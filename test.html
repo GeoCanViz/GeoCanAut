@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>Discover map services</title>
+    <script src="http://serverapi.arcgisonline.com/jsapi/ve/?v=1.4" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" >
+        var folderCount = 0;
+        var totalFolders = 0;
+        var resourceInfo = null;
+        var folders = null;
+        var services = "";
+        var serviceUrl = "";
+
+        // function to get basic service information
+        function GetResourceInfo() {
+            document.getElementById("ResourceInfoDisplay").innerHTML = "";
+            var f = document.forms[0];
+            serviceUrl = f.serviceUrl.options[f.serviceUrl.selectedIndex].text;
+            services="";
+            folderCount = 0;
+            // create new layer factor
+            var agisve_services = new ESRI.ArcGIS.VE.ArcGISLayerFactory();
+            // send request for service information
+            agisve_services.GetResourceInfo(serviceUrl, showResourceInfo);
+        }
+
+        // function to process resource infromation
+        function showResourceInfo(resourceInfo) {
+            // get any folders
+            folders = resourceInfo.folders;
+            totalFolders = resourceInfo.folders.length;
+            // loop through the root services and list those that are map services
+            for (var i=0;i<resourceInfo.services.length;i++) {
+                var service = resourceInfo.services[i];
+                if (service.type=="MapServer")
+                    services += "<b>" + service.name + "</b> (" + service.type + ") - "  + serviceUrl + "/" + service.name + "<br />";
+            }
+            // if there are any folders, get information for the first one
+            if (totalFolders>0) {
+                var url = serviceUrl + "/" + folders[0];
+                restRequest(url, getFolderInfo);
+            } else
+                showAll();
+        }
+
+        // function to request information for a server's folders
+        function getFolderInfo(data) {
+            // loop through the folder services and list those that are map services
+            for (var i = 0; i < data.services.length; i++) {
+                var service = data.services[i];
+                if (service.type == "MapServer")
+                    services += "<b>" + service.name + "</b> (" + service.type + ") - "  + serviceUrl + "/" + folders[folderCount] + "/" + service.name + "<br />";
+				//Following gives all other type like: Geometry, GeoProcessing, etc...
+                //if (service.type != "MapServer")
+                //    services += "<b>" + service.name + "</b> (" + service.type + ") - "  + serviceUrl + "/" + folders[folderCount] + "/" + service.name + "<br />";
+            }
+            // increment index in folders array and get information for that folder
+            folderCount++;
+            if (folderCount < totalFolders) {
+                var url = serviceUrl + "/" + folders[folderCount];
+                restRequest(url, getFolderInfo);
+            } else
+                showAll();
+        }
+
+        // function to display gathered information
+        function showAll() {
+            if (services.length==0) services = "No Map Services found."
+            document.getElementById("ResourceInfoDisplay").innerHTML += "<b>Available Map Services:</b><br />" + services;
+        }
+
+        // function for sending rest request
+        restRequest = function(url, callback) {
+            var request = new ESRI.ArcGIS.VE.RestRequest();
+            request.Send(url, callback);
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" action="">
+    <div style="font-family: Verdana; font-size: small;">
+        Rest Endpoint URL:
+        <select id="serviceUrl" >
+            <option >http://geoappext.nrcan.gc.ca/ArcGIS/rest/services</option>
+            <option >http://s-bsc-geoappint.nrn.nrcan.gc.ca/arcgis/rest/services</option>
+            <option >http://sampleserver1.arcgisonline.com/ArcGIS/rest/services</option>
+            <option >http://sampleserver2.arcgisonline.com/ArcGIS/rest/services</option>
+            <option >http://maps.arcgisonline.com/rest</option>
+       </select>
+        <input id="Button1" type="button" value="Get Map Services" onmousedown="GetResourceInfo()" />
+        </div>
+        <div id="ResourceInfoDisplay" style="font-family: Verdana; font-size: x-small; width: 700px; height: 375px; overflow: auto; border: solid 1px black;"></div>
+
+    </form>
+
+</body>
+</html>

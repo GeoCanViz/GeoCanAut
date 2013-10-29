@@ -191,6 +191,7 @@
     <target name="copy-images">
     	<echo level="info" message="---Copying images---"/>
 		<copy todir="${dist.dir}/images">
+			<fileset dir="${src.dir}/js/images/gscaut"/>
 			<fileset dir="${src.dir}/js/images/jqueryui"/>
 		</copy>
 	</target>
@@ -200,6 +201,11 @@
     	<echo level="info" message="---Copying dependencies---"/>
 		<copy todir="${dist.dir}/dependencies">
 			<fileset dir="${src.dir}/js/dependencies"/>
+		</copy>
+		<copy todir="${dist.dir}">
+			<fileset dir="${src.dir}/js/sass">
+				<include name="**/PIE.htc" />
+			</fileset>
 		</copy>
 	</target>
 	
