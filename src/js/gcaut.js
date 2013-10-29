@@ -9,16 +9,15 @@
 var locationPath;
 (function() {
 	'use strict';
-	var mapsTotal,
-		mapsNum;
 
-	define(['jquery'], function($) {
-		var initialize,
-			readConfig,
-			execConfig;
+	define(['jquery',
+        'knockout',
+        'gcaut-secDefineServicesVM'],
+    function($, ko, sectionDefineServicesVM) {
+		var initialize;
 
 		/*
-	 	 *  initialize the GCaut application
+            *  initialize the GCaut application
 		 */
 		initialize = function() {
 			
@@ -32,8 +31,20 @@ var locationPath;
 				} 
 			} 
 
-			// initialize view models
-			xxx.initialize($mapSection);	
+
+            if (navigator.userAgent.indexOf("MSIE") !== -1) {
+                var pos6 = navigator.userAgent.indexOf("MSIE 6.0");
+                var pos7 = navigator.userAgent.indexOf("MSIE 7.0");
+                var pos8 = navigator.userAgent.indexOf("MSIE 8.0");
+                var pos9 = navigator.userAgent.indexOf("MSIE 9.0");
+                if ((pos6 !== -1) || (pos7 !== -1) || (pos8 !== -1) || (pos9 !== -1)) {
+                    alert("You are using IE 9 or less. Use a real browser!!!");
+                }
+            } else {
+                // initialize view models
+                sectionDefineServicesVM.initialize($('#secDefineServices'));
+            }
+
 		};
 		
 		return {

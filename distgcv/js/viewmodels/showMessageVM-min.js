@@ -1,0 +1,1 @@
+(function(){define(["jquery","knockout","gcaut-i18n"],function(e,c,d){var a;var b;a=function(g){var f=function(){var h=this;h.init=function(){return{controlsDescendantBindings:true}};h.init()};c.applyBindings(new f(g))};b=function(){e("#divShowMessage").dialog("open")};return{initialize:a,open:b}})}).call(this);
