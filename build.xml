@@ -202,11 +202,6 @@
 		<copy todir="${dist.dir}/dependencies">
 			<fileset dir="${src.dir}/js/dependencies"/>
 		</copy>
-		<copy todir="${dist.dir}">
-			<fileset dir="${src.dir}/js/sass">
-				<include name="**/PIE.htc" />
-			</fileset>
-		</copy>
 	</target>
 	
 	<!-- update header -->

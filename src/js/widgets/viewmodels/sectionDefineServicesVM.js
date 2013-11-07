@@ -27,29 +27,28 @@
           var ext = name.substring( name.indexOf(".")+1 );
           if (ext !== "json" ) {
               msg.initialize("Must be a JSON file");
-              msg.open();
           }
         }
 
-          function handleFileSelect(evt) {
+        function handleFileSelect(evt) {
             var files = evt.target.files; // FileList object
         
             // Loop through the FileList.
             for (var i = 0, f; f = files[i]; i++) {
-        
+            
               // Only process json files.
               if (!f.type.match('application/json')) {
                 continue;
               }
-        
+            
               var reader = new FileReader();
-        
+            
               // Closure to capture the file information.
               reader.onload = readFile(f);
               // Read in the JSON file as a data text.
               reader.readAsText(f);
             }
-          }
+        }
 
         function readFile(theFile) {
             return function(e) {
@@ -58,7 +57,6 @@
                 //alert(theFile.name);
                 //alert("Show I read JSON file. Value of mousecoord=" + data.icanmap.controls.mousecoord);
                 msg.initialize("Show I read JSON file. Value of mousecoord=" + data.icanmap.controls.mousecoord);
-                msg.open();
 
 
 // Do something with the data here...
@@ -118,17 +116,17 @@
             switch(sectionno){
                 case 0:
                     $("#secDefineServices").fadeIn( "slow" );
-                    $("#gvcPrevious").removeClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gvcShow');
-                    $("#gvcPrevious").addClass('gvcHidden');
-                    $("#gvcNext").removeClass('gvcHidden');
-                    $("#gvcNext").addClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gvcShow');
+                    $("#gcvPrevious").removeClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gcvShow');
+                    $("#gcvPrevious").addClass('gcvHidden');
+                    $("#gcvNext").removeClass('gcvHidden');
+                    $("#gcvNext").addClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gcvShow');
                     break;
                 case 1:
                     $("#secArrangeServices").fadeIn( "slow" );
-                    $("#gvcPrevious").removeClass('gvcHidden');
-                    $("#gvcPrevious").addClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gvcShow');
-                    $("#gvcNext").removeClass('gvcHidden');
-                    $("#gvcNext").addClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gvcShow');
+                    $("#gcvPrevious").removeClass('gcvHidden');
+                    $("#gcvPrevious").addClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gcvShow');
+                    $("#gcvNext").removeClass('gcvHidden');
+                    $("#gcvNext").addClass('gcvbutton gcvbutton135 gcvbuttonImage gcvgrey gcvHeight40 gcvShow');
                     break;
                     
                 // On last section, hide the Next button
@@ -168,7 +166,6 @@
                 _self.availlayers = i18n.getDict('%availlayers');
                 _self.definemap = i18n.getDict('%definemap') + " #x";
                 _self.layer = i18n.getDict('%layer');
-                _self.name = i18n.getDict('%name');
                 _self.nameconfig = i18n.getDict('%nameconfig');
                 _self.nextstep = i18n.getDict('%nextstep');
                 _self.open = i18n.getDict('%open');
@@ -180,6 +177,7 @@
                 _self.previousstep = i18n.getDict('%previousstep');
                 _self.priservice = i18n.getDict('%pri-serv');
                 _self.proceed = i18n.getDict('%proceed');
+                _self.projectname = i18n.getDict('%projectname');
                 _self.save = i18n.getDict('%save');
                 _self.saveconfig = i18n.getDict('%saveconfig');
                 _self.secservice = i18n.getDict('%sec-serv');
@@ -282,12 +280,10 @@
                    if ($("#inProjectName").val() === "") {
                        //alert("You must supply a file name");supplyfilename
                        msg.initialize(i18n.getDict('%supplyfilename'));
-                       msg.open();
                    } else {
                        // Save the file
                        //alert("Saving...");
                        msg.initialize("Saving the configuration file...");
-                       msg.open();
                    }
                };
                 
