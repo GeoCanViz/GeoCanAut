@@ -14,39 +14,31 @@
 			<form id="frmFileUpload">
 			<!-- Header to include in every page -->
 			<div class="gcvHeader">
-				<span class="gcvPlus5"><img src="distgcv/images/geocanviz.gif" alt="GeoCanViz logo" class="gcvLogo" /></span>
-				<span class="gcvMinus5">
-					<label for="inProjectName" data-bind="text: name"></label>
-					<input id="inProjectName" class="gcvProjName" accept="text/js" data-bind="attr:{title: nameconfig }" />
+				<div class="gcvMargLeft10"><h1 id="h1Title">GeoCanAut: An Authoring Tool for<img src="distgcv/images/geocanviz.gif" alt="GeoCanViz logo" class="gcvLogo gcvMargBottom0 gcvPlus5" /></h1></div>
+				<div class="gcvMargLeft10"><h1 id="h1Title"></h1></div>
+				<div class="gcvMargLeft10" style="display:inline;">
+					<label for="lblProjectName" data-bind="text: projectname" style="display:inline;"></label>
+					<input id="inProjectName" class="gcvProjName" accept="text/js" data-bind="attr:{title: nameconfig }" style="display:inline;" />
 					<!--<input id="inProjectName" class="gcvProjName" accept="text/js" data-bind="attr:{title: nameconfig, event: { change: updateFileName } }" />-->
 					<input type="file" id="file1" style="display:none" accept="text/json">
-				</span>
-				<!--<a href="#" id="aOpenProject" data-bind="click:openConfigFile, attr:{title: openconfig}" class="gcvbutton gcvbutton75 gcvbuttonImage gcvgrey">
-					<img src="distgcv/images/folder_find.png" class="gcvImg20" />
-					<span class="gcvimgText" data-bind="text: open"></span>
-				</a>-->
-				<a href="#" id="aOpenProject" data-bind="click:openConfigFile, attr:{title: openconfig}" class="gvcbutton">
-					<img src="distgcv/images/folder_find.png" class="gcvImg20" />
+				</div>
+				<a href="#" id="aOpenProject" data-bind="click:openConfigFile, attr:{title: openconfig}" class="gcvbutton" style="display:inline;">
+					<img src="distgcv/images/folder_find.png" class="gcvImg20 gcvMargBottom0 gcvimgPos" />
 					<span class="gcvimgText" data-bind="text: open"></span>
 				</a>
-				<!--<a href="#" data-bind="click:saveConfigFile, attr:{title: saveconfig}" class="gcvbutton gcvbutton100 gcvbuttonImage gcvgrey gcvMargBot10">
-					<img src="distgcv/images/save.gif" class="gcvImg20" />
-					<span class="gcvimgText" data-bind="text: save"></span>
-				</a>-->
-				<a href="#" data-bind="click:saveConfigFile, attr:{title: saveconfig}" class="gvcbutton gcvMargBot10">
-					<img src="distgcv/images/save.gif" class="gcvImg20" />
+				<a href="#" data-bind="click:saveConfigFile, attr:{title: saveconfig}" class="gcvbutton gcvMargBot10" style="display:inline;">
+					<img src="distgcv/images/save.gif" class="gcvImg20 gcvMargBottom0 gcvimgPos" />
 					<span class="gcvimgText" data-bind="text: save"></span>
 				</a>
 			</div>
 	
-	
 			<!-- Body of page -->
-			<div class="gcvPageBody">
+			<div class="gcvPageBody gcvMargBottom0">
 				<label id="lblMapNo" data-bind="text: definemap"></label>
 				<section id="secDefineServices">
 					<div data-role="fieldcontain">
 						<div class="gcvTitle1">
-							<label id="lblPrimary" class="gcvLabelWhite">
+							<label id="lblPrimary" class="gcvLabelWhite gcvMargBottom0">
 								<span data-bind="text: priservice"></span>
 							</label>
 						</div>
@@ -57,14 +49,14 @@
 								<span class="gcvimgText" data-bind="text: picklist"></span>
 							</a>-->
 							<a href="#" id="aPickPriService" data-bind="click: getService, attr:{title: pickprilist}"
-								class="gvcbutton">
-								<img src="distgcv/images/application_view_list.png" class="gcvImg20" />
+								class="gcvbutton">
+								<img src="distgcv/images/application_view_list.png" class="gcvImg20 gcvMargBottom0 gcvimgPos" />
 								<span class="gcvimgText" data-bind="text: picklist"></span>
 							</a>
 						</div>
 						<!--<div class="gcvcontainer2">
 							<div class="gcvcols gcvcols12 gcvMargTop10">
-								<section class="gcvfirst gcvcol" data-bind="text: orspecify"></section>
+								<section class="gcvfirst gcvcol2" data-bind="text: orspecify"></section>
 								<section class="gcvcol2"><label id="lblServiceTypePri" data-bind="text: servicetype"></label></section>
 								<section class="gcvcol2">
 									<select id="selServiceTypePri"
@@ -76,24 +68,24 @@
 								</section>
 							</div>
 						</div>-->
-						<div class="gcvcontainer2">
-							<div class="gcvcols gcvcols12 gcvMargTop10">
-								<section class="gcvfirst gcvcol" data-bind="text: orspecify"></section>
+						<div class="gcvcontainer2 gcvMargBottom0">
+							<div class="gcvcols gcvcols12 gcvMargTop10 gcvMargBottom0">
+								<section class="gcvfirst gcvcol2" data-bind="text: orspecify"></section>
 								<section class="gcvcol2"><label id="lblServiceUrlPri" data-bind="text: serviceurl"></label></section>
 								<section class="gcvcol2"><input id="inServiceUrlPri" class="gcvWidth200"></select></section>
 								<section class="gcvcol">&nbsp;</section>
-								<section class="gcvcol2 gcvMargTop10">
+								<section class="gcvcol3">
 									<img id="imgVerifyPri" src="distgcv/images/pixel.gif" class="gcvImg20" title="" alt="" />
-									<a href="#" data-bind="attr:{title: verify}" class="gvcbutton">
-										<img src="distgcv/images/cog.gif" class="gcvImg20" title="" alt="" />
+									<a href="#" data-bind="attr:{title: verify}" class="gcvbutton gcvbutton115">
+										<img src="distgcv/images/cog.gif" class="gcvImg20 gcvMargBottom0 gcvimgPos" title="" alt="" />
 										<span class="gcvimgText" data-bind="text: verify"></span>
 									</a>
 								</section>
 							</div>
 						</div>
-						<div class="gcvcontainer2">
-							<div class="gcvcols gcvcols12">
-								<section class="gcvfirst gcvcol">&nbsp;</section>
+						<div class="gcvcontainer3 gcvmargTop0">
+							<div class="gcvcols gcvcols12 gcvmargTop0">
+								<section class="gcvfirst gcvcol2">&nbsp;</section>
 								<section class="gcvcol2"><label id="lblLayerPri"><span data-bind="text: layer"></span></label></section>
 								<section class="gcvcol2">
 									<select id="selLayerPri" class="gcvWidth200">
@@ -103,22 +95,22 @@
 						</div>
 					</div>
 	
-					<div id="divSecondaryServicesContainer" class="gcvSecondaryContainer">
+					<div id="divSecondaryServicesContainer" class="gcvSecondaryContainer2">
 						<div class="gcvTitle1">
 							<label id="lblSecondary" class="gcvLabelWhite">
-								<span data-bind="text: secservice"></span>
+								<span data-bind="text: secservice" class="gcvMargBottom0"></span>
 							</label>
 						</div>
 						<div class="gcvMargLeft10 gcvMargTop10">
-							<a href="#" data-bind="click: addSecService, attr:{title: addsecserv}" class="gvcbutton">
-								<img src="distgcv/images/add.png" class="gcvImg20" />
+							<a href="#" data-bind="click: addSecService, attr:{title: addsecserv}" class="gcvbutton">
+								<img src="distgcv/images/add.png" class="gcvImg20 gcvMargBottom0 gcvimgPos" />
 								<span class="gcvimgText" data-bind="text: addsecserv"></span></a>
 						</div>
 						<section id="secAddSecServices"></section>
 	
 					</div>
 				</section>
-				<section id="secArrangeServices" class="gvcHidden">
+				<section id="secArrangeServices" class="gcvHidden">
 					<div class="gcvTitle1">
 						<label id="lblArrangeServices" class="gcvLabelWhite">
 							<span data-bind="text: arrangeservices"></span>
@@ -135,12 +127,12 @@
 									</select>
 								</section>
 								<section class="gcvcol gcvcentercols gcvMargTop50">
-									<div><a id="gvcMoveRight" href="#" class="gvcbutton">
-										<img src="distgcv/images/previous.gif" class="gcvHeight20" />
+									<div><a id="gvcMoveRight" href="#" class="gcvbutton">
+										<img src="distgcv/images/previous.gif" class="gcvHeight20 gcvMargBottom0" />
 									</a></div>
 									<br/>
-									<div><a id="gvcMoveLeft" href="#" class="gvcbutton">
-										<img src="distgcv/images/next.gif" class="gcvHeight20" />
+									<div><a id="gcvMoveLeft" href="#" class="gcvbutton">
+										<img src="distgcv/images/next.gif" class="gcvHeight20 gcvMargBottom0" />
 									</a></div>
 								</section>
 								<section class="gcvcol2">
@@ -148,11 +140,11 @@
 									</select>
 								</section>
 								<section class="gcvcol gcvMargTop50">
-									<div><a id="gvcMoveUp" href="#" class="gvcbuttonVert gcvbuttonHeight30">
+									<div><a id="gcvMoveUp" href="#" class="gcvbuttonVert gcvbuttonHeight30">
 										<img src="distgcv/images/up.gif" class="gcvHeight25" />
 									</a></div>
 									<br/>
-									<div><a id="gvcMoveDown" href="#" class="gvcbuttonVert gcvbuttonHeight30">
+									<div><a id="gcvMoveDown" href="#" class="gcvbuttonVert gcvbuttonHeight30">
 										<img src="distgcv/images/down.gif" class="gcvHeight25" />
 									</a></div>
 								</section>
@@ -161,7 +153,6 @@
 					</div>
 				</section>
 			</div>
-	
 			
 			<div id="divSelectService">
 				<div><label><span data-bind="text: server"></label></div>
@@ -202,16 +193,15 @@
 				</div>
 			</div>
 	
-	
 			<!-- Footer to include in every page -->
 			<div class="gcvFooter gcvMargTop10">
 				<span class="gcvFooterContent gcvMargTop10">
-					<a id="gvcPrevious" href="#" data-bind="attr:{title: proceed}, click: showPreviousSection" class="gvcbutton gvcHidden">
-						<img src="distgcv/images/previous.gif" class="gcvImg20" />
+					<a id="gcvPrevious" href="#" data-bind="attr:{title: previousstep}, click: showPreviousSection" class="gcvbutton gcvHidden">
+						<img src="distgcv/images/previous.gif" class="gcvImg20 gcvMargBottom0 gcvimgPos" />
 						<span class="gcvimgText" data-bind="text: previousstep"></span>
 					</a>
-					<a id="gvcNext" href="#" data-bind="attr:{title: proceed}, click: showNextSection" class="gvcbutton gvcShow">
-						<img src="distgcv/images/next.gif" class="gcvImg20" />
+					<a id="gcvNext" href="#" data-bind="attr:{title: nextstep}, click: showNextSection" class="gcvbutton gcvShow">
+						<img src="distgcv/images/next.gif" class="gcvImg20 gcvMargBottom0 gcvimgPos" />
 						<span class="gcvimgText" data-bind="text: nextstep"></span>
 					</a>
 				</span>

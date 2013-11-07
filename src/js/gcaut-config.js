@@ -61,8 +61,12 @@
                     name: 'gcaut-i18n',
                     location: locationPath + 'distgcv/js',
                     main: language
+                // }, {
+                    // name: 'gcaut-sectionDefineServicesV',
+                    // location: locationPath + 'distgcv/js/views',
+                    // main: 'sectionDefineServicesV-min'
                 }, {
-                    name: 'gcaut-secDefineServicesVM',
+                    name: 'gcaut-sectionDefineServicesVM',
                     location: locationPath + 'distgcv/js/viewmodels',
                     main: 'sectionDefineServicesVM-min'
                 }, {

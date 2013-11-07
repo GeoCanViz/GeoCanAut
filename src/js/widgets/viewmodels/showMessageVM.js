@@ -14,32 +14,65 @@
         'gcaut-i18n'
     ], function($, ko, i18n) {
         var initialize;
-        var open;
 
 
-        initialize = function(text) {
+        initialize = function(html) {
             
             // data model               
-            var showMessageVM = function() {
+            var showMessageVM = function(html) {
                 var _self = this;
-//                $( "#divShowMessage" ).dialog( "open" );
+
+                $('<div id="divMessage" class="whitebg" />').dialog({
+                    modal: true,
+                    title: "Message",
+                    closeText: i18n.getDict('%close'),
+                    open: function() {
+                        $(this).html(html);
+                        $('.ui-widget-overlay').bind('click', function () { $(this).siblings('.ui-dialog').find('.ui-dialog-content').dialog('close'); });
+                    },
+                    close: function() { 
+                        $(this).dialog('destroy').remove();
+                    },
+                    show: {
+                        effect: "fade",
+                        duration: 700
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    position: { my: "center", at: "center", of: window },
+                    height: 200,
+                    buttons: [
+                        {
+                            text: "Ok",
+                            title: "Ok",
+                            click: function() {
+                                $( this ).dialog( "destroy" ).remove();
+                            }
+                        },
+                        {
+                            text: i18n.getDict('%cancel'),
+                            title: i18n.getDict('%cancel'),
+                            click: function() {
+                                $( this ).dialog( "destroy" ).remove();
+                            }
+                        }
+                    ]
+                });
 
                 _self.init = function() {
+                    $( "#divShowMessage" ).dialog( "open" );
                     return { controlsDescendantBindings: true };
                 };
                 
                 _self.init();
             };
-            ko.applyBindings(new showMessageVM(text)); // This makes Knockout get to work
-        };
-        
-        open = function() {
-            $( "#divShowMessage" ).dialog( "open" );
+            ko.applyBindings(new showMessageVM(html)); // This makes Knockout get to work
         };
         
         return {
-            initialize: initialize,
-            open: open
+            initialize: initialize
         };
     });
 }).call(this);

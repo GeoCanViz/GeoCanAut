@@ -10,9 +10,9 @@ var locationPath;
 (function() {
 	'use strict';
 
-	define(['jquery',
+    define(['jquery',
         'knockout',
-        'gcaut-secDefineServicesVM'],
+        'gcaut-sectionDefineServicesVM'],
     function($, ko, sectionDefineServicesVM) {
 		var initialize;
 

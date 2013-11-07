@@ -63,7 +63,11 @@
                     location: locationPath + 'distgcv/js',
                     main: language
                 }, {
-                    name: 'gcaut-secDefineServicesVM',
+                    // name: 'gcaut-sectionDefineServicesV',
+                    // location: locationPath + 'src/js/widgets/views',
+                    // main: 'sectionDefineServicesV'
+                // }, {
+                    name: 'gcaut-sectionDefineServicesVM',
                     location: locationPath + 'src/js/widgets/viewmodels',
                     main: 'sectionDefineServicesVM'
                 }, {

@@ -7,36 +7,48 @@
  *
  */
 
-body {line-height:1.0em!important;}
+
+body {
+  line-height:1.0em!important;
+  font-size: 10pt!important;
+  width:980px!important;
+  }
+
+.ui-dialog {
+  background: #fcfdfd url(images/ui-bg_inset-hard_100_fcfdfd_1x100.png) 50% bottom repeat-x!important;
+  }
 
 .gcvLogo { width: 122px; height: 40px; }
 .gcvFooter { width: 100%!important; background-color: #E0E0E0; vertical-align: middle; height:40px; }
 .gcvFooterContent {  position:relative; top:7px; left:10px; vertical-align: middle; height:40px;}
-.gcvHeader { width: 100%!important; background-color: #E0E0E0; vertical-align: middle; margin-top: 0px; height: 60px; white-space: nowrap; }
+.gcvHeader { width: 100%!important; background-color: #E0E0E0; vertical-align: middle; margin-top: 0px; height: 100px; white-space: nowrap; }
 .gcvHeight20 { height: 20px; }
 .gcvHeight25 { height: 25px; }
 .gcvHeight30 { height: 30px; }
 .gcvHeight40 { height: 40px; }
 .gcvHeight250 { height: 250px; }
-.gvcHidden { display:none; }
+.gcvHidden { display:none; }
 .gcvImg20 { height: 20px; }
-.gcvLabelWhite { margin-left: 5px; color: #FFFFFF; }
-.gcvMargBot10 { margin-bottom: 10px!important; }
+.gcvIndent10 { indent: 10px; }
+.gcvLabelWhite { margin-left: 5px; color: #FFFFFF; line-height:1.5em!important; }
+.gcvMargBottom0 { margin-bottom: 0px!important; }
 .gcvMargLeft5 { margin-left: 5px!important; }
 .gcvMargLeft10 { margin-left: 10px!important; }
 .gcvMargRight5 { margin-right: 5px!important; }
 .gcvMargRight10 { margin-right: 10px!important; }
+.gcvMargTop0 { margin-top: 0px!important; }
 .gcvMargTop10 { margin-top: 10px!important; }
 .gcvMargTop50 { margin-top: 50px!important; }
 .gcvMinus5 { position:relative; top:-5px; }
 .gcvPageBody { width: 100%; margin-left: 10px; margin-top: 10px; }
+.gcvPlus3 { position:relative; top:3px; }
 .gcvPlus5 { position:relative; top:5px; }
 .gcvProjName { width: 250px; }
 .gcvSecondaryContainer { width: 100%!important; margin-left: 10px; margin-top: 10px; }
 .gcvSecondaryContainer2 { width: 96%!important; margin-left: 10px; margin-top: 10px; }
-.gvcShow { display:visible; }
+.gcvShow { display:visible; }
 .gcvTitle1 { margin-left: 10px; margin-top: 20px; background: #336699; height: 20px; width:96%; }
-.gcvTitle2 { margin-left: 10px; margin-top: 20px; background: #CDE2FC; height: 20px; width:96%; }
+.gcvTitle2 { margin-left: 10px; margin-top: 20px; background: #CDE2FC; height: 20px; width:96%; font-weight: bold; }
 .gcvWidth200 { width:200px; }
 .gcvWidth300 { width:300px; }
 
@@ -47,6 +59,7 @@ body {line-height:1.0em!important;}
 .gcvbutton40 { width:40px; }
 .gcvbutton75 { width:75px; }
 .gcvbutton100 { width:100px; }
+.gcvbutton115 { width:115px; }
 .gcvbutton125 { width:125px; }
 .gcvbutton135 { width:135px; }
 .gcvbutton150 { width:150px; }
@@ -67,27 +80,29 @@ body {line-height:1.0em!important;}
 .gcvbuttonHeight30 { 
   height:30px!important;
   width:20px!important; 
-  padding: 10px 5px 10px 5px;
+  padding: 35px 0px 0px 0px!important;
+}
+.gcvimgPos {
+  position:relative!important;
+  left: -5px!important;
 }
 .gcvimgText {
   position:relative!important;
   top:-5px!important;
-  left: 0px!important;
+  left: -7px!important;
 }
 
 
-.gvcbutton{
+.gcvbutton{
   cursor: pointer;
   text-decoration:none;
   border: 1px solid rgb(153, 153, 153);
   padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0);
-    line-height:16px;
-  font-size:14px;
-  font-weight:bold;
-  font-family:arial, serif;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
+  color:rgb(0, 0, 0)!important;
+  font-size:10pt!important;
+  font-weight:bold!important;
+  font-family:arial, serif!important;
+  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
   border-radius:15px 15px 15px 15px;
   -moz-border-radius:15px 15px 15px 15px;
   -webkit-border-radius:15px 15px 15px 15px;
@@ -99,18 +114,16 @@ body {line-height:1.0em!important;}
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 204, 204, 0.6)), to(rgb(153, 153, 153)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 204, 204, 0.6), rgb(153, 153, 153));
 }
-.gvcbutton:hover{
+.gcvbutton:hover{
   cursor: pointer;
   text-decoration:none;
   border: 1px solid rgb(153, 153, 153);
   padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0);
-    line-height:16px;
-  font-size:14px;
-  font-weight:bold;
-  font-family:arial, serif;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
+  color:rgb(0, 0, 0)!important;
+  font-size:10pt!important;
+  font-weight:bold!important;
+  font-family:arial, serif!important;
+  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
   border-radius:15px 15px 15px 15px;
   -moz-border-radius:15px 15px 15px 15px;
   -webkit-border-radius:15px 15px 15px 15px;
@@ -122,18 +135,16 @@ body {line-height:1.0em!important;}
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
 }
-.gvcbutton:active{
+.gcvbutton:active{
   cursor: pointer;
   text-decoration:none;
   border: 1px solid rgb(153, 153, 153);
   padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0);
-    line-height:16px;
-  font-size:14px;
-  font-weight:bold;
-  font-family:arial, serif;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
+  color:rgb(0, 0, 0)!important;
+  font-size:10pt!important;
+  font-weight:bold!important;
+  font-family:arial, serif!important;
+  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
   border-radius:15px 15px 15px 15px;
   -moz-border-radius:15px 15px 15px 15px;
   -webkit-border-radius:15px 15px 15px 15px;
@@ -145,18 +156,16 @@ body {line-height:1.0em!important;}
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
 }
-.gvcbuttonVert{
+.gcvbuttonVert{
   cursor: pointer;
   text-decoration:none;
   border: 1px solid rgb(153, 153, 153);
-  padding: 18px 5px 5px 5px;
-  color:rgb(0, 0, 0);
-    line-height:16px;
-  font-size:14px;
-  font-weight:bold;
-  font-family:arial, serif;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
+  padding: 10px 10px 0px 10px;
+  color:rgb(0, 0, 0)!important;
+  font-size:10pt!important;
+  font-weight:bold!important;
+  font-family:arial, serif!important;
+  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
   border-radius:15px 15px 15px 15px;
   -moz-border-radius:15px 15px 15px 15px;
   -webkit-border-radius:15px 15px 15px 15px;
@@ -168,14 +177,14 @@ body {line-height:1.0em!important;}
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 204, 204, 0.6)), to(rgb(153, 153, 153)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 204, 204, 0.6), rgb(153, 153, 153));
 }
-.gvcbuttonVert:hover{
+.gcvbuttonVert:hover{
   cursor: pointer;
   text-decoration:none;
   border: 1px solid rgb(153, 153, 153);
-  padding: 18px 5px 5px 5px;
+  padding: 10px 10px 0px 10px;
   color:rgb(0, 0, 0);
     line-height:16px;
-  font-size:14px;
+  font-size:10pt;
   font-weight:bold;
   font-family:arial, serif;
   text-shadow: 0px 0px 5px rgb(255, 255, 255);
@@ -191,14 +200,14 @@ body {line-height:1.0em!important;}
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
 }
-.gvcbuttonVert:active{
+.gcvbuttonVert:active{
   cursor: pointer;
   text-decoration:none;
   border: 1px solid rgb(153, 153, 153);
-  padding: 18px 5px 5px 5px;
+  padding: 10px 10px 0px 10px;
   color:rgb(0, 0, 0);
     line-height:16px;
-  font-size:14px;
+  font-size:10pt;
   font-weight:bold;
   font-family:arial, serif;
   text-shadow: 0px 0px 5px rgb(255, 255, 255);
@@ -230,10 +239,18 @@ body {line-height:1.0em!important;}
   .gcvcontainer2{   /* fluid width */    
     margin:0 auto;    
     min-width:760px;
-    max-width:1240px;
+    max-width:980px;
     text-align:left;
     position:relative;
-    line-height:24px;
+    line-height:40px;
+    }
+  .gcvcontainer3{   /* fluid width */    
+    margin:0 auto;    
+    min-width:760px;
+    max-width:980px;
+    text-align:left;
+    position:relative;
+    line-height:30px;
     }
   #gcvcontainer>header, #gcvcontainer2>header{
     position:relative;
@@ -269,6 +286,7 @@ body {line-height:1.0em!important;}
     .gcvcols5 .gcvcol{width:18.4%;} /* 5 equal width columns */
     .gcvcols6 .gcvcol{width:15%;} /* 6 equal width columns */
     .gcvcols8 .gcvcol{width:12.5%;} /* 8 equal width columns */
+    .gcvcols10 .gcvcol{width:10.0%;} /* 10 equal width columns */
     .gcvcols12 .gcvcol{width:8.3%;} /* 12 equal width columns */
     
     /* double width columns */
@@ -277,6 +295,7 @@ body {line-height:1.0em!important;}
     .gcvcols5 .gcvcol2{width:38.8%;} 
     .gcvcols6 .gcvcol2{width:32%;} 
     .gcvcols8 .gcvcol2{width:25%;} 
+    .gcvcols10 .gcvcol2{width:20%;} 
     .gcvcols12 .gcvcol2{width:16.6%;} 
     
     /* triple width columns */
@@ -284,20 +303,24 @@ body {line-height:1.0em!important;}
     .gcvcols5 .gcvcol3{width:59.2%;} 
     .gcvcols6 .gcvcol3{width:49%;} 
     .gcvcols8 .gcvcol3{width:37.5%;} 
+    .gcvcols10 .gcvcol3{width:30.0%;} 
     .gcvcols12 .gcvcol3{width:29.9%;} 
     
     /* quadruple width columns */
     .gcvcols5 .gcvcol4{width:79.6%;} 
     .gcvcols6 .gcvcol4{width:66%;} 
     .gcvcols8 .gcvcol4{width:50%;} 
+    .gcvcols10 .gcvcol4{width:40%;} 
     .gcvcols12 .gcvcol4{width:33.2%;} 
     
     /* quintuple width columns */
     .gcvcols6 .gcvcol5{width:83%;}  
     .gcvcols8 .gcvcol5{width:62.5%;}  
+    .gcvcols10 .gcvcol5{width:50.0%;}  
     .gcvcols12 .gcvcol5{width:41.5%;}   
 
     /* six width columns */
+    .gcvcols10 .gcvcol6{width:60.0%;}   
     .gcvcols12 .gcvcol6{width:49.8%;}   
     
   /* percentage based grid */
