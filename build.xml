@@ -151,6 +151,7 @@
     <!-- minify -->
     <target name="minify">
     	<echo level="info" message="---Minifying---"/>
+    	<mkdir dir="${dist.dir}/js"/>
     	<copy file="${src.dir}/js/${name.base.js}" tofile="${file.consolidated.js}"/>
     	<copy file="${src.dir}/js/${name.config.js}" tofile="${dist.dir}/${name.config.js}"/>
     	<copy todir="${dist.dir}/js/gistasks">
@@ -201,6 +202,14 @@
     	<echo level="info" message="---Copying dependencies---"/>
 		<copy todir="${dist.dir}/dependencies">
 			<fileset dir="${src.dir}/js/dependencies"/>
+		</copy>
+	</target>
+
+	<!-- copy templates -->
+	<target name="copy-templates">
+    	<echo level="info" message="---Copying templates---"/>
+		<copy todir="${dist.dir}/templates">
+			<fileset dir="${src.dir}/js/templates"/>
 		</copy>
 	</target>
 	

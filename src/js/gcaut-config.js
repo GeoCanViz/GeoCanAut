@@ -51,8 +51,16 @@
                     main: 'knockout.min'
                 }, {
                     name: 'jqueryui',
-                    location: locationPath + '/distgcv/dependencies',
+                    location: locationPath + 'distgcv/dependencies',
                     main: 'jqueryui.min'
+                }, {
+                    name: 'accessibletabs',
+                    location: locationPath + 'distgcv/dependencies',
+                    main: 'jquery.tabs'
+                }, {
+                    name: 'syncheight',
+                    location: locationPath + 'distgcv/dependencies',
+                    main: 'jquery.syncheight'
                 }, {
                     name: 'gcaut',
                     location: locationPath + 'distgcv',
@@ -61,33 +69,31 @@
                     name: 'gcaut-i18n',
                     location: locationPath + 'distgcv/js',
                     main: language
-                // }, {
-                    // name: 'gcaut-sectionDefineServicesV',
-                    // location: locationPath + 'distgcv/js/views',
-                    // main: 'sectionDefineServicesV-min'
+                } , {
+                   name: 'gcaut-headerV',
+                   location: locationPath + 'distgcv/js/views',
+                   main: 'headerV-min'
                 }, {
-                    name: 'gcaut-sectionDefineServicesVM',
-                    location: locationPath + 'distgcv/js/viewmodels',
-                    main: 'sectionDefineServicesVM-min'
+                   name: 'gcaut-headerVM',
+                   location: locationPath + 'distgcv/js/viewmodels',
+                   main: 'headerVM-min'
+                 } , {
+                   name: 'gcaut-defineMapContentV',
+                   location: locationPath + 'distgcv/js/views',
+                   main: 'defineMapContentV-min'
                 }, {
-                    name: 'gcaut-addServiceV',
-                    location: locationPath + 'distgcv/js/views',
-                    main: 'addserviceV-min'
+                   name: 'gcaut-defineMapContentVM',
+                   location: locationPath + 'distgcv/js/viewmodels',
+                   main: 'defineMapContentVM-min'
                 }, {
-                    name: 'gcaut-addServiceVM',
-                    location: locationPath + 'distgcv/js/viewmodels',
-                    main: 'addServiceVM-min'
+                   name: 'gcaut-showMessageV',
+                   location: locationPath + 'distgcv/js/views',
+                   main: 'defineMapContentV-min'
                 }, {
-                    name: 'gcaut-showMessageV',
-                    location: locationPath + 'distgcv/js/views',
-                    main: 'showMessageV-min'
-                }, {
-                    name: 'gcaut-showMessageVM',
-                    location: locationPath + 'distgcv/js/viewmodels',
-                    main: 'showMessageVM-min'
+                   name: 'gcaut-defineMapContentVM',
+                   location: locationPath + 'distgcv/js/viewmodels',
+                   main: 'defineMapContentVM-min'
                 }
-
-                //, {
                 //    name: 'gcaut-pickServiceFromListV',
                 //    location: locationPath + 'distgcv/js/views',
                 //    main: 'pickServiceFromListV-min'

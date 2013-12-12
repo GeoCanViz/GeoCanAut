@@ -7,14 +7,12 @@
  */
 (function() {
     'use strict';
-    define(['gcaut-showMessageVM',
-            'jquery'
-    ], function(sm, $) {
+    define(['gcaut-showMessageVM'
+    ], function(sm) {
         var initialize;
         
         initialize = function(text) {
 
-            var $body = $('#gcvMain');
             var html = '';
                 html += '<div id="divShowMessage" class="gcvMargLeft10 gcvMargTop10">';
                 html += '<span id="spnMsgText">'+text+'</span>';

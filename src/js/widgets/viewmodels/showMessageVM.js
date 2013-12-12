@@ -24,6 +24,7 @@
 
                 $('<div id="divMessage" class="whitebg" />').dialog({
                     modal: true,
+                    autoOpen: true,
                     title: "Message",
                     closeText: i18n.getDict('%close'),
                     open: function() {
@@ -48,27 +49,27 @@
                             text: "Ok",
                             title: "Ok",
                             click: function() {
-                                $( this ).dialog( "destroy" ).remove();
+                                $( this ).dialog( "close" );
                             }
                         },
                         {
                             text: i18n.getDict('%cancel'),
                             title: i18n.getDict('%cancel'),
                             click: function() {
-                                $( this ).dialog( "destroy" ).remove();
+                                $( this ).dialog( "close" );
                             }
                         }
                     ]
                 });
 
                 _self.init = function() {
-                    $( "#divShowMessage" ).dialog( "open" );
+//                    $( "#divShowMessage" ).dialog( "open" );
                     return { controlsDescendantBindings: true };
                 };
                 
                 _self.init();
             };
-            ko.applyBindings(new showMessageVM(html)); // This makes Knockout get to work
+            ko.applyBindings(new showMessageVM(html),$( "#divShowMessage" )[0]); // This makes Knockout get to work
         };
         
         return {

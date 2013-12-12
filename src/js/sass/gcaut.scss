@@ -7,6 +7,7 @@
  *
  */
 
+@import "includes/gcaut-mixin";
 
 body {
   line-height:1.0em!important;
@@ -19,9 +20,10 @@ body {
   }
 
 .gcvLogo { width: 122px; height: 40px; }
+.gcvDeleted { background-color:#CC6666; }
 .gcvFooter { width: 100%!important; background-color: #E0E0E0; vertical-align: middle; height:40px; }
 .gcvFooterContent {  position:relative; top:7px; left:10px; vertical-align: middle; height:40px;}
-.gcvHeader { width: 100%!important; background-color: #E0E0E0; vertical-align: middle; margin-top: 0px; height: 100px; white-space: nowrap; }
+.gcvHeader { width: 100%!important; background-color: #E0E0E0; vertical-align: middle; margin-top: 0px; height: 60px; white-space: nowrap; }
 .gcvHeight20 { height: 20px; }
 .gcvHeight25 { height: 25px; }
 .gcvHeight30 { height: 30px; }
@@ -40,15 +42,17 @@ body {
 .gcvMargTop10 { margin-top: 10px!important; }
 .gcvMargTop50 { margin-top: 50px!important; }
 .gcvMinus5 { position:relative; top:-5px; }
-.gcvPageBody { width: 100%; margin-left: 10px; margin-top: 10px; }
+.gcvPageBody { width: 100%; margin-top: 10px; }
+.gcvPosPlus10 { position: relative; left: 10px; }
 .gcvPlus3 { position:relative; top:3px; }
 .gcvPlus5 { position:relative; top:5px; }
+.gcvPlus10 { position:relative; top:10px; }
 .gcvProjName { width: 250px; }
 .gcvSecondaryContainer { width: 100%!important; margin-left: 10px; margin-top: 10px; }
 .gcvSecondaryContainer2 { width: 96%!important; margin-left: 10px; margin-top: 10px; }
 .gcvShow { display:visible; }
 .gcvTitle1 { margin-left: 10px; margin-top: 20px; background: #336699; height: 20px; width:96%; }
-.gcvTitle2 { margin-left: 10px; margin-top: 20px; background: #CDE2FC; height: 20px; width:96%; font-weight: bold; }
+.gcvTitle2 { margin-left: 10px; margin-top: 20px; background: #CDE2FC; height: 40px; width:96%; font-weight: bold; }
 .gcvWidth200 { width:200px; }
 .gcvWidth300 { width:300px; }
 
@@ -94,131 +98,37 @@ body {
 
 
 .gcvbutton{
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0)!important;
-  font-size:10pt!important;
-  font-weight:bold!important;
-  font-family:arial, serif!important;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+  @include gcv-app-button;
   background-image:linear-gradient(-90deg, rgba(204, 204, 204, 0.6), rgb(153, 153, 153));
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 204, 204, 0.6)), to(rgb(153, 153, 153)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 204, 204, 0.6), rgb(153, 153, 153));
 }
 .gcvbutton:hover{
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0)!important;
-  font-size:10pt!important;
-  font-weight:bold!important;
-  font-family:arial, serif!important;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+  @include gcv-app-button;
   background-image:linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
 }
 .gcvbutton:active{
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0)!important;
-  font-size:10pt!important;
-  font-weight:bold!important;
-  font-family:arial, serif!important;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+  @include gcv-app-button;
   background-image:linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
 }
 .gcvbuttonVert{
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0)!important;
-  font-size:10pt!important;
-  font-weight:bold!important;
-  font-family:arial, serif!important;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+  @include gcv-app-button;
   background-image:linear-gradient(-90deg, rgba(204, 204, 204, 0.6), rgb(153, 153, 153));
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 204, 204, 0.6)), to(rgb(153, 153, 153)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 204, 204, 0.6), rgb(153, 153, 153));
 }
 .gcvbuttonVert:hover{
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0);
-    line-height:16px;
-  font-size:10pt;
-  font-weight:bold;
-  font-family:arial, serif;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+  @include gcv-app-button;
   background-image:linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
 }
 .gcvbuttonVert:active{
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0);
-    line-height:16px;
-  font-size:10pt;
-  font-weight:bold;
-  font-family:arial, serif;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+  @include gcv-app-button;
   background-image:linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));
   background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(204, 255, 255, 0.5)), to(rgba(0, 102, 255, 0.55)));
   background-image:-moz-linear-gradient(-90deg, rgba(204, 255, 255, 0.5), rgba(0, 102, 255, 0.55));

@@ -1,44 +1,20 @@
 @import "compass/css3/images";
 
-@mixin app-gradiant {
-  background-color: #a3d8a5; // old browsers
-	@include filter-gradient(#a3d8a5, #e5e5e5, vertical);
-	@include background-image(linear-gradient(top,  #a3d8a5 0%,#e5e5e5 100%));
-}
-
-@mixin app-gradiant-reverse {
-  background-color: #a3d8a5; // old browsers
-	@include filter-gradient(#a3d8a5, #e5e5e5, vertical);
-	@include background-image(linear-gradient(top,  #e5e5e5 0%,#a3d8a5 100%));
-}
-
-@mixin button-gradiant {
-  background-color: #ffffff; // old browsers
-	@include filter-gradient(#ffffff, #bfbfbf, horizontal);
-	@include background-image(radial-gradient(center, ellipse cover,  #ffffff 39%,#bfbfbf 100%));
-}
-
-@mixin content-border-radius($radius) {
-	-webkit-border-radius: $radius;
-	-moz-border-radius: $radius;
-	border-radius: $radius;
-}
-
-@mixin app-text($size, $weight) {
-	font: {
-		family: verdana;
-		weight: $weight;
-		size: $size + px; // old browser
-		size: $size + rem;
-	}
-}
-
-@mixin toolbar-background {
-  background-color: #ffffff;
-}
-
-@mixin button-size {
-  margin: 3px;
-  height: 30px;
-  width: 30px;
+@mixin gcv-app-button {
+  cursor: pointer;
+  text-decoration:none;
+  border: 1px solid rgb(153, 153, 153);
+  padding: 10px 10px 0px 10px;
+  color:rgb(0, 0, 0)!important;
+  font-size:10pt!important;
+  font-weight:bold!important;
+  font-family:arial, serif!important;
+  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
+  border-radius:15px 15px 15px 15px;
+  -moz-border-radius:15px 15px 15px 15px;
+  -webkit-border-radius:15px 15px 15px 15px;
+  box-shadow:0px 0px 0px rgb(0, 0, 0);
+  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
+  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
 }

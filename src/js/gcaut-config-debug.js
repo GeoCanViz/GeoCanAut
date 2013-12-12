@@ -22,7 +22,6 @@
 		console.log('language not set, English by default');
 	}
 
-
     if (navigator.userAgent.indexOf("MSIE") !== -1) {
         var pos6 = navigator.userAgent.indexOf("MSIE 6.0");
         var pos7 = navigator.userAgent.indexOf("MSIE 7.0");
@@ -52,8 +51,16 @@
                     main: 'knockout.min'
                 }, {
                     name: 'jqueryui',
-                    location: locationPath + '/src/js/dependencies',
+                    location: locationPath + 'src/js/dependencies',
                     main: 'jqueryui.min'
+                }, {
+                    name: 'accessibletabs',
+                    location: locationPath + 'src/js/dependencies',
+                    main: 'jquery.tabs'
+                }, {
+                    name: 'syncheight',
+                    location: locationPath + 'src/js/dependencies',
+                    main: 'jquery.syncheight'
                 }, {
                     name: 'gcaut',
                     location: locationPath + 'src/js',
@@ -63,31 +70,30 @@
                     location: locationPath + 'distgcv/js',
                     main: language
                 }, {
-                    // name: 'gcaut-sectionDefineServicesV',
-                    // location: locationPath + 'src/js/widgets/views',
-                    // main: 'sectionDefineServicesV'
-                // }, {
-                    name: 'gcaut-sectionDefineServicesVM',
-                    location: locationPath + 'src/js/widgets/viewmodels',
-                    main: 'sectionDefineServicesVM'
+                   name: 'gcaut-headerV',
+                   location: locationPath + 'src/js/widgets/views',
+                   main: 'headerV'
                 }, {
-                    name: 'gcaut-addServiceV',
-                    location: locationPath + 'src/js/widgets/views',
-                    main: 'addServiceV'
+                   name: 'gcaut-headerVM',
+                   location: locationPath + 'src/js/widgets/viewmodels',
+                   main: 'headerVM'
                 }, {
-                    name: 'gcaut-addServiceVM',
-                    location: locationPath + 'src/js/widgets/viewmodels',
-                    main: 'addServiceVM'
+                   name: 'gcaut-defineMapContentV',
+                   location: locationPath + 'src/js/widgets/views',
+                   main: 'defineMapContentV'
                 }, {
-                    name: 'gcaut-showMessageV',
-                    location: locationPath + 'src/js/widgets/views',
-                    main: 'showMessageV'
+                   name: 'gcaut-defineMapContentVM',
+                   location: locationPath + 'src/js/widgets/viewmodels',
+                   main: 'defineMapContentVM'
                 }, {
-                    name: 'gcaut-showMessageVM',
-                    location: locationPath + 'src/js/widgets/viewmodels',
-                    main: 'showMessageVM'
+                   name: 'gcaut-showMessageV',
+                   location: locationPath + 'src/js/widgets/views',
+                   main: 'showMessageV'
+                }, {
+                   name: 'gcaut-showMessageVM',
+                   location: locationPath + 'src/js/widgets/viewmodels',
+                   main: 'showMessageVM'
                 }
-
                 //, {
                 //    name: 'gcaut-pickServiceFromListV',
                 //    location: locationPath + 'src/js/widgets/views',
@@ -110,5 +116,4 @@
     }
 
    
-
 }).call(this);
