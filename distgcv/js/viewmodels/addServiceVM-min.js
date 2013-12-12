@@ -1,1 +1,0 @@
-(function(){define(["jquery","knockout","gcaut-i18n"],function(d,b,c){var a;a=function(f){var e=function(i){var g=this,h=d("#inServiceUrlSec"+i);g.init=function(){return{controlsDescendantBindings:true}};g.pickSecService=function(){alert("add service #"+i)};g.init()};b.applyBindings(new e(f))};return{initialize:a}})}).call(this);

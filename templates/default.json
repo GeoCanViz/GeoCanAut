@@ -1,0 +1,137 @@
+{"gcviz": {        
+        "mapframe": {
+                "size": {
+                        "height": 400,
+                        "width": 800
+                },
+                "extent": {
+                        "xmin": -5035766.0,
+                        "ymin": -668341.0,
+                        "xmax": 5547588.0,
+                        "ymax": 3564999.0
+                },
+                "resolution": {
+                        "min": -1,
+                        "max": -1
+                },
+                "map": { 
+                        "sr": {
+                                "wkid": 3978
+                        },
+                        "extent": {
+                                "xmin": -2752407.0,
+                                "ymin": -475361.0,
+                                "xmax": 3597605.0,
+                                "ymax": 2064644.0
+                        },
+                        "lods": [],
+                        "resolution": {
+                                "min": -1,
+                                "max": -1
+                        },
+                        "link": true,
+                        "layers": [{
+                                 "id": "name",
+                                "type": "tiled",
+                                "url": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer",
+                                "selectable": false,
+                                "swiper": {
+                                        "enable": false
+                                },
+                                "cluster": {
+                                        "enable": false
+                                },
+                                "resolution": {
+                                        "min": -1,
+                                        "max": -1
+                                }
+                        }]
+                }
+        },
+        "insetframe": {
+                "enable": false,
+                "size": {
+                        "numrow": 0,
+                        "numcol": 0
+                },
+                "insets": [{
+                }]
+        },
+        "header": {
+                "title": {
+                        "value": "Map 1",
+                        "alttext": "Map 1",
+                        "justify": "center"
+                },
+                "tools": true,
+                "print": {
+                        "enable": false,
+                        "type": "simple"
+                },
+                "fullscreen": true,
+                "inset": false,
+                "link": {
+                        "enable": false,
+                        "visible": false
+                }
+        },
+        "footer": {
+                "northarrow": {
+                        "enable": true,
+                        "inwkid": 3978
+                },
+                "mousecoords": {
+                        "enable": true,
+                        "outwkid": 4326,
+                        "urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer"
+                },
+                "datatable": { 
+                        "direction": "in"
+                }
+        },
+        "toolbardraw": {
+                "enable": true,
+                "expand": false,
+                "drawline": {
+                        "enable": true
+                },
+                "drawtext": {
+                        "enable": true
+                },
+                "measure": {
+                        "enable": false,
+                        "type": "full",
+                        "unit": "km"
+                },
+                "importexport": {
+                        "enable": false,
+                        "format": "JSON"
+                }
+        },
+        "toolbarnav": {
+                "enable": true,
+                "expand": false,
+                "zoom": false,
+                "fullextent": true,
+                "geolocation": {
+                        "enable": false,
+                        "type": "all"
+                },
+                "scalebar": {
+                        "enable": false,
+                        "unit": "km"
+                },
+                "scaledisplay": {
+                        "enable": false,
+                        "format": "standard"
+                },
+                "overview": {
+                        "enable": false,
+                        "url": "http"
+                },
+                "position":  {
+                        "enable": false
+                }
+        },
+        "customwidgets": []
+}}

@@ -1,1 +1,1 @@
-(function(){define(["gcaut-showMessageVM","jquery"],function(c,b){var a;a=function(f){var e=b("#gcvMain");var d="";d+='<div id="divShowMessage" class="gcvMargLeft10 gcvMargTop10">';d+='<span id="spnMsgText">'+f+"</span>";d+="</div>";c.initialize(d)};return{initialize:a}})}).call(this);
+(function(){define(["gcaut-showMessageVM"],function(b){var a;a=function(d){var c="";c+='<div id="divShowMessage" class="gcvMargLeft10 gcvMargTop10">';c+='<span id="spnMsgText">'+d+"</span>";c+="</div>";b.initialize(c)};return{initialize:a}})}).call(this);

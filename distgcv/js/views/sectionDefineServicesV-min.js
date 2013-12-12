@@ -1,1 +1,0 @@
-(function(){define(["gcaut-sectionDefineServicesVM","jquery","gcaut-i18n"],function(b,d,c){var a;a=function(){};return{initialize:a}})}).call(this);
