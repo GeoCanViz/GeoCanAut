@@ -9,6 +9,75 @@
 
 @import "includes/gcaut-mixin";
 
+label {
+	display: inline-block;
+}
+
+.gcaut-button {
+	cursor: pointer;
+	background: transparent;
+	border: none;
+	padding: (0.4 * $rembase) + rem;
+	margin: (0.3 * $rembase) + rem;
+	height: (3 * $rembase) + rem;
+	width: (3 * $rembase) + rem;
+	position: relative;
+  
+	.gcaut-img-button {
+		margin: 0 !important;
+		height: (2.2 * $rembase) + rem;
+		width: (2.2 * $rembase) + rem;
+	}
+	
+	&:disabled {
+		@include button-gradiant-disable;
+		@include content-border-radius;
+		cursor: none;
+	}
+	
+	&:hover:enabled {
+		@include button-gradiant-hover;
+		@include content-border-radius;
+	}
+  
+	&:focus {
+		@include button-gradiant-hover;
+		@include content-border-radius;
+	}
+  
+	&:active:enabled {
+		@include button-gradiant-active;
+		@include content-border-radius;
+	}
+}
+
+.gcaut-tooltip {
+	.ui-tooltip-content {
+		@include app-text(1.2);
+	}
+}
+
+.gcaut-hidden {
+	display: none;
+}
+
+input[type="file"] {
+	opacity: 0;
+	z-index: 1;
+	top:	0rem;
+	left: 0rem;
+	position: absolute;
+	margin: 0 !important;
+	height: (2.2 * $rembase) + rem;
+	width: (2.2 * $rembase) + rem;
+}
+
+
+
+
+
+
+
 body {
   line-height:1.0em!important;
   font-size: 10pt!important;

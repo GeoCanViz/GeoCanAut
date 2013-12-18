@@ -1,0 +1,72 @@
+{
+"gcaut": {
+	"name": "sample1.json"
+},
+"gcviz": {        
+	"mapframe": {
+		"size": {
+			"height": 400,
+			"width": 800
+		},
+		"extent": {
+			"xmin": 0.0,
+			"ymin": 0.0,
+			"xmax": 0.0,
+			"ymax": 0.0
+		},
+		"map": {
+			"sr": {
+				"wkid": 3978
+			},
+			"extent": {
+				"xmin": 0.0,
+				"ymin": 0.0,
+				"xmax": 0.0,
+				"ymax": 0.0
+			},
+			"lods": [],
+			"resolution": {
+				"min": 0,
+				"max": 0
+			},
+			"link": false,
+			"layers": [{
+				"id": "first",
+				"type": "tiled",
+				"url": "http://first"
+			}, {
+				"id": "second",
+				"type": "dynamic",
+				"url": "http://second"
+			}]
+		}
+	},
+	"header": {
+		"title": {
+			"value": "Map 1",
+			"alttext": "Map 1",
+			"justify": "center"
+		},
+		"tools": true,
+		"print": {
+			"enable": true,
+			"type": "simple"
+		},
+		"fullscreen": true,
+		"inset": false
+	},
+	"footer": {
+		"northarrow": {
+			"enable": true,
+			"inwkid": 3978
+		},
+		"mousecoords": {
+			"enable": true,
+			"outwkid": 4326,
+			"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer"
+		},
+		"datatable": { 
+			"direction": "in"
+		}
+	}
+}}

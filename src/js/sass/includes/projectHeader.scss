@@ -1,0 +1,29 @@
+@import "gcaut-mixin";
+
+.gcaut-projheader {
+	@include app-head-foot;
+	@include app-gradiant;
+	height: (14 * $rembase) + rem;
+	
+	.gcaut-projheader-title {
+		display: inline-block;
+		height: (4 * $rembase) + rem;
+	
+	.gcaut-projheader-titlelabel {
+			margin-top: (0.5 * $rembase) + rem;
+			line-height: (3.5 * $rembase) + rem;
+			@include app-text(1.6, bold);
+		}
+		
+		.gcaut-projheader-newlabel {
+			margin-top: (0.5 * $rembase) + rem;
+			line-height: (3.5 * $rembase) + rem;
+			@include app-text(1.2);
+		}
+	}
+  
+	.gcaut-projheader-button {
+		float: left;
+		display: inline-block;
+	}
+}

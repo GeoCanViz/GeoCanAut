@@ -5,67 +5,59 @@
  *
  * Header view model widget
  */
-
+/* global locationPath: false */
 (function() {
     'use strict';
-    define([
-        'jquery',
-        'knockout'
-    ], function($, ko) {
-        var addMapEvent,
-            deleteMapEvent,
-            initialize,
-            restoreMapEvent;
+    define(['jquery-private',
+        	'knockout',
+        	'gcaut-i18n'
+    ], function($aut, ko, i18n) {
+        var initialize,
+        	clean,
+        	vm;
         
-        initialize = function(id) {
+        initialize = function(elem, map) {
             
             // data model               
-            var headerVM = function() {
-                var _self = this;
+            var headerViewModel = function(elem, map) {
+                var _self = this,
+                	title = map.title;
+                
+                // label
+                _self.lblMapTitle = i18n.getDict('%map-name');
+                _self.lblMapAlt = i18n.getDict('%map-name');
+                
+                // input
+				_self.mapTitleValue = ko.observable(title.value);
+				_self.mapAltValue = ko.observable(title.alttext);
+				
+				// clean the view model
+				clean(ko, elem);
+				
                 _self.init = function() {
                     return { controlsDescendantBindings: true };
                 };
                 
-                /*
-                 * Add a map event
-                 */
-                self.addMapEvent = function() {
-                    var $divMapConfigs = $('#divMapConfigs');
-                    var $selMap = $('#selMap');
-                    var html = '';
-        //            mapNum = mapNum + 1;
-        //            html = '   <div id="'+mapNum+'" class="gcviz" data-gcviz="templates/default.json"></div>';
-        //            $divMapConfigs.append(html);
-        //            html = '        <option value="'+mapNum+'" selected>'+mapNum+'</option>';
-        //            $selMap.append(html);
-        //            var mapElem = $('#'+mapNum);
-        //            readConfig(mapElem);
-                };
-                
-                /*
-                 * Delete a map event
-                 */
-                self.deleteMapEvent = function(id) {
-                    
-                };
-                
-                /*
-                 * Restore a map event
-                 */
-                self.restoreMapEvent = function(id) {
-                    
-                };
-                
+                _self.bind = function() {
+					clean(ko, elem);
+					ko.applyBindings(_self, elem);
+				};
+                              
                 _self.init();
             };
-            ko.applyBindings(new headerVM(), $('#gcvMain')[0]); // Apply bindings only to the desired DIV in the VM
+            
+            vm = new headerViewModel(elem, map);
+            ko.applyBindings(vm, elem); // This makes Knockout get to work
+            return vm;
         };
         
+        clean = function(ko, elem) {
+			ko.cleanNode(elem);
+		};
+		
         return {
-            addMapEvent: addMapEvent,
-            deleteMapEvent: deleteMapEvent,
-            restoreMapEvent: restoreMapEvent,
-            initialize: initialize
+            initialize: initialize,
+            clean: clean
         };
     });
 }).call(this);
