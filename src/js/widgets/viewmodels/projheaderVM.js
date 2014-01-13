@@ -13,8 +13,9 @@
 			'gcaut-i18n',
 			'gcaut-ko',
 			'gcaut-vm-map',
-			'gcaut-vm-header'
-	], function($aut, ko, i18n, binding, mapVM, headerVM) {
+			'gcaut-vm-header',
+			'gcaut-vm-footer'
+	], function($aut, ko, i18n, binding, mapVM, headerVM, footerVM) {
 		var initialize,
 			readConfig,
 			vm;
@@ -27,22 +28,26 @@
 					pathNew = locationPath + 'gcaut/images/projNew.png',
 					pathOpen = locationPath + 'gcaut/images/projOpen.png',
 					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
-					pathRestore = locationPath + 'gcaut/images/projRestore.gif';
+					pathRestore = locationPath + 'gcaut/images/projRestore.gif',
+					pathSave = locationPath + 'gcaut/images/projSave.png';
 
 				// images path
 				_self.imgNew = pathNew;
 				_self.imgOpen = pathOpen;
 				_self.imgDelete = pathDelete;
 				_self.imgRestore = pathRestore;
+				_self.imgSave = pathSave;
 				
 				// set label
 				_self.headerLabel = i18n.getDict('%projheader-title');
 				_self.newLabel = i18n.getDict('%projheader-newlabel');
+				_self.saveLabel = i18n.getDict('%projheader-savelabel');
 				_self.mapLabel = i18n.getDict('%map') + ': ';
 				_self.mapsLabel = ko.observable(' ' + i18n.getDict('%of') + ' ' + i18n.getDict('%map') + '(s)');
 				
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');
+				_self.tpSave = i18n.getDict('%projheader-tpsavemap');
 				_self.tpOpen = i18n.getDict('%projheader-tpopenmap');
 				_self.tpDelete = i18n.getDict('%projheader-tpdeletemap');
 				_self.tpRestore = i18n.getDict('%projheader-tprestoremap');
@@ -113,6 +118,35 @@
 					_self.resetIndex();	
 				};
 				
+				_self.saveMap = function() {
+   					 
+					// get the active map id
+					var id = _self.mapsIDValue() - 1,
+						vm = _self.maps[id],
+						uri = 'data:text/csv;charset=utf-8,',
+						content = '{"gcaut": {"name": "sample1.json"},"gcviz": {',
+						downloadLink;
+					
+					// loop trought viewmodels and get info to write
+					Object.keys(vm).forEach(function(key) {
+					    content += vm[key].write();
+					    content += ',';
+					});
+					
+					// remove last comma, add the close brackets and add to uri
+					content = content.substring(0, content.length - 1);
+					content += '}}';
+					uri += content;
+					
+					// create a download link to get the file then delete it
+					downloadLink = document.createElement('a');
+					downloadLink.href = uri;
+					downloadLink.download = 'data.json';
+					document.body.appendChild(downloadLink);
+					downloadLink.click();
+					document.body.removeChild(downloadLink); 
+				};
+				
 				_self.resetIndex = function() {
 					var len = _self.maps.length,
 						lenAll = _self.maps.length;
@@ -153,6 +187,7 @@
 					// create the master view model (launch every view model one after the other)
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
+					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer);
 					
 					// push the vm to array, update the dropdown list and select the new item
 					_self.maps.push(vm);

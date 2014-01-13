@@ -113,6 +113,10 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<button class="gcaut-button" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }"><img class="gcaut-img-button" data-bind="attr:{src: imgDelete}"></img></button>
 				<button class="gcaut-button" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }"><img class="gcaut-img-button" data-bind="attr:{src: imgRestore}"></img></button>
 			</div>
+			<div class="gcaut-projheader-button" style="clear: both;">
+				<span class="gcaut-projheader-savelabel" data-bind="text: saveLabel"></span>
+				<button class="gcaut-button" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }"><img class="gcaut-img-button" data-bind="attr:{src: imgSave}"></img></button>
+			</div>
 		</div>
 	</section>
     
@@ -162,7 +166,22 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<div style="clear: both"></div>
 				<label for="headerMapAlt" data-bind="text: lblMapAlt"></label>
 				<input id="headerMapAlt" type="text" data-bind="value: mapAltValue"></input>
-			</setion>
+				<div style="clear: both"></div>
+				<label data-bind="text: lblEnbTools"></label>
+				<div style="clear: both"></div>
+				<label for="cb_tools" class="form-checkbox" data-bind="text: lblTools"></label>
+				<input type="checkbox" id="cb_tools" data-bind="checked: isTools">
+				<div style="clear: both"></div>
+				<label for="cb_print" class="form-checkbox" data-bind="text: lblPrint"></label>
+				<input type="checkbox" id="cb_print" data-bind="checked: isPrint">
+				<label for="cb_printtype" class="form-checkbox" data-bind="text: lblPrintType"></label>
+				<select id="cb_printtype" data-bind="options: printType, optionsText: 'printVal', optionsValue: 'printIndex', value: selectPrint, optionsCaption: lblSelectItem, enable: isPrint"></select>
+				<div style="clear: both"></div>
+				<label for="cb_inset" class="form-checkbox" data-bind="text: lblInset"></label>
+				<input type="checkbox" id="cb_inset" data-bind="checked: isInset">
+				<div style="clear: both"></div>
+				<label for="cb_fullscreen" class="form-checkbox" data-bind="text: lblFulscreen"></label>
+				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
 		</div>
 		<h2>Outils</h2>
 		<div class="tabbody">
@@ -170,11 +189,22 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		</div>
 		<h2>Pied</h2>
 		<div class="tabbody">
-			<section id="footer">
+			<section id="footerMap">
+				<label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
+				<input id="urlGeomServer" type="text" data-bind="value: urlGeomServer"></input>
+				<div style="clear: both"></div>
+				<label for="cb_arrow" class="form-checkbox" data-bind="text: lblEnbArrow"></label>
+				<input type="checkbox" id="cb_arrow" data-bind="checked: isArrow">
+				<label for="cb_arrowsr" class="form-checkbox" data-bind="text: lblArrowSR"></label>
+				<select id="cb_arrowsr" data-bind="options: arrowSR, enable: isArrow, value: selectArrowSR, optionsCaption: lblSelectItem"></select>
+				<div style="clear: both"></div>
+				<label for="cb_mouse" class="form-checkbox" data-bind="text: lblEnbMouse"></label>
+				<input type="checkbox" id="cb_mouse" data-bind="checked: isMouse">
+				<label for="cb_mousesr" class="form-checkbox" data-bind="text: lblMouseSR"></label>
+				<select id="cb_mousesr" data-bind="options: mouseSR, enable: isMouse, value: selectMouseSR, optionsCaption: lblSelectItem"></select>
 			</setion>
 		</div>
 	</div>
-
 	<section id="projectFooter" class="gcaut-projheader" style="height: 40px;"></section>
 </div>
 <dl id="gcwu-date-mod" role="contentinfo">

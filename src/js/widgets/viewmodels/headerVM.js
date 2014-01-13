@@ -17,19 +17,44 @@
         	vm;
         
         initialize = function(elem, map) {
-            
+            // Constructor for an object with two properties
+			var printTypeArr = function(value, index) {
+				this.printVal = value;
+				this.printIndex = index;
+			};
+
             // data model               
             var headerViewModel = function(elem, map) {
                 var _self = this,
-                	title = map.title;
-                
+                	title = map.title,
+                	print = map.print,
+                	printType = [i18n.getDict('%header-printtype1'), i18n.getDict('%header-printtype2')];
+
                 // label
-                _self.lblMapTitle = i18n.getDict('%map-name');
-                _self.lblMapAlt = i18n.getDict('%map-name');
+                _self.lblMapTitle = i18n.getDict('%header-mapname');
+                _self.lblMapAlt = i18n.getDict('%header-mapname');
+                _self.lblEnbTools = i18n.getDict('%header-lblbutton');
+                _self.lblTools = i18n.getDict('%header-tools');
+                _self.lblPrint = i18n.getDict('%header-print');
+                _self.lblPrintType = i18n.getDict('%header-printtype');
+                _self.lblInset = i18n.getDict('%header-inset');
+                _self.lblFulscreen = i18n.getDict('%header-fullscreen');
+                _self.lblSelectItem = i18n.getDict('%selectItem');
                 
                 // input
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
+				_self.isTools = ko.observable(map.tools);
+				_self.isPrint = ko.observable(print.enable);
+				_self.isInset = ko.observable(map.inset);
+				_self.isFullscreen = ko.observable(map.fullscreen);
+				
+				// print type
+				_self.printType = [new printTypeArr(printType[0], 0), new printTypeArr(printType[1], 1)];
+				_self.selectPrint = ko.observable();
+				if (typeof print.type !== 'undefined') {
+					_self.selectPrint(_self.printType[print.type].printIndex);
+				}
 				
 				// clean the view model
 				clean(ko, elem);
@@ -42,7 +67,26 @@
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
-                              
+                
+                _self.write = function() {
+					var value = '"header": {' +
+									'"title": {' +
+										'"value": "' + _self.mapTitleValue() +'",' +
+										'"alttext": "' + _self.mapAltValue() + '",' +
+										'"justify": "center"' +
+									'},' +
+									'"tools": ' + _self.isTools() + ',' +
+									'"print": {' +
+										'"enable": ' + _self.isPrint() + ',' +
+										'"type": ' + _self.selectPrint() +
+									'},' +
+									'"fullscreen": ' + _self.isFullscreen() + ',' +
+									'"inset": ' + _self.isInset() +
+								'}';
+					
+					return value;
+				};
+				              
                 _self.init();
             };
             

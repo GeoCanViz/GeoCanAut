@@ -44,26 +44,26 @@
 	"header": {
 		"title": {
 			"value": "Map 1",
-			"alttext": "Map 1",
+			"alttext": "Map 1 alt text",
 			"justify": "center"
 		},
 		"tools": true,
 		"print": {
 			"enable": true,
-			"type": "simple"
+			"type": 1
 		},
 		"fullscreen": true,
 		"inset": false
 	},
 	"footer": {
+		"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
 		"northarrow": {
 			"enable": true,
 			"inwkid": 3978
 		},
 		"mousecoords": {
 			"enable": true,
-			"outwkid": 4326,
-			"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer"
+			"outwkid": 4326
 		},
 		"datatable": { 
 			"direction": "in"

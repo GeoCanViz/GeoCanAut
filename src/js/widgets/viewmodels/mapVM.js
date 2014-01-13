@@ -53,6 +53,45 @@
 					ko.applyBindings(_self, elem);
 				};
 				
+				_self.write = function() {
+					var value = '"mapframe": {' +
+									'"size": {' +
+										'"height": ' + 400 + ',' +
+										'"width": ' + 800 +
+									'},' +
+									'"extent": {' +
+										'"xmin": ' + 0.0 + ',' +
+										'"ymin": ' + 0.0 + ',' +
+										'"xmax": ' + 0.0 + ',' +
+										'"ymax": ' + 0.0 +
+									'},' +
+									'"map": {' +
+										'"sr": {' +
+											'"wkid": ' + 3978 +
+										'},' +
+										'"extent": {' +
+											'"xmin": ' + 0.0 + ',' +
+											'"ymin": ' + 0.0 + ',' +
+											'"xmax": ' + 0.0 + ',' +
+											'"ymax": ' + 0.0 +
+										'},' +
+										'"lods": [],' +
+										'"resolution": {' +
+											'"min": ' + 0 + ',' +
+											'"max": ' + 0 +
+										'},' +
+										'"link": ' + false + ',' +
+										'"layers": [{' +
+											'"id": "first",' +
+											'"type": "tiled",' +
+											'"url": "http.first"' +
+										'}]'+
+									'}' +
+								'}';
+					
+					return value;
+				};
+				
 				_self.addLayer = function() {
 					_self.layers.push({ id: 'New at ' + new Date() });
 				};

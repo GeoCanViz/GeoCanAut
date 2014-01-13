@@ -204,6 +204,10 @@
 				name: 'gcaut-vm-header',
 				location: locationPath + 'gcaut/js/viewmodels',
 				main: 'headerVM-min'
+			}, {
+				name: 'gcaut-vm-footer',
+				location: locationPath + 'gcaut/js/viewmodels',
+				main: 'footerVM-min'
 			}
 		]
 	});
