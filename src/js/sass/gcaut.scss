@@ -57,13 +57,20 @@ label {
 	}
 }
 
+.gcaut-message-error {
+	@include app-text(1.3, normal, red);
+}
+
+.gcaut-message {
+	@include app-text(1.3);
+}
+
 .gcaut-hidden {
 	display: none;
 }
 
 input[type="file"] {
 	opacity: 0;
-	z-index: 1;
 	top:	0rem;
 	left: 0rem;
 	position: absolute;

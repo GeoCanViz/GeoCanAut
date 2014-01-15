@@ -59,6 +59,16 @@
 				_self.mapsIDValue = ko.observable();
 
 				_self.init = function() {
+					
+					// work around for Firefox because we cant trigger the input if it is inside the button
+					// We need it inside the button to have our css
+					if (window.browser === 'Firefox') {
+						//var inpFile = document.getElementById('fileDialogFF');
+						$('#openFileDialog').click(function(e) {
+						    $(document.getElementById('fileDialogFF')).click();
+						});
+					}
+					
 					return { controlsDescendantBindings: true };
 				};
 				
@@ -123,7 +133,7 @@
 					// get the active map id
 					var id = _self.mapsIDValue() - 1,
 						vm = _self.maps[id],
-						uri = 'data:text/csv;charset=utf-8,',
+						uri = 'data:text/json;charset=utf-8,',
 						content = '{"gcaut": {"name": "sample1.json"},"gcviz": {',
 						downloadLink;
 					

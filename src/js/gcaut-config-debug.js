@@ -192,6 +192,10 @@
 				location: locationPath + 'src/js/custom',
 				main: 'gcaut-ko-binding'
 			}, {
+				name: 'gcviz-gismap',
+				location: locationPath + 'src/js/gistasks',
+				main: 'gisMapUtility'
+			}, {
 				name: 'gcaut-vm-projheader',
 				location: locationPath + 'src/js/widgets/viewmodels',
 				main: 'projheaderVM'

@@ -42,6 +42,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 </head>
 
 <body><div id="wb-body">
+	
 <div id="wb-skip">
 <ul id="wb-tphp">
 <li id="wb-skip1"><a href="#wb-cont">Passer au contenu principal</a></li>
@@ -104,7 +105,11 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 			<div class="gcaut-projheader-button">
 				<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
 				<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
-				<button class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }"><img class="gcaut-img-button" data-bind="attr:{src: imgOpen}"></img><input type="file" accept="application/json" data-bind="event: { change: openMap }"></input></button>
+				<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+				<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
+					<input type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+					<img class="gcaut-img-button" data-bind="attr:{src: imgOpen}"></img>
+				</button>
 			</div>
 			<div class="gcaut-projheader-button" style="clear: both;">
 				<span class="gcaut-projheader-newlabel" data-bind="text: mapLabel"></span>
@@ -127,21 +132,36 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<div id="gcautmaptabs" class="tabs2">
 					<h3>Général</h3>
 					<div id="generalMap" class="tabbody2">
-						<span for="mapSize" data-bind="text: lblMapSize"></span>
-						<label for="mapHeight" data-bind="text: lblMapHeight"></label>
-						<input id="mapHeight" type="text" data-bind="value: mapHeightValue"></input>
-						<label for="mapWidth" data-bind="text: lblMapWidth"></label>
-						<input id="mapWidth" type="text" data-bind="value: mapWidthValue"></input>
+						<span data-bind="text: lblMapSize"></span>
+						<label for="txt_mapHeight" data-bind="text: lblMapHeight"></label>
+						<input id="txt_mapHeight" data-bind="value: mapHeightValue"></input>
+						<label for="txt_mapWidth" data-bind="text: lblMapWidth"></label>
+						<input id="txt_mapWidth" data-bind="value: mapWidthValue"></input>
 						<div style="clear: both"></div>
-						<label for="addLayer" data-bind="text: lblAddLayer"></label>
-						<button id="addLayer" class="gcaut-button" tabindex="0" data-bind="click: addLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
+						<label for="cb_mapsr" class="form-checkbox" data-bind="text: lblMapSR"></label>
+						<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem"></select>
+						<div style="clear: both"></div>
+						<span data-bind="text: lblAddLayer"></span>
+						<button id="addLayer" class="gcaut-button" tabindex="0" data-bind="click: selectLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
 						<div id="layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
 						<script type="text/html" id="mapLayers">
 							<div>
-							<span data-bind="text: id"> </span>
+							<span data-bind="text: id"></span>
         					<a href="#" data-bind="click: $parent.removeLayer">Remove</a>
         					</div>
 						</script>
+					</div>
+					<div id="map_addlayer" data-bind="css: hidden">
+							<form><fieldset>
+								<label for="cb_layertype" class="form-checkbox" data-bind="text: lblLayerType"></label>
+								<select id="cb_layertype" data-bind="options: layerType, value: selectLayerType, optionsCaption: lblSelectItem"></select>
+								<div style="clear: both"></div>
+								<label for="txt_layerURL" data-bind="text: lblLayerURL"></label>
+								<input id="txt_layerURL" class="text ui-widget-content ui-corner-all" data-bind="value: layerURL, enable: isValid"></input>
+								<button class="gcaut-button" tabindex="0" data-bind="click: validateLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
+								<div style="clear: both"></div>
+								<span id="layerMessage"></span>
+							</fieldset></form>
 					</div>
 					<h3>Ordre des couvertures</h3>
 					<div class="tabbody2">
@@ -286,7 +306,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 <!-- CustomScriptsStart -->
 <!-- bootstrapper script start (comment min and uncomment debug to run without to build)-->
 <script>dojoConfig = { async: true };</script> 
-<script src="http://js.arcgis.com/3.7/"></script>
+<script src="http://js.arcgis.com/3.8/"></script>
 <!-- <script src="../gcaut/gcaut-config-min.js"></script> -->
 <script src="../src/js/gcaut-config-debug.js"></script>
 <link rel="stylesheet" href="../gcaut/gcaut-min.css">

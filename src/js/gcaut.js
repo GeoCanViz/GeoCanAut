@@ -10,10 +10,11 @@ var locationPath;
 (function() {
 	'use strict';
 
-    define(['gcaut-vm-projheader',
+    define(['jquery-private',
     		'jqueryui',
-    		'accessibletabs'],
-    function(projheaderVM, jqui, tabs) {
+    		'accessibletabs',
+    		'gcaut-vm-projheader'],
+    function($aut, jqui, tabs, projheaderVM) {
 		var initialize,
 			setLocationPath;
 
@@ -23,6 +24,10 @@ var locationPath;
 		initialize = function() {
 			var elem = document.getElementById('projectHeader');
 			
+			// extent or private AMD jQuery with the jQuery from outside project to get reference to some dependencies (magnificPopup, jqueryUI, slidesJS)
+			// we need to do this because those libraries are not AMD and use the window.jQuery object to initialize themselves.
+			$aut.extend(true, $aut, $);
+                        
 			// set location path
 			setLocationPath();
 			
