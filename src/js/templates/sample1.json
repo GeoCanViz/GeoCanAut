@@ -8,35 +8,35 @@
 			"height": 400,
 			"width": 800
 		},
-		"extent": {
-			"xmin": 0.0,
-			"ymin": 0.0,
-			"xmax": 0.0,
-			"ymax": 0.0
+		"extentmax": {
+			"xmin": 1.0,
+			"ymin": 1.0,
+			"xmax": 1.0,
+			"ymax": 1.0
 		},
 		"map": {
 			"sr": {
 				"wkid": 3978
 			},
-			"extent": {
-				"xmin": 0.0,
-				"ymin": 0.0,
-				"xmax": 0.0,
-				"ymax": 0.0
+			"extentinit": {
+				"xmin": 2.0,
+				"ymin": 2.0,
+				"xmax": 2.0,
+				"ymax": 2.0
 			},
 			"lods": [],
 			"resolution": {
 				"min": 0,
 				"max": 0
 			},
-			"link": false,
+			"link": true,
 			"layers": [{
 				"id": "first",
-				"type": "tiled",
+				"type": 3,
 				"url": "http://first"
 			}, {
 				"id": "second",
-				"type": "dynamic",
+				"type": 4,
 				"url": "http://second"
 			}]
 		}
@@ -50,7 +50,7 @@
 		"tools": true,
 		"print": {
 			"enable": true,
-			"type": 1
+			"type": 2
 		},
 		"fullscreen": true,
 		"inset": false

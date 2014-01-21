@@ -46,9 +46,11 @@
 		validateLayer = function(message, type, url, valid) {
 			var layer;
 			
-			if (type === 'esriREST') {
+			// make sure url start by http:// or https://. If not, add it
+			// TODO
+			if (type === 3) {
 				layer = new esri.layers.ArcGISTiledMapServiceLayer(url);
-			} else if (type === 'dynamic') {
+			} else if (type === 4) {
 				layer = new esri.layers.ArcGISDynamicMapServiceLayer(url);
 			} else if (type === 'feature') {
 				layer = new esri.layers.FeatureLayer(url, {
@@ -72,7 +74,6 @@
 
 				$message.addClass('gcaut-message-error');
 				$message.text(i18n.getDict('%map-layererror'));
-
 			});
 			
 		};

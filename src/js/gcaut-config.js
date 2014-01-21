@@ -193,9 +193,13 @@
 				location: locationPath + 'gcaut/js/custom',
 				main: 'gcaut-ko-binding-min'
 			}, {
-				name: 'gcviz-gismap',
+				name: 'gcaut-gismap',
 				location: locationPath + 'gcaut/js/gistasks',
-				main: 'gisMapUtility'
+				main: 'gisMapUtility-min'
+			}, {
+				name: 'gcaut-gisrest',
+				location: locationPath + 'gcaut/js/gistasks',
+				main: 'gisServiceEsriRest-min'
 			}, {
 				name: 'gcaut-vm-projheader',
 				location: locationPath + 'gcaut/js/viewmodels',

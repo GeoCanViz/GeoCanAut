@@ -104,23 +104,23 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		<div id="newMap">
 			<div class="gcaut-projheader-button">
 				<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
-				<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
+				<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
 				<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
 				<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
 					<input type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
-					<img class="gcaut-img-button" data-bind="attr:{src: imgOpen}"></img>
+					<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
 				</button>
 			</div>
 			<div class="gcaut-projheader-button" style="clear: both;">
 				<span class="gcaut-projheader-newlabel" data-bind="text: mapLabel"></span>
 				<select id="mapsID" data-bind="options: mapsID, value: mapsIDValue"></select>
 				<span class="gcaut-projheader-newlabel" data-bind="text: mapsLabel"></span>
-				<button class="gcaut-button" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }"><img class="gcaut-img-button" data-bind="attr:{src: imgDelete}"></img></button>
-				<button class="gcaut-button" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }"><img class="gcaut-img-button" data-bind="attr:{src: imgRestore}"></img></button>
+				<button class="gcaut-button" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }"><img class="gcaut-img-button" data-bind="attr: { src: imgDelete }"></img></button>
+				<button class="gcaut-button" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }"><img class="gcaut-img-button" data-bind="attr: { src: imgRestore }"></img></button>
 			</div>
 			<div class="gcaut-projheader-button" style="clear: both;">
 				<span class="gcaut-projheader-savelabel" data-bind="text: saveLabel"></span>
-				<button class="gcaut-button" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }"><img class="gcaut-img-button" data-bind="attr:{src: imgSave}"></img></button>
+				<button class="gcaut-button" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }"><img class="gcaut-img-button" data-bind="attr: { src: imgSave }"></img></button>
 			</div>
 		</div>
 	</section>
@@ -138,11 +138,72 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<label for="txt_mapWidth" data-bind="text: lblMapWidth"></label>
 						<input id="txt_mapWidth" data-bind="value: mapWidthValue"></input>
 						<div style="clear: both"></div>
-						<label for="cb_mapsr" class="form-checkbox" data-bind="text: lblMapSR"></label>
-						<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem"></select>
+						<label for="cb_link" data-bind="text: lblLink"></label>
+						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
 						<div style="clear: both"></div>
-						<span data-bind="text: lblAddLayer"></span>
-						<button id="addLayer" class="gcaut-button" tabindex="0" data-bind="click: selectLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
+						<span class="gcaut-subtitle" data-bind="text: lblBasemap"></span>
+						<div style="clear: both"></div>
+						<label for="cb_basetype" data-bind="text: lblLayerType"></label>
+						<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem"></select>
+						<div style="clear: both"></div>
+						<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
+						<input id="txt_baseURL" data-bind="value: baseURL, visible: $root.selectBaseLayerType"></input>
+						<button class="gcaut-button" tabindex="0" data-bind="callbacks: { func: 'showBaseInfo' }, click: validateBaseLayer, tooltip: { content: tpNew }, visible: $root.selectBaseLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+						<table data-bind="visible: isBaseValid">
+							<tr>
+								<td>
+									<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
+									<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem"></select>
+								</td>
+							</tr>
+							<tr>
+								<td><span data-bind="text: lblExtentMax"></span></td>
+								<td>
+									<label for="txt_mextentMinX" data-bind="text: lblExtentMinX"></label>
+									<input id="txt_mextentMinX" data-bind="value: maxExtentMinX, enable: false"></input>
+								</td>
+								<td>
+									<label for="txt_mextentMinY" data-bind="text: lblExtentMinY"></label>
+									<input id="txt_mextentMinY" data-bind="value: maxExtentMinY, enable: false"></input>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<label for="txt_mextentMaxX" data-bind="text: lblExtentMaxX"></label>
+									<input id="txt_mextentMaxX" data-bind="value: maxExtentMaxX, enable: false"></input>
+								</td>
+								<td>
+									<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
+									<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
+								</td>
+							</tr>
+							<tr>
+								<td><span data-bind="text: lblExtentInit"></span></td>
+								<td>
+									<label for="txt_iextentMinX" data-bind="text: lblExtentMinX"></label>
+									<input id="txt_iextentMinX" data-bind="value: initExtentMinX, enable: false"></input>
+								</td>
+								<td>
+									<label for="txt_iextentMinY" data-bind="text: lblExtentMinY"></label>
+									<input id="txt_iextentMinY" data-bind="value: initExtentMinY, enable: false"></input>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<label for="txt_iextentMaxX" data-bind="text: lblExtentMaxX"></label>
+									<input id="txt_iextentMaxX" data-bind="value: initExtentMaxX, enable: false"></input>
+								</td>
+								<td>
+									<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
+									<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
+								</td>
+							</tr>
+						</table>
+						<div style="clear: both"></div>
+						<span class="gcaut-subtitle" data-bind="text: lblAddLayer"></span>
+						<button id="addLayer" class="gcaut-button" tabindex="0" data-bind="click: selectLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
 						<div id="layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
 						<script type="text/html" id="mapLayers">
 							<div>
@@ -153,12 +214,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					</div>
 					<div id="map_addlayer" data-bind="css: hidden">
 							<form><fieldset>
-								<label for="cb_layertype" class="form-checkbox" data-bind="text: lblLayerType"></label>
-								<select id="cb_layertype" data-bind="options: layerType, value: selectLayerType, optionsCaption: lblSelectItem"></select>
+								<label for="cb_layertype" data-bind="text: lblLayerType"></label>
+								<select id="cb_layertype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
 								<div style="clear: both"></div>
 								<label for="txt_layerURL" data-bind="text: lblLayerURL"></label>
 								<input id="txt_layerURL" class="text ui-widget-content ui-corner-all" data-bind="value: layerURL, enable: isValid"></input>
-								<button class="gcaut-button" tabindex="0" data-bind="click: validateLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr:{src: imgNew}"></img></button>
+								<button class="gcaut-button" tabindex="0" data-bind="click: validateLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 								<div style="clear: both"></div>
 								<span id="layerMessage"></span>
 							</fieldset></form>
@@ -195,7 +256,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<label for="cb_print" class="form-checkbox" data-bind="text: lblPrint"></label>
 				<input type="checkbox" id="cb_print" data-bind="checked: isPrint">
 				<label for="cb_printtype" class="form-checkbox" data-bind="text: lblPrintType"></label>
-				<select id="cb_printtype" data-bind="options: printType, optionsText: 'printVal', optionsValue: 'printIndex', value: selectPrint, optionsCaption: lblSelectItem, enable: isPrint"></select>
+				<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, optionsCaption: lblSelectItem, enable: isPrint"></select>
 				<div style="clear: both"></div>
 				<label for="cb_inset" class="form-checkbox" data-bind="text: lblInset"></label>
 				<input type="checkbox" id="cb_inset" data-bind="checked: isInset">
@@ -307,6 +368,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 <!-- bootstrapper script start (comment min and uncomment debug to run without to build)-->
 <script>dojoConfig = { async: true };</script> 
 <script src="http://js.arcgis.com/3.8/"></script>
+<script src="http://serverapi.arcgisonline.com/jsapi/ve/?v=1.4"></script>
 <!-- <script src="../gcaut/gcaut-config-min.js"></script> -->
 <script src="../src/js/gcaut-config-debug.js"></script>
 <link rel="stylesheet" href="../gcaut/gcaut-min.css">

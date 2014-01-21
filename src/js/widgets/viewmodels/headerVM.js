@@ -28,7 +28,7 @@
                 var _self = this,
                 	title = map.title,
                 	print = map.print,
-                	printType = [i18n.getDict('%header-printtype1'), i18n.getDict('%header-printtype2')];
+                	printType = [{ id: 1, val: i18n.getDict('%header-printtype1') }, { id: 2, val: i18n.getDict('%header-printtype2') }];
 
                 // label
                 _self.lblMapTitle = i18n.getDict('%header-mapname');
@@ -50,10 +50,10 @@
 				_self.isFullscreen = ko.observable(map.fullscreen);
 				
 				// print type
-				_self.printType = [new printTypeArr(printType[0], 0), new printTypeArr(printType[1], 1)];
+				_self.printType = printType;
 				_self.selectPrint = ko.observable();
 				if (typeof print.type !== 'undefined') {
-					_self.selectPrint(_self.printType[print.type].printIndex);
+					_self.selectPrint(_self.printType[print.type -1]);
 				}
 				
 				// clean the view model
@@ -78,7 +78,7 @@
 									'"tools": ' + _self.isTools() + ',' +
 									'"print": {' +
 										'"enable": ' + _self.isPrint() + ',' +
-										'"type": ' + _self.selectPrint() +
+										'"type": ' + _self.selectPrint().id +
 									'},' +
 									'"fullscreen": ' + _self.isFullscreen() + ',' +
 									'"inset": ' + _self.isInset() +

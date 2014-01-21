@@ -8,7 +8,7 @@
 			"height": 0,
 			"width": 0
 		},
-		"extent": {
+		"extentmax": {
 			"xmin": 0.0,
 			"ymin": 0.0,
 			"xmax": 0.0,
@@ -18,7 +18,7 @@
 			"sr": {
 				"wkid": 0
 			},
-			"extent": {
+			"extentinit": {
 				"xmin": 0.0,
 				"ymin": 0.0,
 				"xmax": 0.0,

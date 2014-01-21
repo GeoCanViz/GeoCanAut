@@ -57,6 +57,10 @@ label {
 	}
 }
 
+.gcaut-subtitle {
+  @include app-text(1.2, bold);
+}
+
 .gcaut-message-error {
 	@include app-text(1.3, normal, red);
 }
