@@ -31,24 +31,9 @@ var locationPath;
 			// set location path
 			setLocationPath();
 			
-			// initialize tabs container
-			$('#gcauttabs').accessibleTabs({
-				currentClass: 'current', 
-				tabhead: 'h2', 
-				tabbody: '.tabbody', 
-				fx:'fadeIn',
-				fxspeed: 'normal',
-				currentInfoText: '', 
-			});
-			
-			$('#gcautmaptabs').accessibleTabs({
-				currentClass: 'current', 
-				tabhead: 'h3', 
-				tabbody: '.tabbody2', 
-				fx:'fadeIn',
-				fxspeed: 'normal',
-				currentInfoText: '', 
-			});
+			// initialize jQueryUI tabs container			
+			$('#gcauttabs').tabs({ heightStyle: 'auto' });
+			$('#gcautmaptabs').tabs({ heightStyle: 'auto' });
 			
 			// launch project header
 			projheaderVM.initialize(elem);

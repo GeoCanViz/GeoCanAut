@@ -93,7 +93,6 @@
 				_self.initExtentMinY = ko.observable(extentMax.ymin);
 				_self.initExtentMaxX = ko.observable(extentMax.xmax);
 				_self.initExtentMaxY = ko.observable(extentMax.ymax);
-				_self.baseCallback = ko.observable(false);
 				
 				// layer input
 				_self.layers = ko.observableArray(map.layers);
@@ -102,6 +101,9 @@
 				_self.selectLayerType = ko.observable();
 				_self.isValid = ko.observable(true);
 				
+				// layer service info array
+				_self.servLayers = ko.observableArray();
+
 				// clean the view model
 				clean(ko);
 
@@ -183,7 +185,8 @@
 					//var url = 'http://apps.geomatics.gov.nt.ca/ArcGIS/services/GNWT/BiologicEcologic_LCC';
 					//var url = 'http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en?';
 					var url = 'http://maps.ottawa.ca/ArcGIS/rest/services/CyclingMap/MapServer';
-					gisREST.getResourceInfo(url);
+					var url = 'http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer';
+					gisREST.getResourceInfo(url, showResourceInfo);
 					_self.isBaseValid(true);
 				};
         
@@ -230,6 +233,118 @@
 					_self.layers.remove(this);
 				};
     
+    			function showResourceInfo(sender, data) {
+					var layers = [],
+						len = sender.layers.length - 1,
+						index = -1,
+						item,
+						layer,
+						sendLayers = sender.layers;
+
+					while (index !== len) {
+						// set attribute the get sublayers
+						layer = {};
+						item = sendLayers[index + 1];
+						layer.name = item.name;
+						layer.id = item.id;
+						layer.servLayers = getSublayer(item, sendLayers, []);
+						
+						// knockout checkbox binding
+						layer.isChecked = ko.observable(false);
+						layer.isChecked.subscribe(check);
+   				
+						// get index of the next group
+						if (layer.servLayers.length > 0) {
+							index = getIndex(layer.servLayers, 0);
+						} else {
+							index = layer.id;
+						}
+
+						layers.push(layer);
+					}
+					
+					_self.servLayers(layers);
+				};
+				
+				function getSublayer(parent, sendLayers, layers) {
+					var sublayer = {},
+						subLayerIds,
+						child,
+						len;
+					
+					// if there is sublayers add them
+					subLayerIds = parent.subLayerIds;
+					if (subLayerIds !== null) {
+						len = subLayerIds.length;
+						while (len--) {
+							sublayer = {};
+							sublayer.servLayers = [];
+							
+							// add the child info and push to array
+							child = sendLayers[subLayerIds[len]];
+							sublayer.name = child.name;
+							sublayer.id = child.id;
+							sublayer.isChecked = ko.observable(false);
+							sublayer.isChecked.subscribe(check);
+		   				
+							layers.push(sublayer);
+							
+							// call the same function to know if there is child with tha child sublayers array to add to
+							getSublayer(child, sendLayers, layers[layers.length - 1].servLayers);
+						}
+					}
+					
+					return layers;
+				};
+				
+				function check(value) {
+		   			ko.utils.arrayForEach(_self.servLayers(), function(item) {
+						checksub(item);
+					});
+		   		};
+
+				_self.changeServiceVisibility = function(selectedLayer, event) {
+
+                                        return true;
+                                };
+
+
+		   		function checksub(item) {
+		   			if (item.isChecked()) {
+							ko.utils.arrayForEach(item.servLayers, function(subitem) {
+								subitem.isChecked(true); 
+								checksub(subitem);
+							});
+							
+							
+						}
+						
+						if (!item.isChecked()) {
+							ko.utils.arrayForEach(item.servLayers, function(subitem) {
+								subitem.isChecked(false); 
+								checksub(subitem);
+							});
+						}
+		   		};
+		   		
+				function getIndex(arr, id) {
+					var val;
+					
+					if (arr.length > 0) {
+						for (var i = 0; i < arr.length; i++) {
+							if (arr[i].servLayers.length > 0) {
+								val = getIndex(arr[i].servLayers, id);	
+								id = (val > id) ? val : id;
+							} else {
+								val = arr[i].id;
+								id = (val > id) ? val : id;
+							}
+						}
+					} 
+					
+					return id;
+				};
+				
 				_self.init();
 			};
 
@@ -240,7 +355,7 @@
 		
 		clean = function(ko) {
 			// clean (each tab) and remove node in foreach array binding
-			ko.cleanNode(document.getElementById('generalMap'));
+			ko.cleanNode(document.getElementById('tabmap-gen'));
 			//document.getElementById('layers').innerHTML = '';
 		};
 		
