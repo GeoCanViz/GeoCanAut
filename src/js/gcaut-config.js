@@ -173,14 +173,6 @@
 				location: locationPath + 'gcaut/dependencies',
 				main: 'jqueryui.min'
 			}, {
-				name: 'accessibletabs',
-				location: locationPath + 'gcaut/dependencies',
-				main: 'jquery.tabs.min'
-			}, {
-				name: 'syncheight',
-				location: locationPath + 'gcaut/dependencies',
-				main: 'jquery.syncheight.min'
-			}, {
 				name: 'gcaut',
 				location: locationPath + 'gcaut',
 				main: 'gcaut-min'

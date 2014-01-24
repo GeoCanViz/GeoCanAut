@@ -249,10 +249,10 @@
 						layer.id = item.id;
 						layer.servLayers = getSublayer(item, sendLayers, []);
 						
-						// knockout checkbox binding
+						// knockout checkbox and label binding
 						layer.isChecked = ko.observable(false);
-						layer.isChecked.subscribe(check);
-   				
+						layer.isUse = ko.observable(false);
+   						
 						// get index of the next group
 						if (layer.servLayers.length > 0) {
 							index = getIndex(layer.servLayers, 0);
@@ -262,7 +262,8 @@
 
 						layers.push(layer);
 					}
-					
+
+					// update knockout array
 					_self.servLayers(layers);
 				};
 				
@@ -285,8 +286,7 @@
 							sublayer.name = child.name;
 							sublayer.id = child.id;
 							sublayer.isChecked = ko.observable(false);
-							sublayer.isChecked.subscribe(check);
-		   				
+							sublayer.isUse = ko.observable(false);						
 							layers.push(sublayer);
 							
 							// call the same function to know if there is child with tha child sublayers array to add to
@@ -296,47 +296,21 @@
 					
 					return layers;
 				};
-				
-				function check(value) {
-		   			ko.utils.arrayForEach(_self.servLayers(), function(item) {
-						checksub(item);
-					});
-		   		};
-
-				_self.changeServiceVisibility = function(selectedLayer, event) {
-
-                                        return true;
-                                };
-
-
-		   		function checksub(item) {
-		   			if (item.isChecked()) {
-							ko.utils.arrayForEach(item.servLayers, function(subitem) {
-								subitem.isChecked(true); 
-								checksub(subitem);
-							});
-							
-							
-						}
-						
-						if (!item.isChecked()) {
-							ko.utils.arrayForEach(item.servLayers, function(subitem) {
-								subitem.isChecked(false); 
-								checksub(subitem);
-							});
-						}
-		   		};
-		   		
+             
 				function getIndex(arr, id) {
-					var val;
+					var val,
+						len,
+						layers;
 					
 					if (arr.length > 0) {
-						for (var i = 0; i < arr.length; i++) {
-							if (arr[i].servLayers.length > 0) {
-								val = getIndex(arr[i].servLayers, id);	
+						len = arr.length;
+						while (len--) {
+							layers = arr[len].servLayers;
+							if (layers.length > 0) {
+								val = getIndex(layers, id);	
 								id = (val > id) ? val : id;
 							} else {
-								val = arr[i].id;
+								val = arr[len].id;
 								id = (val > id) ? val : id;
 							}
 						}
@@ -344,6 +318,55 @@
 					
 					return id;
 				};
+				
+				_self.cascadeCheck = function(parents, item, event) {
+					
+					// Set isUse for all parents;
+					item.isUse(!item.isChecked());
+					checkParentlayers(parents, !item.isChecked());
+		
+					// check or uncheck all child layers and set the isUse
+					checkSublayers(item, 0);
+					return true;
+				};
+
+				function checkParentlayers(parents, checked) {
+					// minus 1 because the last item in the array is the view model
+					var len = parents.length - 1,
+						index = 0,
+						parent,
+						use;
+					
+					while (index !== len) {
+						use = false;
+						parent = parents[index];
+						index++;
+						
+						// check if a layer on the same level is use
+						ko.utils.arrayForEach(parent.servLayers, function(subitem) {
+							if (subitem.isUse()) {
+								use = true;
+							}; 
+						});
+						
+						// if a layer on the same level is use set to true
+						if (use) {
+							parent.isUse(true);
+						} else {
+							parent.isUse(checked);
+						}
+					}
+		   		};
+		   		
+		   		function checkSublayers(item, level) {
+		   			var checked = level ? !item.isChecked() : item.isChecked();
+
+					ko.utils.arrayForEach(item.servLayers, function(subitem) {
+						subitem.isUse(!checked); 
+						subitem.isChecked(!checked); 
+						checkSublayers(subitem, 1);
+					});
+		   		};
 				
 				_self.init();
 			};

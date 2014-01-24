@@ -164,8 +164,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							</div>
 							<script id="serviceLayers" type="text/html">
 								<li>
-									<label for="chk_layer" data-bind="text: name"></label>
-									<input type="checkbox" id="chk_layer" data-bind="click: $root.changeServiceVisibility, attr: {title: 'tes', checked: false}""></input>
+									<label data-bind="text: name, attr: { for: $data.name }, style: { color: isUse() ? 'red' : 'black' }"></label>
+									<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), checked: isChecked, attr: { id: $data.name }"></input>
+									
 									<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
 								</li>
 							</script>

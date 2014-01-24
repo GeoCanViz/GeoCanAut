@@ -12,9 +12,8 @@ var locationPath;
 
     define(['jquery-private',
     		'jqueryui',
-    		'accessibletabs',
     		'gcaut-vm-projheader'],
-    function($aut, jqui, tabs, projheaderVM) {
+    function($aut, jqui, projheaderVM) {
 		var initialize,
 			setLocationPath;
 
