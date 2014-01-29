@@ -42,7 +42,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 </head>
 
 <body><div id="wb-body">
-	
+
 <div id="wb-skip">
 <ul id="wb-tphp">
 <li id="wb-skip1"><a href="#wb-cont">Passer au contenu principal</a></li>
@@ -98,7 +98,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 	<img class="gcviz-head-logo" src="images/geocanviz.gif"></img>
 	<h1 class="gcviz-head-h1">Exemples pratiques</h1>
 	<div style="background-color: black; height: 10px;"></div>
-	
+
 	<section id="projectHeader" class="gcaut-projheader">
 		<div class="gcaut-projheader-title"><span class="gcaut-projheader-titlelabel" data-bind="text: headerLabel"></span></div>
 		<div id="newMap">
@@ -124,14 +124,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 			</div>
 		</div>
 	</section>
-	<div id="gcauttabs" class="tabs1">
+	<div id="gcauttabs" class="tabs1 gcaut-invisible">
 		<ul>
 			<li><a href="#tab-map">Carte</a></li>
 			<li><a href="#tab-inset">Insertion</a></li>
 			<li><a href="#tab-head">En-tête</a></li>
 			<li><a href="#tab-tools">Outils</a></li>
 			<li><a href="#tab-foot">Pied</a></li>
-		</ul>	
+		</ul>
 		<div id="tab-map">
 			<div id="gcautmaptabs">
 				<ul>
@@ -153,31 +153,31 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<span class="gcaut-subtitle" data-bind="text: lblBasemap"></span>
 							<div style="clear: both"></div>
 							<label for="cb_basetype" data-bind="text: lblLayerType"></label>
-							<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem"></select>
+							<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: layers().length === 0"></select>
 							<div style="clear: both"></div>
 							<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-							<input id="txt_baseURL" data-bind="value: baseURL, visible: $root.selectBaseLayerType"></input>
-							<button class="gcaut-button" tabindex="0" data-bind="callbacks: { func: 'showBaseInfo' }, click: validateBaseLayer, tooltip: { content: tpNew }, visible: $root.selectBaseLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
-							
-							<div style="height: 300px; overflow:auto;" data-bind="visible: $root.selectBaseLayerType">
-								<ul style="display: block;" data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
-							</div>
-							<script id="serviceLayers" type="text/html">
-								<li>
-									<label data-bind="text: name, attr: { for: $data.name }, style: { color: isUse() ? 'red' : 'black' }"></label>
-									<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), checked: isChecked, attr: { id: $data.name }"></input>
-									
-									<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
-								</li>
+							<input id="txt_baseURL" data-bind="value: baseURL, visible: $root.selectBaseLayerType, enable: layers().length === 0"></input>
+							<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: layers().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+							<div style="clear: both"></div>
+							<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
+							<div style="clear: both"></div>
+							<div id="baselayers" style="max-height: 300px; overflow:auto;" data-bind="template: { name: 'mapBaseLayers', foreach: layers }"></div>
+							<script type="text/html" id="mapBaseLayers">
+								<ul style="display: block;">
+									<li style="white-space: nowrap;" data-bind="visible: $data.category === 'base'">
+										<a href="#" data-bind="click: $parent.removeLayer">Remove</a>
+										<span data-bind="text: id"></span>
+	        						</li>
+	        					</ul>
 							</script>
-							
-							<table data-bind="visible: isBaseValid && $root.selectBaseLayerType">
+
+							<table data-bind="visible: layers().length > 0">
 								<tr>
 									<td>
 										<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
 									</td>
 									<td>
-										<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem"></select>
+										<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
 									</td>
 								</tr>
 								<tr>
@@ -227,29 +227,48 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							</table>
 							<div style="clear: both"></div>
 							<span class="gcaut-subtitle" data-bind="text: lblAddLayer"></span>
-							<button id="addLayer" class="gcaut-button" tabindex="0" data-bind="click: selectLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
-							<div id="layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
+							<div style="clear: both"></div>
+							<label for="cb_basetype" data-bind="text: lblLayerType"></label>
+							<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
+							<div style="clear: both"></div>
+							<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
+							<input id="txt_layerURL" data-bind="value: layerURL, visible: $root.selectLayerType"></input>
+							<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+							<div style="clear: both"></div>
+							<span id="layerMessage"></span>
+							<div style="clear: both"></div>
+							<div id="layers" style="max-height: 300px; overflow:auto;" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
 							<script type="text/html" id="mapLayers">
-								<div>
-								<span data-bind="text: id"></span>
-	        					<a href="#" data-bind="click: $parent.removeLayer">Remove</a>
-	        					</div>
+								<ul style="display: block;">
+									<li style="white-space: nowrap;" data-bind="visible: $data.category === 'layer'">
+										<a href="#" data-bind="click: $parent.removeLayer">Remove</a>
+										<span data-bind="text: id"></span>
+	        						</li>
+	        					</ul>
 							</script>
 						</div>
 						<div id="map_addlayer" data-bind="css: hidden">
-								<form><fieldset>
-									<label for="cb_layertype" data-bind="text: lblLayerType"></label>
-									<select id="cb_layertype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
-									<div style="clear: both"></div>
-									<label for="txt_layerURL" data-bind="text: lblLayerURL"></label>
-									<input id="txt_layerURL" class="text ui-widget-content ui-corner-all" data-bind="value: layerURL, enable: isValid"></input>
-									<button class="gcaut-button" tabindex="0" data-bind="click: validateLayer, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
-									<div style="clear: both"></div>
-									<span id="layerMessage"></span>
-								</fieldset></form>
+							<div style="height: 300px; overflow:auto;">
+								<ul style="display: block;" data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
+							</div>
+							<script id="serviceLayers" type="text/html">
+								<li>
+									<label data-bind="text: name, attr: { for: $data.name }, style: { color: isUse() ? 'red' : 'black' }"></label>
+									<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), checked: isChecked, attr: { id: $data.name }"></input>
+									<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
+								</li>
+							</script>
 						</div>
 						<div id="tabmap-order">
 							<p>Ordre</p>
+							<div id="layersorder" style="max-height: 300px; overflow:auto;" data-bind="template: { name: 'mapLayersOrder', foreach: layers }"></div>
+							<script type="text/html" id="mapLayersOrder">
+								<ul style="display: block;">
+									<li style="white-space: nowrap;">
+										<span data-bind="text: id"></span>
+	        						</li>
+	        					</ul>
+							</script>
 						</div>
 						<div id="tabmap-options">
 							<p>Option</p>
@@ -384,7 +403,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 
 <!-- CustomScriptsStart -->
 <!-- bootstrapper script start (comment min and uncomment debug to run without to build)-->
-<script>dojoConfig = { async: true };</script> 
+<script>dojoConfig = { async: true };</script>
 <script src="http://js.arcgis.com/3.8/"></script>
 <script src="http://serverapi.arcgisonline.com/jsapi/ve/?v=1.4"></script>
 <!-- <script src="../gcaut/gcaut-config-min.js"></script> -->

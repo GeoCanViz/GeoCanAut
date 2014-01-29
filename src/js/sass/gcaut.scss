@@ -22,29 +22,29 @@ label {
 	height: (3 * $rembase) + rem;
 	width: (3 * $rembase) + rem;
 	position: relative;
-  
+
 	.gcaut-img-button {
 		margin: 0 !important;
 		height: (2.2 * $rembase) + rem;
 		width: (2.2 * $rembase) + rem;
 	}
-	
+
 	&:disabled {
 		@include button-gradiant-disable;
 		@include content-border-radius;
 		cursor: none;
 	}
-	
+
 	&:hover:enabled {
 		@include button-gradiant-hover;
 		@include content-border-radius;
 	}
-  
+
 	&:focus {
 		@include button-gradiant-hover;
 		@include content-border-radius;
 	}
-  
+
 	&:active:enabled {
 		@include button-gradiant-active;
 		@include content-border-radius;
@@ -71,6 +71,14 @@ label {
 
 .gcaut-hidden {
 	display: none;
+}
+
+.gcaut-visible{
+	visibility: visible;
+}
+
+.gcaut-invisible{
+	visibility: hidden;
 }
 
 input[type="file"] {
@@ -161,9 +169,9 @@ body {
 .gcvbuttonLabel { position:relative; top:-25px; left:20px; margin:0px 0px 0px 0px; font-weight:bold; }
 
 
-.gcvbuttonHeight30 { 
+.gcvbuttonHeight30 {
   height:30px!important;
-  width:20px!important; 
+  width:20px!important;
   padding: 35px 0px 0px 0px!important;
 }
 .gcvimgPos {
@@ -226,16 +234,16 @@ body {
     position:relative;
     line-height:24px;
     }
-  .gcvcontainer2{   /* fluid width */    
-    margin:0 auto;    
+  .gcvcontainer2{   /* fluid width */
+    margin:0 auto;
     min-width:760px;
     max-width:980px;
     text-align:left;
     position:relative;
     line-height:40px;
     }
-  .gcvcontainer3{   /* fluid width */    
-    margin:0 auto;    
+  .gcvcontainer3{   /* fluid width */
+    margin:0 auto;
     min-width:760px;
     max-width:980px;
     text-align:left;
@@ -247,27 +255,27 @@ body {
     padding:2em 0;
     margin-bottom:1.5em;
     border-bottom:1px solid #ccc;
-    } 
+    }
   footer{
     position:relative;
     clear:both;
     padding:2em 0;
     border-top:1px solid #ccc;
-    } 
-  
+    }
+
   /* percentage based grid */
-    
-    /* 
+
+    /*
       class name .cols used for column containers
       class name .col used for individual columns
     */
-    
+
     .gcvcols{margin-bottom:.5em;overflow:hidden;} /* main column container class */
     .gcvcol, .gcvcol2, .gcvcol3, .gcvcol4, .gcvcol5 .gcvcol6 {
       float:left;
-      display:inline; 
+      display:inline;
       margin-left:2%;
-      } 
+      }
     .gcvcentercols { margin:0 auto; }
     .gcvcols .gcvfirst, .gcvcol:first-child{margin-left:none !important;}
     .gcvcol{width:49%;} /* 2 equal width columns - default */
@@ -278,41 +286,41 @@ body {
     .gcvcols8 .gcvcol{width:12.5%;} /* 8 equal width columns */
     .gcvcols10 .gcvcol{width:10.0%;} /* 10 equal width columns */
     .gcvcols12 .gcvcol{width:8.3%;} /* 12 equal width columns */
-    
+
     /* double width columns */
-    .gcvcols3 .gcvcol2{width:66%;} 
-    .gcvcols4 .gcvcol2{width:49%;} 
-    .gcvcols5 .gcvcol2{width:38.8%;} 
-    .gcvcols6 .gcvcol2{width:32%;} 
-    .gcvcols8 .gcvcol2{width:25%;} 
-    .gcvcols10 .gcvcol2{width:20%;} 
-    .gcvcols12 .gcvcol2{width:16.6%;} 
-    
+    .gcvcols3 .gcvcol2{width:66%;}
+    .gcvcols4 .gcvcol2{width:49%;}
+    .gcvcols5 .gcvcol2{width:38.8%;}
+    .gcvcols6 .gcvcol2{width:32%;}
+    .gcvcols8 .gcvcol2{width:25%;}
+    .gcvcols10 .gcvcol2{width:20%;}
+    .gcvcols12 .gcvcol2{width:16.6%;}
+
     /* triple width columns */
-    .gcvcols4 .gcvcol3{width:74.5%;} 
-    .gcvcols5 .gcvcol3{width:59.2%;} 
-    .gcvcols6 .gcvcol3{width:49%;} 
-    .gcvcols8 .gcvcol3{width:37.5%;} 
-    .gcvcols10 .gcvcol3{width:30.0%;} 
-    .gcvcols12 .gcvcol3{width:29.9%;} 
-    
+    .gcvcols4 .gcvcol3{width:74.5%;}
+    .gcvcols5 .gcvcol3{width:59.2%;}
+    .gcvcols6 .gcvcol3{width:49%;}
+    .gcvcols8 .gcvcol3{width:37.5%;}
+    .gcvcols10 .gcvcol3{width:30.0%;}
+    .gcvcols12 .gcvcol3{width:29.9%;}
+
     /* quadruple width columns */
-    .gcvcols5 .gcvcol4{width:79.6%;} 
-    .gcvcols6 .gcvcol4{width:66%;} 
-    .gcvcols8 .gcvcol4{width:50%;} 
-    .gcvcols10 .gcvcol4{width:40%;} 
-    .gcvcols12 .gcvcol4{width:33.2%;} 
-    
+    .gcvcols5 .gcvcol4{width:79.6%;}
+    .gcvcols6 .gcvcol4{width:66%;}
+    .gcvcols8 .gcvcol4{width:50%;}
+    .gcvcols10 .gcvcol4{width:40%;}
+    .gcvcols12 .gcvcol4{width:33.2%;}
+
     /* quintuple width columns */
-    .gcvcols6 .gcvcol5{width:83%;}  
-    .gcvcols8 .gcvcol5{width:62.5%;}  
-    .gcvcols10 .gcvcol5{width:50.0%;}  
-    .gcvcols12 .gcvcol5{width:41.5%;}   
+    .gcvcols6 .gcvcol5{width:83%;}
+    .gcvcols8 .gcvcol5{width:62.5%;}
+    .gcvcols10 .gcvcol5{width:50.0%;}
+    .gcvcols12 .gcvcol5{width:41.5%;}
 
     /* six width columns */
-    .gcvcols10 .gcvcol6{width:60.0%;}   
-    .gcvcols12 .gcvcol6{width:49.8%;}   
-    
+    .gcvcols10 .gcvcol6{width:60.0%;}
+    .gcvcols12 .gcvcol6{width:49.8%;}
+
   /* percentage based grid */
 
 /* // layout */

@@ -43,41 +43,6 @@
 			return map;
 		};
 		
-		validateLayer = function(message, type, url, valid) {
-			var layer;
-			
-			// make sure url start by http:// or https://. If not, add it
-			// TODO
-			if (type === 3) {
-				layer = new esri.layers.ArcGISTiledMapServiceLayer(url);
-			} else if (type === 4) {
-				layer = new esri.layers.ArcGISDynamicMapServiceLayer(url);
-			} else if (type === 'feature') {
-				layer = new esri.layers.FeatureLayer(url, {
-					mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-      				outFields: ["*"]
-				});
-			}
-			
-			// test to see if it is a valid layer
-			layer.on('load', function() {
-				var $message = $aut('#' + message);
-				
-				$message.addClass('gcaut-message');
-				$message.text(i18n.getDict('%map-layersuccess'));
-				
-				valid(false);
-				$aut('#btnLayerOK').attr('disabled', false);
-			});
-			layer.on('error', function() {
-				var $message = $aut('#' + message);
-
-				$message.addClass('gcaut-message-error');
-				$message.text(i18n.getDict('%map-layererror'));
-			});
-			
-		};
-		
 		return {
 			createMap: createMap,
 			validateLayer: validateLayer

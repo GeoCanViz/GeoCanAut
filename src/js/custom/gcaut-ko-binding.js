@@ -44,36 +44,5 @@
 				trigger: 'hover, focus'
 			}
 	};
-  
-	ko.bindingHandlers.callbacks = {
-		init: function(element, valueAccessor, allBindings, viewModel) {
-                        // var mapid = viewModel.mapid,
-                                // vm = vmArray[mapid].header;
-                        // vm.isFullscreen.subscribe(manageFullscreen);
-//                         
-                        function manageFullscreen(fullscreen) {
-                                if (fullscreen) {
-                                        viewModel.enterFullscreen(vm.widthSection, vm.heightSection);
-                                } else {
-                                        viewModel.exitFullscreen();
-                                }
-                        }
-                },
-                
-		update: function(element, valueAccessor, allBindings, viewModel) {
-			// get function name to call from the binding
-			var func = valueAccessor().func,
-				keyType = valueAccessor().keyType;
-
-			// ko.utils.registerEventHandler(element, keyType, function(event) {
-				// if (viewModel[func](event.which, event.shiftKey, event.type)) {
-					// event.preventDefault();
-					// return false;
-				// }
-// 
-				// return true;
-			// });
-		}         
-	};
 	});
 }).call(this);
