@@ -1,0 +1,34 @@
+@import "gcaut-mixin";
+
+.gcaut-layers {
+	line-height: (2 * $rembase) + rem;
+	margin-bottom: (2.25 * $rembase) + rem;
+	@include gcaut-infoholder(25, true);
+}
+
+.gcaut-bases {
+	overflow: auto;
+	line-height: (2 * $rembase) + rem;
+	margin-bottom: (2.25 * $rembase) + rem;
+}
+
+.gcaut-mapinfo {
+	@include gcaut-infoholder(40, true);
+}
+
+#layersorder {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+
+	li {
+		margin: 0 (0.03 * $rembase) + rem (0.03 * $rembase) + rem (0.03 * $rembase) + rem;
+		padding: (0.04 * $rembase) + rem;
+		padding-left: (0.5 * $rembase) + rem;
+		@include app-text(1.2);
+
+		span {
+			display: inline-block;
+		}
+	}
+}

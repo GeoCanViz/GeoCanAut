@@ -185,6 +185,10 @@
 				location: locationPath + 'gcaut/js/custom',
 				main: 'gcaut-ko-binding-min'
 			}, {
+				name: 'gcaut-func',
+				location: locationPath + 'gcaut/js/custom',
+				main: 'gcaut-functions-min'
+			}, {
 				name: 'gcaut-gismap',
 				location: locationPath + 'gcaut/js/gistasks',
 				main: 'gisMapUtility-min'

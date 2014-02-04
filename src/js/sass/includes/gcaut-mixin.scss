@@ -20,6 +20,22 @@ $base-classname: "gcaut";
 //font-size: 62.5%; // 1 rem = 10px
 $rembase: 0.625; // 100% come from WET, they set body to 80% if we put html to 62.5% it will screw up their css
 
+// responsive grid (http://viget.com/inspire/building-a-nested-responsive-grid-with-sass-compass)
+$cols: 12;
+$gutter: 2%;
+$one_col: (100% - ($gutter * ($cols - 1))) / $cols;
+
+@mixin cols($num) {
+	width: ($one_col * $num) + ($gutter * ($num - 1));
+}
+
+@mixin sub_cols($num_child, $num_parent) {
+	$parent_size: ($one_col * $num_parent) + ($gutter * ($num_parent - 1));
+	$child_size: ($one_col * $num_child) + ($gutter * ($num_child - 1));
+	margin-left: ($gutter / $parent_size) * 100%;
+	width: ($child_size / $parent_size) * 100%;
+}
+
 @mixin app-gradiant {
   background-color: $app-strong; // old browsers
 	@include background-image(linear-gradient(top,  $app-strong 0%, $app-light 100%));
@@ -33,8 +49,8 @@ $rembase: 0.625; // 100% come from WET, they set body to 80% if we put html to 6
 @mixin button-gradiant-hover {
   @include background-image(-ms-radial-gradient(center, circle closest-corner, $yellow 0%, $orange 100%)); /* IE10 Consumer Preview */
   @include background-image(-moz-radial-gradient(center, circle closest-corner, $yellow 0%, $orange 100%)); /* Mozilla Firefox */
-  @include background-image(-o-radial-gradient(center, circle closest-corner, $yellow 0%, $orange 100%)); /* Opera */ 
-  @include background-image(-webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, $yellow), color-stop(1, $orange))); /* Webkit (Safari/Chrome 10) */ 
+  @include background-image(-o-radial-gradient(center, circle closest-corner, $yellow 0%, $orange 100%)); /* Opera */
+  @include background-image(-webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, $yellow), color-stop(1, $orange))); /* Webkit (Safari/Chrome 10) */
   @include background-image(-webkit-radial-gradient(center, circle closest-corner, $yellow 0%, $orange 100%)); /* Webkit (Chrome 11+) */
   @include background-image(radial-gradient(circle closest-corner at center, $yellow 0%, $orange 100%)); /* W3C Markup, IE10 Release Preview */
   background-color: $tb-light; // old browsers
@@ -43,8 +59,8 @@ $rembase: 0.625; // 100% come from WET, they set body to 80% if we put html to 6
 @mixin button-gradiant-active {
   @include background-image(-ms-radial-gradient(center, circle closest-corner, $yellow 0%, $red 100%)); /* IE10 Consumer Preview */
   @include background-image(-moz-radial-gradient(center, circle closest-corner, $yellow 0%, $red 100%)); /* Mozilla Firefox */
-  @include background-image(-o-radial-gradient(center, circle closest-corner, $yellow 0%, $red 100%)); /* Opera */ 
-  @include background-image(-webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, $yellow), color-stop(1, $red))); /* Webkit (Safari/Chrome 10) */ 
+  @include background-image(-o-radial-gradient(center, circle closest-corner, $yellow 0%, $red 100%)); /* Opera */
+  @include background-image(-webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, $yellow), color-stop(1, $red))); /* Webkit (Safari/Chrome 10) */
   @include background-image(-webkit-radial-gradient(center, circle closest-corner, $yellow 0%, $red 100%)); /* Webkit (Chrome 11+) */
   @include background-image(radial-gradient(circle closest-corner at center, $yellow 0%, $red 100%)); /* W3C Markup, IE10 Release Preview */
   background-color: $tb-light; // old browsers
@@ -53,8 +69,8 @@ $rembase: 0.625; // 100% come from WET, they set body to 80% if we put html to 6
 @mixin button-gradiant-disable {
 	@include background-image(-ms-radial-gradient(center, circle closest-corner, $disabled-light 0%, $disabled-strong 100%)); /* IE10 Consumer Preview */
   @include background-image(-moz-radial-gradient(center, circle closest-corner, $disabled-light 0%, $disabled-strong 100%)); /* Mozilla Firefox */
-  @include background-image(-o-radial-gradient(center, circle closest-corner, $disabled-light 0%, $disabled-strong 100%)); /* Opera */ 
-  @include background-image(-webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, $disabled-light), color-stop(1, $disabled-strong))); /* Webkit (Safari/Chrome 10) */ 
+  @include background-image(-o-radial-gradient(center, circle closest-corner, $disabled-light 0%, $disabled-strong 100%)); /* Opera */
+  @include background-image(-webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, $disabled-light), color-stop(1, $disabled-strong))); /* Webkit (Safari/Chrome 10) */
   @include background-image(-webkit-radial-gradient(center, circle closest-corner, $disabled-light 0%, $disabled-strong 100%)); /* Webkit (Chrome 11+) */
   @include background-image(radial-gradient(circle closest-corner at center, $disabled-light 0%, $disabled-strong 100%)); /* W3C Markup, IE10 Release Preview */
   background-color: $tb-light; // old browsers
@@ -84,21 +100,15 @@ $rembase: 0.625; // 100% come from WET, they set body to 80% if we put html to 6
 	text-align: center;
 }
 
-@mixin gcv-app-button {
-  cursor: pointer;
-  text-decoration:none;
-  border: 1px solid rgb(153, 153, 153);
-  padding: 10px 10px 0px 10px;
-  color:rgb(0, 0, 0)!important;
-  font-size:10pt!important;
-  font-weight:bold!important;
-  font-family:arial, serif!important;
-  text-shadow: 0px 0px 5px rgb(255, 255, 255)!important;
-  border-radius:15px 15px 15px 15px;
-  -moz-border-radius:15px 15px 15px 15px;
-  -webkit-border-radius:15px 15px 15px 15px;
-  box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -moz-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  -webkit-box-shadow:0px 0px 0px rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
+@mixin gcaut-border($size: 0.2, $color: #bdbdbd) {
+	border-style: solid;
+	border-color: $color;
+	border-width: ($size * $rembase) + rem;
+	padding: (0.5 * $rembase) + rem;
+}
+
+@mixin gcaut-infoholder($maxheight, $border: true) {
+	@if $border { @include gcaut-border; }
+	overflow: auto;
+	max-height: ($maxheight * $rembase) + rem;
 }

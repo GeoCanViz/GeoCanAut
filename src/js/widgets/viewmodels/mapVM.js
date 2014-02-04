@@ -26,6 +26,8 @@
 				var _self = this,
 					pathNew = locationPath + 'gcaut/images/projNew.png',
 					pathValid = locationPath + 'gcaut/images/mapValidate.png',
+					pathExtent = locationPath + 'gcaut/images/mapExtent.png',
+					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
 					sr = [3944, 3978, 4326, 102002],
 					layerType = [{ id: 1, val: 'WMS' }, { id: 2, val: 'WMTS' }, { id: 3, val: 'esriREST Cache' }, { id: 4, val: 'esriREST Dynamic' }],
 					size = map.size,
@@ -33,18 +35,22 @@
 					map = map.map,
 					extentInit = map.extentinit,
 					$layer = $aut('#map_addlayer'),
+					$extent = $aut('#map_extent'),
 					urlObject, typeObject;
 
 				// images path
 				_self.imgNew = pathNew;
 				_self.imgValid = pathValid;
+				_self.imgExtent = pathExtent;
+				_self.imgDelete = pathDelete;
 
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');
 
 				// class
-				_self.hidden = ko.observable('.gcaut-hidden');
-				_self.errormsg = ko.observable('.gcaut-message-error');
+				_self.hiddenLayer = ko.observable('gcaut-hidden');
+				_self.hiddenMap = ko.observable('gcaut-hidden');
+				_self.errormsg = ko.observable('gcaut-message-error');
 
 				// error message
 				_self.errortext = ko.observable();
@@ -66,13 +72,24 @@
 				_self.lblAddLayer = i18n.getDict('%map-addlayer');
 				_self.lblLayerType = i18n.getDict('%map-layertype');
 				_self.lblLayerURL = i18n.getDict('%map-layerurl');
+				_self.lblSetExtent = i18n.getDict('%map-setextent');
+				_self.lblScale = i18n.getDict('%map-scale');
+				_self.lblScaleMin = i18n.getDict('%minimum');
+				_self.lblScaleMax = i18n.getDict('%maximum');
 
 				// map input
-				_self.mapHeightValue = ko.observable(size.height);
-				_self.mapWidthValue = ko.observable(size.width);
+				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: 0 });
+				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: 0 });
 				_self.isLink = ko.observable(map.link);
 
+				// set extent variable
+				_self.setExtentMinX = ko.observable();
+				_self.setExtentMinY = ko.observable();
+				_self.setExtentMaxX = ko.observable();
+				_self.setExtentMaxY = ko.observable();
+
 				// base layer input
+				_self.bases = ko.observableArray();
 				_self.selectBaseLayerType = ko.observable();
 				_self.baseURL = ko.observable('http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer');
 				if (typeof map.layers[0] !== 'undefined') {
@@ -86,16 +103,17 @@
 
 				_self.mapSR = ko.observableArray(sr);
 				_self.selectMapSR = ko.observable(map.sr.wkid);
-				_self.maxExtentMinX = ko.observable(extentMax.xmin);
-				_self.maxExtentMinY = ko.observable(extentMax.ymin);
-				_self.maxExtentMaxX = ko.observable(extentMax.xmax);
-				_self.maxExtentMaxY = ko.observable(extentMax.ymax);
-				_self.initExtentMinX = ko.observable(extentMax.xmin);
-				_self.initExtentMinY = ko.observable(extentMax.ymin);
-				_self.initExtentMaxX = ko.observable(extentMax.xmax);
-				_self.initExtentMaxY = ko.observable(extentMax.ymax);
+				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
+				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
+				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 10 });
+				_self.maxExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 10 });
+				_self.initExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
+				_self.initExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
+				_self.initExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 10 });
+				_self.initExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 10 });
 
 				// layer input
+				_self.isLayer = ko.observable(false);
 				_self.layers = ko.observableArray(map.layers);
 				_self.layerURL = ko.observable('http://maps.ottawa.ca/ArcGIS/rest/services/CyclingMap/MapServer');
 				_self.layerType = layerType;
@@ -104,15 +122,19 @@
 				// layer service info array
 				_self.servLayers = ko.observableArray();
 
+				// layers options
+				_self.scaleMin = ko.observable().extend({ numeric: 10 });;
+				_self.scaleMax = ko.observable().extend({ numeric: 10 });;
+
 				// clean the view model
-				clean(ko);
+				clean(ko, elem);
 
 				_self.init = function() {
 					return { controlsDescendantBindings: true };
 				};
 
 				_self.bind = function() {
-					clean(ko);
+					clean(ko, elem);
 					$aut('#layers').empty(); // remove layers from DOM
 					ko.applyBindings(_self, elem);
 				};
@@ -120,7 +142,6 @@
 				_self.validateLayer = function(type) {
 					//var url =  'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer';
 					//var url = 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer';
-					//var url = 'http://apps.geomatics.gov.nt.ca/ArcGIS/services/GNWT/BiologicEcologic_LCC';
 					//var url = 'http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en?';
 					//var url = 'http://maps.ottawa.ca/ArcGIS/rest/services/CyclingMap/MapServer';
 					//var url = 'http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer';
@@ -129,9 +150,11 @@
 
 					typeObject = type;
 					if (type === 'base') {
+						_self.isLayer(false);
 						urlObject = _self.baseURL;
 						category = _self.selectBaseLayerType().id;
 					} else {
+						_self.isLayer(true);
 						urlObject = _self.layerURL;
 						category = _self.selectLayerType().id;
 					}
@@ -143,7 +166,7 @@
 
 					if (isValid) {
 						// get service info and validateURL as callback function
-						gisREST.getResourceInfo(urlObject(), validateURL);
+						gisREST.getResourceInfo(urlObject(), validateURL, showBadURL);
 
 						// set add layer window (pass the object, not the string)
 						layerPopup(urlObject, _self.layers);
@@ -151,6 +174,10 @@
 					} else {
 						_self.errortext(i18n.getDict('%map-layererror'));
 					}
+				};
+
+				function showBadURL() {
+					_self.errortext(i18n.getDict('%map-layererror'));
 				};
 
 				function layerPopup(url, layers) {
@@ -171,7 +198,7 @@
 							click: function() {
 								updateLayers(_self.servLayers(), layers);
 								url('');
-								_self.hidden('.gcaut-hidden');
+								_self.hiddenLayer('gcaut-hidden');
 								$aut(this).dialog('destroy');
 							}
 						}, {
@@ -179,15 +206,19 @@
 							text: 'Cancel',
 							click: function() {
 								url('');
-								_self.hidden('.gcaut-hidden');
+								_self.hiddenLayer('gcaut-hidden');
 								$aut(this).dialog('destroy');
 							}
 						}]
 					});
 				};
 
-				_self.removeLayer = function() {
-					_self.layers.remove(this);
+				_self.removeLayer = function(type) {
+					if (type === 'base') {
+						_self.bases.remove(this);
+					} else {
+						_self.layers.remove(this);
+					}
 				};
 
 				function updateLayers(elem, list) {
@@ -196,17 +227,21 @@
 						layer,
 						servLayers;
 
-					while (len--) {
-						layer = layers[len];
-						servLayers = layer.servLayers;
+					if (_self.isLayer()) {
+						while (len--) {
+							layer = layers[len];
+							servLayers = layer.servLayers;
 
-						if (servLayers.length === 0) {
-							if (layer.isChecked()) {
-								_self.layers.push({ id: layer.fullname, category: layer.category });
+							if (servLayers.length === 0) {
+								if (layer.isChecked()) {
+									_self.layers.push({ id: layer.fullname, category: layer.category });
+								}
+							} else {
+								updateLayers(servLayers, list);
 							}
-						} else {
-							updateLayers(servLayers, list);
 						}
+					} else {
+						_self.bases.push({ id: _self.baseURL(), category: 'base' });
 					}
 				};
 
@@ -235,7 +270,7 @@
 
     					// show window to select layers
     					$layer.dialog('open');
-						_self.hidden('');
+						_self.hiddenLayer('');
 
     				} else if (sender.hasOwnProperty('error')) {
 						_self.errortext(i18n.getDict('%map-layererror'));
@@ -261,7 +296,7 @@
 						itemName = item.name;
 						itemId = item.id;
 						layer.name = itemName;
-						layer.fullname = url + '/' + itemName;
+						layer.fullname = itemName;
 						layer.url = url + '/' + itemId;
 						layer.id = itemId;
 						layer.category = typeObject;
@@ -404,6 +439,66 @@
 					});
 		   		};
 
+				_self.setExtent = function(type) {
+					var size = { width:_self.mapWidthValue(),
+								 height: _self.mapHeightValue()
+								},
+						id = 'map_setExtent',
+						holder = [_self.setExtentMinX, _self.setExtentMinY, _self.setExtentMaxX, _self.setExtentMaxY];
+
+					$extent.dialog({
+						autoOpen: false,
+						modal: true,
+						resizable: false,
+						draggable: false,
+						show: 'fade',
+						hide: 'fade',
+						closeOnEscape: true,
+						title: _self.lblSetExtent,
+						width: size.width + 50,
+						height: size.height + 200,
+						close: function() { },
+						buttons: [{
+							id: 'btnLayerOK',
+							text: 'Ok',
+							click: function() {
+								var type = $(this).data('type');
+								if (type === 'max') {
+									_self.maxExtentMinX(_self.setExtentMinX());
+									_self.maxExtentMinY(_self.setExtentMinY());
+									_self.maxExtentMaxX(_self.setExtentMaxX());
+									_self.maxExtentMaxY(_self.setExtentMaxY());
+								} else {
+									_self.initExtentMinX(_self.setExtentMinX());
+									_self.initExtentMinY(_self.setExtentMinY());
+									_self.initExtentMaxX(_self.setExtentMaxX());
+									_self.initExtentMaxY(_self.setExtentMaxY());
+								}
+
+
+								$aut('#' + id).remove();
+								_self.hiddenMap('gcaut-hidden');
+								$aut(this).dialog('destroy');
+							}
+						}, {
+							id: 'btnLayerCancel',
+							text: 'Cancel',
+							click: function() {
+								$aut('#' + id).remove();
+								_self.hiddenMap('gcaut-hidden');
+								$aut(this).dialog('destroy');
+							}
+						}]
+					});
+
+					// show window to select layers
+    				$extent.data('type', type).dialog('open');
+    				_self.hiddenMap('');
+
+					// create the map
+					gisM.createMap(id, 'dynamic', 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer/0', size, holder);
+				};
+
 				_self.write = function() {
 					var value = '"mapframe": {' +
 									'"size": {' +
@@ -451,9 +546,9 @@
 			return vm;
 		};
 
-		clean = function(ko) {
+		clean = function(ko, elem) {
 			// clean (each tab) and remove node in foreach array binding
-			ko.cleanNode(document.getElementById('tabmap-gen'));
+			ko.cleanNode(elem);
 		};
 
 		return {

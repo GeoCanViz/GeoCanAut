@@ -81,17 +81,19 @@
 						file = files[len];
 						reader = new FileReader();
 
-						// Closure to capture the file information and launch the process
+						// closure to capture the file information and launch the process
 						reader.onerror = function(event) {
 							console.log(i18n.getDict('%msg-configerr'));
 						};
 
 						reader.onload = (function(theFile) {
 								return function(e) {
-									try{
-								        var config = JSON.parse(e.target.result);
+									var config;
+									
+									try {
+								        config = JSON.parse(e.target.result);
 										_self.initMap(config, config.gcaut.name);
-								    }catch(e){
+								    } catch(e) {
 								        console.log(i18n.getDict('%msg-configerr'));
 								    }
         					};
@@ -222,9 +224,9 @@
 
 					// show or hide tabs
 					if (_self.mapsID().length === 0) {
-						$tabs.addClass('gcaut-invisible');
-					} else {
-						$tabs.removeClass('gcaut-invisible');
+						$tabs.tabs('option', { collapsible: true, active: false, disabled: true });
+					} else if (_self.mapsID().length === 1) {
+						$tabs.tabs('option', { collapsible: false, disabled: false, active: 0 });
 					}
 				});
 
@@ -232,7 +234,7 @@
 			};
 
 			vm = new projheaderViewModel(elem);
-			ko.applyBindings(vm, elem); // This makes Knockout get to work
+			ko.applyBindings(vm, elem); // this makes Knockout get to work
 		};
 
 		return {

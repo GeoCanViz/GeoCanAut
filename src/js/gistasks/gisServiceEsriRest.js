@@ -10,14 +10,22 @@
 (function () {
 	'use strict';
 	define(['jquery-private',
-			'gcaut-i18n'
-			], function($aut, i18n) {
+			'gcaut-i18n',
+			'dojo/request',
+			'esri/request'
+			], function($aut, i18n, dojoRequest, esriRequest) {
 
 		var getResourceInfo;
 
-		getResourceInfo = function(url, func) {
-			var agisveServices = new ESRI.ArcGIS.VE.ArcGISLayerFactory();
-			agisveServices.GetResourceInfo(url, func);
+		getResourceInfo = function(url, success, error) {
+			var requestHandle = esriRequest({
+            						url: url,
+            						content: { f: "json" },
+  									handleAs: "json",
+  									callbackParamName: "callback"
+          						});
+
+			requestHandle.then(success, error);
 		};
 
 		return {
