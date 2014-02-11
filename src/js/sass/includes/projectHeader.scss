@@ -3,7 +3,7 @@
 .gcaut-projheader {
 	@include app-head-foot;
 	@include app-gradiant;
-	height: (18 * $rembase) + rem;
+	height: (12 * $rembase) + rem;
 	
 	.gcaut-projheader-title {
 		display: inline-block;

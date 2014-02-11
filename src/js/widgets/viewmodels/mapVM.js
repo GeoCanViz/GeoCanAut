@@ -28,6 +28,8 @@
 					pathValid = locationPath + 'gcaut/images/mapValidate.png',
 					pathExtent = locationPath + 'gcaut/images/mapExtent.png',
 					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
+					pathCheckAll = locationPath + 'gcaut/images/mapCheckAll.png',
+					pathUncheckAll = locationPath + 'gcaut/images/mapUncheckAll.png',
 					sr = [3944, 3978, 4326, 102002],
 					layerType = [{ id: 1, val: 'WMS' }, { id: 2, val: 'WMTS' }, { id: 3, val: 'esriREST Cache' }, { id: 4, val: 'esriREST Dynamic' }],
 					size = map.size,
@@ -43,6 +45,8 @@
 				_self.imgValid = pathValid;
 				_self.imgExtent = pathExtent;
 				_self.imgDelete = pathDelete;
+				_self.imgCheckAll = pathCheckAll;
+				_self.imgUncheckAll = pathUncheckAll;
 
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');
@@ -389,7 +393,25 @@
 					return id;
 				};
 
-				_self.cascadeCheck = function(parents, item, event) {
+				_self.checkAll = function(layers, value) {
+					var len = layers.length,
+						layer;
+					
+					while (len--) {
+						layer = layers[len];
+
+						// set parent level
+						layer.isUse(value);
+						layer.isChecked(value);
+						
+						// check or uncheck all child layers and set the isUse
+						checkSublayers(layer, 1);
+					}
+					
+					return true;
+				};
+				
+				_self.cascadeCheck = function(parents, item) {
 					var check = !item.isChecked();
 
 					// Set isUse for all parents;
@@ -398,6 +420,7 @@
 
 					// check or uncheck all child layers and set the isUse
 					checkSublayers(item, 0);
+					
 					return true;
 				};
 

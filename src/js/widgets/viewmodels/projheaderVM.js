@@ -45,6 +45,12 @@
 				_self.mapLabel = i18n.getDict('%map') + ': ';
 				_self.mapsLabel = ko.observable(' ' + i18n.getDict('%of') + ' ' + i18n.getDict('%map') + '(s)');
 
+				// text
+				_self.txtOf = i18n.getDict('%of');
+				_self.txtMaps = i18n.getDict('%map') + '(s)';
+				_self.txtConfig = i18n.getDict('%msg-configread') + ': ';
+				_self.txtConfigErr = i18n.getDict('%msg-configerr');
+				
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');
 				_self.tpSave = i18n.getDict('%projheader-tpsavemap');
@@ -83,7 +89,7 @@
 
 						// closure to capture the file information and launch the process
 						reader.onerror = function(event) {
-							console.log(i18n.getDict('%msg-configerr'));
+							console.log();
 						};
 
 						reader.onload = (function(theFile) {
@@ -94,7 +100,7 @@
 								        config = JSON.parse(e.target.result);
 										_self.initMap(config, config.gcaut.name);
 								    } catch(e) {
-								        console.log(i18n.getDict('%msg-configerr'));
+								        console.log(_self.txtConfigErr);
 								    }
         					};
       					})(file);
@@ -109,7 +115,7 @@
 
 				_self.deleteMap = function() {
 					// removes map from dropdown and array and add item to restore array
-					var id = _self.mapsIDValue() - 1,
+					var id = _self.mapsIDValue().id - 1,
 						item = _self.maps.splice(id, 1);
 					_self.mapsRestore.push(item[0]);
 
@@ -121,7 +127,7 @@
 					// push back to maps array
 					var len = _self.mapsRestore.length;
 
-					while(len--) {
+					while (len--) {
 						_self.maps.push(_self.mapsRestore.shift());
 					}
 
@@ -132,7 +138,7 @@
 				_self.saveMap = function() {
 
 					// get the active map id
-					var id = _self.mapsIDValue() - 1,
+					var id = _self.mapsIDValue().id - 1,
 						vm = _self.maps[id],
 						uri = 'data:text/json;charset=utf-8,',
 						content = '{"gcaut": {"name": "sample1.json"},"gcviz": {',
@@ -159,15 +165,23 @@
 				};
 
 				_self.resetIndex = function() {
-					var len = _self.maps.length,
-						lenAll = _self.maps.length;
+					var len = _self.maps.length + 1,
+						lenAll = _self.maps.length,
+						id;
 
-					_self.mapsID([]);
-					while(len--) {
-						_self.mapsID.push(lenAll - len);
+					// there is a bug with removeAll so we clean the array before
+					while (len--) {
+						_self.mapsID()[len] = '';
 					}
-					_self.mapsIDValue(lenAll);
-					_self.mapsLabel(' ' + i18n.getDict('%of') + ' ' + _self.mapsID().length + ' ' + i18n.getDict('%map') + '(s)');
+					_self.mapsID.removeAll();
+					
+					len = _self.maps.length;
+					while (len--) {
+						id = lenAll - len;
+						_self.mapsID.push({ id: id, val: 'carte ' + id });
+					}
+					_self.mapsIDValue(_self.mapsID()[lenAll - 1]);
+					_self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
 				};
 
 				/*
@@ -202,17 +216,17 @@
 
 					// push the vm to array, update the dropdown list and select the new item
 					_self.maps.push(vm);
-					_self.mapsID.push(id);
-					_self.mapsIDValue(id);
-					_self.mapsLabel(' ' + i18n.getDict('%of') + ' ' + _self.mapsID().length + ' ' + i18n.getDict('%map') + '(s)');
-					console.log(i18n.getDict('%msg-configread') + ': ' + url);
+					_self.mapsID.push({ id: id, val: 'carte ' + id });
+					_self.mapsIDValue(_self.mapsID()[id -1]);
+					_self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
+					console.log(_self.txtConfig + url);
 				};
 
 				/*
 				 * this function is fired when map dropdown list value changed
 				 */
-				_self.mapsIDValue.subscribe(function(id) {
-					var vm = _self.maps[id - 1],
+				_self.mapsIDValue.subscribe(function(item) {
+					var vm = _self.maps[item.id - 1],
 						$tabs = $aut('#gcauttabs');
 
 					// clean the bindings then reapply the view model values for each vm

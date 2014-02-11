@@ -101,27 +101,22 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 
 	<section id="projectHeader" class="gcaut-projheader">
 		<div class="gcaut-projheader-title"><span class="gcaut-projheader-titlelabel" data-bind="text: headerLabel"></span></div>
-		<div id="newMap">
-			<div class="gcaut-projheader-button">
-				<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
-				<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
-				<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
-				<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
-					<input type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
-					<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
-				</button>
-			</div>
-			<div class="gcaut-projheader-button">
+		<div id="mapnew" class="gcaut-projheader-button">
+			<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
+			<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
+			<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+			<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
+				<input type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+				<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
+			</button>
+		</div>
+		<div id="mapselect" class="ui-widget-header gcaut-projheader-button">
 				<span class="gcaut-projheader-newlabel" data-bind="text: mapLabel"></span>
-				<select id="mapsID" data-bind="options: mapsID, value: mapsIDValue"></select>
+				<select id="mapsID" data-bind="options: mapsID, optionsText: 'val', value: mapsIDValue"></select>
 				<span class="gcaut-projheader-newlabel" data-bind="text: mapsLabel"></span>
 				<button class="gcaut-button" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }"><img class="gcaut-img-button" data-bind="attr: { src: imgDelete }"></img></button>
 				<button class="gcaut-button" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }"><img class="gcaut-img-button" data-bind="attr: { src: imgRestore }"></img></button>
-			</div>
-			<div class="gcaut-projheader-button">
-				<span class="gcaut-projheader-savelabel" data-bind="text: saveLabel"></span>
 				<button class="gcaut-button" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }"><img class="gcaut-img-button" data-bind="attr: { src: imgSave }"></img></button>
-			</div>
 		</div>
 	</section>
 	<div id="gcauttabs" style="display: none;">
@@ -254,12 +249,17 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					</div>
 					<div id="map_addlayer" data-bind="css: hiddenLayer">
 						<div class="gcaut-layers">
+							<div data-bind="template: { name: 'selectLayers' }"></div>
 							<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
 						</div>
+						<script id="selectLayers" type="text/html">
+							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), true), visible: $root.isLayer"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgCheckAll }"></img></button>
+							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), false), visible: $root.isLayer"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgUncheckAll }"></img></button>
+						</script>
 						<script id="serviceLayers" type="text/html">
 							<li>
-								<label data-bind="text: name, attr: { for: $data.name }, style: { color: isUse() ? 'red' : 'black' }"></label>
 								<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.isLayer, checked: isChecked, attr: { id: $data.name }"></input>
+								<label data-bind="text: name, attr: { for: $data.name }, style: { color: isUse() ? 'red' : 'black' }"></label>
 								<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
 							</li>
 						</script>
