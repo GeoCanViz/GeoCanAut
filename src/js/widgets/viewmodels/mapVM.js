@@ -81,6 +81,11 @@
 				_self.lblScaleMin = i18n.getDict('%minimum');
 				_self.lblScaleMax = i18n.getDict('%maximum');
 
+				// services
+				_self.baseURL = ko.observable();
+				_self.layerURL = ko.observable();
+				_self.availServ = ko.observableArray([]);
+
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: 0 });
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: 0 });
@@ -95,7 +100,6 @@
 				// base layer input
 				_self.bases = ko.observableArray();
 				_self.selectBaseLayerType = ko.observable();
-				_self.baseURL = ko.observable('http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer');
 				if (typeof map.layers[0] !== 'undefined') {
 					if (typeof map.layers[0].type !== 'undefined') {
 						_self.selectBaseLayerType(layerType[map.layers[0].type -1]);
@@ -119,7 +123,6 @@
 				// layer input
 				_self.isLayer = ko.observable(false);
 				_self.layers = ko.observableArray(map.layers);
-				_self.layerURL = ko.observable('http://maps.ottawa.ca/ArcGIS/rest/services/CyclingMap/MapServer');
 				_self.layerType = layerType;
 				_self.selectLayerType = ko.observable();
 
@@ -143,26 +146,50 @@
 					ko.applyBindings(_self, elem);
 				};
 
+				// return predefined services
+				_self.getServices = function() {
+					var array = localStorage.servicename.split(';');
+
+					return _self.availServ(array);
+				};
+
+				// set URL
+				_self.setURL = function(event, ui) {
+
+					if (_self.bases().length === 0) {
+						_self.baseURL(ui.item.value);
+					} else {
+						_self.layerURL(ui.item.value);
+					}
+
+					return false;
+				};
+
 				_self.validateLayer = function(type) {
-					//var url =  'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer';
-					//var url = 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer';
-					//var url = 'http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en?';
-					//var url = 'http://maps.ottawa.ca/ArcGIS/rest/services/CyclingMap/MapServer';
-					//var url = 'http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer';
 					var isValid,
-						category;
+						category,
+						layerURL, baseURL;
 
 					typeObject = type;
 					if (type === 'base') {
 						_self.isLayer(false);
 						urlObject = _self.baseURL;
 						category = _self.selectBaseLayerType().id;
+						baseURL = _self.baseURL();
+						_self.availServ().push(baseURL);
 					} else {
 						_self.isLayer(true);
 						urlObject = _self.layerURL;
 						category = _self.selectLayerType().id;
+						layerURL = _self.layerURL();
+						_self.availServ().push(layerURL);
 					}
 
+					// remove duplicate in service array and copy to localstorage
+					_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
+					localStorage.setItem("servicename", _self.availServ().join(';'));
+
+					// check the url
 					isValid = checkFormatURL(urlObject(), category);
 
 					// clean error message
@@ -396,21 +423,21 @@
 				_self.checkAll = function(layers, value) {
 					var len = layers.length,
 						layer;
-					
+
 					while (len--) {
 						layer = layers[len];
 
 						// set parent level
 						layer.isUse(value);
 						layer.isChecked(value);
-						
+
 						// check or uncheck all child layers and set the isUse
 						checkSublayers(layer, 1);
 					}
-					
+
 					return true;
 				};
-				
+
 				_self.cascadeCheck = function(parents, item) {
 					var check = !item.isChecked();
 
@@ -420,7 +447,7 @@
 
 					// check or uncheck all child layers and set the isUse
 					checkSublayers(item, 0);
-					
+
 					return true;
 				};
 

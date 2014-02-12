@@ -55,6 +55,7 @@ label {
 	height: (3 * $rembase) + rem;
 	width: (3 * $rembase) + rem;
 	position: relative;
+	vertical-align: middle;
 
 	.gcaut-img-button {
 		margin: 0 !important;

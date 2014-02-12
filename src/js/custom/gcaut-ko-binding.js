@@ -11,19 +11,19 @@
 			'knockout',
 			'jqueryui'
 	], function($aut, ko, slider) {
-    
+
     ko.bindingHandlers.tooltip = {
 		init: function(element, valueAccessor) {
 			var local = ko.utils.unwrapObservable(valueAccessor()),
 				options = {},
 				$element = $(element);
-					
+
 			ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
 			ko.utils.extend(options, local);
-				
+
 			$element.attr('title', options.content);
 			$element.tooltip(options);
-					
+
 			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 					$element.tooltip('destroy');
 				});
@@ -55,7 +55,7 @@
 			roundingMultiplier = Math.pow(10, precision),
 			newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
 			valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
- 
+
 			// only write if it changed
 			if (valueToWrite !== current) {
 				target(valueToWrite);
@@ -67,13 +67,32 @@
 			}
 		}
 		}).extend({ notify: 'always' });
- 
+
 		// initialize with current value to make sure it is rounded appropriately
 		result(target());
- 
+
 		// return the new computed observable
 		return result;
 	};
 
-	});	
+	// http://jsfiddle.net/7bRVH/214/
+	ko.bindingHandlers.autocomplete = {
+		init: function (element, params) {
+			$aut(element).autocomplete(params());
+		},
+		update: function (element, params) {
+			$aut(element).autocomplete('option', 'source', params().source.availServ());
+		}
+	};
+
+	ko.bindingHandlers.accordion = {
+		init: function (element, params) {
+			$aut(element).accordion();
+		},
+		update: function (element, params) {
+			$aut(element).accordion('refresh');
+		}
+	};
+
+	});
 }).call(this);

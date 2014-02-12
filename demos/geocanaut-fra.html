@@ -101,7 +101,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 
 	<section id="projectHeader" class="gcaut-projheader">
 		<div class="gcaut-projheader-title"><span class="gcaut-projheader-titlelabel" data-bind="text: headerLabel"></span></div>
-		<div id="mapnew" class="gcaut-projheader-button">
+		<div id="mapnew" class="gcaut-projheader-new">
 			<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
 			<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
 			<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
@@ -110,16 +110,15 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
 			</button>
 		</div>
-		<div id="mapselect" class="ui-widget-header gcaut-projheader-button">
-				<span class="gcaut-projheader-newlabel" data-bind="text: mapLabel"></span>
-				<select id="mapsID" data-bind="options: mapsID, optionsText: 'val', value: mapsIDValue"></select>
+		<div id="mapselect" class="gcaut-projheader-select">
+				<select id="mapsID" data-bind="options: mapsID, value: mapsIDValue"></select>
 				<span class="gcaut-projheader-newlabel" data-bind="text: mapsLabel"></span>
 				<button class="gcaut-button" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }"><img class="gcaut-img-button" data-bind="attr: { src: imgDelete }"></img></button>
 				<button class="gcaut-button" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }"><img class="gcaut-img-button" data-bind="attr: { src: imgRestore }"></img></button>
 				<button class="gcaut-button" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }"><img class="gcaut-img-button" data-bind="attr: { src: imgSave }"></img></button>
 		</div>
 	</section>
-	<div id="gcauttabs" style="display: none;">
+	<div id="gcauttabs" data-bind="tabs: { }" style="display: none;">
 		<ul>
 			<li><a href="#tab-map">Carte</a></li>
 			<li><a href="#tab-inset">Insertion</a></li>
@@ -145,104 +144,115 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<label for="cb_link" data-bind="text: lblLink"></label>
 						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
 						<div style="clear: both"></div>
-						<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
-							<span class="gcaut-subtitle" data-bind="text: lblBasemap"></span>
-							<div class="gcaut-mapinfo">
-								<div style="clear: both"></div>
-								<label for="cb_basetype" data-bind="text: lblLayerType"></label>
-								<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: layers().length === 0"></select>
-								<div style="clear: both"></div>
-								<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-								<input id="txt_baseURL" data-bind="value: baseURL, visible: $root.selectBaseLayerType, enable: layers().length === 0"></input>
-								<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: layers().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
-								<div style="clear: both"></div>
-								<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
-								<div style="clear: both"></div>
-								<div data-bind="visible: bases().length > 0">
-									<div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
-									<script type="text/html" id="mapBaseLayers">
-										<ul>
-											<li style="white-space: nowrap;" data-bind="visible: $data.category === 'base'">
-												<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'base')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
-												<span data-bind="text: id"></span>
-				        					</li>
-				        				</ul>
-									</script>
-									<div class"row">
-										<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
-										<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
-									</div>
-									<div class="row">
-										<span data-bind="text: lblExtentMax"></span>
-										<button class="gcaut-button" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'max'), tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgExtent }"></img></button>
-									</div>
-									<div class="row">
-										<div class="span3">
-											<label for="txt_mextentMinX" data-bind="text: lblExtentMinX"></label>
-											<input id="txt_mextentMinX" data-bind="value: maxExtentMinX, enable: false"></input>
-										</div>
-										<div class="span3">
-											<label for="txt_mextentMinY" data-bind="text: lblExtentMinY"></label>
-											<input id="txt_mextentMinY" data-bind="value: maxExtentMinY, enable: false"></input>
-										</div>
-										<div class="span3">
-											<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
-											<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
-										</div>
-										<div class="span3">
-											<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
-											<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
-										</div>
-									</div>
-									<div class="row">
-										<span data-bind="text: lblExtentInit"></span>
-										<button class="gcaut-button" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'max'), tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgExtent }"></img></button>
-									</div>
-									<div class="row">
-										<div class="span3">
-											<label for="txt_iextentMinX" data-bind="text: lblExtentMinX"></label>
-											<input id="txt_iextentMinX" data-bind="value: initExtentMinX, enable: false"></input>
-										</div>
-										<div class="span3">
-											<label for="txt_iextentMinY" data-bind="text: lblExtentMinY"></label>
-											<input id="txt_iextentMinY" data-bind="value: initExtentMinY, enable: false"></input>
-										</div>
-										<div class="span3">
-											<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
-											<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
-										</div>
-										<div class="span3">
-											<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
-											<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
+						<div id="map_layers" data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
+							<h3 class="ui-accordion-header" data-bind="text: lblBasemap"></h3>
+							<div>
+								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
+									<div class="gcaut-mapinfo">
+										<div style="clear: both"></div>
+										<label for="cb_basetype" data-bind="text: lblLayerType"></label>
+										<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
+										<div style="clear: both"></div>
+										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
+										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, autocomplete: { source: getServices(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
+										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: layers().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+										<div style="clear: both"></div>
+										<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
+										<div style="clear: both"></div>
+										<div data-bind="visible: bases().length > 0">
+											<div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
+											<script type="text/html" id="mapBaseLayers">
+												<div data-bind="visible: $data.category === 'base'">
+													<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'base')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
+													<span data-bind="text: id"></span>
+						        				</div>
+											</script>
+											<div class="row">
+												<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
+												<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
+											</div>
+											<div class="row">
+												<div class="span8">
+													<div class="row">
+														<div class="span4">
+															<span data-bind="text: lblExtentMax"></span>
+															<button class="gcaut-button" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'max'), tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgExtent }"></img></button>
+														</div>
+														<div class="span4">
+															<span data-bind="text: lblExtentInit"></span>
+															<button class="gcaut-button" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'max'), tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgExtent }"></img></button>
+														</div>
+													</div>
+													<div class="row">
+														<div class="span4">
+															<label for="txt_mextentMinX" data-bind="text: lblExtentMinX"></label>
+															<input id="txt_mextentMinX" data-bind="value: maxExtentMinX, enable: false"></input>
+														</div>
+														<div class="span4">
+															<label for="txt_iextentMinX" data-bind="text: lblExtentMinX"></label>
+															<input id="txt_iextentMinX" data-bind="value: initExtentMinX, enable: false"></input>
+														</div>
+													</div>
+													<div class="row">
+														<div class="span4">
+															<label for="txt_mextentMinY" data-bind="text: lblExtentMinY"></label>
+															<input id="txt_mextentMinY" data-bind="value: maxExtentMinY, enable: false"></input>
+														</div>
+														<div class="span4">
+															<label for="txt_iextentMinY" data-bind="text: lblExtentMinY"></label>
+															<input id="txt_iextentMinY" data-bind="value: initExtentMinY, enable: false"></input>
+														</div>
+													</div>
+													<div class="row">
+														<div class="span4">
+															<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
+															<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
+														</div>
+														<div class="span4">
+															<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
+															<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
+														</div>
+													</div>
+													<div class="row">
+														<div class="span4">
+															<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
+															<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
+														</div>
+														<div class="span4">
+															<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
+															<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div style="clear: both"></div>
-						<div data-bind="visible: bases().length > 0">
-							<span class="gcaut-subtitle" data-bind="text: lblAddLayer"></span>
-							<div class="gcaut-mapinfo">
-								<div style="clear: both"></div>
-								<label for="cb_basetype" data-bind="text: lblLayerType"></label>
-								<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
-								<div style="clear: both"></div>
-								<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
-								<input id="txt_layerURL" data-bind="value: layerURL, visible: $root.selectLayerType"></input>
-								<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
-								<div style="clear: both"></div>
-								<span id="layerMessage"></span>
-								<div style="clear: both"></div>
-								<div data-bind="visible: layers().length > 0">
-									<div id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
-									<script type="text/html" id="mapLayers">
-										<ul>
-											<li style="white-space: nowrap;" data-bind="visible: $data.category === 'layer'">
-												<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
-												<span data-bind="text: id"></span>
-				        					</li>
-				        				</ul>
-									</script>
+							<h3 class="ui-accordion-header" data-bind="text: lblAddLayer, visible: bases().length > 0"></h3>
+							<div>
+								<div class="gcaut-mapinfo">
+									<div style="clear: both"></div>
+									<label for="cb_basetype" data-bind="text: lblLayerType"></label>
+									<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
+									<div style="clear: both"></div>
+									<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
+									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, autocomplete: { source: getServices(), select: setURL }, visible: $root.selectLayerType"/>
+									<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+									<div style="clear: both"></div>
+									<span id="layerMessage"></span>
+									<div style="clear: both"></div>
+									<div data-bind="visible: layers().length > 0">
+										<div id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
+										<script type="text/html" id="mapLayers">
+											<ul>
+												<li style="white-space: nowrap;" data-bind="visible: $data.category === 'layer'">
+													<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
+													<span data-bind="text: id"></span>
+					        					</li>
+					        				</ul>
+										</script>
+									</div>
 								</div>
 							</div>
 						</div>
