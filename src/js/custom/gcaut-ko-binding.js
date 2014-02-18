@@ -16,7 +16,7 @@
 		init: function(element, valueAccessor) {
 			var local = ko.utils.unwrapObservable(valueAccessor()),
 				options = {},
-				$element = $(element);
+				$element = $aut(element);
 
 			ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
 			ko.utils.extend(options, local);
@@ -24,10 +24,11 @@
 			$element.attr('title', options.content);
 			$element.tooltip(options);
 
+			//handle disposal (if KO removes by the template binding)
 			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-					$element.tooltip('destroy');
-				});
-			},
+				$element.tooltip('destroy');
+			});
+		},
 		options: {
 			show: {
 				effect: 'slideDown',
@@ -76,21 +77,122 @@
 	};
 
 	// http://jsfiddle.net/7bRVH/214/
-	ko.bindingHandlers.autocomplete = {
-		init: function (element, params) {
-			$aut(element).autocomplete(params());
+	ko.bindingHandlers.uiAutocomplete = {
+		init: function (element, valueAccessor) {
+			var options = valueAccessor() || {},
+	        	$element = $aut(element);
+	        
+			$element.autocomplete(options);
+			
+			 //handle disposal (if KO removes by the template binding)
+	        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+				$element.autocomplete('destroy');
+			});
 		},
-		update: function (element, params) {
-			$aut(element).autocomplete('option', 'source', params().source.availServ());
+		update: function (element, valueAccessor) {
+			var options = valueAccessor() || {};
+			$aut(element).autocomplete('option', 'source', options.source.availServ());
 		}
 	};
+	
+	ko.bindingHandlers.uiSortable = {
+		 init: function(element, valueAccessor) {
+	        var options = valueAccessor() || {},
+	        	$refresh = $aut('#' + options.refresh),
+	        	$element = $aut(element);
 
-	ko.bindingHandlers.accordion = {
-		init: function (element, params) {
-			$aut(element).accordion();
-		},
-		update: function (element, params) {
-			$aut(element).accordion('refresh');
+			$element.sortable(options);
+			$element.disableSelection();
+			
+			if (typeof $refresh !== 'undefined') {
+				$refresh.focus(function() {
+					$element.sortable('refresh');
+				});
+			}
+
+	        //handle disposal (if KO removes by the template binding)
+	        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+				$element.sortable('destroy');
+			});
+	    },
+	    update: function(element, valueAccessor) {
+			var options = valueAccessor() || {};
+			$aut(element).sortable('destroy').sortable(options);
+	    }
+	};
+
+	ko.bindingHandlers.uiAccordion = {
+	    init: function(element, valueAccessor) {
+	        var options = valueAccessor() || {},
+	        	$refresh = $aut('#' + options.refresh),
+	        	$element = $aut(element);
+	        
+			$element.accordion(options);
+			
+			if (typeof $refresh !== 'undefined') {
+				$refresh.focus(function() {
+					$element.accordion('refresh');
+				});
+			}
+			
+	        //handle disposal (if KO removes by the template binding)
+	        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+				$element.accordion('destroy');
+			});
+	    },
+	    update: function(element, valueAccessor) {
+			var options = valueAccessor() || {};
+			$aut(element).accordion('destroy').accordion(options);
+	    }
+	};
+	
+	ko.bindingHandlers.uiDialog = {
+	    init: function(element, valueAccessor) {
+	    	var local = ko.utils.unwrapObservable(valueAccessor()),
+				options = {},
+	        	$element = $aut(element);
+	        
+	        ko.utils.extend(options, ko.bindingHandlers.uiDialog.options);
+			ko.utils.extend(options, local);
+			
+			// if function are provided for ok and/or cancel, update
+			if (typeof options.ok !== 'undefined') {
+				options.buttons[0].click = options.ok;
+			}
+			if (typeof options.cancel !== 'undefined') {
+				options.buttons[1].click = options.cancel;
+			}
+			
+			$element.dialog(options);
+	    },
+	    options: {
+	    	autoOpen: false,
+			modal: true,
+			resizable: false,
+			draggable: false,
+			show: 'fade',
+			hide: 'fade',
+			closeOnEscape: true,
+			close: function() { },
+			buttons: [{
+				text: 'Ok',
+				click: function() {
+					$aut(this).dialog('close');
+				}
+				}, {
+				text: 'Cancel',
+				click: function() {
+					$aut(this).dialog('close');
+				}
+			}]
+	    }
+	};
+
+	//custom binding handler that opens/closes the dialog
+	ko.bindingHandlers.openDialog = {
+		update: function(element, valueAccessor) {
+			var value = ko.utils.unwrapObservable(valueAccessor());
+			value ? $aut(element).dialog('open') : $aut(element).dialog('close');;
 		}
 	};
 

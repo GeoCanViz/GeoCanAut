@@ -173,6 +173,10 @@
 				location: locationPath + 'gcaut/dependencies',
 				main: 'jqueryui.min'
 			}, {
+				name: 'genfile',
+				location: locationPath + 'gcaut/dependencies',
+				main: 'generatefile.min'
+			}, {
 				name: 'gcaut',
 				location: locationPath + 'gcaut',
 				main: 'gcaut-min'

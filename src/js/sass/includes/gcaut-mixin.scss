@@ -106,9 +106,3 @@ $one_col: (100% - ($gutter * ($cols - 1))) / $cols;
 	border-width: ($size * $rembase) + rem;
 	padding: (0.5 * $rembase) + rem;
 }
-
-@mixin gcaut-infoholder($maxheight, $border: true) {
-	@if $border { @include gcaut-border; }
-	overflow: auto;
-	max-height: ($maxheight * $rembase) + rem;
-}

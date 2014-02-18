@@ -172,6 +172,10 @@
 				location: locationPath + 'src/js/dependencies',
 				main: 'jqueryui.min'
 			}, {
+				name: 'genfile',
+				location: locationPath + 'src/js/dependencies',
+				main: 'generatefile.min'
+			}, {
 				name: 'gcaut',
 				location: locationPath + 'src/js',
 				main: 'gcaut'

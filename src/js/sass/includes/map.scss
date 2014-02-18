@@ -1,19 +1,20 @@
 @import "gcaut-mixin";
 
 .gcaut-layers {
-	line-height: (2 * $rembase) + rem;
+	line-height: (1.75 * $rembase) + rem;
 	margin-bottom: (2.25 * $rembase) + rem;
-	@include gcaut-infoholder(25, true);
+	max-height:	(30 * $rembase) + rem;
+	overflow: auto;
 }
 
 .gcaut-bases {
 	overflow: auto;
-	line-height: (2 * $rembase) + rem;
+	line-height: (1.75 * $rembase) + rem;
 	margin-bottom: (2.25 * $rembase) + rem;
 }
 
 .gcaut-mapinfo {
-	@include gcaut-infoholder(40, true);
+	height:	(40 * $rembase) + rem;
 }
 
 .gcaut-uri {

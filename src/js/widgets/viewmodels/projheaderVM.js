@@ -10,12 +10,13 @@
 	'use strict';
 	define(['jquery-private',
 			'knockout',
+			'genfile',
 			'gcaut-i18n',
 			'gcaut-ko',
 			'gcaut-vm-map',
 			'gcaut-vm-header',
 			'gcaut-vm-footer'
-	], function($aut, ko, i18n, binding, mapVM, headerVM, footerVM) {
+	], function($aut, ko, generateFile, i18n, binding, mapVM, headerVM, footerVM) {
 		var initialize,
 			readConfig,
 			vm;
@@ -139,7 +140,7 @@
 				_self.saveMap = function() {
 
 					// get the active map id
-					var id = _self.mapsIDValue() - 1,
+					var id = parseInt(_self.mapsIDValue().split(' ')[1]) - 1,
 						vm = _self.maps[id],
 						uri = 'data:text/json;charset=utf-8,',
 						content = '{"gcaut": {"name": "sample1.json"},"gcviz": {',
@@ -155,14 +156,15 @@
 					content = content.substring(0, content.length - 1);
 					content += '}}';
 					uri += content;
-
-					// create a download link to get the file then delete it
-					downloadLink = document.createElement('a');
-					downloadLink.href = uri;
-					downloadLink.download = 'data.json';
-					document.body.appendChild(downloadLink);
-					downloadLink.click();
-					document.body.removeChild(downloadLink);
+			
+					// generate the iframe then that call the php. Then remove the iframe
+			    	$aut.generateFile({
+						filename	: _self.mapsIDValue() + '.txt',
+						content		: content,
+						script		: 'http://localhost:8888/download.php'
+					});
+					
+					setTimeout(function() { $aut('#gcaut-download').remove(); }, 1000);
 				};
 
 				_self.resetIndex = function() {

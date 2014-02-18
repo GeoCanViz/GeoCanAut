@@ -13,8 +13,9 @@ var locationPath;
     define(['jquery-private',
     		'jqueryui',
     		'gcaut-i18n',
-    		'gcaut-vm-projheader'],
-    function($aut, jqui, i18n, projheaderVM) {
+    		'gcaut-vm-projheader',
+    		'esri/config'],
+    function($aut, jqui, i18n, projheaderVM, esriConfig) {
 		var initialize,
 			setLocationPath,
 			setStorage,
@@ -38,12 +39,15 @@ var locationPath;
 			// set localstorage for services name
 			setStorage(servicename);
 
+			// set proxy for esri request
+			esriConfig.defaults.io.proxyUrl = '../proxy.ashx';
+			esriConfig.defaults.io.alwaysUseProxy = false;
+		
 			// initialize jQueryUI tabs container
 			// not bind with knockout because they are not part of the viewmodel, they are containers
-			// it is the same reason why accordion on tab map-option is not in knockout. The activate function is on the tab outside knockout
 			$tabs.removeAttr('style');
 			$tabs.tabs({ heightStyle: 'auto', collapsible: true, active: false, disabled: true });
-			$('#gcautmaptabs').tabs({ heightStyle: 'auto', activate: function(event, ui) { setTabOptions(event, ui); } });
+			$('#gcautmaptabs').tabs({ heightStyle: 'auto' });
 
 			// launch project header
 			projheaderVM.initialize(elem);
@@ -71,27 +75,8 @@ var locationPath;
 		};
 
 		setStorage = function(value) {
-			if (typeof localStorage.servicename === 'undefined') {
+			if (typeof localStorage.servicename === 'undefined' || localStorage.servicename === 'undefined') {
 				localStorage.setItem('servicename', value);
-			}
-		};
-
-		setTabOptions = function(event, ui) {
-			var tab = ui.newPanel.attr('id'),
-				$div;
-
-			if (tab === 'tabmap-order') {
-				$div = $aut('#layersorder');
-				$div.sortable();
-				$div.disableSelection();
-			} else if (tab === 'tabmap-options') {
-				$div = $aut('#layersoptions');
-				$div.accordion();
-				$div.accordion('refresh');
-			} else if (tab === 'tabmap-gen') {
-				$div = $aut('#map_layers');
-				$div.accordion({ heightStyle: 'fill' });
-				$div.accordion('refresh');
 			}
 		};
 

@@ -80,7 +80,15 @@
 				_self.lblScale = i18n.getDict('%map-scale');
 				_self.lblScaleMin = i18n.getDict('%minimum');
 				_self.lblScaleMax = i18n.getDict('%maximum');
-
+				
+				// text
+				_self.txtLayerErr = i18n.getDict('%map-layererror');
+				
+				// dialog
+				_self.isLayerDialogOpen = ko.observable();
+				_self.isExtentDialogOpen = ko.observable();
+				_self.extentType = ko.observable();
+				
 				// services
 				_self.baseURL = ko.observable();
 				_self.layerURL = ko.observable();
@@ -187,7 +195,7 @@
 
 					// remove duplicate in service array and copy to localstorage
 					_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
-					localStorage.setItem("servicename", _self.availServ().join(';'));
+					localStorage.setItem('servicename', _self.availServ().join(';'));
 
 					// check the url
 					isValid = checkFormatURL(urlObject(), category);
@@ -199,51 +207,30 @@
 						// get service info and validateURL as callback function
 						gisREST.getResourceInfo(urlObject(), validateURL, showBadURL);
 
-						// set add layer window (pass the object, not the string)
-						layerPopup(urlObject, _self.layers);
-
 					} else {
-						_self.errortext(i18n.getDict('%map-layererror'));
+						_self.errortext(_self.txtLayerErr);
 					}
 				};
 
 				function showBadURL() {
-					_self.errortext(i18n.getDict('%map-layererror'));
+					_self.errortext(_self.txtLayerErr);
 				};
 
-				function layerPopup(url, layers) {
-					$layer.dialog({
-						autoOpen: false,
-						modal: true,
-						resizable: false,
-						draggable: false,
-						show: 'fade',
-						hide: 'fade',
-						closeOnEscape: true,
-						title: _self.lblAddLayer,
-						width: 600,
-						close: function() { },
-						buttons: [{
-							id: 'btnLayerOK',
-							text: 'Ok',
-							click: function() {
-								updateLayers(_self.servLayers(), layers);
-								url('');
-								_self.hiddenLayer('gcaut-hidden');
-								$aut(this).dialog('destroy');
-							}
-						}, {
-							id: 'btnLayerCancel',
-							text: 'Cancel',
-							click: function() {
-								url('');
-								_self.hiddenLayer('gcaut-hidden');
-								$aut(this).dialog('destroy');
-							}
-						}]
-					});
+				_self.dialogLayerOk = function() {
+					updateLayers(_self.servLayers(), layers);
+					_self.baseURL('');
+					_self.layerURL('');
+					_self.hiddenLayer('gcaut-hidden');
+					_self.isLayerDialogOpen(false);
 				};
-
+				
+				_self.dialogLayerCancel = function() {
+					_self.baseURL('');
+					_self.layerURL('');
+					_self.hiddenLayer('gcaut-hidden');
+					_self.isLayerDialogOpen(false);
+				};
+				
 				_self.removeLayer = function(type) {
 					if (type === 'base') {
 						_self.bases.remove(this);
@@ -300,11 +287,11 @@
     					showResourceInfo(sender);
 
     					// show window to select layers
-    					$layer.dialog('open');
+    					_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');
 
     				} else if (sender.hasOwnProperty('error')) {
-						_self.errortext(i18n.getDict('%map-layererror'));
+						_self.errortext(_self.txtLayerErr);
     				}
     			};
 
@@ -493,62 +480,42 @@
 					var size = { width:_self.mapWidthValue(),
 								 height: _self.mapHeightValue()
 								},
-						id = 'map_setExtent',
 						holder = [_self.setExtentMinX, _self.setExtentMinY, _self.setExtentMaxX, _self.setExtentMaxY];
 
-					$extent.dialog({
-						autoOpen: false,
-						modal: true,
-						resizable: false,
-						draggable: false,
-						show: 'fade',
-						hide: 'fade',
-						closeOnEscape: true,
-						title: _self.lblSetExtent,
-						width: size.width + 50,
-						height: size.height + 200,
-						close: function() { },
-						buttons: [{
-							id: 'btnLayerOK',
-							text: 'Ok',
-							click: function() {
-								var type = $(this).data('type');
-								if (type === 'max') {
-									_self.maxExtentMinX(_self.setExtentMinX());
-									_self.maxExtentMinY(_self.setExtentMinY());
-									_self.maxExtentMaxX(_self.setExtentMaxX());
-									_self.maxExtentMaxY(_self.setExtentMaxY());
-								} else {
-									_self.initExtentMinX(_self.setExtentMinX());
-									_self.initExtentMinY(_self.setExtentMinY());
-									_self.initExtentMaxX(_self.setExtentMaxX());
-									_self.initExtentMaxY(_self.setExtentMaxY());
-								}
-
-
-								$aut('#' + id).remove();
-								_self.hiddenMap('gcaut-hidden');
-								$aut(this).dialog('destroy');
-							}
-						}, {
-							id: 'btnLayerCancel',
-							text: 'Cancel',
-							click: function() {
-								$aut('#' + id).remove();
-								_self.hiddenMap('gcaut-hidden');
-								$aut(this).dialog('destroy');
-							}
-						}]
-					});
-
-					// show window to select layers
-    				$extent.data('type', type).dialog('open');
+					// show window to select extent
+    				_self.extentType(type);
+    				_self.isExtentDialogOpen(true);
     				_self.hiddenMap('');
 
 					// create the map
-					gisM.createMap(id, 'dynamic', 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer/0', size, holder);
+					gisM.createMap('map_setExtent', 'dynamic', 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer/0', size, holder);
 				};
-
+				
+				_self.dialogExtentOk = function() {
+					var type = _self.extentType();
+					if (type === 'max') {
+						_self.maxExtentMinX(_self.setExtentMinX());
+						_self.maxExtentMinY(_self.setExtentMinY());
+						_self.maxExtentMaxX(_self.setExtentMaxX());
+						_self.maxExtentMaxY(_self.setExtentMaxY());
+					} else {
+						_self.initExtentMinX(_self.setExtentMinX());
+						_self.initExtentMinY(_self.setExtentMinY());
+						_self.initExtentMaxX(_self.setExtentMaxX());
+						_self.initExtentMaxY(_self.setExtentMaxY());
+					}
+					
+					$aut('#map_setExtent').remove();
+					_self.hiddenMap('gcaut-hidden');
+					_self.isExtentDialogOpen(false);
+				};
+				
+				_self.dialogExtentCancel = function() {
+					$aut('#map_setExtent').remove();
+					_self.hiddenMap('gcaut-hidden');
+					_self.isExtentDialogOpen(false);
+				};
+				
 				_self.write = function() {
 					var value = '"mapframe": {' +
 									'"size": {' +

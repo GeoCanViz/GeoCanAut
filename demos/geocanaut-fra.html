@@ -42,7 +42,6 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 </head>
 
 <body><div id="wb-body">
-
 <div id="wb-skip">
 <ul id="wb-tphp">
 <li id="wb-skip1"><a href="#wb-cont">Passer au contenu principal</a></li>
@@ -94,7 +93,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 <div id="wb-core"><div id="wb-core-in" class="equalize">
 <div id="wb-main" role="main"><div id="wb-main-in">
 <!-- MainContentStart -->
-<div id="header" class="gcviz-head">
+<div id="header" class="gcviz-head" style="min-width: 961px;">
 	<img class="gcviz-head-logo" src="images/geocanviz.gif"></img>
 	<h1 class="gcviz-head-h1">Exemples pratiques</h1>
 	<div style="background-color: black; height: 10px;"></div>
@@ -118,7 +117,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<button class="gcaut-button" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }"><img class="gcaut-img-button" data-bind="attr: { src: imgSave }"></img></button>
 		</div>
 	</section>
-	<div id="gcauttabs" data-bind="tabs: { }" style="display: none;">
+	<div id="gcauttabs" style="display: none;">
 		<ul>
 			<li><a href="#tab-map">Carte</a></li>
 			<li><a href="#tab-inset">Insertion</a></li>
@@ -144,7 +143,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<label for="cb_link" data-bind="text: lblLink"></label>
 						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
 						<div style="clear: both"></div>
-						<div id="map_layers" data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
+						<div id="map_layers" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'txt_mapHeight' }, visible: mapHeightValue() > 0 && mapWidthValue() > 0">
 							<h3 class="ui-accordion-header" data-bind="text: lblBasemap"></h3>
 							<div>
 								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
@@ -154,8 +153,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
 										<div style="clear: both"></div>
 										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, autocomplete: { source: getServices(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
-										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: layers().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: getServices(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
+										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: bases().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 										<div style="clear: both"></div>
 										<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
 										<div style="clear: both"></div>
@@ -180,7 +179,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 														</div>
 														<div class="span4">
 															<span data-bind="text: lblExtentInit"></span>
-															<button class="gcaut-button" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'max'), tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgExtent }"></img></button>
+															<button class="gcaut-button" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'init'), tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgExtent }"></img></button>
 														</div>
 													</div>
 													<div class="row">
@@ -237,7 +236,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
 									<div style="clear: both"></div>
 									<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
-									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, autocomplete: { source: getServices(), select: setURL }, visible: $root.selectLayerType"/>
+									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: getServices(), select: setURL }, visible: $root.selectLayerType"/>
 									<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 									<div style="clear: both"></div>
 									<span id="layerMessage"></span>
@@ -257,7 +256,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							</div>
 						</div>
 					</div>
-					<div id="map_addlayer" data-bind="css: hiddenLayer">
+					<div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel }, openDialog: isLayerDialogOpen, css: hiddenLayer">
 						<div class="gcaut-layers">
 							<div data-bind="template: { name: 'selectLayers' }"></div>
 							<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
@@ -274,22 +273,29 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							</li>
 						</script>
 					</div>
-					<div id="map_extent" data-bind="css: hiddenMap">
-						<span data-bind="text: lblExtentMinX"></span>
+					<div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 800, height: 600, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel }, openDialog: isExtentDialogOpen, css: hiddenMap">
+						<div class="row">
+							<div class="span3">
+								<span data-bind="text: lblExtentMinX"></span>
 						<span data-bind="text: setExtentMinX"></span>
-						<div style="clear: both"></div>
-						<span data-bind="text: lblExtentMinY"></span>
+							</div>
+							<div class="span3">
+								<span data-bind="text: lblExtentMinY"></span>
 						<span data-bind="text: setExtentMinY"></span>
-						<div style="clear: both"></div>
-						<span data-bind="text: lblExtentMaxX"></span>
+							</div>
+							<div class="span3">
+								<span data-bind="text: lblExtentMaxX"></span>
 						<span data-bind="text: setExtentMaxX"></span>
-						<div style="clear: both"></div>
-						<span data-bind="text: lblExtentMaxY"></span>
+							</div>
+							<div class="span3">
+								<span data-bind="text: lblExtentMaxY"></span>
 						<span data-bind="text: setExtentMaxY"></span>
+							</div>
+						</div>
 					</div>
 					<div id="tabmap-order" class="gcaut-tabs">
 						<div class="gcaut-mapinfo" data-bind="visible: layers().length > 0">
-							<ul id="layersorder" data-bind="template: { name: 'mapLayersOrder', foreach: layers }"></ul>
+							<ul id="layersorder" data-bind="uiSortable: { refresh: 'tabmap-order' }, template: { name: 'mapLayersOrder', foreach: layers }"></ul>
 							<script type="text/html" id="mapLayersOrder">
 									<li class="ui-state-default">
 										<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
@@ -300,7 +306,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					</div>
 					<div id="tabmap-options" class="gcaut-tabs">
 						<div data-bind="visible: layers().length > 0" tabindex="0">
-							<div id="layersoptions" data-bind="template: { name: 'mapLayersOption', foreach: layers }"></div>
+							<div id="layersoptions" data-bind="uiAccordion: { heightStyle: 'fill', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
 							<script type="text/html" id="mapLayersOption">
 									<h3 class="ui-accordion-header" data-bind="text: id"></h3>
 									<div>
