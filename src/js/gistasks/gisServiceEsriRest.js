@@ -26,29 +26,29 @@
           						});
 
 			requestHandle.then(success, error);
-			
-			var requestHandleWMS = esriRequest({
-            						url: 'http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en?request=GetCapabilities',
-  									handleAs: 'xml'
-          						});
-			requestHandleWMS.then(function(response) {
-				console.log('in');
-			
-			}, function(error) {
-				console.log('out');
-			});
-			
-			var requestHandleAPI = esriRequest({
-            						url: 'http://prj2epsg.org/search.json?terms=Italy',
-            						//content: { f: 'json' },
-  									handleAs: 'jsonp'
-          						});
-			requestHandleAPI.then(function(response) {
-				console.log('in');
-			
-			}, function(error) {
-				console.log('out');
-			});
+
+			// var requestHandleWMS = esriRequest({
+            						// url: 'http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en?request=GetCapabilities',
+  									// handleAs: 'xml'
+          						// });
+			// requestHandleWMS.then(function(response) {
+				// console.log('in');
+//
+			// }, function(error) {
+				// console.log('out');
+			// });
+//
+			// var requestHandleAPI = esriRequest({
+            						// url: 'http://prj2epsg.org/search.json?terms=Italy',
+            						// //content: { f: 'json' },
+  									// handleAs: 'jsonp'
+          						// });
+			// requestHandleAPI.then(function(response) {
+				// console.log('in');
+//
+			// }, function(error) {
+				// console.log('out');
+			// });
 		};
 
 		return {

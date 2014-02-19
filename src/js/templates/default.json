@@ -2,21 +2,21 @@
 "gcaut": {
 	"name": "default"
 },
-"gcviz": {        
+"gcviz": {
 	"mapframe": {
 		"size": {
 			"height": 0,
 			"width": 0
 		},
-		"extentmax": {
+		"map": {
+			"sr": {
+				"wkid": 0
+			},
+			"extentmax": {
 			"xmin": 0.0,
 			"ymin": 0.0,
 			"xmax": 0.0,
 			"ymax": 0.0
-		},
-		"map": {
-			"sr": {
-				"wkid": 0
 			},
 			"extentinit": {
 				"xmin": 0.0,
@@ -24,12 +24,12 @@
 				"xmax": 0.0,
 				"ymax": 0.0
 			},
-			"lods": [],
-			"resolution": {
-				"min": 0,
-				"max": 0
+			"lods": {
+				"enable": false,
+				"values": []
 			},
 			"link": false,
+			"bases": [],
 			"layers": []
 		}
 	},
@@ -53,7 +53,7 @@
 		"mousecoords": {
 			"enable": false
 		},
-		"datatable": { 
+		"datatable": {
 			"direction": "in"
 		}
 	}

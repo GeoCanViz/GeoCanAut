@@ -33,9 +33,11 @@
 					sr = [3944, 3978, 4326, 102002],
 					layerType = [{ id: 1, val: 'WMS' }, { id: 2, val: 'WMTS' }, { id: 3, val: 'esriREST Cache' }, { id: 4, val: 'esriREST Dynamic' }],
 					size = map.size,
-					extentMax = map.extentmax,
 					map = map.map,
+					base = map.bases[0],
+					extentMax = map.extentmax,
 					extentInit = map.extentinit,
+					lods = map.lods,
 					$layer = $aut('#map_addlayer'),
 					$extent = $aut('#map_extent'),
 					urlObject, typeObject;
@@ -64,6 +66,9 @@
 				_self.lblMapHeight = i18n.getDict('%height') + ': ';
 				_self.lblMapWidth = i18n.getDict('%width') + ': ';
 				_self.lblLink = i18n.getDict('%map-link');
+				_self.lblResol = i18n.getDict('%map-resolution');
+				_self.lblLods = i18n.getDict('%map-lods');
+				_self.lblLevel = i18n.getDict('%map-level');
 				_self.lblBasemap = i18n.getDict('%map-basemap');
 				_self.lblMapSR = i18n.getDict('%map-spatialref');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
@@ -80,15 +85,15 @@
 				_self.lblScale = i18n.getDict('%map-scale');
 				_self.lblScaleMin = i18n.getDict('%minimum');
 				_self.lblScaleMax = i18n.getDict('%maximum');
-				
+
 				// text
 				_self.txtLayerErr = i18n.getDict('%map-layererror');
-				
+
 				// dialog
 				_self.isLayerDialogOpen = ko.observable();
 				_self.isExtentDialogOpen = ko.observable();
 				_self.extentType = ko.observable();
-				
+
 				// services
 				_self.baseURL = ko.observable();
 				_self.layerURL = ko.observable();
@@ -99,7 +104,7 @@
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: 0 });
 				_self.isLink = ko.observable(map.link);
 
-				// set extent variable
+				// set extent variable (for the dialog box)
 				_self.setExtentMinX = ko.observable();
 				_self.setExtentMinY = ko.observable();
 				_self.setExtentMaxX = ko.observable();
@@ -108,25 +113,22 @@
 				// base layer input
 				_self.bases = ko.observableArray();
 				_self.selectBaseLayerType = ko.observable();
-				if (typeof map.layers[0] !== 'undefined') {
-					if (typeof map.layers[0].type !== 'undefined') {
-						_self.selectBaseLayerType(layerType[map.layers[0].type -1]);
-					}
-					if (typeof map.layers[0].url !== 'undefined') {
-						_self.baseURL(map.layers[0].url);
-					}
+				if (typeof base !== 'undefined') {
+					_self.bases.push({ id: base.id, type: base.type, category: 'base', url: base.url });
 				}
 
 				_self.mapSR = ko.observableArray(sr);
+				_self.isLods = ko.observable(lods.enable);
+				_self.lods = ko.observableArray(lods.values);
 				_self.selectMapSR = ko.observable(map.sr.wkid);
 				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
 				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
 				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 10 });
 				_self.maxExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 10 });
-				_self.initExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
-				_self.initExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
-				_self.initExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 10 });
-				_self.initExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 10 });
+				_self.initExtentMinX = ko.observable(extentInit.xmin).extend({ numeric: 10 });
+				_self.initExtentMinY = ko.observable(extentInit.ymin).extend({ numeric: 10 });
+				_self.initExtentMaxX = ko.observable(extentInit.xmax).extend({ numeric: 10 });
+				_self.initExtentMaxY = ko.observable(extentInit.ymax).extend({ numeric: 10 });
 
 				// layer input
 				_self.isLayer = ko.observable(false);
@@ -138,8 +140,8 @@
 				_self.servLayers = ko.observableArray();
 
 				// layers options
-				_self.scaleMin = ko.observable().extend({ numeric: 10 });;
-				_self.scaleMax = ko.observable().extend({ numeric: 10 });;
+				//_self.scaleMin = ko.observable().extend({ numeric: 10 });;
+				//_self.scaleMax = ko.observable().extend({ numeric: 10 });;
 
 				// clean the view model
 				clean(ko, elem);
@@ -223,14 +225,14 @@
 					_self.hiddenLayer('gcaut-hidden');
 					_self.isLayerDialogOpen(false);
 				};
-				
+
 				_self.dialogLayerCancel = function() {
 					_self.baseURL('');
 					_self.layerURL('');
 					_self.hiddenLayer('gcaut-hidden');
 					_self.isLayerDialogOpen(false);
 				};
-				
+
 				_self.removeLayer = function(type) {
 					if (type === 'base') {
 						_self.bases.remove(this);
@@ -252,14 +254,14 @@
 
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
-									_self.layers.push({ id: layer.fullname, category: layer.category });
+									_self.layers.push({ id: layer.fullname, type: layer.type, category: layer.category, url: layer.url, minScale: layer.minScale, maxScale: layer.maxScale });
 								}
 							} else {
 								updateLayers(servLayers, list);
 							}
 						}
 					} else {
-						_self.bases.push({ id: _self.baseURL(), category: 'base' });
+						_self.bases.push({ id: _self.baseURL(), type: _self.selectBaseLayerType().id, category: 'base', url: _self.baseURL() });
 					}
 				};
 
@@ -305,7 +307,8 @@
 						sendLayers = sender.layers,
 						initExt = sender.initialExtent,
 						fullExt = sender.fullExtent,
-						url = urlObject();
+						url = urlObject(),
+						lods, lenlods;
 
 					while (index !== len) {
 						// set attribute the get sublayers
@@ -339,6 +342,18 @@
 
 					// update base layer info
 					_self.selectMapSR(sender.spatialReference.wkid);
+
+					// if lods is present add the info
+					if (typeof sender.tileInfo !== 'undefined') {
+						lods = sender.tileInfo.lods;
+						lenlods = lods.length;
+
+						while (lenlods--) {
+							lods[lenlods].isChecked = ko.observable(true);
+						}
+						_self.lods(lods);
+					}
+
 					_self.maxExtentMinX(fullExt.xmin);
 					_self.maxExtentMinY(fullExt.ymin);
 					_self.maxExtentMaxX(fullExt.xmax);
@@ -354,7 +369,14 @@
 						subLayerIds,
 						child,
 						childName, childId,
-						len;
+						len,
+						typeid;
+
+					if (typeObject === 'base') {
+						typeid = _self.selectBaseLayerType().id;
+					} else {
+						typeid = _self.selectLayerType().id;
+					}
 
 					// if there is sublayers add them
 					subLayerIds = parent.subLayerIds;
@@ -372,9 +394,12 @@
 							sublayer.fullname = fullname + '/' + childName;
 							sublayer.url = url + '/' + childId;
 							sublayer.id = childId;
+							sublayer.minScale = child.minScale;
+							sublayer.maxScale = child.maxScale;
 							sublayer.isChecked = ko.observable(false);
 							sublayer.isUse = ko.observable(false);
 							sublayer.category = typeObject;
+							sublayer.type = typeid;
 							layers.push(sublayer);
 
 							// call the same function to know if there is child with tha child sublayers array to add to
@@ -488,9 +513,9 @@
     				_self.hiddenMap('');
 
 					// create the map
-					gisM.createMap('map_setExtent', 'dynamic', 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer/0', size, holder);
+					gisM.createMap('map_setExtent', _self.selectBaseLayerType().id, _self.bases()[0].url, size, holder);
 				};
-				
+
 				_self.dialogExtentOk = function() {
 					var type = _self.extentType();
 					if (type === 'max') {
@@ -504,53 +529,99 @@
 						_self.initExtentMaxX(_self.setExtentMaxX());
 						_self.initExtentMaxY(_self.setExtentMaxY());
 					}
-					
+
 					$aut('#map_setExtent').remove();
 					_self.hiddenMap('gcaut-hidden');
 					_self.isExtentDialogOpen(false);
 				};
-				
+
 				_self.dialogExtentCancel = function() {
 					$aut('#map_setExtent').remove();
 					_self.hiddenMap('gcaut-hidden');
 					_self.isExtentDialogOpen(false);
 				};
-				
+
 				_self.write = function() {
-					var value = '"mapframe": {' +
-									'"size": {' +
-										'"height": ' + 400 + ',' +
-										'"width": ' + 800 +
+					var value,
+						lod,
+						layer,
+						strbase = '',
+						strlods = '',
+						strlayers = '',
+						lenlods = _self.lods().length,
+						lenlayers = _self.layers().length,
+						lods = _self.lods.reverse(),
+						layers = _self.layers.reverse(),
+						base = _self.bases()[0];
+
+
+					if (typeof base !== 'undefined') {
+						strbase = '{' +
+										'"id": "' + base.id + '",' +
+										'"type": ' + base.type + ',' +
+										'"url": "' + base.url + '"' +
+									'}';
+					}
+
+					while (lenlods--) {
+						lod = lods[lenlods];
+						strlods += '{' +
+										'"level": ' + lod.level + ',' +
+										'"resolution": ' + lod.resolution + ',' +
+										'"check": ' + lod.isChecked() +
+									'},';
+					}
+
+					if (strlods.length > 0) {
+						strlods = strlods.slice(0, -1);
+					}
+
+					if (lenlayers > 0) {
+						while (lenlayers--) {
+							layer = layers[lenlayers];
+							strlayers += '{' +
+											'"id": "' + layer.id + '",' +
+											'"type": ' + layer.type + ',' +
+											'"url": "' + layer.url + '",' +
+											'"scale": {' +
+												'"min": ' + layer.minScale + ',' +
+												'"max": ' + layer.maxScale +
+											'}' +
+										'},';
+						}
+						strlayers = strlayers.slice(0, -1);
+					}
+
+					value = '"mapframe": {' +
+								'"size": {' +
+									'"height": ' + _self.mapHeightValue() + ',' +
+									'"width": ' + _self.mapWidthValue() +
+								'},' +
+								'"map": {' +
+									'"sr": {' +
+										'"wkid": ' + _self.selectMapSR() +
 									'},' +
-									'"extent": {' +
-										'"xmin": ' + 0.0 + ',' +
-										'"ymin": ' + 0.0 + ',' +
-										'"xmax": ' + 0.0 + ',' +
-										'"ymax": ' + 0.0 +
+									'"extentmax": {' +
+										'"xmin": ' + _self.maxExtentMinX() + ',' +
+										'"ymin": ' + _self.maxExtentMinY() + ',' +
+										'"xmax": ' + _self.maxExtentMaxX() + ',' +
+										'"ymax": ' + _self.maxExtentMaxY() +
 									'},' +
-									'"map": {' +
-										'"sr": {' +
-											'"wkid": ' + 3978 +
-										'},' +
-										'"extent": {' +
-											'"xmin": ' + 0.0 + ',' +
-											'"ymin": ' + 0.0 + ',' +
-											'"xmax": ' + 0.0 + ',' +
-											'"ymax": ' + 0.0 +
-										'},' +
-										'"lods": [],' +
-										'"resolution": {' +
-											'"min": ' + 0 + ',' +
-											'"max": ' + 0 +
-										'},' +
-										'"link": ' + false + ',' +
-										'"layers": [{' +
-											'"id": "first",' +
-											'"type": "tiled",' +
-											'"url": "http.first"' +
-										'}]'+
-									'}' +
-								'}';
+									'"extentinit": {' +
+										'"xmin": ' + _self.initExtentMinX() + ',' +
+										'"ymin": ' + _self.initExtentMinY() + ',' +
+										'"xmax": ' + _self.initExtentMaxX() + ',' +
+										'"ymax": ' + _self.initExtentMaxY() +
+									'},' +
+									'"lods": {' +
+										'"enable": ' + _self.isLods() + ',' +
+										'"values": [' + strlods + ']' +
+									'},' +
+									'"link": ' + _self.isLink() + ',' +
+									'"bases": [' + strbase + '],' +
+									'"layers": ['+ strlayers + ']' +
+								'}' +
+							'}';
 
 					return value;
 				};

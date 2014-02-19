@@ -171,6 +171,31 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 												<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
 											</div>
 											<div class="row">
+												<div class="span12">
+													<div class="row">
+														<div class="span2" data-bind="visible: $root.lods().length > 0">
+															<label for="cb_lods" data-bind="text: lblLods"></label>
+															<input type="checkbox" id="cb_lods" data-bind="checked: isLods">
+														</div>
+														<div class="span10" data-bind="visible: isLods">
+															<div data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'cb_lods' }">
+															<h3 class="ui-accordion-header" data-bind="text: lblResol"></h3>
+															<div>
+																<ul data-bind="template: { name: 'showLods', foreach: $data.lods }"></ul>
+																<script type="text/html" id="showLods">
+																	<li>
+																		<input type="checkbox" data-bind="attr: { id: 'cb_level' + $data.level }, checked: $data.isChecked">
+																		<label data-bind="attr: { for: 'cb_level' + $data.level }, text: $root.lblLevel + $data.level + ':'"></label>
+																		<span data-bind="text: $data.resolution"></span>
+																	</li>
+																</script>
+															</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
 												<div class="span8">
 													<div class="row">
 														<div class="span4">
@@ -242,14 +267,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									<span id="layerMessage"></span>
 									<div style="clear: both"></div>
 									<div data-bind="visible: layers().length > 0">
-										<div id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></div>
+										<ul id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></ul>
 										<script type="text/html" id="mapLayers">
-											<ul>
-												<li style="white-space: nowrap;" data-bind="visible: $data.category === 'layer'">
-													<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
-													<span data-bind="text: id"></span>
-					        					</li>
-					        				</ul>
+											<li style="white-space: nowrap;" data-bind="visible: $data.category === 'layer'">
+												<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
+												<span data-bind="text: id"></span>
+					        				</li>
 										</script>
 									</div>
 								</div>
@@ -306,15 +329,15 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					</div>
 					<div id="tabmap-options" class="gcaut-tabs">
 						<div data-bind="visible: layers().length > 0" tabindex="0">
-							<div id="layersoptions" data-bind="uiAccordion: { heightStyle: 'fill', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
+							<div id="layersoptions" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
 							<script type="text/html" id="mapLayersOption">
 									<h3 class="ui-accordion-header" data-bind="text: id"></h3>
 									<div>
 										<span data-bind="text: $root.lblScale"></span>
 										<label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
-										<input id="txt_scaleMin" data-bind="value: $root.scaleMin"></input>
+										<input id="txt_scaleMin" data-bind="value: $data.minScale"></input>
 										<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
-										<input id="txt_scaleMax" data-bind="value: $root.scaleMax"></input>
+										<input id="txt_scaleMax" data-bind="value: $data.maxScale"></input>
 									</div>
 							</script>
 						</div>

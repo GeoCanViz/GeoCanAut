@@ -15,7 +15,7 @@
         var initialize,
         	clean,
         	vm;
-        
+
         initialize = function(elem, map) {
             // Constructor for an object with two properties
 			var printTypeArr = function(value, index) {
@@ -23,7 +23,7 @@
 				this.printIndex = index;
 			};
 
-            // data model               
+            // data model
             var headerViewModel = function(elem, map) {
                 var _self = this,
                 	title = map.title,
@@ -40,7 +40,7 @@
                 _self.lblInset = i18n.getDict('%header-inset');
                 _self.lblFulscreen = i18n.getDict('%header-fullscreen');
                 _self.lblSelectItem = i18n.getDict('%selectItem');
-                
+
                 // input
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
@@ -48,28 +48,30 @@
 				_self.isPrint = ko.observable(print.enable);
 				_self.isInset = ko.observable(map.inset);
 				_self.isFullscreen = ko.observable(map.fullscreen);
-				
+
 				// print type
 				_self.printType = printType;
 				_self.selectPrint = ko.observable();
 				if (typeof print.type !== 'undefined') {
 					_self.selectPrint(_self.printType[print.type -1]);
 				}
-				
+
 				// clean the view model
 				clean(ko, elem);
-				
+
                 _self.init = function() {
                     return { controlsDescendantBindings: true };
                 };
-                
+
                 _self.bind = function() {
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
-                
+
                 _self.write = function() {
-					var value = '"header": {' +
+					var prinType,
+                		isPrint = _self.isPrint(),
+						value = '"header": {' +
 									'"title": {' +
 										'"value": "' + _self.mapTitleValue() +'",' +
 										'"alttext": "' + _self.mapAltValue() + '",' +
@@ -77,28 +79,35 @@
 									'},' +
 									'"tools": ' + _self.isTools() + ',' +
 									'"print": {' +
-										'"enable": ' + _self.isPrint() + ',' +
-										'"type": ' + _self.selectPrint().id +
+										'"enable": ' +  isPrint +
+										'setPrintType' +
 									'},' +
 									'"fullscreen": ' + _self.isFullscreen() + ',' +
 									'"inset": ' + _self.isInset() +
 								'}';
-					
+
+					// if there is print add the needed content to config file. If not remove the tag.
+					if (isPrint) {
+						value = value.replace('setPrintType', ',"type": ' + _self.selectPrint().id);
+					} else {
+						value = value.replace('setPrintType', '');
+					}
+
 					return value;
 				};
-				              
+
                 _self.init();
             };
-            
+
             vm = new headerViewModel(elem, map);
             ko.applyBindings(vm, elem); // This makes Knockout get to work
             return vm;
         };
-        
+
         clean = function(ko, elem) {
 			ko.cleanNode(elem);
 		};
-		
+
         return {
             initialize: initialize,
             clean: clean

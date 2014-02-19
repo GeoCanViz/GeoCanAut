@@ -156,14 +156,14 @@
 					content = content.substring(0, content.length - 1);
 					content += '}}';
 					uri += content;
-			
+
 					// generate the iframe then that call the php. Then remove the iframe
 			    	$aut.generateFile({
-						filename	: _self.mapsIDValue() + '.txt',
+						filename	: _self.mapsIDValue() + '.json',
 						content		: content,
 						script		: 'http://localhost:8888/download.php'
 					});
-					
+
 					setTimeout(function() { $aut('#gcaut-download').remove(); }, 1000);
 				};
 

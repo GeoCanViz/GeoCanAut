@@ -25,39 +25,25 @@
 				layer,
 				width = size.width,
 				height = size.height,
-				options,
-				initExtent = new esri.geometry.Extent({'xmin': -4630285.316767354, 'ymin': 521021.85642220173, 'xmax': 5053156.458021438, 'ymax': 4896502.9546601, 'spatialReference': {'wkid': 3978}});
+				options;
 
 			options = {
-					extent: new esri.geometry.Extent({'xmin': -4630285.316767354, 'ymin': 521021.85642220173, 'xmax': 5053156.458021438, 'ymax': 4896502.9546601, 'spatialReference': {'wkid': 3978}}),
-					spatialReference: {'wkid': 3978},
-					logo: false,
-					showAttribution: false,
-					wrapAround180: true,
-					smartNavigation: false
+				logo: false,
+				showAttribution: false,
+				wrapAround180: true,
+				smartNavigation: false
 			};
 
 			// create map
 			$aut('#map_extent').prepend('<div id="' + id + '" style="border-style: solid;"></div>');
 			$aut('#' + id).width(width).height(height);
 			map = new esri.Map(id, options);
-
-			map.addLayer(new esri.layers.ArcGISDynamicMapServiceLayer('http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer'));
-			//map.addLayer(new esri.layers.FeatureLayer('http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer/0'));
-			//map.addLayer(new esri.layers.ArcGISTiledMapServiceLayer('http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer'));
-			//map.addLayer(new esri.layers.FeatureLayer('http://maps.ottawa.ca/ArcGIS/rest/services/Greenbelt/MapServer/0', { mode: esri.layers.FeatureLayer.MODE_ONDEMAND, outFields: ["*"] }));
+			map.addLayer(createLayer(typeLayer, urlLayer));
 
 			// set map size here because API will not take it from the html div
 			$aut('#' + id + 'root').width(width).height(height);
 			map.width = width;
 			map.height = height;
-
-			//layer = createLayer('tiled', 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer');
-			//map.addLayer(layer);
-
-			layer = createLayer('dynamic', 'http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer/0');
-			//layer = createLayer('dynamic', 'http://maps.ottawa.ca/ArcGIS/rest/services/Greenbelt/MapServer/0');
-			//map.addLayer(layer);
 
 			map.on('extent-change', func.debounce(function(evt) {
 				var extent = evt.extent;
@@ -73,9 +59,9 @@
 		createLayer = function(type, url) {
 			var layer;
 
-			if (type === 'tiled') {
+			if (type === 3) {
 				layer = new esri.layers.ArcGISTiledMapServiceLayer(url);
-			} else if (type === 'dynamic') {
+			} else if (type === 4) {
 				layer = new esri.layers.ArcGISDynamicMapServiceLayer(url);
 			} else if (type === 'feature') {
 				layer = new esri.layers.FeatureLayer(url, {
