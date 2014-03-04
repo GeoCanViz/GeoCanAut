@@ -10,12 +10,12 @@
 	define(['jquery-private',
 			'knockout',
 			'jqueryui'
-	], function($aut, ko, slider) {
+	], function($aut, ko) {
 
     ko.bindingHandlers.tooltip = {
 		init: function(element, valueAccessor) {
-			var local = ko.utils.unwrapObservable(valueAccessor()),
-				options = {},
+			var options = {},
+				local = ko.utils.unwrapObservable(valueAccessor()),
 				$element = $aut(element);
 
 			ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
@@ -50,23 +50,24 @@
 	ko.extenders.numeric = function(target, precision) {
 		// create a writeable computed observable to intercept writes to our observable
 		var result = ko.computed({
-		read: target,  // always return the original observables value
-		write: function(newValue) {
-			var current = target(),
-			roundingMultiplier = Math.pow(10, precision),
-			newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
-			valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
-
-			// only write if it changed
-			if (valueToWrite !== current) {
-				target(valueToWrite);
-			} else {
-				// if the rounded value is the same, but a different value was written, force a notification for the current field
-				if (newValue !== current) {
-					target.notifySubscribers(valueToWrite);
+			read: target,  // always return the original observables value
+			write: function(newValue) {
+				var current = target(),
+				
+				roundingMultiplier = Math.pow(10, precision),
+				newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
+				valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+	
+				// only write if it changed
+				if (valueToWrite !== current) {
+					target(valueToWrite);
+				} else {
+					// if the rounded value is the same, but a different value was written, force a notification for the current field
+					if (newValue !== current) {
+						target.notifySubscribers(valueToWrite);
+					}
 				}
 			}
-		}
 		}).extend({ notify: 'always' });
 
 		// initialize with current value to make sure it is rounded appropriately
@@ -80,26 +81,26 @@
 	ko.bindingHandlers.uiAutocomplete = {
 		init: function (element, valueAccessor) {
 			var options = valueAccessor() || {},
-	        	$element = $aut(element);
-	        
+				$element = $aut(element);
+ 
 			$element.autocomplete(options);
-			
-			 //handle disposal (if KO removes by the template binding)
-	        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+
+			//handle disposal (if KO removes by the template binding)
+			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 				$element.autocomplete('destroy');
 			});
 		},
 		update: function (element, valueAccessor) {
 			var options = valueAccessor() || {};
-			$aut(element).autocomplete('option', 'source', options.source.availServ());
+			$aut(element).autocomplete('option', 'source', options.source);
 		}
 	};
 	
 	ko.bindingHandlers.uiSortable = {
-		 init: function(element, valueAccessor) {
-	        var options = valueAccessor() || {},
-	        	$refresh = $aut('#' + options.refresh),
-	        	$element = $aut(element);
+		init: function(element, valueAccessor) {
+			var options = valueAccessor() || {},
+				$refresh = $aut('#' + options.refresh),
+				$element = $aut(element);
 
 			$element.sortable(options);
 			$element.disableSelection();
@@ -110,23 +111,23 @@
 				});
 			}
 
-	        //handle disposal (if KO removes by the template binding)
-	        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+			//handle disposal (if KO removes by the template binding)
+			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 				$element.sortable('destroy');
 			});
-	    },
-	    update: function(element, valueAccessor) {
+		},
+		update: function(element, valueAccessor) {
 			var options = valueAccessor() || {};
 			$aut(element).sortable('destroy').sortable(options);
-	    }
+		}
 	};
 
 	ko.bindingHandlers.uiAccordion = {
-	    init: function(element, valueAccessor) {
-	        var options = valueAccessor() || {},
-	        	$refresh = $aut('#' + options.refresh),
-	        	$element = $aut(element);
-	        
+		init: function(element, valueAccessor) {
+			var options = valueAccessor() || {},
+				$refresh = $aut('#' + options.refresh),
+				$element = $aut(element);
+    
 			$element.accordion(options);
 			
 			if (typeof $refresh !== 'undefined') {
@@ -135,26 +136,26 @@
 				});
 			}
 			
-	        //handle disposal (if KO removes by the template binding)
-	        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+			//handle disposal (if KO removes by the template binding)
+			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 				$element.accordion('destroy');
 			});
-	    },
-	    update: function(element, valueAccessor) {
+		},
+		update: function(element, valueAccessor) {
 			var options = valueAccessor() || {};
 			$aut(element).accordion('destroy').accordion(options);
-	    }
+		}
 	};
 	
 	ko.bindingHandlers.uiDialog = {
-	    init: function(element, valueAccessor) {
-	    	var local = ko.utils.unwrapObservable(valueAccessor()),
+		init: function(element, valueAccessor) {
+			var local = ko.utils.unwrapObservable(valueAccessor()),
 				options = {},
-	        	$element = $aut(element);
-	        
-	        ko.utils.extend(options, ko.bindingHandlers.uiDialog.options);
+				$element = $aut(element);
+
+			ko.utils.extend(options, ko.bindingHandlers.uiDialog.options);
 			ko.utils.extend(options, local);
-			
+
 			// if function are provided for ok and/or cancel, update
 			if (typeof options.ok !== 'undefined') {
 				options.buttons[0].click = options.ok;
@@ -164,9 +165,9 @@
 			}
 			
 			$element.dialog(options);
-	    },
-	    options: {
-	    	autoOpen: false,
+		},
+		options: {
+			autoOpen: false,
 			modal: true,
 			resizable: false,
 			draggable: false,
@@ -185,14 +186,19 @@
 					$aut(this).dialog('close');
 				}
 			}]
-	    }
+		}
 	};
 
 	//custom binding handler that opens/closes the dialog
 	ko.bindingHandlers.openDialog = {
 		update: function(element, valueAccessor) {
 			var value = ko.utils.unwrapObservable(valueAccessor());
-			value ? $aut(element).dialog('open') : $aut(element).dialog('close');;
+			
+			if (value) {
+				$aut(element).dialog('open');
+			} else {
+				$aut(element).dialog('close');
+			}
 		}
 	};
 

@@ -18,13 +18,13 @@
 			'gcaut-vm-footer'
 	], function($aut, ko, generateFile, i18n, binding, mapVM, headerVM, footerVM) {
 		var initialize,
-			readConfig,
+			loadFile,
 			vm;
 
 		initialize = function(elem) {
 
 			// data model
-			var projheaderViewModel = function(elem) {
+			var projheaderViewModel = function() {
 				var _self = this,
 					pathNew = locationPath + 'gcaut/images/projNew.png',
 					pathOpen = locationPath + 'gcaut/images/projOpen.png',
@@ -71,8 +71,8 @@
 					// work around for Firefox because we cant trigger the input if it is inside the button
 					// We need it inside the button to have our css
 					if (window.browser === 'Firefox') {
-						$('#openFileDialog').click(function(e) {
-						    $(document.getElementById('fileDialogFF')).click();
+						$aut('#openFileDialog').click(function() {
+							$aut(document.getElementById('fileDialogFF')).click();
 						});
 					}
 
@@ -80,9 +80,9 @@
 				};
 
 				_self.openMap = function() {
-					var files = event.target.files,
-						len = files.length,
-						file, reader;
+					var file, reader,
+						files = event.target.files,
+						len = files.length;
 
 					// loop through the FileList.
 					while (len--) {
@@ -90,26 +90,24 @@
 						reader = new FileReader();
 
 						// closure to capture the file information and launch the process
-						reader.onerror = function(event) {
-							console.log();
-						};
-
-						reader.onload = (function(theFile) {
-								return function(e) {
-									var config;
-
-									try {
-								        config = JSON.parse(e.target.result);
-										_self.initMap(config, config.gcaut.name);
-								    } catch(e) {
-								        console.log(_self.txtConfigErr);
-								    }
-        					};
-      					})(file);
-      					reader.readAsText(file);
+						reader.onload = loadFile();
+						reader.readAsText(file);
 					}
 				};
+				
+				loadFile = function() {
+					return function(e) {
+						var config;
 
+						try {
+							config = JSON.parse(e.target.result);
+							_self.initMap(config, config.gcaut.name);
+						} catch(error) {
+							console.log(_self.txtConfigErr + ': ' + error);
+						}
+					};
+				};
+				
 				_self.newMap = function() {
 					// read the file then launch the process
 					_self.readConfig(pathTemplate);
@@ -117,7 +115,7 @@
 
 				_self.deleteMap = function() {
 					// removes map from dropdown and array and add item to restore array
-					var id = parseInt(_self.mapsIDValue().split(' ')[1]) - 1,
+					var id = parseInt(_self.mapsIDValue().split(' ')[1], 10) - 1,
 						item = _self.maps.splice(id, 1);
 					_self.mapsRestore.push(item[0]);
 
@@ -140,37 +138,34 @@
 				_self.saveMap = function() {
 
 					// get the active map id
-					var id = parseInt(_self.mapsIDValue().split(' ')[1]) - 1,
-						vm = _self.maps[id],
-						uri = 'data:text/json;charset=utf-8,',
-						content = '{"gcaut": {"name": "sample1.json"},"gcviz": {',
-						downloadLink;
+					var id = _self.mapsIDValue(),
+						vm = _self.maps[parseInt(id.split(' ')[1], 10) - 1],
+						content = '{"gcaut": {"name": "' + id + '.json"},"gcviz": {';
 
 					// loop trought viewmodels and get info to write
 					Object.keys(vm).forEach(function(key) {
-					    content += vm[key].write();
-					    content += ',';
+						content += vm[key].write();
+						content += ',';
 					});
 
-					// remove last comma, add the close brackets and add to uri
-					content = content.substring(0, content.length - 1);
+					// remove last comma, close brackets
+					content = content.slice(0, - 1);
 					content += '}}';
-					uri += content;
 
-					// generate the iframe then that call the php. Then remove the iframe
-			    	$aut.generateFile({
-						filename	: _self.mapsIDValue() + '.json',
+					// generate the iframe then call the php. Then remove the iframe
+					$aut.generateFile({
+						filename	: id + '.json',
 						content		: content,
-						script		: 'http://localhost:8888/download.php'
+						script		: 'http://localhost:8888/php/download.php'
 					});
 
 					setTimeout(function() { $aut('#gcaut-download').remove(); }, 1000);
 				};
 
 				_self.resetIndex = function() {
-					var len = _self.maps.length,
-						lenAll = _self.maps.length,
-						id;
+					var id,
+						len = _self.maps.length,
+						lenAll = _self.maps.length;
 
 					_self.mapsID([]);
 					while (len--) {
@@ -182,8 +177,8 @@
 				};
 
 				/*
-		 		*  read configuration file and start execution
-		 		*/
+				*  read configuration file and start execution
+				*/
 				_self.readConfig = function(url) {
 					// ajax call to get the config file info
 					$aut.support.cors = true; // force cross-site scripting for IE9
@@ -202,9 +197,9 @@
 				};
 
 				_self.initMap = function(config, url) {
-					var id = _self.maps.length + 1,
+					var vm = {},
+						id = _self.maps.length + 1,
 						mapVal = _self.mapLabel + id,
-						vm = {},
 						gcviz = config.gcviz;
 
 					// create the master view model (launch every view model one after the other)
@@ -221,12 +216,12 @@
 				};
 
 				/*
-				 * this function is fired when map dropdown list value changed
-				 */
+				* this function is fired when map dropdown list value changed
+				*/
 				_self.mapsIDValue.subscribe(function(item) {
 
 					if (typeof item !== 'undefined') {
-						var id = parseInt(item.split(' ')[1]) - 1,
+						var id = parseInt(item.split(' ')[1], 10) - 1,
 							vm = _self.maps[id],
 							$tabs = $aut('#gcauttabs');
 
@@ -249,7 +244,7 @@
 				_self.init();
 			};
 
-			vm = new projheaderViewModel(elem);
+			vm = new projheaderViewModel();
 			ko.applyBindings(vm, elem); // this makes Knockout get to work
 		};
 

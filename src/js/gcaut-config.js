@@ -6,14 +6,14 @@
  * Version: @gcaut.version@
  *
  */
+/* global alert: false */
 (function() {
 	'use strict';
 	// get the language
-	var url = window.location.toString(),
+	var metas, len,
+		url = window.location.toString(),
 		locationPath,
-		language = 'en-min',
-		metas,
-		i;
+		language = 'en-min';
 	
 	if ((url.search(/_f\.htm/) > -1) || (url.search(/-fra\./) > -1) || (url.search(/-fr\./) > -1) || (url.search(/lang=fra/) > -1) || (url.search(/lang=fr/) > -1)) {
 		language = 'fr-min';
@@ -25,11 +25,11 @@
 
 	// get code location from meta tag
 	metas = document.getElementsByTagName('meta'),
-	i = metas.length; 
+	len = metas.length; 
 
-	while(i--) { 
-		if (metas[i].getAttribute('property') === 'location') { 
-			locationPath = metas[i].getAttribute('content'); 
+	while(len--) { 
+		if (metas[len].getAttribute('property') === 'location') { 
+			locationPath = metas[len].getAttribute('content'); 
 		} 
 	}
 	
@@ -47,17 +47,16 @@
 		}
 	}
 	
- 	// detect browser (code from http://www.quirksmode.org/)
+	// detect browser (code from http://www.quirksmode.org/)
 	var browserDetect = {
 		init: function() {
 			window.browser = this.searchString(this.dataBrowser) || 'unknown';
 			window.browserversion = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || 'unknown';
 	},
 	searchString: function(data) {
-		var length = data.length,
-			i = 0,
-			dataString,
-			dataProp;
+		var dataString, dataProp,
+			length = data.length,
+			i = 0;
 		
 		while (length--) {
 			dataString = data[i].string;
@@ -80,7 +79,7 @@
 		if (index === -1) {
 			return;
 		} else {
-			return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+			return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
 		}
 	},
 	dataBrowser: [
@@ -139,20 +138,19 @@
 	// if browser not supported, redirect
 	if (window.browser !== 'Explorer' && window.browser !== 'Firefox' && window.browser !== 'Chrome' && window.browser !== 'Safari') {
 		if (language === 'en-min') {
-			 alert('Browser not suported: needs to be Chrome, Firefox, Safari or Explorer. You will be redirected to Google home page');
+			alert('Browser not suported: needs to be Chrome, Firefox, Safari or Explorer. You will be redirected to Google home page');
 		} else {
 			alert('Navigateur non supporté: le navigateur doit être Chrome, Firefox, Safari ou Explorer. Vous serez redirigé vers la page d\'acceuil de Google');
 		}
 		window.location = 'http://www.google.com/';
 	} else if (window.browser === 'Explorer' && window.browserversion <= 8) {
 		if (language === 'en-min') {
-			 alert('Browser not suported: Explorer needs to be version 9 and higher. Vous serez redirigé vers la page d\'acceuil de Google');
+			alert('Browser not suported: Explorer needs to be version 9 and higher. Vous serez redirigé vers la page d\'acceuil de Google');
 		} else {
 			alert('Navigateur non supporté: Explorer doit être version 9 ou plus. Vous serez redirigé vers la page d\'acceuil de Google');
 		}
 		window.location = 'http://www.google.com/';
 	}
-
 
 	// load the require libraries
 	define.amd.jQuery = true;	
@@ -193,13 +191,17 @@
 				location: locationPath + 'gcaut/js/custom',
 				main: 'gcaut-functions-min'
 			}, {
+				name: 'gcaut-esri',
+				location: locationPath + 'gcaut/js/formats',
+				main: 'gcaut-esri-min'
+			}, {
 				name: 'gcaut-gismap',
 				location: locationPath + 'gcaut/js/gistasks',
 				main: 'gisMapUtility-min'
 			}, {
-				name: 'gcaut-gisrest',
+				name: 'gcaut-gisservinfo',
 				location: locationPath + 'gcaut/js/gistasks',
-				main: 'gisServiceEsriRest-min'
+				main: 'gisServiceInfo-min'
 			}, {
 				name: 'gcaut-vm-projheader',
 				location: locationPath + 'gcaut/js/viewmodels',
@@ -222,14 +224,15 @@
 
 	// start the process with a private jquery. If we dont, it creates a conflict because we laod jQuery and it is different then the one loaded by WET
 	define('jquery-private', ['jquery'], function ($aut) {
-	    var noConflict = $aut.noConflict(true);
-	    
-	    // if there is no jQuery loaded, set the window jquery to be the one from this project. Otherwise keep the outside one because it is use
-	    // by script outside this project.
-	    window.jQuery = !(window.jQuery) ? window.$ = $aut : window.jQuery;
-	    
-	    return noConflict;
-	});  
+		var noConflict = $aut.noConflict(true);
+  
+		// if there is no jQuery loaded, set the window jquery to be the one from this project. Otherwise keep the outside one because it is use
+		// by script outside this project.
+		window.jQuery = !(window.jQuery) ? window.$ = $aut : window.jQuery;
+
+		return noConflict;
+	});
+
 	require(['jquery-private', 'gcaut'], function($aut, gcaut) {
 		return $aut(document).ready(function() {
 			return gcaut.initialize();

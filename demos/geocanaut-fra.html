@@ -153,8 +153,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
 										<div style="clear: both"></div>
 										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: getServices(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
-										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: bases().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
+										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: bases().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 										<div style="clear: both"></div>
 										<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
 										<div style="clear: both"></div>
@@ -168,7 +168,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											</script>
 											<div class="row">
 												<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
-												<select id="cb_mapsr" data-bind="options: mapSR, value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
+												<select id="cb_mapsr" data-bind="options: srType, optionsText: 'val', value: selectMapSR, optionsCaption: lblSelectItem, enable: true"></select>
 											</div>
 											<div class="row">
 												<div class="span12">
@@ -261,15 +261,15 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
 									<div style="clear: both"></div>
 									<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
-									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: getServices(), select: setURL }, visible: $root.selectLayerType"/>
-									<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateLayer.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectLayerType"/>
+									<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 									<div style="clear: both"></div>
 									<span id="layerMessage"></span>
 									<div style="clear: both"></div>
 									<div data-bind="visible: layers().length > 0">
 										<ul id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></ul>
 										<script type="text/html" id="mapLayers">
-											<li style="white-space: nowrap;" data-bind="visible: $data.category === 'layer'">
+											<li style="white-space: nowrap;">
 												<button class="gcaut-button" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer')"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgDelete }"></img></button>
 												<span data-bind="text: id"></span>
 					        				</li>
@@ -378,17 +378,17 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		<div id="tab-foot" class="gcaut-tabs">
 			<section id="footerMap">
 				<label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
-				<input id="urlGeomServer" type="text" data-bind="value: urlGeomServer"></input>
+				<input id="urlGeomServer" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
 				<div style="clear: both"></div>
 				<label for="cb_arrow" class="form-checkbox" data-bind="text: lblEnbArrow"></label>
 				<input type="checkbox" id="cb_arrow" data-bind="checked: isArrow">
 				<label for="cb_arrowsr" class="form-checkbox" data-bind="text: lblArrowSR"></label>
-				<select id="cb_arrowsr" data-bind="options: arrowSR, enable: isArrow, value: selectArrowSR, optionsCaption: lblSelectItem"></select>
+				<select id="cb_arrowsr" data-bind="options: arrowSR, optionsText: 'val', value: selectArrowSR, optionsCaption: lblSelectItem, enable: isArrow"></select>
 				<div style="clear: both"></div>
 				<label for="cb_mouse" class="form-checkbox" data-bind="text: lblEnbMouse"></label>
 				<input type="checkbox" id="cb_mouse" data-bind="checked: isMouse">
 				<label for="cb_mousesr" class="form-checkbox" data-bind="text: lblMouseSR"></label>
-				<select id="cb_mousesr" data-bind="options: mouseSR, enable: isMouse, value: selectMouseSR, optionsCaption: lblSelectItem"></select>
+				<select id="cb_mousesr" data-bind="options: mouseSR, optionsText: 'val', value: selectMouseSR, optionsCaption: lblSelectItem, enable: isMouse,"></select>
 			</setion>
 		</div>
 	</div>

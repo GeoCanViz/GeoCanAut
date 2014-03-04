@@ -41,17 +41,21 @@
 		},
 		"tools": false,
 		"print": {
-			"enable": false
+			"enable": false,
+			"type": -1
 		},
 		"fullscreen": false,
 		"inset": false
 	},
 	"footer": {
+		"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
 		"northarrow": {
-			"enable": false
+			"enable": false,
+			"inwkid": -1
 		},
 		"mousecoords": {
-			"enable": false
+			"enable": false,
+			"outwkid": -1
 		},
 		"datatable": {
 			"direction": "in"

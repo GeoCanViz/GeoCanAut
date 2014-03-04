@@ -12,17 +12,24 @@
 			'knockout',
 			'jqueryui',
 			'gcaut-i18n',
+			'gcaut-func',
+			'gcaut-esri',
 			'gcaut-gismap',
-			'gcaut-gisrest'
-	], function($aut, ko, jqUI, i18n, gisM, gisREST) {
+			'gcaut-gisservinfo'
+	], function($aut, ko, jqUI, i18n, gcautFunc, esriData, gisM, gisServInfo) {
 		var initialize,
 			clean,
+			setServName,
+			updateLayers,
+			readServInfo,
+			checkParentlayers,
+			checkSublayers,
 			vm;
 
 		initialize = function(elem, map) {
 
 			// data model
-			var mapViewModel = function(elem, map) {
+			var mapViewModel = function(elem, mapin) {
 				var _self = this,
 					pathNew = locationPath + 'gcaut/images/projNew.png',
 					pathValid = locationPath + 'gcaut/images/mapValidate.png',
@@ -30,16 +37,15 @@
 					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
 					pathCheckAll = locationPath + 'gcaut/images/mapCheckAll.png',
 					pathUncheckAll = locationPath + 'gcaut/images/mapUncheckAll.png',
-					sr = [3944, 3978, 4326, 102002],
+					srType = gcautFunc.getSrType(i18n.getDict('%map-sr')),
 					layerType = [{ id: 1, val: 'WMS' }, { id: 2, val: 'WMTS' }, { id: 3, val: 'esriREST Cache' }, { id: 4, val: 'esriREST Dynamic' }],
-					size = map.size,
-					map = map.map,
+					size = mapin.size,
+					map = mapin.map,
 					base = map.bases[0],
+					layers = map.layers,
 					extentMax = map.extentmax,
 					extentInit = map.extentinit,
 					lods = map.lods,
-					$layer = $aut('#map_addlayer'),
-					$extent = $aut('#map_extent'),
 					urlObject, typeObject;
 
 				// images path
@@ -114,10 +120,13 @@
 				_self.bases = ko.observableArray();
 				_self.selectBaseLayerType = ko.observable();
 				if (typeof base !== 'undefined') {
-					_self.bases.push({ id: base.id, type: base.type, category: 'base', url: base.url });
+					_self.bases.push({ id: base.id,
+										type: base.type, 
+										category: 'base',
+										url: base.url });
 				}
 
-				_self.mapSR = ko.observableArray(sr);
+				_self.srType = srType;
 				_self.isLods = ko.observable(lods.enable);
 				_self.lods = ko.observableArray(lods.values);
 				_self.selectMapSR = ko.observable(map.sr.wkid);
@@ -139,10 +148,15 @@
 				// layer service info array
 				_self.servLayers = ko.observableArray();
 
-				// layers options
-				//_self.scaleMin = ko.observable().extend({ numeric: 10 });;
-				//_self.scaleMax = ko.observable().extend({ numeric: 10 });;
-
+				// subscribe functions
+				_self.selectBaseLayerType.subscribe(function(val) {
+					return _self.availServ(setServName(val.id)); 
+				});
+				
+				_self.selectLayerType.subscribe(function(val) {
+					return _self.availServ(setServName(val.id)); 
+				});
+				
 				// clean the view model
 				clean(ko, elem);
 
@@ -155,75 +169,11 @@
 					$aut('#layers').empty(); // remove layers from DOM
 					ko.applyBindings(_self, elem);
 				};
-
-				// return predefined services
-				_self.getServices = function() {
-					var array = localStorage.servicename.split(';');
-
-					return _self.availServ(array);
-				};
-
-				// set URL
-				_self.setURL = function(event, ui) {
-
-					if (_self.bases().length === 0) {
-						_self.baseURL(ui.item.value);
-					} else {
-						_self.layerURL(ui.item.value);
-					}
-
-					return false;
-				};
-
-				_self.validateLayer = function(type) {
-					var isValid,
-						category,
-						layerURL, baseURL;
-
-					typeObject = type;
-					if (type === 'base') {
-						_self.isLayer(false);
-						urlObject = _self.baseURL;
-						category = _self.selectBaseLayerType().id;
-						baseURL = _self.baseURL();
-						_self.availServ().push(baseURL);
-					} else {
-						_self.isLayer(true);
-						urlObject = _self.layerURL;
-						category = _self.selectLayerType().id;
-						layerURL = _self.layerURL();
-						_self.availServ().push(layerURL);
-					}
-
-					// remove duplicate in service array and copy to localstorage
-					_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
-					localStorage.setItem('servicename', _self.availServ().join(';'));
-
-					// check the url
-					isValid = checkFormatURL(urlObject(), category);
-
-					// clean error message
-					_self.errortext('');
-
-					if (isValid) {
-						// get service info and validateURL as callback function
-						gisREST.getResourceInfo(urlObject(), validateURL, showBadURL);
-
-					} else {
-						_self.errortext(_self.txtLayerErr);
-					}
-				};
-
-				function showBadURL() {
-					_self.errortext(_self.txtLayerErr);
-				};
-
+				
+				// select layers dialog buttons functions (ok and cancel)
 				_self.dialogLayerOk = function() {
 					updateLayers(_self.servLayers(), layers);
-					_self.baseURL('');
-					_self.layerURL('');
-					_self.hiddenLayer('gcaut-hidden');
-					_self.isLayerDialogOpen(false);
+					_self.dialogLayerCancel();
 				};
 
 				_self.dialogLayerCancel = function() {
@@ -232,16 +182,9 @@
 					_self.hiddenLayer('gcaut-hidden');
 					_self.isLayerDialogOpen(false);
 				};
-
-				_self.removeLayer = function(type) {
-					if (type === 'base') {
-						_self.bases.remove(this);
-					} else {
-						_self.layers.remove(this);
-					}
-				};
-
-				function updateLayers(elem, list) {
+				
+				// update layers array when they are selected from the dialog box
+				updateLayers = function(elem, list) {
 					var layers = elem,
 						len = layers.length,
 						layer,
@@ -254,184 +197,26 @@
 
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
-									_self.layers.push({ id: layer.fullname, type: layer.type, category: layer.category, url: layer.url, minScale: layer.minScale, maxScale: layer.maxScale });
+									_self.layers.push({ id: layer.fullname,
+														type: layer.type,
+														category: layer.category,
+														url: layer.url,
+														minScale: layer.minScale,
+														maxScale: layer.maxScale });
 								}
 							} else {
 								updateLayers(servLayers, list);
 							}
 						}
 					} else {
-						_self.bases.push({ id: _self.baseURL(), type: _self.selectBaseLayerType().id, category: 'base', url: _self.baseURL() });
+						_self.bases.push({ id: _self.baseURL(), 
+											type: _self.selectBaseLayerType().id,
+											category: 'base',
+											url: _self.baseURL() });
 					}
 				};
 
-    			function checkFormatURL(url, type) {
-    				var isValid = true;
-
-    				// esri rest cache or rest dynamic
-    				if (type === 3 || type === 4) {
-
-    					// check for http:// or https://
-    					isValid = (url.search(/http:\/\//i) !== -1 || url.search(/https:\/\//i) !== -1) ? true : false;
-
-    					// check for rest
-    					isValid = (isValid && (url.search(/\/rest\//i) !== -1)) ? true : false;
-
-    					// check for mapserver
-    					isValid = (isValid && (url.search(/\/mapserver/i) !== -1)) ? true : false;
-    				}
-
-    				return isValid;
-    			};
-
-    			function validateURL(sender, url) {
-    				if (sender.hasOwnProperty('layers')) {
-    					showResourceInfo(sender);
-
-    					// show window to select layers
-    					_self.isLayerDialogOpen(true);
-						_self.hiddenLayer('');
-
-    				} else if (sender.hasOwnProperty('error')) {
-						_self.errortext(_self.txtLayerErr);
-    				}
-    			};
-
-    			function showResourceInfo(sender) {
-					var layers = [],
-						len = sender.layers.length - 1,
-						index = -1,
-						item,
-						itemName, itemId,
-						layer,
-						sendLayers = sender.layers,
-						initExt = sender.initialExtent,
-						fullExt = sender.fullExtent,
-						url = urlObject(),
-						lods, lenlods;
-
-					while (index !== len) {
-						// set attribute the get sublayers
-						layer = {};
-						item = sendLayers[index + 1];
-						itemName = item.name;
-						itemId = item.id;
-						layer.name = itemName;
-						layer.fullname = itemName;
-						layer.url = url + '/' + itemId;
-						layer.id = itemId;
-						layer.category = typeObject;
-						layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname);
-
-						// knockout checkbox and label binding
-						layer.isChecked = ko.observable(false);
-						layer.isUse = ko.observable(false);
-
-						// get index of the next group
-						if (layer.servLayers.length > 0) {
-							index = getIndex(layer.servLayers, 0);
-						} else {
-							index = layer.id;
-						}
-
-						layers.push(layer);
-					}
-
-					// update knockout array
-					_self.servLayers(layers);
-
-					// update base layer info
-					_self.selectMapSR(sender.spatialReference.wkid);
-
-					// if lods is present add the info
-					if (typeof sender.tileInfo !== 'undefined') {
-						lods = sender.tileInfo.lods;
-						lenlods = lods.length;
-
-						while (lenlods--) {
-							lods[lenlods].isChecked = ko.observable(true);
-						}
-						_self.lods(lods);
-					}
-
-					_self.maxExtentMinX(fullExt.xmin);
-					_self.maxExtentMinY(fullExt.ymin);
-					_self.maxExtentMaxX(fullExt.xmax);
-					_self.maxExtentMaxY(fullExt.ymax);
-					_self.initExtentMinX(initExt.xmin);
-					_self.initExtentMinY(initExt.ymin);
-					_self.initExtentMaxX(initExt.xmax);
-					_self.initExtentMaxY(initExt.ymax);
-				};
-
-				function getSublayer(parent, sendLayers, layers, url, fullname) {
-					var sublayer = {},
-						subLayerIds,
-						child,
-						childName, childId,
-						len,
-						typeid;
-
-					if (typeObject === 'base') {
-						typeid = _self.selectBaseLayerType().id;
-					} else {
-						typeid = _self.selectLayerType().id;
-					}
-
-					// if there is sublayers add them
-					subLayerIds = parent.subLayerIds;
-					if (subLayerIds !== null) {
-						len = subLayerIds.length;
-						while (len--) {
-							sublayer = {};
-							sublayer.servLayers = [];
-
-							// add the child info and push to array
-							child = sendLayers[subLayerIds[len]];
-							childName = child.name;
-							childId = child.id;
-							sublayer.name = childName;
-							sublayer.fullname = fullname + '/' + childName;
-							sublayer.url = url + '/' + childId;
-							sublayer.id = childId;
-							sublayer.minScale = child.minScale;
-							sublayer.maxScale = child.maxScale;
-							sublayer.isChecked = ko.observable(false);
-							sublayer.isUse = ko.observable(false);
-							sublayer.category = typeObject;
-							sublayer.type = typeid;
-							layers.push(sublayer);
-
-							// call the same function to know if there is child with tha child sublayers array to add to
-							getSublayer(child, sendLayers, layers[layers.length - 1].servLayers, url, sublayer.fullname);
-						}
-					}
-
-					return layers;
-				};
-
-				function getIndex(arr, id) {
-					var val,
-						len,
-						layers;
-
-					if (arr.length > 0) {
-						len = arr.length;
-						while (len--) {
-							layers = arr[len].servLayers;
-							if (layers.length > 0) {
-								val = getIndex(layers, id);
-								id = (val > id) ? val : id;
-							} else {
-								val = arr[len].id;
-								id = (val > id) ? val : id;
-							}
-						}
-					}
-
-					return id;
-				};
-
+				// four next function are use to check/uncheck element in layer dialog box
 				_self.checkAll = function(layers, value) {
 					var len = layers.length,
 						layer;
@@ -463,7 +248,7 @@
 					return true;
 				};
 
-				function checkParentlayers(parents, checked) {
+				checkParentlayers = function(parents, checked) {
 					// minus 1 because the last item in the array is the view model
 					var len = parents.length - 1,
 						index = 0,
@@ -479,7 +264,7 @@
 						ko.utils.arrayForEach(parent.servLayers, function(subitem) {
 							if (subitem.isUse()) {
 								use = true;
-							};
+							}
 						});
 
 						// if a layer on the same level is use set to true
@@ -489,33 +274,19 @@
 							parent.isUse(checked);
 						}
 					}
-		   		};
+				};
 
-		   		function checkSublayers(item, level) {
-		   			var checked = level ? !item.isChecked() : item.isChecked();
+				checkSublayers = function(item, level) {
+					var checked = level ? !item.isChecked() : item.isChecked();
 
 					ko.utils.arrayForEach(item.servLayers, function(subitem) {
 						subitem.isUse(!checked);
 						subitem.isChecked(!checked);
 						checkSublayers(subitem, 1);
 					});
-		   		};
-
-				_self.setExtent = function(type) {
-					var size = { width:_self.mapWidthValue(),
-								 height: _self.mapHeightValue()
-								},
-						holder = [_self.setExtentMinX, _self.setExtentMinY, _self.setExtentMaxX, _self.setExtentMaxY];
-
-					// show window to select extent
-    				_self.extentType(type);
-    				_self.isExtentDialogOpen(true);
-    				_self.hiddenMap('');
-
-					// create the map
-					gisM.createMap('map_setExtent', _self.selectBaseLayerType().id, _self.bases()[0].url, size, holder);
 				};
-
+				
+				// set extent dialog buttons functions (ok and cancel)
 				_self.dialogExtentOk = function() {
 					var type = _self.extentType();
 					if (type === 'max') {
@@ -530,15 +301,138 @@
 						_self.initExtentMaxY(_self.setExtentMaxY());
 					}
 
-					$aut('#map_setExtent').remove();
-					_self.hiddenMap('gcaut-hidden');
-					_self.isExtentDialogOpen(false);
+					_self.dialogExtentCancel();
 				};
 
 				_self.dialogExtentCancel = function() {
 					$aut('#map_setExtent').remove();
 					_self.hiddenMap('gcaut-hidden');
 					_self.isExtentDialogOpen(false);
+				};
+				
+				// create the inside of the extent dialog window
+				_self.setExtent = function(type) {
+					var size = { width:_self.mapWidthValue(),
+									height: _self.mapHeightValue()
+							},
+						holder = [_self.setExtentMinX,
+									_self.setExtentMinY,
+									_self.setExtentMaxX,
+									_self.setExtentMaxY];
+
+					// show window to select extent
+					_self.extentType(type);
+					_self.isExtentDialogOpen(true);
+					_self.hiddenMap('');
+
+					// create the map
+					gisM.createMap('map_setExtent',
+									_self.selectBaseLayerType().id,
+									_self.bases()[0].url,
+									size,
+									holder);
+				};
+				
+				// set the service name from the localstorage when layer's type change
+				setServName = function(id) {
+					var array;
+					
+					if (id === 1) {
+						array = localStorage.servnameWMS.split(';');
+					} else if (id === 2)  {
+						array = localStorage.servnameWMTS.split(';');
+					} else if (id === 3)  {
+						array = localStorage.servnameCacheREST.split(';');
+					} else if (id === 4)  {
+						array = localStorage.servnameDynamicREST.split(';');
+					}
+					
+					_self.layerURL('');
+					_self.baseURL('');
+					return array;
+				};
+
+				// when the remove layer icon is click, remove the layer from the array
+				_self.removeLayer = function(type) {
+					if (type === 'base') {
+						_self.bases.remove(this);
+					} else {
+						_self.layers.remove(this);
+					}
+				};
+
+				// when one item in the autocomple is selected, update the input text
+				_self.setURL = function(event, ui) {
+
+					if (_self.bases().length === 0) {
+						_self.baseURL(ui.item.value);
+					} else {
+						_self.layerURL(ui.item.value);
+					}
+
+					return false;
+				};
+
+				// launch when url validation button is push
+				_self.validateURL = function(type) {
+					var isValid,
+						category,
+						layerURL, baseURL,
+						layerType;
+
+					typeObject = type;
+					if (type === 'base') {
+						_self.isLayer(false);
+						urlObject = _self.baseURL;
+						category = _self.selectBaseLayerType().id;
+						baseURL = _self.baseURL();
+						layerType = _self.selectBaseLayerType().id;
+					} else {
+						_self.isLayer(true);
+						urlObject = _self.layerURL;
+						category = _self.selectLayerType().id;
+						layerURL = _self.layerURL();
+						layerType = _self.selectLayerType().id;
+					}
+
+					// remove duplicate in service array and copy to localstorage
+					_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
+					if (layerType === 1) {
+						localStorage.setItem('servnameWMS', _self.availServ().join(';'));
+					} else if (layerType === 2)  {
+						localStorage.setItem('servnameWMTS', _self.availServ().join(';'));
+					} else if (layerType === 3)  {
+						localStorage.setItem('servnameCacheREST', _self.availServ().join(';'));
+					} else if (layerType === 4)  {
+						localStorage.setItem('servnameDynamicREST', _self.availServ().join(';'));
+					}
+
+					// check the url
+					isValid = gcautFunc.checkFormatURL(urlObject(), category);
+
+					// clean error message
+					_self.errortext('');
+
+					if (isValid) {
+						// get service info and validateURL as callback function
+						gisServInfo.getResourceInfo(urlObject(), readServInfo, function() { _self.errortext(_self.txtLayerErr); });
+
+					} else {
+						_self.errortext(_self.txtLayerErr);
+					}
+				};
+				
+				// callback function for gisServInfo.getResourceInfo
+				readServInfo = function(sender) {
+					if (sender.hasOwnProperty('layers')) {
+						esriData.readInfo(sender, _self, urlObject(), typeObject);
+
+						// show window to select layers
+						_self.isLayerDialogOpen(true);
+						_self.hiddenLayer('');
+					} else if (sender.hasOwnProperty('error')) {
+						_self.errortext(_self.txtLayerErr);
+					}
 				};
 
 				_self.write = function() {
@@ -548,6 +442,7 @@
 						strbase = '',
 						strlods = '',
 						strlayers = '',
+						sr = -1,
 						lenlods = _self.lods().length,
 						lenlayers = _self.layers().length,
 						lods = _self.lods.reverse(),
@@ -592,6 +487,11 @@
 						strlayers = strlayers.slice(0, -1);
 					}
 
+					// check if value are undefined
+					if (_self.selectMapSR() !== undefined) {
+						sr = _self.selectMapSR().id;
+					}
+					
 					value = '"mapframe": {' +
 								'"size": {' +
 									'"height": ' + _self.mapHeightValue() + ',' +
@@ -599,7 +499,7 @@
 								'},' +
 								'"map": {' +
 									'"sr": {' +
-										'"wkid": ' + _self.selectMapSR() +
+										'"wkid": ' + sr +
 									'},' +
 									'"extentmax": {' +
 										'"xmin": ' + _self.maxExtentMinX() + ',' +

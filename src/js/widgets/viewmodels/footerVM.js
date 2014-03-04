@@ -5,120 +5,104 @@
  *
  * Footer view model widget
  */
-/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
-        	'knockout',
-        	'gcaut-i18n'
-    ], function($aut, ko, i18n) {
-        var initialize,
-        	clean,
-        	vm;
+			'knockout',
+			'gcaut-i18n',
+			'gcaut-func'
+	], function($aut, ko, i18n, gcautFunc) {
+		var initialize,
+			clean,
+			vm;
 
-        initialize = function(elem, map) {
+		initialize = function(elem, map) {
 
-            // data model
-            var footerViewModel = function(elem, map) {
-                var _self = this,
-                	arrow = map.northarrow,
-                	mouse = map.mousecoords,
-                	sr = [3944, 3978, 4326];
+			// data model
+			var footerViewModel = function(elem, map) {
+				var _self = this,
+					arrow = map.northarrow,
+					mouse = map.mousecoords,
+					srType = gcautFunc.getSrType(i18n.getDict('%map-sr'));
 
-                // label
-                _self.lblUrlGeomServer = i18n.getDict('%footer-urlGeomServer');
-                _self.lblEnbArrow = i18n.getDict('%footer-arrow');
-                _self.lblArrowSR = i18n.getDict('%footer-arrowSR');
-                _self.lblEnbMouse = i18n.getDict('%footer-mouse');
-                _self.lblMouseSR = i18n.getDict('%footer-mouseSR');
-                _self.lblSelectItem = i18n.getDict('%selectItem');
+				// label
+				_self.lblUrlGeomServer = i18n.getDict('%footer-urlGeomServer');
+				_self.lblEnbArrow = i18n.getDict('%footer-arrow');
+				_self.lblArrowSR = i18n.getDict('%footer-arrowSR');
+				_self.lblEnbMouse = i18n.getDict('%footer-mouse');
+				_self.lblMouseSR = i18n.getDict('%footer-mouseSR');
+				_self.lblSelectItem = i18n.getDict('%selectItem');
 
-                // input
+				// input
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.isArrow = ko.observable(arrow.enable);
 				_self.isMouse = ko.observable(mouse.enable);
 
 				// arrow and mouse SR
-				_self.arrowSR = sr;
-				_self.mouseSR = sr;
-				_self.selectArrowSR = ko.observable();
-				_self.selectMouseSR = ko.observable();
-				if (typeof arrow.inwkid !== 'undefined') {
-					_self.selectArrowSR(arrow.inwkid);
-				}
-				if (typeof mouse.outwkid !== 'undefined') {
-					_self.selectMouseSR(mouse.outwkid);
-				}
+				_self.arrowSR = srType;
+				_self.mouseSR = srType;
+				_self.selectArrowSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, arrow.inwkid)]);
+				_self.selectMouseSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, mouse.outwkid)]);
 
 				// clean the view model
 				clean(ko, elem);
 
-                _self.init = function() {
-                    return { controlsDescendantBindings: true };
-                };
+				_self.init = function() {
+					return { controlsDescendantBindings: true };
+				};
 
-                _self.bind = function() {
+				_self.bind = function() {
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
 
 				_self.write = function() {
-					var isArrow = _self.isArrow(),
-						isMouse = _self.isMouse(),
-						url = _self.urlGeomServer(),
-						value = '"footer": {' +
-									'"urlgeomserv": "setUrl",' +
-									'"northarrow": {' +
-										'"enable": ' + isArrow +
-										'setArrowSR' +
-									'},' +
-									'"mousecoords": {' +
-										'"enable": ' + isMouse +
-										'setMouseSR' +
-									'},' +
-									'"datatable": {' +
-										'"direction": "in"' +
-									'}' +
-								'}';
-
-					// if there is arrow and/or mouse add the needed content to config file. If not remove the tag.
-					if (typeof url !== 'undefined') {
-						value = value.replace('setUrl', url);
-					} else {
-						value = value.replace('setUrl', '');
+					var value,
+						inwkid = -1,
+						outwkid = -1;
+					
+					// check if value are undefined
+					if (_self.selectArrowSR() !== undefined) {
+						inwkid = _self.selectArrowSR().id;
 					}
-
-					if (isArrow) {
-						value = value.replace('setArrowSR', ',"inwkid": ' + _self.selectArrowSR());
-					} else {
-						value = value.replace('setArrowSR', '');
+					
+					if (_self.selectMouseSR() !== undefined) {
+						outwkid = _self.selectMouseSR().id;
 					}
-
-					if (isMouse) {
-						value = value.replace('setMouseSR', ',"outwkid": ' + _self.selectMouseSR());
-					} else {
-						value = value.replace('setMouseSR', '');
-					}
+					
+					value = '"footer": {' +
+								'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
+								'"northarrow": {' +
+									'"enable": ' + _self.isArrow() +
+									',"inwkid": ' + inwkid +
+								'},' +
+								'"mousecoords": {' +
+									'"enable": ' + _self.isMouse() +
+									',"outwkid": ' + outwkid +
+								'},' +
+								'"datatable": {' +
+									'"direction": "in"' +
+								'}' +
+							'}';
 
 					return value;
 				};
 
-                _self.init();
-            };
+				_self.init();
+			};
 
-            vm = new footerViewModel(elem, map);
-            ko.applyBindings(vm, elem); // This makes Knockout get to work
-            return vm;
-        };
+			vm = new footerViewModel(elem, map);
+			ko.applyBindings(vm, elem); // This makes Knockout get to work
+			return vm;
+		};
 
-        clean = function(ko, elem) {
+		clean = function(ko, elem) {
 			ko.cleanNode(elem);
 		};
 
-        return {
-            initialize: initialize,
-            clean: clean
-        };
-    });
+		return {
+			initialize: initialize,
+			clean: clean
+		};
+	});
 }).call(this);
-
