@@ -63,7 +63,7 @@
 				_self.hiddenLayer = ko.observable('gcaut-hidden');
 				_self.hiddenMap = ko.observable('gcaut-hidden');
 				_self.errormsg = ko.observable('gcaut-message-error');
-
+				
 				// error message
 				_self.errortext = ko.observable();
 
@@ -95,6 +95,9 @@
 				// text
 				_self.txtLayerErr = i18n.getDict('%map-layererror');
 
+				// focus txt_mapHeight on init
+				_self.focusMapHeight = ko.observable(true);
+				
 				// dialog
 				_self.isLayerDialogOpen = ko.observable();
 				_self.isExtentDialogOpen = ko.observable();
@@ -129,7 +132,7 @@
 				_self.srType = srType;
 				_self.isLods = ko.observable(lods.enable);
 				_self.lods = ko.observableArray(lods.values);
-				_self.selectMapSR = ko.observable(map.sr.wkid);
+				_self.selectMapSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, map.sr.wkid)]);
 				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
 				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
 				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 10 });
@@ -185,10 +188,10 @@
 				
 				// update layers array when they are selected from the dialog box
 				updateLayers = function(elem, list) {
-					var layers = elem,
-						len = layers.length,
-						layer,
-						servLayers;
+					var layer,
+						servLayers,
+						layers = elem,
+						len = layers.length;
 
 					if (_self.isLayer()) {
 						while (len--) {
@@ -218,8 +221,8 @@
 
 				// four next function are use to check/uncheck element in layer dialog box
 				_self.checkAll = function(layers, value) {
-					var len = layers.length,
-						layer;
+					var layer,
+						len = layers.length;
 
 					while (len--) {
 						layer = layers[len];
@@ -250,10 +253,10 @@
 
 				checkParentlayers = function(parents, checked) {
 					// minus 1 because the last item in the array is the view model
-					var len = parents.length - 1,
-						index = 0,
-						parent,
-						use;
+					var parent,
+						use,
+						len = parents.length - 1,
+						index = 0;
 
 					while (index !== len) {
 						use = false;
@@ -289,6 +292,7 @@
 				// set extent dialog buttons functions (ok and cancel)
 				_self.dialogExtentOk = function() {
 					var type = _self.extentType();
+					
 					if (type === 'max') {
 						_self.maxExtentMinX(_self.setExtentMinX());
 						_self.maxExtentMinY(_self.setExtentMinY());
@@ -435,6 +439,21 @@
 					}
 				};
 
+				_self.updateOrder = function() {
+					// reorder layers array after sort
+					var text,
+						$elems = $aut('#layersorder').find('.layerTitle'),
+						len = $elems.length,
+						tmpLayers = [];
+					
+					while (len--) {
+						text = $($elems[len]).text();
+						tmpLayers.push(gcautFunc.getObject(_self.layers(), 'id', text));
+					}
+					
+					_self.layers(tmpLayers);
+				};
+				
 				_self.write = function() {
 					var value,
 						lod,
@@ -463,7 +482,7 @@
 						strlods += '{' +
 										'"level": ' + lod.level + ',' +
 										'"resolution": ' + lod.resolution + ',' +
-										'"check": ' + lod.isChecked() +
+										'"check": ' + lod.check +
 									'},';
 					}
 
@@ -479,8 +498,8 @@
 											'"type": ' + layer.type + ',' +
 											'"url": "' + layer.url + '",' +
 											'"scale": {' +
-												'"min": ' + layer.minScale + ',' +
-												'"max": ' + layer.maxScale +
+												'"min": ' + layer.scale.min + ',' +
+												'"max": ' + layer.scale.max +
 											'}' +
 										'},';
 						}

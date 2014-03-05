@@ -9,8 +9,9 @@
 	'use strict';
 	define(['jquery-private',
 			'knockout',
-			'gcaut-i18n'
-	], function($aut, ko, i18n) {
+			'gcaut-i18n',
+			'gcaut-func'
+	], function($aut, ko, i18n, gcautFunc) {
 		var initialize,
 			clean,
 			vm;
@@ -21,7 +22,7 @@
 				var _self = this,
 					title = map.title,
 					print = map.print,
-					printType = [{ id: 1, val: i18n.getDict('%header-printtype1') }, { id: 2, val: i18n.getDict('%header-printtype2') }];
+					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist'));
 
 				// label
 				_self.lblMapTitle = i18n.getDict('%header-mapname');
@@ -34,15 +35,21 @@
 				_self.lblFulscreen = i18n.getDict('%header-fullscreen');
 				_self.lblSelectItem = i18n.getDict('%selectItem');
 
-				// input
+				// title
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
+				
+				// tools
 				_self.isTools = ko.observable(map.tools);
-				_self.isPrint = ko.observable(print.enable);
+				
+				// insets
 				_self.isInset = ko.observable(map.inset);
+				
+				// full screen
 				_self.isFullscreen = ko.observable(map.fullscreen);
 
-				// print type
+				// print
+				_self.isPrint = ko.observable(print.enable);
 				_self.printType = printType;
 				_self.selectPrint = ko.observable(_self.printType[print.type - 1]);
 

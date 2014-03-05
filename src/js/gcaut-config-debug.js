@@ -218,6 +218,18 @@
 				name: 'gcaut-vm-footer',
 				location: locationPath + 'src/js/widgets/viewmodels',
 				main: 'footerVM'
+			}, {
+				name: 'gcaut-vm-legend',
+				location: locationPath + 'src/js/widgets/viewmodels',
+				main: 'legendVM'
+			}, {
+				name: 'gcaut-vm-nav',
+				location: locationPath + 'src/js/widgets/viewmodels',
+				main: 'navigationVM'
+			}, {
+				name: 'gcaut-vm-draw',
+				location: locationPath + 'src/js/widgets/viewmodels',
+				main: 'drawVM'
 			}
 		]
 	});

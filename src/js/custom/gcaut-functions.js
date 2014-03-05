@@ -10,9 +10,11 @@
 	define([], function() {
 
 		var debounce,
+			getListCB,
 			getSrType,
 			getSrTypeIndex,
-			checkFormatURL;
+			checkFormatURL,
+			getObject;
 
 		debounce = function(func, threshold, execAsap) {
 
@@ -40,6 +42,21 @@
 			};
 		};
 
+		getListCB = function(val) {
+			var i = 1,
+				typeArr = [],
+				array = val.split(';'),
+				len = array.length;
+					
+			array = array.reverse();
+			while (len--) {
+				typeArr.push({ id: i, val: array[len] });
+				i++;
+			}
+	
+			return typeArr;	
+		};
+		
 		getSrType = function(val) {
 			var items, item,
 				typeArr = [],
@@ -86,11 +103,28 @@
 			return flag;
 		};
 		
+		getObject = function(array, field, text) {
+			var item,
+				value = null,
+				len = array.length;
+			
+			while (len--) {
+				item = array[len];
+				if (item[field] === text) {
+					value = item;
+				}
+			}
+			
+			return value
+		}
+		
 		return {
 			debounce: debounce,
+			getListCB: getListCB,
 			getSrType: getSrType,
 			getSrTypeIndex: getSrTypeIndex,
-			checkFormatURL: checkFormatURL
+			checkFormatURL: checkFormatURL,
+			getObject: getObject
 		};
 	});
 }());

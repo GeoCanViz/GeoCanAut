@@ -51,6 +51,7 @@ var locationPath;
 			$tabs.removeAttr('style');
 			$tabs.tabs({ heightStyle: 'auto', collapsible: true, active: false, disabled: true });
 			$('#gcautmaptabs').tabs({ heightStyle: 'auto' });
+			$('#gcauttoolstabs').tabs({ heightStyle: 'auto' });
 
 			// launch project header
 			projheaderVM.initialize(elem);

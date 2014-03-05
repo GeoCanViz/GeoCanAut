@@ -47,6 +47,52 @@
 		"fullscreen": false,
 		"inset": false
 	},
+	"toolbardraw": {
+		"enable": false,
+		"expand": false,
+		"drawline": {
+			"enable": false
+		},
+		"drawtext": {
+			"enable": false
+		},
+		"measure": {
+			"enable": false,
+			"type": 3,
+			"unit": 1
+		},
+		"importexport": {
+			"enable": false,
+			"format": 1
+		}
+	},
+	"toolbarnav": {
+		"enable": false,
+		"expand": false,
+		"zoom": false,
+		"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+		"geolocation": {
+			"enable": false,
+			"type": 2
+		},
+		"scalebar": {
+			"enable": false,
+			"unit": 1
+		},
+		"scaledisplay": {
+			"enable": false,
+			"format": 1
+		},
+		"overview": {
+			"enable": false,
+			"url": ""
+		}
+	},
+	"toolbarlegend": {
+		"enable": false,
+		"expand": false,		
+		"items": [{}]
+	},
 	"footer": {
 		"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
 		"northarrow": {

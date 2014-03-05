@@ -15,8 +15,11 @@
 			'gcaut-ko',
 			'gcaut-vm-map',
 			'gcaut-vm-header',
-			'gcaut-vm-footer'
-	], function($aut, ko, generateFile, i18n, binding, mapVM, headerVM, footerVM) {
+			'gcaut-vm-footer',
+			'gcaut-vm-legend',
+			'gcaut-vm-draw',
+			'gcaut-vm-nav'
+	], function($aut, ko, generateFile, i18n, binding, mapVM, headerVM, footerVM, legendVM, drawVM, navVM) {
 		var initialize,
 			loadFile,
 			vm;
@@ -206,7 +209,24 @@
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
 					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer);
+					//vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend);
+					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
+					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 
+					// select map tab to be active (will refresh the accordions controls)
+					// use $ instead of $aut because they use jQueryUI dependency
+					$('#gcauttabs').tabs('option', 'active', 0);
+					$('#gcautmaptabs').tabs('option', 'active', 0);
+					
+					//make sure the resolution accordion is close. if not in a timeout it won't
+					// work properly
+					setTimeout( function() { $('#gcaut-lods').accordion('option', 'active', false); }, 0);
+					
+					// we force to select the map height because even if we set the value in the viewmodel
+					// it is not focus on the first map.
+					// we set it in a timeout, if not, it will not work
+					setTimeout(function() { vm.map.focusMapHeight(true); }, 0);
+					
 					// push the vm to array, update the dropdown list and select the new item
 					_self.maps.push(vm);
 					_self.mapsID.push(mapVal);

@@ -100,6 +100,7 @@
 		init: function(element, valueAccessor) {
 			var options = valueAccessor() || {},
 				$refresh = $aut('#' + options.refresh),
+				update = options.update,
 				$element = $aut(element);
 
 			$element.sortable(options);
@@ -109,6 +110,10 @@
 				$refresh.focus(function() {
 					$element.sortable('refresh');
 				});
+			}
+			
+			if (typeof update !== 'undefined') {
+					$element.on('sortupdate', update);
 			}
 
 			//handle disposal (if KO removes by the template binding)

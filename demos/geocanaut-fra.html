@@ -136,14 +136,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					<div id="tabmap-gen" class="gcaut-tabs">
 						<span data-bind="text: lblMapSize"></span>
 						<label for="txt_mapHeight" data-bind="text: lblMapHeight"></label>
-						<input id="txt_mapHeight" data-bind="value: mapHeightValue, valueUpdate: 'afterkeydown'"></input>
+						<input id="txt_mapHeight" data-bind="value: mapHeightValue, valueUpdate: 'afterkeydown', hasFocus: focusMapHeight"></input>
 						<label for="txt_mapWidth" data-bind="text: lblMapWidth"></label>
 						<input id="txt_mapWidth" data-bind="value: mapWidthValue, valueUpdate: 'afterkeydown'"></input>
 						<div style="clear: both"></div>
 						<label for="cb_link" data-bind="text: lblLink"></label>
 						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
 						<div style="clear: both"></div>
-						<div id="map_layers" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'txt_mapHeight' }, visible: mapHeightValue() > 0 && mapWidthValue() > 0">
+						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'txt_mapHeight' }, visible: mapHeightValue() > 0 && mapWidthValue() > 0">
 							<h3 class="ui-accordion-header" data-bind="text: lblBasemap"></h3>
 							<div>
 								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
@@ -168,7 +168,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											</script>
 											<div class="row">
 												<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
-												<select id="cb_mapsr" data-bind="options: srType, optionsText: 'val', value: selectMapSR, optionsCaption: lblSelectItem, enable: true"></select>
+												<select id="cb_mapsr" data-bind="options: srType, optionsText: 'val', value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
 											</div>
 											<div class="row">
 												<div class="span12">
@@ -178,13 +178,13 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 															<input type="checkbox" id="cb_lods" data-bind="checked: isLods">
 														</div>
 														<div class="span10" data-bind="visible: isLods">
-															<div data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'cb_lods' }">
+															<div id="gcaut-lods" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }">
 															<h3 class="ui-accordion-header" data-bind="text: lblResol"></h3>
 															<div>
 																<ul data-bind="template: { name: 'showLods', foreach: $data.lods }"></ul>
 																<script type="text/html" id="showLods">
 																	<li>
-																		<input type="checkbox" data-bind="attr: { id: 'cb_level' + $data.level }, checked: $data.isChecked">
+																		<input type="checkbox" data-bind="attr: { id: 'cb_level' + $data.level }, checked: $data.check">
 																		<label data-bind="attr: { for: 'cb_level' + $data.level }, text: $root.lblLevel + $data.level + ':'"></label>
 																		<span data-bind="text: $data.resolution"></span>
 																	</li>
@@ -318,26 +318,26 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					</div>
 					<div id="tabmap-order" class="gcaut-tabs">
 						<div class="gcaut-mapinfo" data-bind="visible: layers().length > 0">
-							<ul id="layersorder" data-bind="uiSortable: { refresh: 'tabmap-order' }, template: { name: 'mapLayersOrder', foreach: layers }"></ul>
+							<ul id="layersorder" data-bind="uiSortable: { refresh: 'tabmap-order', update: $root.updateOrder }, template: { name: 'mapLayersOrder', foreach: layers }"></ul>
 							<script type="text/html" id="mapLayersOrder">
 									<li class="ui-state-default">
 										<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-										<span data-bind="text: id" style="white-space: nowrap;"></span>
+										<span data-bind="text: id, css: { 'layerTitle': true }" style="white-space: nowrap;"></span>
 		        					</li>
 							</script>
 						</div>
 					</div>
 					<div id="tabmap-options" class="gcaut-tabs">
 						<div data-bind="visible: layers().length > 0" tabindex="0">
-							<div id="layersoptions" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
+							<div id="layersoptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
 							<script type="text/html" id="mapLayersOption">
 									<h3 class="ui-accordion-header" data-bind="text: id"></h3>
 									<div>
 										<span data-bind="text: $root.lblScale"></span>
 										<label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
-										<input id="txt_scaleMin" data-bind="value: $data.minScale"></input>
+										<input id="txt_scaleMin" data-bind="value: $data.scale.min"></input>
 										<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
-										<input id="txt_scaleMax" data-bind="value: $data.maxScale"></input>
+										<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
 									</div>
 							</script>
 						</div>
@@ -373,7 +373,78 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
 		</div>
 		<div id="tab-tools" class="gcaut-tabs">
-			<p>Tools</p>
+			<div id="gcauttoolstabs">
+				<ul>
+					<li><a href="#tabtool-legend">Légende</a></li>
+					<li><a href="#tabtool-draw">Dessiner</a></li>
+					<li><a href="#tabtool-nav">Navigation</a></li>
+				</ul>
+				<section id="tools">
+					<div id="tabtool-legend" class="gcaut-tabs">
+						<section id="legendMap">
+							
+						</section>
+					</div>
+					<div id="tabtool-draw" class="gcaut-tabs">
+						<section id="drawMap">
+							<label for="enableDraw" class="form-checkbox" data-bind="text: lblEnable"></label>
+							<input type="checkbox" id="enableDraw" data-bind="checked: isEnable">
+							<div style="clear: both"></div>
+							<label for="expandDraw" class="form-checkbox" data-bind="text: lblExpand"></label>
+							<input type="checkbox" id="expandDraw" data-bind="checked: isExpand">
+							<div style="clear: both"></div>
+							<label for="lineDraw" class="form-checkbox" data-bind="text: lblLine"></label>
+							<input type="checkbox" id="lineDraw" data-bind="checked: isLine">
+							<div style="clear: both"></div>
+							<label for="textDraw" class="form-checkbox" data-bind="text: lblText"></label>
+							<input type="checkbox" id="textDraw" data-bind="checked: isText">
+							<div style="clear: both"></div>
+							<label for="measureDraw" class="form-checkbox" data-bind="text: lblMeasure"></label>
+							<input type="checkbox" id="measureDraw" data-bind="checked: isMeasure">
+							<label for="measureTypeDraw" class="form-checkbox" data-bind="text: lblMeasureType"></label>
+							<select id="measureTypeDraw" data-bind="options: measureType, optionsText: 'val', value: selectMeasureType, optionsCaption: lblSelectItem, enable: isMeasure"></select>
+							<label for="measureUnitDraw" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+							<select id="measureUnitDraw" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnit, optionsCaption: lblSelectItem, enable: isMeasure"></select>
+							<div style="clear: both"></div>
+							<label for="fileDraw" class="form-checkbox" data-bind="text: lblFile"></label>
+							<input type="checkbox" id="fileDraw" data-bind="checked: isFile">
+						</section>
+					</div>
+					<div id="tabtool-nav" class="gcaut-tabs">
+						<section id="navigationMap">
+							<label for="enableNav" class="form-checkbox" data-bind="text: lblEnable"></label>
+							<input type="checkbox" id="enableNav" data-bind="checked: isEnable">
+							<div style="clear: both"></div>
+							<label for="expandNav" class="form-checkbox" data-bind="text: lblExpand"></label>
+							<input type="checkbox" id="expandNav" data-bind="checked: isExpand">
+							<div style="clear: both"></div>
+							<label for="urlGeomServerNav" data-bind="text: lblUrlGeomServer"></label>
+							<input id="urlGeomServerNav" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
+							<div style="clear: both"></div>
+							<label for="zoomNav" class="form-checkbox" data-bind="text: lblZoom"></label>
+							<input type="checkbox" id="zoomNav" data-bind="checked: isZoom">
+							<div style="clear: both"></div>
+							<label for="geolocNav" class="form-checkbox" data-bind="text: lblGeoloc"></label>
+							<input type="checkbox" id="geolocNav" data-bind="checked: isGeoloc">
+							<div style="clear: both"></div>
+							<label for="scalebarNav" class="form-checkbox" data-bind="text: lblScalebar"></label>
+							<input type="checkbox" id="scalebarNav" data-bind="checked: isScalebar">
+							<label for="scalebarTypeNav" class="form-checkbox" data-bind="text: lblScalebarUnit"></label>
+							<select id="scalebarTypeNav" data-bind="options: scalebarType, optionsText: 'val', value: selectScalebar, optionsCaption: lblSelectItem, enable: isScalebar"></select>
+							<div style="clear: both"></div>
+							<label for="scaleNav" class="form-checkbox" data-bind="text: lblScale"></label>
+							<input type="checkbox" id="scaleNav" data-bind="checked: isScale">
+							<label for="scaleTypeNav" class="form-checkbox" data-bind="text: lblScaleFormat"></label>
+							<select id="scaleTypeNav" data-bind="options: scaleType, optionsText: 'val', value: selectScale, optionsCaption: lblSelectItem, enable: isScale"></select>
+							<div style="clear: both"></div>
+							<label for="overNav" class="form-checkbox" data-bind="text: lblOver"></label>
+							<input type="checkbox" id="overNav" data-bind="checked: isOver">
+							<label for="urlOverNav" data-bind="text: lblUrlOver, visible: isOver"></label>
+							<input id="urlOverNav" class="gcaut-uri" type="text" data-bind="value: urlOver, visible: isOver"></input>
+						</section>
+					</div>
+				</section>
+			</div>
 		</div>
 		<div id="tab-foot" class="gcaut-tabs">
 			<section id="footerMap">

@@ -10,29 +10,21 @@
 	define(['knockout',
 			'gcaut-func'
 	], function(ko, gcautFunc) {
-
 		var readInfo,
 			getSublayer,
-			getIndex,
-			typeObject,
-			_self;
+			getIndex;
 
-		readInfo = function(sender, self, urlObject, type) {
-			var layers = [],
+		readInfo = function(sender, _self, urlObject, typeObject) {
+			var item, itemName, itemId,
+				layer,
+				layers = [],
 				len = sender.layers.length - 1,
 				index = -1,
-				item,
-				itemName, itemId,
-				layer,
 				sendLayers = sender.layers,
 				initExt = sender.initialExtent,
 				fullExt = sender.fullExtent,
 				url = urlObject,
 				lods, lenlods;
-
-//TODO
-typeObject = type;
-_self = self;
 
 			while (index !== len) {
 				// set attribute the get sublayers
@@ -45,7 +37,7 @@ _self = self;
 				layer.url = url + '/' + itemId;
 				layer.id = itemId;
 				layer.category = typeObject;
-				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname);
+				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, typeObject);
 
 				// knockout checkbox and label binding
 				layer.isChecked = ko.observable(false);
@@ -91,7 +83,7 @@ _self = self;
 			_self.initExtentMaxY(initExt.ymax);
 		};
 
-		getSublayer = function(parent, sendLayers, layers, url, fullname) {
+		getSublayer = function(parent, sendLayers, layers, url, fullname, _self, typeObject) {
 			var sublayer = {},
 				subLayerIds,
 				child,
@@ -134,7 +126,9 @@ _self = self;
 							sendLayers,
 							layers[layers.length - 1].servLayers,
 							url,
-							sublayer.fullname);
+							sublayer.fullname,
+							_self,
+							typeObject);
 				}
 			}
 

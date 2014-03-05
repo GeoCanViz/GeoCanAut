@@ -33,15 +33,17 @@
 				_self.lblMouseSR = i18n.getDict('%footer-mouseSR');
 				_self.lblSelectItem = i18n.getDict('%selectItem');
 
-				// input
+				// geometry server url
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
-				_self.isArrow = ko.observable(arrow.enable);
-				_self.isMouse = ko.observable(mouse.enable);
 
-				// arrow and mouse SR
+				// north arrow
+				_self.isArrow = ko.observable(arrow.enable);
 				_self.arrowSR = srType;
-				_self.mouseSR = srType;
 				_self.selectArrowSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, arrow.inwkid)]);
+	
+				// mouse coordinates
+				_self.isMouse = ko.observable(mouse.enable);
+				_self.mouseSR = srType;
 				_self.selectMouseSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, mouse.outwkid)]);
 
 				// clean the view model
