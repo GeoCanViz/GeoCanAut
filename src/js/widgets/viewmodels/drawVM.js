@@ -5,6 +5,7 @@
  *
  * Draw view model widget
  */
+/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -26,7 +27,17 @@
 					measure = map.measure,
 					file = map.importexport,
 					measureType = gcautFunc.getListCB(i18n.getDict('%draw-measuretypelist')),
-					measureUnit = gcautFunc.getListCB(i18n.getDict('%draw-measureunitlist'));
+					measureUnit = gcautFunc.getListCB(i18n.getDict('%draw-measureunitlist')),
+					pathLine = locationPath + 'gcaut/images/drawDraw.png',
+					pathText = locationPath + 'gcaut/images/drawText.png',
+					pathMeasure = locationPath + 'gcaut/images/drawMeasure.png',
+					pathImportExport = locationPath + 'gcaut/images/drawImport.png;' +locationPath + 'gcaut/images/drawExport.png';
+
+				// images path
+				_self.imgLine = pathLine;
+				_self.imgText = pathText;
+				_self.imgMeasure = pathMeasure;
+				_self.imgImportExport = pathImportExport;
 
 				// label
 				_self.lblEnable = i18n.getDict('%draw-enable');
@@ -37,7 +48,6 @@
 				_self.lblMeasureType = i18n.getDict('%draw-measuretype');
 				_self.lblMeasureUnit = i18n.getDict('%draw-measureunit');
 				_self.lblFile = i18n.getDict('%draw-file');
-				_self.lblSelectItem = i18n.getDict('%selectItem');
 
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
@@ -72,18 +82,7 @@
 				};
 
 				_self.write = function() {
-					var value,
-						measureType = -1,
-						measureUnit = -1;
-					
-					// check if value are undefined
-					if (_self.selectMeasureType() !== undefined) {
-						measureType = _self.selectMeasureType().id;
-					}
-					
-					if (_self.selectMeasureUnit() !== undefined) {
-						measureUnit = _self.selectMeasureUnit().id;
-					}
+					var value;
 					
 					value = '"toolbardraw": {' +
 								'"enable": ' + _self.isEnable() +
@@ -96,8 +95,8 @@
 								'},' +
 								'"measure": {' +
 									'"enable": ' + _self.isMeasure() +
-									',"type": ' + measureType +
-									',"unit": ' + measureUnit +
+									',"type": ' + _self.selectMeasureType().id +
+									',"unit": ' + _self.selectMeasureUnit().id +
 								'},' +
 								'"importexport": {' +
 									'"enable": ' + _self.isFile() +

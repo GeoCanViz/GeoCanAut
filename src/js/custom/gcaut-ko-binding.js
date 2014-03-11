@@ -207,5 +207,43 @@
 		}
 	};
 
+	//custom binding handler to add image to a label
+	ko.bindingHandlers.imgLabel = {
+		init: function(element, valueAccessor) {
+			var array,
+				len,
+				options = valueAccessor() || {};
+			
+			// add text
+			$aut(element).text(options.text);
+			
+			// add a simgle image if img is provided
+			// add multiple images if imgs is provided
+			if (options.img) {
+				$aut(element).prepend('<img class="gcaut-img-lbl" src="' + options.img + '"></img>');
+			} else if (options.imgs) {
+				array = options.imgs.split(';');
+				len = array.length;
+				
+				while (len--) {
+					$aut(element).prepend('<img class="gcaut-img-lbl" src="' + array[len] + '"></img>');
+				}
+			}
+		}
+	};
+
+	// binding to subscribe to an element in another view model. The element to link needs to be pass to
+	// the vm at initialization
+	ko.bindingHandlers.passControl = {
+		init: function(element, valueAccessor, allBindings, viewModel) {
+			var options = valueAccessor() || {};
+			viewModel[options.elem].subscribe(customFunc);
+	
+			function customFunc(value) {
+				viewModel[options.funct](value);
+			}
+		}
+	};
+	
 	});
 }).call(this);

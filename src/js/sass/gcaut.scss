@@ -9,6 +9,21 @@
 
 @import "includes/gcaut-mixin";
 
+%gcaut-img-val {
+	margin: 0 !important;
+	height: (2.2 * $rembase) + rem;
+	width: (2.2 * $rembase) + rem;
+}
+
+%gcaut-button-val {
+	cursor: pointer;
+	background: transparent;
+	padding: (0.4 * $rembase) + rem;
+	margin: (0.3 * $rembase) + rem;
+	position: relative;
+	vertical-align: middle;
+}
+
 body {
 	line-height: (3 * $rembase) + rem;
 }
@@ -47,20 +62,13 @@ label {
 }
 
 .gcaut-button {
-	cursor: pointer;
-	background: transparent;
+	@extend %gcaut-button-val;
 	border: none;
-	padding: (0.4 * $rembase) + rem;
-	margin: (0.3 * $rembase) + rem;
 	height: (3 * $rembase) + rem;
 	width: (3 * $rembase) + rem;
-	position: relative;
-	vertical-align: middle;
 
 	.gcaut-img-button {
-		margin: 0 !important;
-		height: (2.2 * $rembase) + rem;
-		width: (2.2 * $rembase) + rem;
+		@extend %gcaut-img-val;
 	}
 
 	&:disabled {
@@ -83,6 +91,39 @@ label {
 		@include button-gradiant-active;
 		@include content-border-radius;
 	}
+}
+
+.gcaut-button-text {
+	@extend %gcaut-button-val;
+	@include content-border-radius;
+	@include gcaut-border;
+	
+	&:disabled {
+		@include button-gradiant-disable;
+		@include content-border-radius;
+		cursor: none;
+	}
+
+	&:hover:enabled {
+		@include button-gradiant-hover;
+		@include content-border-radius;
+	}
+
+	&:focus {
+		@include button-gradiant-hover;
+		@include content-border-radius;
+	}
+
+	&:active:enabled {
+		@include button-gradiant-active;
+		@include content-border-radius;
+	}
+}
+
+.gcaut-img-lbl {
+	@extend %gcaut-img-val;
+	vertical-align: middle;
+	margin-right: 5px!important;
 }
 
 .gcaut-tooltip {

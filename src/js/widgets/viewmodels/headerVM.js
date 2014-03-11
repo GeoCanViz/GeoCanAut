@@ -5,6 +5,7 @@
  *
  * Header view model widget
  */
+/* global locationPath: false */
 (function() {
 	'use strict';
 	define(['jquery-private',
@@ -22,8 +23,18 @@
 				var _self = this,
 					title = map.title,
 					print = map.print,
-					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist'));
+					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist')),
+					pathTools = locationPath + 'gcaut/images/headTools.png',
+					pathPrint = locationPath + 'gcaut/images/headPrint.png',
+					pathInset = locationPath + 'gcaut/images/headShowInset.png',
+					pathFullscreen = locationPath + 'gcaut/images/headFullscreen.png';
 
+				// images path
+				_self.imgTools = pathTools;
+				_self.imgPrint = pathPrint;
+				_self.imgInset = pathInset;
+				_self.imgFullscreen = pathFullscreen;
+				
 				// label
 				_self.lblMapTitle = i18n.getDict('%header-mapname');
 				_self.lblMapAlt = i18n.getDict('%header-mapname');
@@ -33,7 +44,6 @@
 				_self.lblPrintType = i18n.getDict('%header-printtype');
 				_self.lblInset = i18n.getDict('%header-inset');
 				_self.lblFulscreen = i18n.getDict('%header-fullscreen');
-				_self.lblSelectItem = i18n.getDict('%selectItem');
 
 				// title
 				_self.mapTitleValue = ko.observable(title.value);
@@ -66,14 +76,8 @@
 				};
 
 				_self.write = function() {
-					var value,
-						print = -1;
+					var value;
 
-					// check if value are undefined
-					if (_self.selectPrint() !== undefined) {
-						print = _self.selectPrint().id;
-					}
-					
 					value = '"header": {' +
 								'"title": {' +
 									'"value": "' + _self.mapTitleValue() +'",' +
@@ -83,7 +87,7 @@
 								'"tools": ' + _self.isTools() + ',' +
 								'"print": {' +
 									'"enable": ' +  _self.isPrint() +
-									',"type": ' + print +
+									',"type": ' + _self.selectPrint().id +
 								'},' +
 								'"fullscreen": ' + _self.isFullscreen() +
 								',"inset": ' + _self.isInset() +

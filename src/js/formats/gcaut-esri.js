@@ -113,15 +113,14 @@
 					sublayer.fullname = fullname + '/' + childName;
 					sublayer.url = url + '/' + childId;
 					sublayer.id = childId;
-					sublayer.minScale = child.minScale;
-					sublayer.maxScale = child.maxScale;
+					sublayer.scale = { min: child.minScale, max: child.maxScale};
 					sublayer.isChecked = ko.observable(false);
 					sublayer.isUse = ko.observable(false);
 					sublayer.category = typeObject;
 					sublayer.type = typeid;
 					layers.push(sublayer);
 
-					// call the same function to know if there is child with tha child sublayers array to add to
+					// call the same function to know if there is child within the child sublayers array to add to
 					getSublayer(child,
 							sendLayers,
 							layers[layers.length - 1].servLayers,

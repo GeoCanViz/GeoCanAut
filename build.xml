@@ -204,6 +204,10 @@
 		<copy todir="${dist.dir}/images">
 			<fileset dir="${src.dir}/js/images/projheader"/>
 			<fileset dir="${src.dir}/js/images/map"/>
+			<fileset dir="${src.dir}/js/images/head"/>
+			<fileset dir="${src.dir}/js/images/foot"/>
+			<fileset dir="${src.dir}/js/images/draw"/>
+			<fileset dir="${src.dir}/js/images/nav"/>
 			<fileset dir="${src.dir}/js/images/jqueryui"/>
 		</copy>
 	</target>

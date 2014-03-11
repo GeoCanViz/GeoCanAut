@@ -13,15 +13,17 @@
 			'genfile',
 			'gcaut-i18n',
 			'gcaut-ko',
+			'gcaut-func',
 			'gcaut-vm-map',
 			'gcaut-vm-header',
 			'gcaut-vm-footer',
 			'gcaut-vm-legend',
 			'gcaut-vm-draw',
 			'gcaut-vm-nav'
-	], function($aut, ko, generateFile, i18n, binding, mapVM, headerVM, footerVM, legendVM, drawVM, navVM) {
+	], function($aut, ko, generateFile, i18n, binding, gcautFunc, mapVM, headerVM, footerVM, legendVM, drawVM, navVM) {
 		var initialize,
 			loadFile,
+			setFocus,
 			vm;
 
 		initialize = function(elem) {
@@ -82,7 +84,7 @@
 					return { controlsDescendantBindings: true };
 				};
 
-				_self.openMap = function() {
+				_self.openMap = function(vm, event) {
 					var file, reader,
 						files = event.target.files,
 						len = files.length;
@@ -119,23 +121,28 @@
 				_self.deleteMap = function() {
 					// removes map from dropdown and array and add item to restore array
 					var id = parseInt(_self.mapsIDValue().split(' ')[1], 10) - 1,
-						item = _self.maps.splice(id, 1);
+						item = _self.maps.splice(id, 1),
+						maps = vm.maps;
+					
 					_self.mapsRestore.push(item[0]);
 
-					// reset index
+					// reset index and focus
 					_self.resetIndex();
+					setFocus(maps[maps.length - 1].map.focusMapHeight);
 				};
 
 				_self.restoreMap = function() {
 					// push back to maps array
-					var len = _self.mapsRestore.length;
+					var len = _self.mapsRestore.length,
+						maps = vm.maps;
 
 					while (len--) {
 						_self.maps.push(_self.mapsRestore.shift());
 					}
-
-					// reset index
+					
+					// reset index and set focus
 					_self.resetIndex();
+					setFocus(maps[maps.length - 1].map.focusMapHeight);
 				};
 
 				_self.saveMap = function() {
@@ -156,13 +163,14 @@
 					content += '}}';
 
 					// generate the iframe then call the php. Then remove the iframe
+					// http://tutorialzine.com/2011/05/generating-files-javascript-php/
 					$aut.generateFile({
 						filename	: id + '.json',
 						content		: content,
 						script		: 'http://localhost:8888/php/download.php'
 					});
 
-					setTimeout(function() { $aut('#gcaut-download').remove(); }, 1000);
+					gcautFunc.debounce(function() { $aut('#gcaut-download').remove(); }, 3000, false);
 				};
 
 				_self.resetIndex = function() {
@@ -208,11 +216,25 @@
 					// create the master view model (launch every view model one after the other)
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
-					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer);
+					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ id:'mapSR', value: vm.map.selectMapSR }]);
 					//vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend);
 					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 
+					setFocus(vm.map.focusMapHeight);
+					
+					// push the vm to array, update the dropdown list and select the new item
+					_self.maps.push(vm);
+					_self.mapsID.push(mapVal);
+					_self.mapsIDValue(mapVal);
+					_self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
+					console.log(_self.txtConfig + url);
+					
+					// set vm object in custom function to be access by other view model
+					gcautFunc.setVM(vm);
+				};
+
+				setFocus = function(elem) {
 					// select map tab to be active (will refresh the accordions controls)
 					// use $ instead of $aut because they use jQueryUI dependency
 					$('#gcauttabs').tabs('option', 'active', 0);
@@ -225,16 +247,10 @@
 					// we force to select the map height because even if we set the value in the viewmodel
 					// it is not focus on the first map.
 					// we set it in a timeout, if not, it will not work
-					setTimeout(function() { vm.map.focusMapHeight(true); }, 0);
+					setTimeout(function() { elem(true); }, 0);
 					
-					// push the vm to array, update the dropdown list and select the new item
-					_self.maps.push(vm);
-					_self.mapsID.push(mapVal);
-					_self.mapsIDValue(mapVal);
-					_self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
-					console.log(_self.txtConfig + url);
 				};
-
+				
 				/*
 				* this function is fired when map dropdown list value changed
 				*/
@@ -252,6 +268,9 @@
 							});
 						}
 
+						// set vm object in custom function to be access by other view model
+						gcautFunc.setVM(vm);
+					
 						// show or hide tabs
 						if (_self.mapsID().length === 0) {
 							$tabs.tabs('option', { collapsible: true, active: false, disabled: true });

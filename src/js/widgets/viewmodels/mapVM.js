@@ -68,15 +68,17 @@
 				_self.errortext = ko.observable();
 
 				// label
+				_self.lblRemove = i18n.getDict('%remove');
 				_self.lblMapSize = i18n.getDict('%size');
-				_self.lblMapHeight = i18n.getDict('%height') + ': ';
-				_self.lblMapWidth = i18n.getDict('%width') + ': ';
+				_self.lblMapHeight = i18n.getDict('%height');
+				_self.lblMapWidth = i18n.getDict('%width');
 				_self.lblLink = i18n.getDict('%map-link');
 				_self.lblResol = i18n.getDict('%map-resolution');
 				_self.lblLods = i18n.getDict('%map-lods');
 				_self.lblLevel = i18n.getDict('%map-level');
 				_self.lblBasemap = i18n.getDict('%map-basemap');
 				_self.lblMapSR = i18n.getDict('%map-spatialref');
+				_self.lblUrlGeomServer = i18n.getDict('%map-urlGeomServer');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
 				_self.lblExtentInit = i18n.getDict('%map-extentinit');
 				_self.lblExtentMinX = i18n.getDict('%map-extentminx');
@@ -132,6 +134,7 @@
 				_self.srType = srType;
 				_self.isLods = ko.observable(lods.enable);
 				_self.lods = ko.observableArray(lods.values);
+				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.selectMapSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, map.sr.wkid)]);
 				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
 				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
@@ -160,6 +163,17 @@
 					return _self.availServ(setServName(val.id)); 
 				});
 				
+				// functions to create isChecked observable on lods when read. This way we can have select/unselect
+				ko.utils.arrayForEach(_self.lods(), function(item) {
+					item.isChecked = ko.observable(item.check);
+				});
+
+				_self.checkLods = function(value) {
+					ko.utils.arrayForEach(_self.lods(), function(item) {
+						item.isChecked(value);
+					});
+				};
+
 				// clean the view model
 				clean(ko, elem);
 
@@ -190,6 +204,7 @@
 				updateLayers = function(elem, list) {
 					var layer,
 						servLayers,
+						scale,
 						layers = elem,
 						len = layers.length;
 
@@ -200,12 +215,13 @@
 
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
+									scale = layer.scale;
 									_self.layers.push({ id: layer.fullname,
 														type: layer.type,
 														category: layer.category,
 														url: layer.url,
-														minScale: layer.minScale,
-														maxScale: layer.maxScale });
+														scale: { min:scale.min,
+																max: scale.max } });
 								}
 							} else {
 								updateLayers(servLayers, list);
@@ -451,7 +467,7 @@
 						tmpLayers.push(gcautFunc.getObject(_self.layers(), 'id', text));
 					}
 					
-					_self.layers(tmpLayers);
+					_self.layers(tmpLayers.reverse());
 				};
 				
 				_self.write = function() {
@@ -482,7 +498,7 @@
 						strlods += '{' +
 										'"level": ' + lod.level + ',' +
 										'"resolution": ' + lod.resolution + ',' +
-										'"check": ' + lod.check +
+										'"check": ' + lod.isChecked() +
 									'},';
 					}
 
@@ -513,32 +529,33 @@
 					
 					value = '"mapframe": {' +
 								'"size": {' +
-									'"height": ' + _self.mapHeightValue() + ',' +
-									'"width": ' + _self.mapWidthValue() +
+									'"height": ' + _self.mapHeightValue() +
+									',"width": ' + _self.mapWidthValue() +
 								'},' +
 								'"map": {' +
+									'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
 									'"sr": {' +
 										'"wkid": ' + sr +
 									'},' +
 									'"extentmax": {' +
-										'"xmin": ' + _self.maxExtentMinX() + ',' +
-										'"ymin": ' + _self.maxExtentMinY() + ',' +
-										'"xmax": ' + _self.maxExtentMaxX() + ',' +
-										'"ymax": ' + _self.maxExtentMaxY() +
+										'"xmin": ' + _self.maxExtentMinX() +
+										',"ymin": ' + _self.maxExtentMinY() +
+										',"xmax": ' + _self.maxExtentMaxX() +
+										',"ymax": ' + _self.maxExtentMaxY() +
 									'},' +
 									'"extentinit": {' +
-										'"xmin": ' + _self.initExtentMinX() + ',' +
-										'"ymin": ' + _self.initExtentMinY() + ',' +
-										'"xmax": ' + _self.initExtentMaxX() + ',' +
-										'"ymax": ' + _self.initExtentMaxY() +
+										'"xmin": ' + _self.initExtentMinX() +
+										',"ymin": ' + _self.initExtentMinY() +
+										',"xmax": ' + _self.initExtentMaxX() +
+										',"ymax": ' + _self.initExtentMaxY() +
 									'},' +
 									'"lods": {' +
-										'"enable": ' + _self.isLods() + ',' +
-										'"values": [' + strlods + ']' +
+										'"enable": ' + _self.isLods() +
+										',"values": [' + strlods + ']' +
 									'},' +
-									'"link": ' + _self.isLink() + ',' +
-									'"bases": [' + strbase + '],' +
-									'"layers": ['+ strlayers + ']' +
+									'"link": ' + _self.isLink() +
+									',"bases": [' + strbase + ']' +
+									',"layers": ['+ strlayers + ']' +
 								'}' +
 							'}';
 

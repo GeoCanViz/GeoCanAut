@@ -9,8 +9,9 @@
 			"width": 0
 		},
 		"map": {
+			"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
 			"sr": {
-				"wkid": 0
+				"wkid": 4326
 			},
 			"extentmax": {
 			"xmin": 0.0,
@@ -42,7 +43,7 @@
 		"tools": false,
 		"print": {
 			"enable": false,
-			"type": -1
+			"type": 1
 		},
 		"fullscreen": false,
 		"inset": false
@@ -70,7 +71,7 @@
 		"enable": false,
 		"expand": false,
 		"zoom": false,
-		"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+		"urlgeomserv": "",
 		"geolocation": {
 			"enable": false,
 			"type": 2
@@ -94,14 +95,14 @@
 		"items": [{}]
 	},
 	"footer": {
-		"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+		"urlgeomserv": "",
 		"northarrow": {
 			"enable": false,
-			"inwkid": -1
+			"inwkid": 4326
 		},
 		"mousecoords": {
 			"enable": false,
-			"outwkid": -1
+			"outwkid": 4326
 		},
 		"datatable": {
 			"direction": "in"

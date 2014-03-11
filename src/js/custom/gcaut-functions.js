@@ -14,7 +14,10 @@
 			getSrType,
 			getSrTypeIndex,
 			checkFormatURL,
-			getObject;
+			getObject,
+			getElemValueVM,
+			setVM,
+			vmObject;
 
 		debounce = function(func, threshold, execAsap) {
 
@@ -92,7 +95,7 @@
 			// create regex from type
 			if (type === 3 || type === 4) {
 				// esri cache or dynamic
-				regexp += '*(arcgis/rest/services)*\/(MapServer)';
+				regexp += '*(/rest/services/)*\/(MapServer)';
 			}
 			
 			regObj = new RegExp(regexp);
@@ -115,16 +118,26 @@
 				}
 			}
 			
-			return value
-		}
+			return value;
+		};
 		
+		getElemValueVM = function(name, element) {
+			return vmObject[name][element]();
+		};
+		
+		setVM = function(vm) {
+			vmObject = vm;
+		};
+				
 		return {
 			debounce: debounce,
 			getListCB: getListCB,
 			getSrType: getSrType,
 			getSrTypeIndex: getSrTypeIndex,
 			checkFormatURL: checkFormatURL,
-			getObject: getObject
+			getObject: getObject,
+			getElemValueVM: getElemValueVM,
+			setVM: setVM
 		};
 	});
 }());
