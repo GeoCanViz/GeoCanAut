@@ -48,7 +48,7 @@
 				_self.mouseSR = srType;
 				_self.selectMouseSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, mouse.outwkid)]);
 
-				// mapSR object from map view model to be able tosubscribe to change event with a custom
+				// mapSR object from map view model to be able to subscribe to change event with a custom
 				// binding
 				while (lenControls--) {
 					_self[controls[lenControls].id] = controls[lenControls].value;

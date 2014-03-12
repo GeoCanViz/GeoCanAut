@@ -289,7 +289,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							</div>
 						</div>
 					</div>
-					<div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel }, openDialog: isLayerDialogOpen, css: hiddenLayer">
+					<div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel, openDialog: 'isLayerDialogOpen' }, css: hiddenLayer">
 						<div class="gcaut-layers">
 							<div data-bind="template: { name: 'selectLayers' }"></div>
 							<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
@@ -306,7 +306,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							</li>
 						</script>
 					</div>
-					<div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 800, height: 600, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel }, openDialog: isExtentDialogOpen, css: hiddenMap">
+					<div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 800, height: 600, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel, openDialog: 'isExtentDialogOpen' }, css: hiddenMap">
 						<div class="row">
 							<div class="span3">
 								<span data-bind="text: lblExtentMinX"></span>
@@ -373,6 +373,16 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<input type="checkbox" id="cb_tools" data-bind="checked: isTools">
 				<label for="cb_tools" class="form-checkbox" data-bind="imgLabel: { text: lblTools, img: imgTools }"></label>
 				<div style="clear: both"></div>
+				<input type="checkbox" id="cb_about" data-bind="checked: isAbout">
+				<label for="cb_about" class="form-checkbox" data-bind="imgLabel: { text: lblAbout, img: imgAbout }"></label>
+				<div class="row">
+					<label for="cb_abouttype" class="form-checkbox" data-bind="text: lblAboutType"></label>
+					<select id="cb_abouttype" data-bind="options: aboutType, optionsText: 'val', value: selectAbout, enable: isAbout"></select>
+					<div style="clear: both"></div>
+					<label for="valueAboutHead" class="form-checkbox" data-bind="text: lblAboutValue"></label>
+					<input id="valueAboutHead" class="gcaut-uri" type="text" data-bind="value: aboutValue, enable: isAbout"></input>
+				</div>
+				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_print" data-bind="checked: isPrint">
 				<label for="cb_print" class="form-checkbox" data-bind="imgLabel: { text: lblPrint, img: imgPrint }"></label>
 				<div class="row">
@@ -396,7 +406,19 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<section id="tools">
 					<div id="tabtool-legend" class="gcaut-tabs">
 						<section id="legendMap">
-							
+							<input type="checkbox" id="enableLegend" data-bind="checked: isEnable">
+							<label for="enableLegend" class="form-checkbox" data-bind="text: lblEnable"></label>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
+							<label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
+							<div style="clear: both"></div>
+							<ul id="legendlayers" class="gcaut-layers" data-bind="passControl: { elem: 'layers', funct: 'updateLayers' }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
+							<script type="text/html" id="legendLayers">
+								<li>
+									<span data-bind="text: id"></span>
+									<ul id="layerList"  data-bind="template: { name: 'legendLayers', foreach: $data.items }"></ul>
+								</li>
+							</script>
 						</section>
 					</div>
 					<div id="tabtool-draw" class="gcaut-tabs">

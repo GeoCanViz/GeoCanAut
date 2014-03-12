@@ -22,15 +22,19 @@
 			var headerViewModel = function(elem, map) {
 				var _self = this,
 					title = map.title,
+					about = map.about,
 					print = map.print,
+					aboutType = gcautFunc.getListCB(i18n.getDict('%header-abouttypelist')),
 					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist')),
 					pathTools = locationPath + 'gcaut/images/headTools.png',
+					pathAbout = locationPath + 'gcaut/images/headAbout.png',
 					pathPrint = locationPath + 'gcaut/images/headPrint.png',
 					pathInset = locationPath + 'gcaut/images/headShowInset.png',
 					pathFullscreen = locationPath + 'gcaut/images/headFullscreen.png';
 
 				// images path
 				_self.imgTools = pathTools;
+				_self.imgAbout = pathAbout;
 				_self.imgPrint = pathPrint;
 				_self.imgInset = pathInset;
 				_self.imgFullscreen = pathFullscreen;
@@ -40,6 +44,9 @@
 				_self.lblMapAlt = i18n.getDict('%header-mapname');
 				_self.lblEnbTools = i18n.getDict('%header-lblbutton');
 				_self.lblTools = i18n.getDict('%header-tools');
+				_self.lblAbout = i18n.getDict('%header-about');
+				_self.lblAboutType = i18n.getDict('%header-abouttype');
+				_self.lblAboutValue = i18n.getDict('%header-aboutvalue');
 				_self.lblPrint = i18n.getDict('%header-print');
 				_self.lblPrintType = i18n.getDict('%header-printtype');
 				_self.lblInset = i18n.getDict('%header-inset');
@@ -58,6 +65,12 @@
 				// full screen
 				_self.isFullscreen = ko.observable(map.fullscreen);
 
+				// about
+				_self.isAbout = ko.observable(about.enable);
+				_self.aboutType = aboutType;
+				_self.selectAbout = ko.observable(_self.aboutType[about.type - 1]);
+				_self.aboutValue = ko.observable(about.value);
+				
 				// print
 				_self.isPrint = ko.observable(print.enable);
 				_self.printType = printType;
@@ -84,7 +97,12 @@
 									'"alttext": "' + _self.mapAltValue() + '",' +
 									'"justify": "center"' +
 								'},' +
-								'"tools": ' + _self.isTools() + ',' +
+								'"tools": ' + _self.isTools() +
+								',"about": {' +
+									'"enable": ' +  _self.isAbout() +
+									',"type": ' + _self.selectAbout().id +
+									',"value": "' + _self.aboutValue() + '"' +
+								'},' +
 								'"print": {' +
 									'"enable": ' +  _self.isPrint() +
 									',"type": ' + _self.selectPrint().id +

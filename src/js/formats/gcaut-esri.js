@@ -36,6 +36,9 @@
 				layer.fullname = itemName;
 				layer.url = url + '/' + itemId;
 				layer.id = itemId;
+				layer.scale = { min: item.minScale, max: item.maxScale};
+				layer.isChecked = ko.observable(false);
+				layer.isUse = ko.observable(false);
 				layer.category = typeObject;
 				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, typeObject);
 
@@ -54,33 +57,36 @@
 			}
 
 			// update knockout array
+			_self.servLayers([]);
 			_self.servLayers(layers);
 
 			// update base layer info
-			_self.selectMapSR(
+			if (typeObject === 'base') {
+				_self.selectMapSR(
 				_self.srType[gcautFunc.getSrTypeIndex(
 				_self.srType,
 				sender.spatialReference.wkid)]);
 
-			// if lods is present add the info
-			if (typeof sender.tileInfo !== 'undefined') {
-				lods = sender.tileInfo.lods;
-				lenlods = lods.length;
-
-				while (lenlods--) {
-					lods[lenlods].isChecked = ko.observable(true);
+				// if lods is present add the info
+				if (typeof sender.tileInfo !== 'undefined') {
+					lods = sender.tileInfo.lods;
+					lenlods = lods.length;
+	
+					while (lenlods--) {
+						lods[lenlods].isChecked = ko.observable(true);
+					}
+					_self.lods(lods);
 				}
-				_self.lods(lods);
+	
+				_self.maxExtentMinX(fullExt.xmin);
+				_self.maxExtentMinY(fullExt.ymin);
+				_self.maxExtentMaxX(fullExt.xmax);
+				_self.maxExtentMaxY(fullExt.ymax);
+				_self.initExtentMinX(initExt.xmin);
+				_self.initExtentMinY(initExt.ymin);
+				_self.initExtentMaxX(initExt.xmax);
+				_self.initExtentMaxY(initExt.ymax);
 			}
-
-			_self.maxExtentMinX(fullExt.xmin);
-			_self.maxExtentMinY(fullExt.ymin);
-			_self.maxExtentMaxX(fullExt.xmax);
-			_self.maxExtentMaxY(fullExt.ymax);
-			_self.initExtentMinX(initExt.xmin);
-			_self.initExtentMinY(initExt.ymin);
-			_self.initExtentMaxX(initExt.xmax);
-			_self.initExtentMaxY(initExt.ymax);
 		};
 
 		getSublayer = function(parent, sendLayers, layers, url, fullname, _self, typeObject) {

@@ -217,7 +217,7 @@
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
 					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ id:'mapSR', value: vm.map.selectMapSR }]);
-					//vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend);
+					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend, [{ id:'layers', value: vm.map.layers }]);
 					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 
@@ -240,7 +240,7 @@
 					$('#gcauttabs').tabs('option', 'active', 0);
 					$('#gcautmaptabs').tabs('option', 'active', 0);
 					
-					//make sure the resolution accordion is close. if not in a timeout it won't
+					// make sure the resolution accordion is close. if not in a timeout it won't
 					// work properly
 					setTimeout( function() { $('#gcaut-lods').accordion('option', 'active', false); }, 0);
 					
@@ -248,7 +248,6 @@
 					// it is not focus on the first map.
 					// we set it in a timeout, if not, it will not work
 					setTimeout(function() { elem(true); }, 0);
-					
 				};
 				
 				/*
@@ -268,9 +267,10 @@
 							});
 						}
 
-						// set vm object in custom function to be access by other view model
+						// set vm object in custom function to be access by other view model and set focus
 						gcautFunc.setVM(vm);
-					
+						setFocus(vm.map.focusMapHeight);
+			
 						// show or hide tabs
 						if (_self.mapsID().length === 0) {
 							$tabs.tabs('option', { collapsible: true, active: false, disabled: true });

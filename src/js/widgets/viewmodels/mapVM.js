@@ -19,9 +19,6 @@
 	], function($aut, ko, jqUI, i18n, gcautFunc, esriData, gisM, gisServInfo) {
 		var initialize,
 			clean,
-			setServName,
-			updateLayers,
-			readServInfo,
 			checkParentlayers,
 			checkSublayers,
 			vm;
@@ -45,8 +42,7 @@
 					layers = map.layers,
 					extentMax = map.extentmax,
 					extentInit = map.extentinit,
-					lods = map.lods,
-					urlObject, typeObject;
+					lods = map.lods;
 
 				// images path
 				_self.imgNew = pathNew;
@@ -129,6 +125,8 @@
 										type: base.type, 
 										category: 'base',
 										url: base.url });
+					
+					_self.selectBaseLayerType(layerType[base.type - 1]);
 				}
 
 				_self.srType = srType;
@@ -156,11 +154,11 @@
 
 				// subscribe functions
 				_self.selectBaseLayerType.subscribe(function(val) {
-					return _self.availServ(setServName(val.id)); 
+					return _self.availServ(_self.setServName(val.id)); 
 				});
 				
 				_self.selectLayerType.subscribe(function(val) {
-					return _self.availServ(setServName(val.id)); 
+					return _self.availServ(_self.setServName(val.id)); 
 				});
 				
 				// functions to create isChecked observable on lods when read. This way we can have select/unselect
@@ -183,13 +181,12 @@
 
 				_self.bind = function() {
 					clean(ko, elem);
-					$aut('#layers').empty(); // remove layers from DOM
 					ko.applyBindings(_self, elem);
 				};
 				
 				// select layers dialog buttons functions (ok and cancel)
 				_self.dialogLayerOk = function() {
-					updateLayers(_self.servLayers(), layers);
+					_self.updateLayers(_self.servLayers(), layers);
 					_self.dialogLayerCancel();
 				};
 
@@ -201,7 +198,7 @@
 				};
 				
 				// update layers array when they are selected from the dialog box
-				updateLayers = function(elem, list) {
+				_self.updateLayers = function(elem, list) {
 					var layer,
 						servLayers,
 						scale,
@@ -224,7 +221,7 @@
 																max: scale.max } });
 								}
 							} else {
-								updateLayers(servLayers, list);
+								_self.updateLayers(servLayers, list);
 							}
 						}
 					} else {
@@ -354,7 +351,7 @@
 				};
 				
 				// set the service name from the localstorage when layer's type change
-				setServName = function(id) {
+				_self.setServName = function(id) {
 					var array;
 					
 					if (id === 1) {
@@ -396,46 +393,40 @@
 				// launch when url validation button is push
 				_self.validateURL = function(type) {
 					var isValid,
-						category,
-						layerURL, baseURL,
+						url,
 						layerType;
 
-					typeObject = type;
 					if (type === 'base') {
 						_self.isLayer(false);
-						urlObject = _self.baseURL;
-						category = _self.selectBaseLayerType().id;
-						baseURL = _self.baseURL();
+						url = _self.baseURL();
 						layerType = _self.selectBaseLayerType().id;
 					} else {
 						_self.isLayer(true);
-						urlObject = _self.layerURL;
-						category = _self.selectLayerType().id;
-						layerURL = _self.layerURL();
+						url = _self.layerURL();
 						layerType = _self.selectLayerType().id;
 					}
 
-					// remove duplicate in service array and copy to localstorage
-					_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
-					if (layerType === 1) {
-						localStorage.setItem('servnameWMS', _self.availServ().join(';'));
-					} else if (layerType === 2)  {
-						localStorage.setItem('servnameWMTS', _self.availServ().join(';'));
-					} else if (layerType === 3)  {
-						localStorage.setItem('servnameCacheREST', _self.availServ().join(';'));
-					} else if (layerType === 4)  {
-						localStorage.setItem('servnameDynamicREST', _self.availServ().join(';'));
-					}
-
 					// check the url
-					isValid = gcautFunc.checkFormatURL(urlObject(), category);
+					isValid = gcautFunc.checkFormatURL(url, layerType);
 
 					// clean error message
 					_self.errortext('');
 
 					if (isValid) {
 						// get service info and validateURL as callback function
-						gisServInfo.getResourceInfo(urlObject(), readServInfo, function() { _self.errortext(_self.txtLayerErr); });
+						gisServInfo.getResourceInfo(url, _self.readServInfo, function() { _self.errortext(_self.txtLayerErr); });
+						
+						// remove duplicate in service array and copy to localstorage
+						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
+						if (layerType === 1) {
+							localStorage.setItem('servnameWMS', _self.availServ().join(';'));
+						} else if (layerType === 2)  {
+							localStorage.setItem('servnameWMTS', _self.availServ().join(';'));
+						} else if (layerType === 3)  {
+							localStorage.setItem('servnameCacheREST', _self.availServ().join(';'));
+						} else if (layerType === 4)  {
+							localStorage.setItem('servnameDynamicREST', _self.availServ().join(';'));
+						}
 
 					} else {
 						_self.errortext(_self.txtLayerErr);
@@ -443,10 +434,19 @@
 				};
 				
 				// callback function for gisServInfo.getResourceInfo
-				readServInfo = function(sender) {
+				_self.readServInfo = function(sender) {
+					var url,
+						type = _self.isLayer() ? 'layer' : 'base';
+					
+					if (type === 'base') {
+						url = _self.baseURL();
+					} else {
+						url = _self.layerURL();
+					}
+					
 					if (sender.hasOwnProperty('layers')) {
-						esriData.readInfo(sender, _self, urlObject(), typeObject);
-
+						esriData.readInfo(sender, _self, url, type);
+						
 						// show window to select layers
 						_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');
@@ -477,7 +477,7 @@
 						strbase = '',
 						strlods = '',
 						strlayers = '',
-						sr = -1,
+						sr = 4326,
 						lenlods = _self.lods().length,
 						lenlayers = _self.layers().length,
 						lods = _self.lods.reverse(),
@@ -571,8 +571,10 @@
 		};
 
 		clean = function(ko, elem) {
-			// clean (each tab) and remove node in foreach array binding
+			ko.cleanNode($aut('#map_addlayer')[0]);
+			ko.cleanNode($aut('#map_extent')[0]);
 			ko.cleanNode(elem);
+			$aut('#layers').empty(); // remove layers from DOM
 		};
 
 		return {

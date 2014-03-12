@@ -153,7 +153,7 @@
 	};
 	
 	ko.bindingHandlers.uiDialog = {
-		init: function(element, valueAccessor) {
+		init: function(element, valueAccessor, allBindings, viewModel) {
 			var local = ko.utils.unwrapObservable(valueAccessor()),
 				options = {},
 				$element = $aut(element);
@@ -170,6 +170,16 @@
 			}
 			
 			$element.dialog(options);
+			
+			viewModel[local.openDialog].subscribe(customFunc);
+			function customFunc(value) {
+				$element.dialog(value ? 'open' : 'close'); 
+			}
+			
+			//handle disposal (if KO removes by the template binding)
+			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+				$element.dialog('destroy');
+			});
 		},
 		options: {
 			autoOpen: false,
@@ -191,20 +201,7 @@
 					$aut(this).dialog('close');
 				}
 			}]
-		}
-	};
-
-	//custom binding handler that opens/closes the dialog
-	ko.bindingHandlers.openDialog = {
-		update: function(element, valueAccessor) {
-			var value = ko.utils.unwrapObservable(valueAccessor());
-			
-			if (value) {
-				$aut(element).dialog('open');
-			} else {
-				$aut(element).dialog('close');
-			}
-		}
+		},
 	};
 
 	//custom binding handler to add image to a label

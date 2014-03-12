@@ -41,6 +41,11 @@
 			"justify": ""
 		},
 		"tools": false,
+		"about": {
+			"enable": false,
+			"type": 1,
+			"value": ""
+		},
 		"print": {
 			"enable": false,
 			"type": 1
@@ -92,7 +97,19 @@
 	"toolbarlegend": {
 		"enable": false,
 		"expand": false,		
-		"items": [{}]
+		"items": [{
+			"id": "a",
+			"items": [{
+				"id": "a-a",
+				"items": [{
+					"id": "a-a-a",
+					"items": []
+				}]
+				}, {
+				"id": "a-b",
+				"items": []
+				}]
+		}]
 	},
 	"footer": {
 		"urlgeomserv": "",
