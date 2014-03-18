@@ -412,12 +412,28 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
 							<label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
 							<div style="clear: both"></div>
-							<ul id="legendlayers" class="gcaut-layers" data-bind="passControl: { elem: 'layers', funct: 'updateLayers' }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
+							<div id="legendlayers" class="a" data-bind="template: { name: 'legendLayers', foreach: $data.legendLayers }"></div>
 							<script type="text/html" id="legendLayers">
-								<li>
-									<span data-bind="text: id"></span>
-									<ul id="layerList"  data-bind="template: { name: 'legendLayers', foreach: $data.items }"></ul>
-								</li>
+								<!-- <li> -->
+									<h3 data-bind="text: id"></h3>
+									<div>
+										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
+										<label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
+										<div style="clear: both"></div>
+										<label for="item_title" data-bind="text: $root.lblLabel"></label>
+										<input id="item_title" type="text" data-bind="value: $data.label.value"></input>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="metaLeg" data-bind="checked: $data.metadata.enable">
+										<label for="metaLeg" class="form-checkbox" data-bind="text: $root.lblMeta"></label>							
+										<div class="row" data-bind="visible: $data.metadata.enable">
+											<label for="leg_metaurl" class="form-checkbox" data-bind="text: $root.lblMetaUrl"></label>
+											<input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
+											<label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
+											<input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
+										</div>							
+									</div>
+									<div id="layerList" class="a" data-bind="template: { name: 'legendLayers', foreach: $data.items }"></div>
+								<!-- </li> -->
 							</script>
 						</section>
 					</div>
@@ -493,7 +509,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<label for="cb_arrow" class="form-checkbox" data-bind="imgLabel: { text: lblEnbArrow, imgs: imgArrow }"></label>
 				<div class="row">
 					<label for="cb_arrowsr" class="form-checkbox" data-bind="text: lblArrowSR"></label>
-					<select id="cb_arrowsr" data-bind="passControl: { elem: 'mapSR', funct: 'updateSR' }, options: arrowSR, optionsText: 'val', value: selectArrowSR, enable: false"></select>
+					<select id="cb_arrowsr" data-bind="options: arrowSR, optionsText: 'val', value: selectArrowSR, enable: false"></select>
 				</div>
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_mouse" data-bind="checked: isMouse">

@@ -170,7 +170,7 @@
 						script		: 'http://localhost:8888/php/download.php'
 					});
 
-					gcautFunc.debounce(function() { $aut('#gcaut-download').remove(); }, 3000, false);
+					setTimeout(function() { $aut('#gcaut-download').remove(); }, 3000, false);
 				};
 
 				_self.resetIndex = function() {
@@ -216,8 +216,8 @@
 					// create the master view model (launch every view model one after the other)
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
-					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ id:'mapSR', value: vm.map.selectMapSR }]);
-					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend, [{ id:'layers', value: vm.map.layers }]);
+					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ value: vm.map.selectMapSR, func: 'updateSR' }]);
+					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend, [{ value: vm.map.layers, func: 'updateLayers' }]);
 					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 

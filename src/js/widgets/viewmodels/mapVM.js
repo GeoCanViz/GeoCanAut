@@ -145,7 +145,7 @@
 
 				// layer input
 				_self.isLayer = ko.observable(false);
-				_self.layers = ko.observableArray(map.layers);
+				_self.layers = ko.observableArray(map.layers).extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 1000 } });;
 				_self.layerType = layerType;
 				_self.selectLayerType = ko.observable();
 
@@ -493,6 +493,7 @@
 									'}';
 					}
 
+					// TODO utiliser stringify and ko.toJS
 					while (lenlods--) {
 						lod = lods[lenlods];
 						strlods += '{' +
@@ -506,6 +507,7 @@
 						strlods = strlods.slice(0, -1);
 					}
 
+					// TODO utiliser stringify and ko.toJS
 					if (lenlayers > 0) {
 						while (lenlayers--) {
 							layer = layers[lenlayers];

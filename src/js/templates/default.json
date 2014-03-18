@@ -37,8 +37,7 @@
 	"header": {
 		"title": {
 			"value": "",
-			"alttext": "",
-			"justify": ""
+			"alttext": ""
 		},
 		"tools": false,
 		"about": {
@@ -97,19 +96,7 @@
 	"toolbarlegend": {
 		"enable": false,
 		"expand": false,		
-		"items": [{
-			"id": "a",
-			"items": [{
-				"id": "a-a",
-				"items": [{
-					"id": "a-a-a",
-					"items": []
-				}]
-				}, {
-				"id": "a-b",
-				"items": []
-				}]
-		}]
+		"items": []
 	},
 	"footer": {
 		"urlgeomserv": "",

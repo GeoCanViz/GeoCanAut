@@ -229,18 +229,5 @@
 		}
 	};
 
-	// binding to subscribe to an element in another view model. The element to link needs to be pass to
-	// the vm at initialization
-	ko.bindingHandlers.passControl = {
-		init: function(element, valueAccessor, allBindings, viewModel) {
-			var options = valueAccessor() || {};
-			viewModel[options.elem].subscribe(customFunc);
-	
-			function customFunc(value) {
-				viewModel[options.funct](value);
-			}
-		}
-	};
-	
 	});
 }).call(this);
