@@ -14,7 +14,7 @@
 		url = window.location.toString(),
 		locationPath,
 		language = 'en-min';
-	
+
 	if ((url.search(/_f\.htm/) > -1) || (url.search(/-fra\./) > -1) || (url.search(/-fr\./) > -1) || (url.search(/lang=fra/) > -1) || (url.search(/lang=fr/) > -1)) {
 		language = 'fr-min';
 	} else if ((url.search(/_e\.htm/) > -1) || (url.search(/-eng\./) > -1) || (url.search(/-en\./) > -1) || (url.search(/lang=eng/) > -1) || (url.search(/lang=en/) > -1)) {
@@ -25,14 +25,14 @@
 
 	// get code location from meta tag
 	metas = document.getElementsByTagName('meta'),
-	len = metas.length; 
+	len = metas.length;
 
-	while(len--) { 
-		if (metas[len].getAttribute('property') === 'location') { 
-			locationPath = metas[len].getAttribute('content'); 
-		} 
+	while(len--) {
+		if (metas[len].getAttribute('property') === 'location') {
+			locationPath = metas[len].getAttribute('content');
+		}
 	}
-	
+
 	// if location path is not set in html set by default at GeoCanAut
 	if (typeof locationPath === 'undefined') {
 		var starGeo = url.search('GeoCanAut');
@@ -46,7 +46,7 @@
 			}
 		}
 	}
-	
+
 	// detect browser (code from http://www.quirksmode.org/)
 	var browserDetect = {
 		init: function() {
@@ -57,12 +57,12 @@
 		var dataString, dataProp,
 			length = data.length,
 			i = 0;
-		
+
 		while (length--) {
 			dataString = data[i].string;
 			dataProp = data[i].prop;
 			this.versionSearchString = data[i].versionSearch || data[i].identity;
-			
+
 			if (dataString) {
 				if (dataString.indexOf(data[i].subString) !== -1) {
 					return data[i].identity;
@@ -134,7 +134,7 @@
 		}]
 	};
 	browserDetect.init();
-	
+
 	// if browser not supported, redirect
 	if (window.browser !== 'Explorer' && window.browser !== 'Firefox' && window.browser !== 'Chrome' && window.browser !== 'Safari') {
 		if (language === 'en-min') {
@@ -153,7 +153,7 @@
 	}
 
 	// load the require libraries
-	define.amd.jQuery = true;	
+	define.amd.jQuery = true;
 	require({
 		async: true,
 		parseOnLoad: false,
@@ -237,7 +237,7 @@
 	// start the process with a private jquery. If we dont, it creates a conflict because we laod jQuery and it is different then the one loaded by WET
 	define('jquery-private', ['jquery'], function ($aut) {
 		var noConflict = $aut.noConflict(true);
-  
+
 		// if there is no jQuery loaded, set the window jquery to be the one from this project. Otherwise keep the outside one because it is use
 		// by script outside this project.
 		window.jQuery = !(window.jQuery) ? window.$ = $aut : window.jQuery;

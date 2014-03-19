@@ -38,7 +38,7 @@
 				_self.imgPrint = pathPrint;
 				_self.imgInset = pathInset;
 				_self.imgFullscreen = pathFullscreen;
-				
+
 				// label
 				_self.lblMapTitle = i18n.getDict('%header-mapname');
 				_self.lblMapAlt = i18n.getDict('%header-mapname');
@@ -55,13 +55,13 @@
 				// title
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
-				
+
 				// tools
 				_self.isTools = ko.observable(map.tools);
-				
+
 				// insets
 				_self.isInset = ko.observable(map.inset);
-				
+
 				// full screen
 				_self.isFullscreen = ko.observable(map.fullscreen);
 
@@ -70,7 +70,7 @@
 				_self.aboutType = aboutType;
 				_self.selectAbout = ko.observable(_self.aboutType[about.type - 1]);
 				_self.aboutValue = ko.observable(about.value);
-				
+
 				// print
 				_self.isPrint = ko.observable(print.enable);
 				_self.printType = printType;

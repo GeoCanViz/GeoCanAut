@@ -55,20 +55,20 @@
 
 				// line
 				_self.isLine = ko.observable(line.enable);
-				
+
 				// text
 				_self.isText = ko.observable(text.enable);
-				
+
 				// measure
 				_self.isMeasure = ko.observable(measure.enable);
 				_self.measureType = measureType;
 				_self.selectMeasureType = ko.observable(_self.measureType[measure.type - 1]);
 				_self.measureUnit = measureUnit;
 				_self.selectMeasureUnit = ko.observable(_self.measureUnit[measure.unit - 1]);
-				
+
 				// import/export file
 				_self.isFile = ko.observable(file.enable);
-				
+
 				// clean the view model
 				clean(ko, elem);
 
@@ -83,7 +83,7 @@
 
 				_self.write = function() {
 					var value;
-					
+
 					value = '"toolbardraw": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
@@ -102,7 +102,7 @@
 									'"enable": ' + _self.isFile() +
 								'}' +
 							'}';
-		
+
 					return value;
 				};
 

@@ -24,14 +24,14 @@
 			var timeout;
 
 			return function debounced () {
-				var obj = this, 
+				var obj = this,
 					args = arguments;
 
 				function delayed () {
 					if (!execAsap) {
 						func.apply(obj, args);
 					}
-					timeout = null; 
+					timeout = null;
 				}
 
 				if (timeout) {
@@ -41,7 +41,7 @@
 					func.apply(obj, args);
 				}
 
-				timeout = setTimeout(delayed, threshold || 100); 
+				timeout = setTimeout(delayed, threshold || 100);
 			};
 		};
 
@@ -50,43 +50,43 @@
 				typeArr = [],
 				array = val.split(';'),
 				len = array.length;
-					
+
 			array = array.reverse();
 			while (len--) {
 				typeArr.push({ id: i, val: array[len] });
 				i++;
 			}
-	
-			return typeArr;	
+
+			return typeArr;
 		};
-		
+
 		getSrType = function(val) {
 			var items, item,
 				typeArr = [],
 				array = val.split(';'),
 				len = array.length;
-					
+
 			array = array.reverse();
 			while (len--) {
 				item = array[len];
 				items = item.split(' - ');
 				typeArr.push({ id: parseInt(items[0], 10), val: item });
 			}
-	
-			return typeArr;	
+
+			return typeArr;
 		};
-	
+
 		getSrTypeIndex = function(array, val) {
 			var len = array.length,
 				rev = array.reverse();
-			
+
 			while (len--) {
-				if (rev[len].id === val) { 
+				if (rev[len].id === val) {
 					return len;
 				}
 			}
 		};
-		
+
 		checkFormatURL = function(url, type) {
 			var regObj,
 				flag = false,
@@ -97,38 +97,38 @@
 				// esri cache or dynamic
 				regexp += '*(/rest/services/)*\/(MapServer)';
 			}
-			
+
 			regObj = new RegExp(regexp);
 			if (regObj.test(url)) {
 				flag = true;
 			}
-			
+
 			return flag;
 		};
-		
+
 		getObject = function(array, field, text) {
 			var item,
 				value = null,
 				len = array.length;
-			
+
 			while (len--) {
 				item = array[len];
 				if (item[field] === text) {
 					value = item;
 				}
 			}
-			
+
 			return value;
 		};
-		
+
 		getElemValueVM = function(name, element) {
 			return vmObject[name][element]();
 		};
-		
+
 		setVM = function(vm) {
 			vmObject = vm;
 		};
-				
+
 		return {
 			debounce: debounce,
 			getListCB: getListCB,

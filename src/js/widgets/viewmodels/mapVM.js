@@ -59,7 +59,7 @@
 				_self.hiddenLayer = ko.observable('gcaut-hidden');
 				_self.hiddenMap = ko.observable('gcaut-hidden');
 				_self.errormsg = ko.observable('gcaut-message-error');
-				
+
 				// error message
 				_self.errortext = ko.observable();
 
@@ -95,7 +95,7 @@
 
 				// focus txt_mapHeight on init
 				_self.focusMapHeight = ko.observable(true);
-				
+
 				// dialog
 				_self.isLayerDialogOpen = ko.observable();
 				_self.isExtentDialogOpen = ko.observable();
@@ -122,10 +122,10 @@
 				_self.selectBaseLayerType = ko.observable();
 				if (typeof base !== 'undefined') {
 					_self.bases.push({ id: base.id,
-										type: base.type, 
+										type: base.type,
 										category: 'base',
 										url: base.url });
-					
+
 					_self.selectBaseLayerType(layerType[base.type - 1]);
 				}
 
@@ -145,7 +145,7 @@
 
 				// layer input
 				_self.isLayer = ko.observable(false);
-				_self.layers = ko.observableArray(map.layers).extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 1000 } });;
+				_self.layers = ko.observableArray(map.layers).extend({ rateLimit: { method: 'notifyWhenChangesStop', timeout: 500 } });
 				_self.layerType = layerType;
 				_self.selectLayerType = ko.observable();
 
@@ -154,13 +154,13 @@
 
 				// subscribe functions
 				_self.selectBaseLayerType.subscribe(function(val) {
-					return _self.availServ(_self.setServName(val.id)); 
+					return _self.availServ(_self.setServName(val.id));
 				});
-				
+
 				_self.selectLayerType.subscribe(function(val) {
-					return _self.availServ(_self.setServName(val.id)); 
+					return _self.availServ(_self.setServName(val.id));
 				});
-				
+
 				// functions to create isChecked observable on lods when read. This way we can have select/unselect
 				ko.utils.arrayForEach(_self.lods(), function(item) {
 					item.isChecked = ko.observable(item.check);
@@ -176,6 +176,8 @@
 				clean(ko, elem);
 
 				_self.init = function() {
+					// force layers update to be able to create the legend
+					_self.layers.valueHasMutated();
 					return { controlsDescendantBindings: true };
 				};
 
@@ -183,7 +185,7 @@
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
-				
+
 				// select layers dialog buttons functions (ok and cancel)
 				_self.dialogLayerOk = function() {
 					_self.updateLayers(_self.servLayers(), layers);
@@ -196,7 +198,7 @@
 					_self.hiddenLayer('gcaut-hidden');
 					_self.isLayerDialogOpen(false);
 				};
-				
+
 				// update layers array when they are selected from the dialog box
 				_self.updateLayers = function(elem, list) {
 					var layer,
@@ -225,7 +227,7 @@
 							}
 						}
 					} else {
-						_self.bases.push({ id: _self.baseURL(), 
+						_self.bases.push({ id: _self.baseURL(),
 											type: _self.selectBaseLayerType().id,
 											category: 'base',
 											url: _self.baseURL() });
@@ -301,11 +303,11 @@
 						checkSublayers(subitem, 1);
 					});
 				};
-				
+
 				// set extent dialog buttons functions (ok and cancel)
 				_self.dialogExtentOk = function() {
 					var type = _self.extentType();
-					
+
 					if (type === 'max') {
 						_self.maxExtentMinX(_self.setExtentMinX());
 						_self.maxExtentMinY(_self.setExtentMinY());
@@ -326,7 +328,7 @@
 					_self.hiddenMap('gcaut-hidden');
 					_self.isExtentDialogOpen(false);
 				};
-				
+
 				// create the inside of the extent dialog window
 				_self.setExtent = function(type) {
 					var size = { width:_self.mapWidthValue(),
@@ -349,11 +351,11 @@
 									size,
 									holder);
 				};
-				
+
 				// set the service name from the localstorage when layer's type change
 				_self.setServName = function(id) {
 					var array;
-					
+
 					if (id === 1) {
 						array = localStorage.servnameWMS.split(';');
 					} else if (id === 2)  {
@@ -363,7 +365,7 @@
 					} else if (id === 4)  {
 						array = localStorage.servnameDynamicREST.split(';');
 					}
-					
+
 					_self.layerURL('');
 					_self.baseURL('');
 					return array;
@@ -415,7 +417,7 @@
 					if (isValid) {
 						// get service info and validateURL as callback function
 						gisServInfo.getResourceInfo(url, _self.readServInfo, function() { _self.errortext(_self.txtLayerErr); });
-						
+
 						// remove duplicate in service array and copy to localstorage
 						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
 						if (layerType === 1) {
@@ -432,21 +434,21 @@
 						_self.errortext(_self.txtLayerErr);
 					}
 				};
-				
+
 				// callback function for gisServInfo.getResourceInfo
 				_self.readServInfo = function(sender) {
 					var url,
 						type = _self.isLayer() ? 'layer' : 'base';
-					
+
 					if (type === 'base') {
 						url = _self.baseURL();
 					} else {
 						url = _self.layerURL();
 					}
-					
+
 					if (sender.hasOwnProperty('layers')) {
 						esriData.readInfo(sender, _self, url, type);
-						
+
 						// show window to select layers
 						_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');
@@ -461,74 +463,24 @@
 						$elems = $aut('#layersorder').find('.layerTitle'),
 						len = $elems.length,
 						tmpLayers = [];
-					
+
 					while (len--) {
-						text = $($elems[len]).text();
+						text = $aut($elems[len]).text();
 						tmpLayers.push(gcautFunc.getObject(_self.layers(), 'id', text));
 					}
-					
+
 					_self.layers(tmpLayers.reverse());
 				};
-				
+
 				_self.write = function() {
 					var value,
-						lod,
-						layer,
-						strbase = '',
-						strlods = '',
-						strlayers = '',
-						sr = 4326,
-						lenlods = _self.lods().length,
-						lenlayers = _self.layers().length,
-						lods = _self.lods.reverse(),
-						layers = _self.layers.reverse(),
-						base = _self.bases()[0];
-
-
-					if (typeof base !== 'undefined') {
-						strbase = '{' +
-										'"id": "' + base.id + '",' +
-										'"type": ' + base.type + ',' +
-										'"url": "' + base.url + '"' +
-									'}';
-					}
-
-					// TODO utiliser stringify and ko.toJS
-					while (lenlods--) {
-						lod = lods[lenlods];
-						strlods += '{' +
-										'"level": ' + lod.level + ',' +
-										'"resolution": ' + lod.resolution + ',' +
-										'"check": ' + lod.isChecked() +
-									'},';
-					}
-
-					if (strlods.length > 0) {
-						strlods = strlods.slice(0, -1);
-					}
-
-					// TODO utiliser stringify and ko.toJS
-					if (lenlayers > 0) {
-						while (lenlayers--) {
-							layer = layers[lenlayers];
-							strlayers += '{' +
-											'"id": "' + layer.id + '",' +
-											'"type": ' + layer.type + ',' +
-											'"url": "' + layer.url + '",' +
-											'"scale": {' +
-												'"min": ' + layer.scale.min + ',' +
-												'"max": ' + layer.scale.max +
-											'}' +
-										'},';
-						}
-						strlayers = strlayers.slice(0, -1);
-					}
+						sr = 4326;
 
 					// check if value are undefined
 					if (_self.selectMapSR() !== undefined) {
 						sr = _self.selectMapSR().id;
 					}
-					
+
 					value = '"mapframe": {' +
 								'"size": {' +
 									'"height": ' + _self.mapHeightValue() +
@@ -553,11 +505,11 @@
 									'},' +
 									'"lods": {' +
 										'"enable": ' + _self.isLods() +
-										',"values": [' + strlods + ']' +
+										',"values": ' + JSON.stringify(ko.toJS(_self.lods())).replace(/isChecked/g, 'check') +
 									'},' +
 									'"link": ' + _self.isLink() +
-									',"bases": [' + strbase + ']' +
-									',"layers": ['+ strlayers + ']' +
+									',"bases": ' + JSON.stringify(ko.toJS(_self.bases())) +
+									',"layers": '+ JSON.stringify(ko.toJS(_self.layers())) +
 								'}' +
 							'}';
 

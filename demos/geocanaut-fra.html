@@ -406,16 +406,21 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<section id="tools">
 					<div id="tabtool-legend" class="gcaut-tabs">
 						<section id="legendMap">
+							<button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
+							<div style="clear: both"></div>
 							<input type="checkbox" id="enableLegend" data-bind="checked: isEnable">
 							<label for="enableLegend" class="form-checkbox" data-bind="text: lblEnable"></label>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
 							<label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
 							<div style="clear: both"></div>
-							<div id="legendlayers" class="a" data-bind="template: { name: 'legendLayers', foreach: $data.legendLayers }"></div>
+							<ul class="legendSort" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, sortable: { connectWith: '.legendSort' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
 							<script type="text/html" id="legendLayers">
-								<!-- <li> -->
-									<h3 data-bind="text: id"></h3>
+								<li>
+									<h3>
+										<span data-bind="text: id"></span>
+										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove"></img></button>
+									</h3>
 									<div>
 										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
 										<label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
@@ -430,10 +435,42 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
 											<label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
 											<input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
-										</div>							
+										</div>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
+										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>			
+										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0, max: 100, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 1 }"></div>
+											<div class="row">
+												<span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
+												<span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>
+											</div>
+										</div>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="visLeg" data-bind="checked: $data.visibility.enable">
+										<label for="visLeg" class="form-checkbox" data-bind="text: $root.lblVisibility"></label>			
+										<div class="row gcaut-subinfo" data-bind="visible: $data.visibility.enable">
+											<input type="checkbox" id="visInitLeg" data-bind="checked: $data.visibility.initstate">
+											<label for="visInitLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityState"></label>
+											<label for="vistypeLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityType"></label>
+											<select id="vistypeLeg" data-bind="options: $root.visibilityType, optionsText: 'val', value: $data.visibility.type, enable: $data.visibility.enable"></select>
+											<label for="visRadioLeg" data-bind="text: $root.lblVisibilityRadio, visible: $data.visibility.type().val === 'radio'"></label>
+											<input id="visRadioLeg" data-bind="value: $data.visibility.radioid, visible: $data.visibility.type().val === 'radio'"></input>
+										</div>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild">
+										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>			
+										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild()">
+											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
+											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
+											<label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl, visible: $data.customimage.enable"></label>
+											<input id="customUrlLeg" data-bind="value: $data.customimage.url, visible: $data.customimage.enable"></input>
+											<label for="customTextLeg" data-bind="text: $root.lblCustomImageText, visible: $data.customimage.enable"></label>
+											<input id="customTextLeg" data-bind="value: $data.customimage.alttext, visible: $data.customimage.enable"></input>
+										</div>
+										<ul class="legendSort" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabmap-gen', sortable: { connectWith: '.legendSort' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>				
 									</div>
-									<div id="layerList" class="a" data-bind="template: { name: 'legendLayers', foreach: $data.items }"></div>
-								<!-- </li> -->
+								</li>
 							</script>
 						</section>
 					</div>

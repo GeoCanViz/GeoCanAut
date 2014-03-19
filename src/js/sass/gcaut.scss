@@ -136,6 +136,14 @@ label {
   @include app-text(1.75, bold);
 }
 
+.gcaut-subinfo {
+	margin-left: (3 * $rembase) + rem;
+}
+
+.gcaut-slider {
+	height: (1.5 * $rembase) + rem!important;
+}
+
 .gcaut-message-error {
 	@include app-text(1.3, normal, red);
 }

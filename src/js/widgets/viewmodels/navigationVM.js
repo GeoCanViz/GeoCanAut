@@ -34,7 +34,7 @@
 				// images path
 				_self.imgZoom = pathZoom;
 				_self.imgGeoloc = pathGeoloc;
-				
+
 				// label
 				_self.lblEnable = i18n.getDict('%nav-enable');
 				_self.lblExpand = i18n.getDict('%expand');
@@ -53,20 +53,20 @@
 
 				// zoom to full extent
 				_self.isZoom = ko.observable(map.zoom);
-				
+
 				// zoom to geolocation
 				_self.isGeoloc = ko.observable(geoloc.enable);
-				
+
 				// scalebar
 				_self.isScalebar = ko.observable(scalebar.enable);
 				_self.scalebarType = scalebarType;
 				_self.selectScalebar = ko.observable(_self.scalebarType[scalebar.unit - 1]);
-				
+
 				// scale
 				_self.isScale = ko.observable(scale.enable);
 				_self.scaleType = scaleType;
 				_self.selectScale = ko.observable(_self.scaleType[scale.format - 1]);
-				
+
 				// overview
 				_self.isOver = ko.observable(overview.enable);
 				_self.urlOver = ko.observable(map.overview.url);
@@ -86,8 +86,8 @@
 				_self.write = function() {
 					var value,
 						// get value from map viewmodel
-						url = gcautFunc.getElemValueVM('map', 'urlGeomServer'); 
-						
+						url = gcautFunc.getElemValueVM('map', 'urlGeomServer');
+
 					value = '"toolbarnav": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
@@ -110,7 +110,7 @@
 									',"url": "' + _self.urlOver() + '"' +
 								'}' +
 							'}';
-		
+
 					return value;
 				};
 

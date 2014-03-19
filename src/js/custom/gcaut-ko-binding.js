@@ -53,11 +53,11 @@
 			read: target,  // always return the original observables value
 			write: function(newValue) {
 				var current = target(),
-				
+
 				roundingMultiplier = Math.pow(10, precision),
 				newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
 				valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
-	
+
 				// only write if it changed
 				if (valueToWrite !== current) {
 					target(valueToWrite);
@@ -77,12 +77,58 @@
 		return result;
 	};
 
+	// http://stackoverflow.com/questions/12856112/using-knockout-js-with-jquery-ui-sliders
+	ko.bindingHandlers.uiSlider = {
+		init: function (element, valueAccessor, allBindingsAccessor) {
+			var options = allBindingsAccessor().sliderOptions || {},
+				$element = $aut(element);
+
+			$element.slider(options);
+			ko.utils.registerEventHandler(element, 'slidechange', function (event, ui) {
+				var observable = valueAccessor();
+
+				if (options.range) {
+					valueAccessor()[0](ui.values[0]);
+					valueAccessor()[1](ui.values[1]);
+				} else {
+					observable()[0](ui.value);
+				}
+			});
+
+			ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+				$element.slider('destroy');
+			});
+
+			ko.utils.registerEventHandler(element, 'slide', function (event, ui) {
+				var observable = valueAccessor();
+
+				if (options.range) {
+					valueAccessor()[0](ui.values[0]);
+					valueAccessor()[1](ui.values[1]);
+				} else {
+					observable()[0](ui.value);
+				}
+			});
+		},
+		update: function (element, valueAccessor, allBindingsAccessor) {
+			var value = ko.utils.unwrapObservable(valueAccessor()),
+				$element = $aut(element);
+
+			if (isNaN(value)) {
+				value = 0;
+			}
+
+			$element.slider('value', value);
+			$element.slider('option', allBindingsAccessor().sliderOptions);
+		}
+	};
+
 	// http://jsfiddle.net/7bRVH/214/
 	ko.bindingHandlers.uiAutocomplete = {
 		init: function (element, valueAccessor) {
 			var options = valueAccessor() || {},
 				$element = $aut(element);
- 
+
 			$element.autocomplete(options);
 
 			//handle disposal (if KO removes by the template binding)
@@ -95,7 +141,7 @@
 			$aut(element).autocomplete('option', 'source', options.source);
 		}
 	};
-	
+
 	ko.bindingHandlers.uiSortable = {
 		init: function(element, valueAccessor) {
 			var options = valueAccessor() || {},
@@ -105,15 +151,15 @@
 
 			$element.sortable(options);
 			$element.disableSelection();
-			
+
 			if (typeof $refresh !== 'undefined') {
 				$refresh.focus(function() {
 					$element.sortable('refresh');
 				});
 			}
-			
+
 			if (typeof update !== 'undefined') {
-					$element.on('sortupdate', update);
+				$element.on('sortupdate', update);
 			}
 
 			//handle disposal (if KO removes by the template binding)
@@ -132,29 +178,42 @@
 			var options = valueAccessor() || {},
 				$refresh = $aut('#' + options.refresh),
 				$element = $aut(element);
-    
-			$element.accordion(options);
-			
+
+			if (typeof options.sortable !== 'undefined') {
+				$element.accordion(options).sortable(options.sortable);
+			} else {
+				$element.accordion(options);
+			}
+
 			if (typeof $refresh !== 'undefined') {
 				$refresh.focus(function() {
-					$element.accordion('refresh');
+					if (typeof $element !== 'undefined') {
+						$element.accordion('refresh');
+					}
 				});
 			}
-			
+
 			//handle disposal (if KO removes by the template binding)
 			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 				$element.accordion('destroy');
 			});
 		},
 		update: function(element, valueAccessor) {
-			var options = valueAccessor() || {};
-			$aut(element).accordion('destroy').accordion(options);
+			var options = valueAccessor() || {},
+				$element = $aut(element);
+
+			if (typeof options.sortable !== 'undefined') {
+				$element.accordion('destroy').accordion(options).sortable(options.sortable);
+			} else {
+				$element.accordion('destroy').accordion(options);
+			}
 		}
 	};
-	
+
 	ko.bindingHandlers.uiDialog = {
 		init: function(element, valueAccessor, allBindings, viewModel) {
-			var local = ko.utils.unwrapObservable(valueAccessor()),
+			var customFunc,
+				local = ko.utils.unwrapObservable(valueAccessor()),
 				options = {},
 				$element = $aut(element);
 
@@ -168,14 +227,15 @@
 			if (typeof options.cancel !== 'undefined') {
 				options.buttons[1].click = options.cancel;
 			}
-			
+
 			$element.dialog(options);
-			
+
+			customFunc = function(value) {
+				$element.dialog(value ? 'open' : 'close');
+			};
+
 			viewModel[local.openDialog].subscribe(customFunc);
-			function customFunc(value) {
-				$element.dialog(value ? 'open' : 'close'); 
-			}
-			
+
 			//handle disposal (if KO removes by the template binding)
 			ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 				$element.dialog('destroy');
@@ -201,7 +261,7 @@
 					$aut(this).dialog('close');
 				}
 			}]
-		},
+		}
 	};
 
 	//custom binding handler to add image to a label
@@ -210,10 +270,10 @@
 			var array,
 				len,
 				options = valueAccessor() || {};
-			
+
 			// add text
 			$aut(element).text(options.text);
-			
+
 			// add a simgle image if img is provided
 			// add multiple images if imgs is provided
 			if (options.img) {
@@ -221,7 +281,7 @@
 			} else if (options.imgs) {
 				array = options.imgs.split(';');
 				len = array.length;
-				
+
 				while (len--) {
 					$aut(element).prepend('<img class="gcaut-img-lbl" src="' + array[len] + '"></img>');
 				}

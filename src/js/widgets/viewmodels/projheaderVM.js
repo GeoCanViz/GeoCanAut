@@ -99,7 +99,7 @@
 						reader.readAsText(file);
 					}
 				};
-				
+
 				loadFile = function() {
 					return function(e) {
 						var config;
@@ -112,7 +112,7 @@
 						}
 					};
 				};
-				
+
 				_self.newMap = function() {
 					// read the file then launch the process
 					_self.readConfig(pathTemplate);
@@ -123,7 +123,7 @@
 					var id = parseInt(_self.mapsIDValue().split(' ')[1], 10) - 1,
 						item = _self.maps.splice(id, 1),
 						maps = vm.maps;
-					
+
 					_self.mapsRestore.push(item[0]);
 
 					// reset index and focus
@@ -139,7 +139,7 @@
 					while (len--) {
 						_self.maps.push(_self.mapsRestore.shift());
 					}
-					
+
 					// reset index and set focus
 					_self.resetIndex();
 					setFocus(maps[maps.length - 1].map.focusMapHeight);
@@ -222,14 +222,14 @@
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 
 					setFocus(vm.map.focusMapHeight);
-					
+
 					// push the vm to array, update the dropdown list and select the new item
 					_self.maps.push(vm);
 					_self.mapsID.push(mapVal);
 					_self.mapsIDValue(mapVal);
 					_self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
 					console.log(_self.txtConfig + url);
-					
+
 					// set vm object in custom function to be access by other view model
 					gcautFunc.setVM(vm);
 				};
@@ -237,19 +237,19 @@
 				setFocus = function(elem) {
 					// select map tab to be active (will refresh the accordions controls)
 					// use $ instead of $aut because they use jQueryUI dependency
-					$('#gcauttabs').tabs('option', 'active', 0);
-					$('#gcautmaptabs').tabs('option', 'active', 0);
-					
+					$aut('#gcauttabs').tabs('option', 'active', 0);
+					$aut('#gcautmaptabs').tabs('option', 'active', 0);
+
 					// make sure the resolution accordion is close. if not in a timeout it won't
 					// work properly
-					setTimeout( function() { $('#gcaut-lods').accordion('option', 'active', false); }, 0);
-					
+					setTimeout( function() { $aut('#gcaut-lods').accordion('option', 'active', false); }, 0);
+
 					// we force to select the map height because even if we set the value in the viewmodel
 					// it is not focus on the first map.
 					// we set it in a timeout, if not, it will not work
 					setTimeout(function() { elem(true); }, 0);
 				};
-				
+
 				/*
 				* this function is fired when map dropdown list value changed
 				*/
@@ -270,7 +270,7 @@
 						// set vm object in custom function to be access by other view model and set focus
 						gcautFunc.setVM(vm);
 						setFocus(vm.map.focusMapHeight);
-			
+
 						// show or hide tabs
 						if (_self.mapsID().length === 0) {
 							$tabs.tabs('option', { collapsible: true, active: false, disabled: true });

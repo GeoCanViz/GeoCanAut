@@ -63,7 +63,7 @@
 			} else if (type === 'feature') {
 				layer = new esriFL(url, {
                     mode: esriFL.MODE_ONDEMAND,
-                    outFields: ["*"]
+                    outFields: ['*']
 				});
 			}
 

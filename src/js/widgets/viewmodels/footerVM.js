@@ -30,7 +30,7 @@
 
 				// images path
 				_self.imgArrow = pathArrow;
-				
+
 				// label
 				_self.lblEnbArrow = i18n.getDict('%footer-arrow');
 				_self.lblArrowSR = i18n.getDict('%footer-arrowSR');
@@ -42,7 +42,7 @@
 				_self.isArrow = ko.observable(arrow.enable);
 				_self.arrowSR = srType;
 				_self.selectArrowSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, arrow.inwkid)]);
-	
+
 				// mouse coordinates
 				_self.isMouse = ko.observable(mouse.enable);
 				_self.mouseSR = srType;
@@ -63,12 +63,12 @@
 				_self.updateSR = function(value) {
 					_self.selectArrowSR(srType[gcautFunc.getSrTypeIndex(srType, value.id)]);
 				};
-				
+
 				_self.write = function() {
 					var value,
 						// get value from map viewmodel
 						url = gcautFunc.getElemValueVM('map', 'urlGeomServer');
-					
+
 					value = '"footer": {' +
 								'"urlgeomserv": "' + url + '",' +
 								'"northarrow": {' +
@@ -92,7 +92,7 @@
 				while (lenControls--) {
 					controls[lenControls].value.subscribe(_self[controls[lenControls].func], _self);
 				}
-				
+
 				_self.init();
 			};
 

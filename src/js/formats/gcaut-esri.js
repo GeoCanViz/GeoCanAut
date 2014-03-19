@@ -45,7 +45,7 @@
 				// knockout checkbox and label binding
 				layer.isChecked = ko.observable(false);
 				layer.isUse = ko.observable(false);
-				
+
 				// get index of the next group
 				if (layer.servLayers.length > 0) {
 					index = getIndex(layer.servLayers, 0);
@@ -71,13 +71,13 @@
 				if (typeof sender.tileInfo !== 'undefined') {
 					lods = sender.tileInfo.lods;
 					lenlods = lods.length;
-	
+
 					while (lenlods--) {
 						lods[lenlods].isChecked = ko.observable(true);
 					}
 					_self.lods(lods);
 				}
-	
+
 				_self.maxExtentMinX(fullExt.xmin);
 				_self.maxExtentMinY(fullExt.ymin);
 				_self.maxExtentMaxX(fullExt.xmax);
@@ -161,7 +161,7 @@
 
 			return id;
 		};
-		
+
 		return {
 			readInfo: readInfo
 		};
