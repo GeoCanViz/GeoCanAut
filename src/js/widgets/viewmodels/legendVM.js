@@ -107,6 +107,7 @@
 					item.fullid = ko.observable(item.fullid);
 					item.last = ko.observable(item.last);
 					item.id = ko.observable(item.id);
+					item.displayfields = ko.observable(item.displayfields),
 					item.label.value = ko.observable(label.value);
 					item.label.alttext = ko.observable(label.alttext);
 					item.metadata.enable = ko.observable(metadata.enable);
@@ -114,8 +115,8 @@
 					item.metadata.alttext = ko.observable(metadata.alttext);
 					item.opacity.enable = ko.observable(opacity.enable);
 					item.opacity.canenable = ko.observable(_self.opacityValue);
-					item.opacity.min = ko.observable(opacity.min).extend({ numeric: 0 });
-					item.opacity.max = ko.observable(opacity.max).extend({ numeric: 0 });
+					item.opacity.min = ko.observable(opacity.min).extend({ numeric: 2 });
+					item.opacity.max = ko.observable(opacity.max).extend({ numeric: 2 });
 					item.visibility.enable = ko.observable(visibility.enable);
 					item.visibility.initstate = ko.observable(visibility.initstate);
 					item.visibility.type = ko.observable(_self.visibilityType[visibility.type - 1]);
@@ -174,11 +175,11 @@
 
 				_self.bind = function() {
 					// refresh ui and bind the update event
-					setTimeout(function() { 
+					setTimeout(function() {
 						$aut('.legendSort').accordion('refresh');
 						$aut('.legendSort').on('sortupdate', gcautFunc.debounce(function() { _self.removeEmpty(); }, 1000, false));
 					}, 1000);
-					
+
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
@@ -251,6 +252,7 @@
 								fullid: ko.observable(fullid),
 								last: ko.observable(last),
 								id: ko.observable(value),
+								displayfields: ko.observable(false),
 								label: {
 									value: ko.observable(value),
 									alttext: ko.observable(value)
@@ -263,8 +265,8 @@
 								opacity: {
 									enable: ko.observable(false),
 									canenable: ko.observable(true),
-									min: ko.observable(0).extend({ numeric: 0 }),
-									max: ko.observable(100).extend({ numeric: 0 })
+									min: ko.observable(0).extend({ numeric: 2 }),
+									max: ko.observable(100).extend({ numeric: 2 })
 								},
 								visibility: {
 									enable: ko.observable(true),
@@ -307,27 +309,27 @@
 					var father, son,
 						len = parent.length - 1,
 						i = 0;
-					
+
 					if (len === 0) {
 						parent[0].legendLayers.remove(item);
 					} else {
 						parent[0].items.remove(item);
-						
+
 						// remove parent if no child exist
 						while (i < len) {
 							son = parent[i];
-							
+
 							if (i + 1 === len) {
 								father = parent[i + 1].legendLayers;
 							} else {
 								father = parent[i + 1].items;
 							}
-							
+
 							_self.existChild(son, father);
 							i++;
-						}	
-					}	
-					
+						}
+					}
+
 					// refresh ui
 					$aut('.legendSort').accordion('refresh');
 				};
@@ -337,11 +339,11 @@
 						parent.remove(item);
 					}
 				};
-				
+
 				_self.removeEmpty = function() {
-					var a = 'l';
+
 				};
-				
+
 				_self.write = function() {
 					var value,
 						layersItems;

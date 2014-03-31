@@ -390,7 +390,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: isPrint"></select>
 				</div>
 				<div style="clear: both"></div>
-				<input type="checkbox" id="cb_inset" data-bind="checked: isInset">
+				<input type="checkbox" id="cb_inset" data-bind="checked: isInset, enable: false">
 				<label for="cb_inset" class="form-checkbox" data-bind="imgLabel: { text: lblInset, img: imgInset }"></label>
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
@@ -440,7 +440,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
 										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>			
 										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
-											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0, max: 100, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 1 }"></div>
+											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
 											<div class="row">
 												<span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
 												<span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>

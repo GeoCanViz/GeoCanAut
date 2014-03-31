@@ -60,7 +60,7 @@
 				_self.isTools = ko.observable(map.tools);
 
 				// insets
-				_self.isInset = ko.observable(map.inset);
+				_self.isInset = ko.observable(true);
 
 				// full screen
 				_self.isFullscreen = ko.observable(map.fullscreen);
@@ -94,8 +94,7 @@
 					value = '"header": {' +
 								'"title": {' +
 									'"value": "' + _self.mapTitleValue() +'",' +
-									'"alttext": "' + _self.mapAltValue() + '",' +
-									'"justify": "center"' +
+									'"alttext": "' + _self.mapAltValue() + '"' +
 								'},' +
 								'"tools": ' + _self.isTools() +
 								',"about": {' +
@@ -108,7 +107,6 @@
 									',"type": ' + _self.selectPrint().id +
 								'},' +
 								'"fullscreen": ' + _self.isFullscreen() +
-								',"inset": ' + _self.isInset() +
 							'}';
 
 					return value;

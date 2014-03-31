@@ -43,7 +43,7 @@ var locationPath;
 			setStorage(wms, wmts, cacheRest, dynamicRest);
 
 			// set proxy for esri request (https://github.com/Esri/resource-proxy)
-			esriConfig.defaults.io.proxyUrl = 'http://localhost:8888/php/proxy.php';
+			esriConfig.defaults.io.proxyUrl = 'http://geoappext.nrn.nrcan.gc.ca/php/proxy.ashx';
 			esriConfig.defaults.io.alwaysUseProxy = false;
 
 			// initialize jQueryUI tabs container

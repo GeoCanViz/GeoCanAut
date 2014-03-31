@@ -34,6 +34,9 @@
 			"layers": []
 		}
 	},
+	"insetframe": {
+		"enable": false
+	},
 	"header": {
 		"title": {
 			"value": "",
@@ -49,8 +52,7 @@
 			"enable": false,
 			"type": 1
 		},
-		"fullscreen": false,
-		"inset": false
+		"fullscreen": false
 	},
 	"toolbardraw": {
 		"enable": false,
@@ -111,5 +113,6 @@
 		"datatable": {
 			"direction": "in"
 		}
-	}
+	},
+	"customwidgets": []
 }}

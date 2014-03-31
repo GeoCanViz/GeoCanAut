@@ -167,7 +167,7 @@
 					$aut.generateFile({
 						filename	: id + '.json',
 						content		: content,
-						script		: 'http://localhost:8888/php/download.php'
+						script		: 'http://localhost:8888/php/download.php' //TODO: put ext server when php installed
 					});
 
 					setTimeout(function() { $aut('#gcaut-download').remove(); }, 3000, false);
