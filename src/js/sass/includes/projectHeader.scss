@@ -1,0 +1,37 @@
+@import "gcaut-mixin";
+
+.gcaut-projheader {
+	@include app-head-foot;
+	@include app-gradiant;
+	height: (11.2 * $rembase) + rem;
+
+	.gcaut-projheader-title {
+		display: inline-block;
+		height: (4 * $rembase) + rem;
+
+	.gcaut-projheader-titlelabel {
+			margin-top: (0.5 * $rembase) + rem;
+			line-height: (3.5 * $rembase) + rem;
+			@include app-text(1.6, bold);
+		}
+
+		.gcaut-projheader-newlabel {
+			margin-top: (0.5 * $rembase) + rem;
+			line-height: (3.5 * $rembase) + rem;
+			@include app-text(1.2);
+		}
+	}
+
+	.gcaut-projheader-new {
+		float: left;
+		clear: both;
+	}
+
+	.gcaut-projheader-select {
+		clear: both;
+		width: (37 * $rembase) + rem;
+		background-color: $app-strong; // old browsers
+		@include background-image(linear-gradient(top,  #4297d7 0%, $app-light 100%));
+		@include content-border-radius;
+	}
+}
