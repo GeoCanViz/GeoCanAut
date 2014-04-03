@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!-- Web Experience Toolkit (WET) / Boîte à outils de l'expérience Web (BOEW)
+wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licence-fr.html -->
+<!-- DataAjaxFragmentStart -->
+<li><section><h3><a href="http://wet-boew.github.io/wet-boew/index-fr.html">Projet GCAut</a></h3><div class="mb-sm">
+<div class="span-2">
+<ul>
+<li><a href="https://github.com/geocanviz/geocanaut/">Page principale du projet</a></li>
+<li><a href="http://geocanviz.github.io/GeoCanAut/demos/geocanaut-fra.html">Exemples pratiques</a></li>
+</ul>
+</div>
+<div class="clear"></div>
+<div class="mb-main-link"><a href="http://geocanviz.github.io/GeoCanAut/demos/geocanaut-fra.html">Projet GCAut - Page principale</a></div>
+</div></section></li>
+<div class="clear"></div>
+</div></section></li>
+<!-- DataAjaxFragmentEnd -->
+</html>

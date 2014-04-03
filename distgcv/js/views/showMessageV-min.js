@@ -1,1 +1,0 @@
-(function(){define(["gcaut-showMessageVM"],function(b){var a;a=function(d){var c="";c+='<div id="divShowMessage" class="gcvMargLeft10 gcvMargTop10">';c+='<span id="spnMsgText">'+d+"</span>";c+="</div>";b.initialize(c)};return{initialize:a}})}).call(this);

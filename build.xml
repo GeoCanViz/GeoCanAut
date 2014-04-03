@@ -12,13 +12,13 @@
 		<property file="build.user.properties"/>
 		<property file="build.properties"/>
     </target>
-	
+
 	<!-- classpath -->
 	<target name="classpath-lib" depends="properties">
 		<!-- ant contribs task definition  -->
 		<path id="antcontrib.classpath">
 			<pathelement location="${antcontribs.jar}"/>
-		</path> 
+		</path>
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath refid="antcontrib.classpath"/>
 		</taskdef>
@@ -31,7 +31,7 @@
 		<taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
 			<classpath refid="yui.classpath"/>
 		</taskdef>
-		
+
 		<!-- JSHint Ant task definition -->
 		<path id="jshint.classpath">
 			<pathelement location="${jshint.jar}"/>
@@ -40,7 +40,7 @@
 			<classpath refid="jshint.classpath"/>
 		</taskdef>
 	</target>
-	
+
 	<!-- create distribution folder -->
 	<target name="create-dist">
 		<echo level="info" message="Creating dist folder..."/>
@@ -85,7 +85,7 @@
 			</and>
 		</condition>
 	</target>
-	
+
 	<!-- Compile all of the SCSS files into their CSS counterparts "ant compile.sass" -->
 	<target name="compile-sass">
 		<echo level="info" message="---Converting CSS SCSS Files into CSS---"/>
@@ -105,17 +105,17 @@
 			<arg value="false"/>
 		</java>
 	</target>
-	
+
 	<!-- jshint -->
 	<target name="call-jshint">
 		<echo level="info" message="---Checking syntax with JSHint---"/>
-		<jshint dir="${src.dir}" fail="${jshint.failbuild}" globalsFile="${jshint.globals.file}" options="newcap: false, unused: true">
+		<jshint dir="${src.dir}" fail="${jshint.failbuild}" options="maxerr=5000,bitwise=true,camelcase=true,curly=true,eqeqeq=true,forin=true,immed=true,latedef=true,newcap=false,noarg=true,noempty=true,nonew=true,plusplus=false,quotmark=true,undef=true,unused=true,strict=true,trailing=true" globalsFile="${jshint.globals.file}">
 			<report type="xml" destfile="${src.dir}/jshint.out.xml"/>
 			<include name="**/*.js"/>
 			<exclude name="**/*.min.js"/>
 		</jshint>
 	</target>
-    
+
     <!-- consolidate js NOT USE BECAUSE AMD IS EASIERS IN DIFFERENT FILES-->
 	<!-- <target name="consolidate-js" depends="properties, create-dist, jshint">
 		<echo level="info" message="...Consolidating js..."/>
@@ -132,7 +132,7 @@
 		<pathconvert pathsep=";" property="files" refid="srcfiles"/>
 		<echo>${files}</echo>
 	</target> -->
-	
+
 	 <!-- consolidate css -->
 	<target name="consolidate-css">
 		<echo level="info" message="---Consolidating css---"/>
@@ -147,7 +147,7 @@
 		<echo>${files}</echo>
 		<delete dir="${src.dir}/js/${sass.css.dir}"/>
 	</target>
-	
+
     <!-- minify -->
     <target name="minify">
     	<echo level="info" message="---Minifying---"/>
@@ -164,6 +164,16 @@
 				<include name="**/*.js" />
 			</fileset>
 		</copy>
+		<copy todir="${dist.dir}/js/custom">
+			<fileset dir="${src.dir}/js/custom">
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/js/formats">
+			<fileset dir="${src.dir}/js/formats">
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
 		<yui-compressor warn="false" munge="true" preserveAllSemiColons="false" fromDir="${dist.dir}" toDir="${dist.dir}" charset="utf-8">
 			<include name="**/*.css"/>
 			<include name="**/*.js"/>
@@ -177,7 +187,7 @@
 			</fileset>
 		</delete>
 	</target>
-	
+
 	<!-- create language files -->
 	<target name="create-i18n">
 		<echo level="info" message="---Creating i18n language files---"/>
@@ -187,12 +197,18 @@
             <arg line="-jar ${rhino.jar} -opt -1 ${build.dir}/createi18n.js" />
         </exec>
     </target>
-    
+
     <!-- copy images -->
     <target name="copy-images">
     	<echo level="info" message="---Copying images---"/>
 		<copy todir="${dist.dir}/images">
-			<fileset dir="${src.dir}/js/images/gscaut"/>
+			<fileset dir="${src.dir}/js/images/projheader"/>
+			<fileset dir="${src.dir}/js/images/map"/>
+			<fileset dir="${src.dir}/js/images/head"/>
+			<fileset dir="${src.dir}/js/images/foot"/>
+			<fileset dir="${src.dir}/js/images/legend"/>
+			<fileset dir="${src.dir}/js/images/draw"/>
+			<fileset dir="${src.dir}/js/images/nav"/>
 			<fileset dir="${src.dir}/js/images/jqueryui"/>
 		</copy>
 	</target>
@@ -212,7 +228,7 @@
 			<fileset dir="${src.dir}/js/templates"/>
 		</copy>
 	</target>
-	
+
 	<!-- update header -->
 	<target name="update-headers">
 		<echo level="info" message="---Updating headers---"/>
@@ -222,12 +238,12 @@
 			<replacefilter token="@gcaut.version@" value="${gcaut-build.version} Build: ${gcaut-build.timestamp}"/>
 		</replace>
 	</target>
-	
+
 	<!-- finish -->
 	<target name="finish">
 		<echo level="info" message="---Build finish---"/>
 	</target>
-    
+
 	<!-- build -->
 	<target name="build" depends="classpath-lib, create-dist, build-jruby, compile-sass, call-jshint, consolidate-css, minify, create-i18n, copy-images, copy-dependencies, update-headers, finish"></target>
 </project>

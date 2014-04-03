@@ -1,0 +1,118 @@
+{
+"gcaut": {
+	"name": "default"
+},
+"gcviz": {
+	"mapframe": {
+		"size": {
+			"height": 0,
+			"width": 0
+		},
+		"map": {
+			"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+			"sr": {
+				"wkid": 4326
+			},
+			"extentmax": {
+			"xmin": 0.0,
+			"ymin": 0.0,
+			"xmax": 0.0,
+			"ymax": 0.0
+			},
+			"extentinit": {
+				"xmin": 0.0,
+				"ymin": 0.0,
+				"xmax": 0.0,
+				"ymax": 0.0
+			},
+			"lods": {
+				"enable": false,
+				"values": []
+			},
+			"link": false,
+			"bases": [],
+			"layers": []
+		}
+	},
+	"insetframe": {
+		"enable": false
+	},
+	"header": {
+		"title": {
+			"value": "",
+			"alttext": ""
+		},
+		"tools": false,
+		"about": {
+			"enable": false,
+			"type": 1,
+			"value": ""
+		},
+		"print": {
+			"enable": false,
+			"type": 1
+		},
+		"fullscreen": false
+	},
+	"toolbardraw": {
+		"enable": false,
+		"expand": false,
+		"drawline": {
+			"enable": false
+		},
+		"drawtext": {
+			"enable": false
+		},
+		"measure": {
+			"enable": false,
+			"type": 3,
+			"unit": 1
+		},
+		"importexport": {
+			"enable": false,
+			"format": 1
+		}
+	},
+	"toolbarnav": {
+		"enable": false,
+		"expand": false,
+		"zoom": false,
+		"urlgeomserv": "",
+		"geolocation": {
+			"enable": false,
+			"type": 2
+		},
+		"scalebar": {
+			"enable": false,
+			"unit": 1
+		},
+		"scaledisplay": {
+			"enable": false,
+			"format": 1
+		},
+		"overview": {
+			"enable": false,
+			"url": ""
+		}
+	},
+	"toolbarlegend": {
+		"enable": false,
+		"expand": false,		
+		"items": []
+	},
+	"footer": {
+		"urlgeomserv": "",
+		"northarrow": {
+			"enable": false,
+			"inwkid": 4326
+		},
+		"mousecoords": {
+			"enable": false,
+			"outwkid": 4326
+		},
+		"datatable": {
+			"direction": "in"
+		}
+	},
+	"customwidgets": []
+}}
