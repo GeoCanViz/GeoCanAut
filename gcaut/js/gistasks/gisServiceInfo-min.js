@@ -1,0 +1,1 @@
+(function(){define(["jquery-private","gcaut-i18n","dojo/request","esri/request"],function(b,c,a,d){var e;e=function(h,j,g){var i=d({url:h,content:{f:"json"},handleAs:"json",callbackParamName:"callback"});i.then(j,g);var f=d({url:h+"?request=GetCapabilities",handleAs:"xml"});f.then(function(k){console.log(k)},function(k){console.log(k)})};return{getResourceInfo:e}})}());
