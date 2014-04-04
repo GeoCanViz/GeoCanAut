@@ -350,6 +350,30 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
 											<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
 										</div>
+										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tabmap-options' }">
+											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster"></h3>
+											<div>
+												<input type="checkbox" id="cb_cluster" data-bind="checked: $data.cluster.enable">
+												<label for="cb_cluster" class="form-checkbox" data-bind="text: $root.lblClusterEnable"></label>
+												<div data-bind="visible: $data.cluster.enable">
+													<label for="cb_clusterdist" data-bind="text: $root.lblClusterDist"></label>
+													<input id="cb_clusterdist" type="text" data-bind="value: $data.cluster.distance"></input>
+													<div style="clear: both"></div>
+													<input type="checkbox" id="cb_clusterlabel" data-bind="checked: $data.cluster.label">
+													<label for="cb_clusterlabel" class="form-checkbox" data-bind="text: $root.lblClusterLabel"></label>
+													<div style="clear: both"></div>
+													<input type="checkbox" id="cb_clustersymb" data-bind="checked: $data.cluster.symbol">
+													<label for="cb_clustersymb" class="form-checkbox" data-bind="text: $root.lblClusterSymbol"></label>
+													<div data-bind="visible: $data.cluster.symbol">
+														<label for="cb_clustersize" data-bind="text: $root.lblClusterSize"></label>
+														<input id="cb_clustersize" type="text" data-bind="value: $data.cluster.maxsizeprop"></input>
+														<div style="clear: both"></div>
+														<label for="cb_clusterdata" data-bind="text: $root.lblClusterData"></label>
+														<input id="cb_clusterdata" type="text" data-bind="value: $data.cluster.maxdataprop"></input>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 							</script>
 						</div>
