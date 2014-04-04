@@ -26,15 +26,15 @@
 
 			requestHandle.then(success, error);
 
-			var requestHandleWMS = esriRequest({
-									url: url + '?request=GetCapabilities',
-									handleAs: 'xml'
-								});
-			requestHandleWMS.then(function(response) {
-				console.log(response);
-			}, function(error) {
-				console.log(error);
-			});
+			// var requestHandleWMS = esriRequest({
+									// url: url + '?request=GetCapabilities',
+									// handleAs: 'xml'
+								// });
+			// requestHandleWMS.then(function(response) {
+				// console.log(response);
+			// }, function(error) {
+				// console.log(error);
+			// });
 		};
 
 		return {

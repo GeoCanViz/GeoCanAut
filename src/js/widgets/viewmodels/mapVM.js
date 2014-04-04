@@ -89,6 +89,13 @@
 				_self.lblScale = i18n.getDict('%map-scale');
 				_self.lblScaleMin = i18n.getDict('%minimum');
 				_self.lblScaleMax = i18n.getDict('%maximum');
+				_self.lblCluster = i18n.getDict('%map-lblcluster');
+				_self.lblClusterEnable = i18n.getDict('%map-lblclusterenable');
+				_self.lblClusterDist = i18n.getDict('%map-lblclusterdist');
+				_self.lblClusterLabel = i18n.getDict('%map-lblclusterlabel');
+				_self.lblClusterSymbol = i18n.getDict('%map-lblclustersymbol');
+				_self.lblClusterSize = i18n.getDict('%map-lblclustersize');
+				_self.lblClusterData = i18n.getDict('%map-lblclusterdata');
 
 				// text
 				_self.txtLayerErr = i18n.getDict('%map-layererror');
@@ -172,6 +179,24 @@
 					});
 				};
 
+				// functions to create observable on layers
+				ko.utils.arrayForEach(_self.layers(), function(item) {
+					var scale = item.scale,
+						cluster= item.cluster;
+						
+					// scale
+					scale.min = ko.observable(scale.min).extend({ numeric: 0 });
+					scale.max = ko.observable(scale.max).extend({ numeric: 0 });
+					
+					// cluster
+					cluster.enable = ko.observable(cluster.enable);
+					cluster.distance = ko.observable(cluster.distance).extend({ numeric: 0 });
+					cluster.label = ko.observable(cluster.label);
+					cluster.symbol = ko.observable(cluster.symbol);
+					cluster.maxsizeprop = ko.observable(cluster.maxsizeprop).extend({ numeric: 0 });
+					cluster.maxdataprop = ko.observable(cluster.maxdataprop).extend({ numeric: 0 });
+				});
+				
 				// clean the view model
 				clean(ko, elem);
 
@@ -203,7 +228,6 @@
 				_self.updateLayers = function(elem, list) {
 					var layer,
 						servLayers,
-						scale,
 						layers = elem,
 						len = layers.length;
 
@@ -214,13 +238,12 @@
 
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
-									scale = layer.scale;
 									_self.layers.push({ id: layer.fullname,
 														type: layer.type,
 														category: layer.category,
 														url: layer.url,
-														scale: { min:scale.min,
-																max: scale.max } });
+														scale: layer.scale,
+														cluster: layer.cluster });
 								}
 							} else {
 								_self.updateLayers(servLayers, list);

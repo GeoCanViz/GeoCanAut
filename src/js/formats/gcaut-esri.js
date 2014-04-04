@@ -36,9 +36,16 @@
 				layer.fullname = itemName;
 				layer.url = url + '/' + itemId;
 				layer.id = itemId;
-				layer.scale = { min: item.minScale, max: item.maxScale};
+				layer.scale = { min: ko.observable(item.minScale).extend({ numeric: 0 }),
+								max: ko.observable(item.maxScale).extend({ numeric: 0 }) };
 				layer.isChecked = ko.observable(false);
 				layer.isUse = ko.observable(false);
+				layer.cluster = { enable: ko.observable(false),
+								distance: ko.observable(50).extend({ numeric: 0 }),
+								label: ko.observable(false),
+								symbol: ko.observable(false),
+								maxsizeprop: ko.observable(50).extend({ numeric: 0 }),
+								maxdataprop: ko.observable(1000).extend({ numeric: 0 }) };
 				layer.category = typeObject;
 				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, typeObject);
 
