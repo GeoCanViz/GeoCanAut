@@ -15,26 +15,26 @@
 
 		var getResourceInfo;
 
-		getResourceInfo = function(url, success, error) {
+		getResourceInfo = function(url, layerType, success, error) {
 			//http://resources.esri.com/help/9.3/arcgisserver/apis/javascript/ve/help/Getting%20Started/DiscoverMapServices.html
-			var requestHandle = esriRequest({
-									url: url,
-									content: { f: 'json' },
-									handleAs: 'json',
-									callbackParamName: 'callback'
-								});
-
+			var requestHandle,
+				options;
+				
+			if (layerType <= 2) {
+				options = { url: url + '?/request=GetCapabilities',
+							handleAs: 'xml'
+					};
+				
+			} else if (layerType <= 4) {
+				options = { url: url,
+							content: { f: 'json' },
+							handleAs: 'json',
+							callbackParamName: 'callback'
+					};
+			}
+			
+			requestHandle = esriRequest(options);				
 			requestHandle.then(success, error);
-
-			// var requestHandleWMS = esriRequest({
-									// url: url + '?request=GetCapabilities',
-									// handleAs: 'xml'
-								// });
-			// requestHandleWMS.then(function(response) {
-				// console.log(response);
-			// }, function(error) {
-				// console.log(error);
-			// });
 		};
 
 		return {

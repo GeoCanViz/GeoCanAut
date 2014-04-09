@@ -1,0 +1,6 @@
+@import "gcaut-mixin";
+
+.ui-state-highlight {
+	height: (2 * $rembase) + rem;
+	line-height: (1.5 * $rembase) + rem;
+}

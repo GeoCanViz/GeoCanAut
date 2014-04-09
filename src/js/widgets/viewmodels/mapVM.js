@@ -14,9 +14,10 @@
 			'gcaut-i18n',
 			'gcaut-func',
 			'gcaut-esri',
+			'gcaut-wms',
 			'gcaut-gismap',
 			'gcaut-gisservinfo'
-	], function($aut, ko, jqUI, i18n, gcautFunc, esriData, gisM, gisServInfo) {
+	], function($aut, ko, jqUI, i18n, gcautFunc, esriData, wmsData, gisM, gisServInfo) {
 		var initialize,
 			clean,
 			checkParentlayers,
@@ -250,9 +251,10 @@
 							}
 						}
 					} else {
-						_self.bases.push({ id: _self.baseURL(),
+						layer = layers[0];
+						_self.bases.push({ id: layer.fullname,
 											type: _self.selectBaseLayerType().id,
-											category: 'base',
+											category: layer.category,
 											url: _self.baseURL() });
 					}
 				};
@@ -439,7 +441,7 @@
 
 					if (isValid) {
 						// get service info and validateURL as callback function
-						gisServInfo.getResourceInfo(url, _self.readServInfo, function() { _self.errortext(_self.txtLayerErr); });
+						gisServInfo.getResourceInfo(url, layerType, _self.readServInfo, function() { _self.errortext(_self.txtLayerErr); });
 
 						// remove duplicate in service array and copy to localstorage
 						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
@@ -469,14 +471,18 @@
 						url = _self.layerURL();
 					}
 
-					if (sender.hasOwnProperty('layers')) {
-						esriData.readInfo(sender, _self, url, type);
-
+					if (sender.hasOwnProperty('error')) {
+						_self.errortext(_self.txtLayerErr);
+					} else {
+						if (sender.hasOwnProperty('layers')) {
+							esriData.readInfo(sender, _self, url, type);
+						} else {
+							
+						}
+						
 						// show window to select layers
 						_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');
-					} else if (sender.hasOwnProperty('error')) {
-						_self.errortext(_self.txtLayerErr);
 					}
 				};
 

@@ -47,6 +47,8 @@
 				_self.lblCustomImage = i18n.getDict('%legend-customimage');
 				_self.lblCustomImageUrl = i18n.getDict('%legend-customimageurl');
 				_self.lblCustomImageText = i18n.getDict('%legend-customimagetext');
+				_self.lblSectBases = i18n.getDict('%legend-sectbases');
+				_self.lblSectLayers = i18n.getDict('%legend-sectlayers');
 
 				// tooltip
 				_self.tpRefresh = i18n.getDict('%projheader-tpnewmap');
@@ -61,9 +63,11 @@
 				// global opacity value to update children
 				_self.opacityValue = false;
 
-				// legend layers
-				_self.legendHolder = ko.observableArray(map.items);
+				// legend layers and bases
+				_self.holderLayers = map.items;
 				_self.legendLayers = ko.observableArray(map.items);
+				_self.holderBases = map.basemaps;
+				_self.legendBases = ko.observableArray(map.basemaps);
 
 				// functions to create observable from the legend items
 				_self.updateInitState = function(value, element) {
@@ -165,6 +169,12 @@
 					item = createItem(item);
 					_self.createArray(item);
 				});
+				
+				ko.utils.arrayForEach(_self.legendBases(), function(item) {
+					_self.opacityValue = true;
+					item = createItem(item);
+					_self.createArray(item);
+				});
 
 				// clean the view model
 				clean(ko, elem);
@@ -176,8 +186,16 @@
 				_self.bind = function() {
 					// refresh ui and bind the update event
 					setTimeout(function() {
-						$aut('.legendSort').accordion('refresh');
-						$aut('.legendSort').on('sortupdate', gcautFunc.debounce(function() { _self.removeEmpty(); }, 1000, false));
+						// workaround to solve holderBases array to be empty when we delete element in bases. If reset it run once
+						// before, only legendBases get empty (not holderBases)
+						var bases = _self.resetArray(_self.holderBases);
+						bases()[0] = _self.holderBases[0];
+						_self.legendBases(bases());
+						
+						$aut('.legendSortBases').accordion('refresh');
+						$aut('.legendSortBases').on('sortupdate', gcautFunc.debounce(function() { _self.removeEmpty(); }, 1000, false));
+						$aut('.legendSortLayers').accordion('refresh');
+						$aut('.legendSortLayers').on('sortupdate', gcautFunc.debounce(function() { _self.removeEmpty(); }, 1000, false));
 					}, 1000);
 
 					clean(ko, elem);
@@ -185,8 +203,21 @@
 				};
 
 				_self.reset = function() {
+					var bases = _self.resetArray(_self.holderBases),
+						layers = _self.resetArray(_self.holderLayers);
+					
+					// reset bases and layers
+					_self.legendBases(bases());
+					_self.legendLayers(layers());
+
+					// refresh ui
+					$aut('.legendSortBases').accordion('refresh');
+					$aut('.legendSortLayers').accordion('refresh');
+				};
+
+				_self.resetArray = function(list) {
 					var arr, id, fullid, lensplit, last,
-						value = _self.legendHolder(),
+						value = list,
 						split = [],
 						items = ko.observableArray(),
 						len = value.length - 1,
@@ -217,14 +248,16 @@
 
 						i++;
 					}
-
-					// refresh ui
-					_self.legendLayers(items());
-					$aut('.legendSort').accordion('refresh');
+					
+					return items;
 				};
-
+				
 				_self.updateLayers = function(value) {
-					_self.legendHolder(value);
+					_self.holderLayers = value;
+				};
+				
+				_self.updateBases = function(value) {
+					_self.holderBases = value;
 				};
 
 				_self.unique = function(items, value, fullid, last) {
@@ -304,14 +337,29 @@
 					return item;
 				};
 
+				// when the remove layer icon is click, remove the base from the array
+				_self.removeBase = function(parent, item) {
+					_self.removeItem(parent, _self.legendBases, item);
+
+					// refresh ui
+					$aut('.legendSortBases').accordion('refresh');
+				};
+
 				// when the remove layer icon is click, remove the layer from the array
 				_self.removeLayer = function(parent, item) {
+					_self.removeItem(parent, _self.legendLayers, item);
+
+					// refresh ui
+					$aut('.legendSortLayers').accordion('refresh');
+				};
+				
+				_self.removeItem = function(parent, array, item) {
 					var father, son,
 						len = parent.length - 1,
 						i = 0;
 
 					if (len === 0) {
-						parent[0].legendLayers.remove(item);
+						array.remove(item);
 					} else {
 						parent[0].items.remove(item);
 
@@ -320,7 +368,7 @@
 							son = parent[i];
 
 							if (i + 1 === len) {
-								father = parent[i + 1].legendLayers;
+								father = parent[i + 1].array;
 							} else {
 								father = parent[i + 1].items;
 							}
@@ -329,11 +377,8 @@
 							i++;
 						}
 					}
-
-					// refresh ui
-					$aut('.legendSort').accordion('refresh');
 				};
-
+				
 				_self.existChild = function(item, parent) {
 					if (item.items().length === 0) {
 						parent.remove(item);
@@ -341,22 +386,26 @@
 				};
 
 				_self.removeEmpty = function() {
-
+					var a = 'test';
 				};
 
 				_self.write = function() {
 					var value,
+						basesItems,
 						layersItems;
 
 					// remove value from the visibility type list
+					basesItems = JSON.stringify(ko.toJS(_self.legendBases)).replace(/{"id":/g, '').replace(/,"val":"radio"}/g, '').replace(/,"val":"case"}/g, '');
 					layersItems = JSON.stringify(ko.toJS(_self.legendLayers)).replace(/{"id":/g, '').replace(/,"val":"radio"}/g, '').replace(/,"val":"case"}/g, '');
 
 					// remove canenable from opacity because it is an internal value
+					basesItems = basesItems.replace(/,"canenable":false/g, '').replace(/,"canenable":true/g, '');
 					layersItems = layersItems.replace(/,"canenable":false/g, '').replace(/,"canenable":true/g, '');
 
 					value = '"toolbarlegend": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
+								',"basemaps": ' + basesItems +
 								',"items": ' + layersItems +
 							'}';
 

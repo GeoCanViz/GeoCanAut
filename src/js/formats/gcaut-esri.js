@@ -127,6 +127,13 @@
 					sublayer.url = url + '/' + childId;
 					sublayer.id = childId;
 					sublayer.scale = { min: child.minScale, max: child.maxScale};
+					sublayer.cluster = { enable: ko.observable(false),
+								distance: ko.observable(50).extend({ numeric: 0 }),
+								label: ko.observable(false),
+								symbol: ko.observable(false),
+								maxsizeprop: ko.observable(50).extend({ numeric: 0 }),
+								maxdataprop: ko.observable(1000).extend({ numeric: 0 })
+							};
 					sublayer.isChecked = ko.observable(false);
 					sublayer.isUse = ko.observable(false);
 					sublayer.category = typeObject;
