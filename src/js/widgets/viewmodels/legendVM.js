@@ -5,6 +5,7 @@
  *
  * Legend view model widget
  */
+/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -24,8 +25,12 @@
 			var legendViewModel = function(elem, map, controls) {
 				var _self = this,
 					lenControls = controls.length,
-					visibilityType = gcautFunc.getListCB(i18n.getDict('%legend-visibilitytypelist'));
+					visibilityType = gcautFunc.getListCB(i18n.getDict('%legend-visibilitytypelist')),
+					pathOpen = locationPath + 'gcaut/images/legendOpen.png';
 
+				// images path
+				_self.imgOpen = pathOpen;
+				
 				// label
 				_self.lblReset = i18n.getDict('%reset');
 				_self.lblRemove = i18n.getDict('%remove');
@@ -188,14 +193,21 @@
 					setTimeout(function() {
 						// workaround to solve holderBases array to be empty when we delete element in bases. If reset it run once
 						// before, only legendBases get empty (not holderBases)
-						var bases = _self.resetArray(_self.holderBases);
+						var bases = _self.resetArray(_self.holderBases),
+							$accBases = $aut('.legendSortBases'),
+							$accLayers = $aut('.legendSortLayers');
+							
 						bases()[0] = _self.holderBases[0];
 						_self.legendBases(bases());
 						
-						$aut('.legendSortBases').accordion('refresh');
-						$aut('.legendSortBases').on('sortupdate', gcautFunc.debounce(function() { _self.removeEmpty(); }, 1000, false));
-						$aut('.legendSortLayers').accordion('refresh');
-						$aut('.legendSortLayers').on('sortupdate', gcautFunc.debounce(function() { _self.removeEmpty(); }, 1000, false));
+						$accBases.accordion('refresh');
+						$accBases.on('sortupdate', gcautFunc.debounce(function(event) {
+																		_self.sortArray($accBases); 
+																	}, 1000, false));
+						$accLayers.accordion('refresh');
+						$accLayers.on('sortupdate', gcautFunc.debounce(function(event) {
+																		_self.sortArray($aut('.legendSortLayers-lvl1'));
+																	}, 1000, false));
 					}, 1000);
 
 					clean(ko, elem);
@@ -384,11 +396,145 @@
 						parent.remove(item);
 					}
 				};
-
-				_self.removeEmpty = function() {
-					var a = 'test';
+				
+				_self.sortArray = function(item) {
+					var tree,
+						values;
+					
+					// get the tree from html accordion structure
+					tree = _self.getArrayRec($aut(item));
+					
+					// flattened versions of the items
+					// http://jsfiddle.net/rniemeyer/VHEYK/
+					_self.flatItems = ko.computed(function() {
+						var result = [],
+							len;
+						_self.addChildren(_self.legendLayers(), result);
+						
+						// remove child items
+						len = result.length;
+						while (len--) {
+							result[len].items([]);
+						}
+						
+						return result;
+					});
+					
+					// update the legendLayers or legendBases
+					values = _self.updateArrayRec(tree, _self.flatItems(), []);
+				};
+				
+				// to be called recursively to flatten the array
+			    _self.addChildren = function(array, result) {
+			        array = ko.utils.unwrapObservable(array);
+			        if (array) {
+			            for (var i = 0, j = array.length; i < j; i++) {
+			                result.push(array[i]);
+			                _self.addChildren(array[i].items, result);
+			            }        
+			        }
+			    };
+				
+				// get item from flatten array
+				_self.getObject = function(items, label) {
+					var item,
+						len = items.length;
+					
+					while (len--) {
+						item = items[len];
+						if (label === item.label.value()) {
+							return item;
+						}
+					}
+				};
+				
+				// to be called recursively to create the tree of label from html
+				_self.getArrayRec = function(item) {
+					var child,
+						label,
+						labels = [],
+						children = $aut(item).children(),
+						len = children.length;
+					
+					while (len--) {
+						child = $aut(children[len]);
+						label = { label: $aut(child.find('h3').find('span')[1]).text() };
+						label.labels = _self.getArrayRec(child.children('div').children('ul'));
+						labels.push(label);
+					}
+					
+					return labels;
+				};
+				
+				_self.updateArrayRec = function(tree, array, values) {
+					var item,
+						val,
+						label,
+						i = 0,
+						len = tree.length;
+					
+					while (len--) {
+						item = tree[len];
+						values.push(_self.getObject(array, item.label));
+						_self.updateArrayRec2(item.labels, array, values[i].items);
+						i++;
+					}
+					
+					return values;
+				};
+				
+				_self.updateArrayRec2 = function(tree, array, values) {
+					var item,
+						val,
+						label,
+						i = 0,
+						len = tree.length;
+					
+					while (len--) {
+						item = tree[len];
+						
+						if (item.labels.length === 0) {
+							values.push(_self.getObject(array, item.label));
+						} else {
+							values().push(_self.getObject(array, item.label));
+							_self.updateArrayRec2(item.labels, array, values()[i].items);
+						}
+						i++;
+					}
+					
+					return values;
 				};
 
+				_self.openCloseAll = function(data, event) {
+					var id = $aut(event.target.parentElement.parentElement).attr('id'),
+						$node = $aut(event.target.parentElement.parentElement.parentElement),
+						$masterHead = $node.find('#' + id),
+						$masterBody = $node.find('#' + id.replace('header', 'panel')),
+						$head = $masterBody.find('li > h3'),
+						$body = $masterBody.find('li > div');
+					
+
+					if ($masterHead.hasClass('ui-accordion-header-active')) {
+						// close
+						$masterHead.removeClass('ui-accordion-header-active ui-state-active ui-corner-top').addClass('ui-corner-all').attr({ 'aria-selected': 'false', 'tabindex': '-1' });
+						$masterHead.find('.ui-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
+						$masterBody.removeClass('ui-accordion-content-active').attr({ 'aria-expanded': 'false', 'aria-hidden': 'true' }).hide();
+						$head.removeClass('ui-accordion-header-active ui-state-active ui-corner-top').addClass('ui-corner-all').attr({ 'aria-selected': 'false', 'tabindex': '-1' });
+						$head.find('.ui-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
+						$body.removeClass('ui-accordion-content-active').attr({ 'aria-expanded': 'false', 'aria-hidden': 'true' }).hide();
+					} else {
+						// open
+						$masterHead.removeClass('ui-corner-all').addClass('ui-accordion-header-active ui-state-active ui-corner-top').attr({ 'aria-selected': 'true', 'tabindex': '0' });
+						$masterHead.find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
+						$masterBody.addClass('ui-accordion-content-active').attr({ 'aria-expanded': 'true', 'aria-hidden': 'false' }).show();
+						$head.removeClass('ui-corner-all').addClass('ui-accordion-header-active ui-state-active ui-corner-top').attr({ 'aria-selected': 'true', 'tabindex': '0' });
+						$head.find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
+						$body.addClass('ui-accordion-content-active').attr({ 'aria-expanded': 'true', 'aria-hidden': 'false' }).show();
+					}
+					
+					event.preventDefault();
+				};
+				
 				_self.write = function() {
 					var value,
 						basesItems,

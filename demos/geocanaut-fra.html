@@ -493,12 +493,13 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 								</li>
 							</script>
 							<h4><label data-bind="text: lblSectLayers"></label></h4>
-							<ul class="legendSortLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
+							<ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
 							<script type="text/html" id="legendLayers">
 								<li>
 									<h3>
 										<span data-bind="text: $data.label.value"></span>
-										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove"></img></button>
+										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></img></button>
+										<button class="gcaut-button" tabindex="0" data-bind="click: $root.openCloseAll, tooltip: { content: $root.tpRefresh }"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgOpen }"></img></button>
 									</h3>
 									<div>
 										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
