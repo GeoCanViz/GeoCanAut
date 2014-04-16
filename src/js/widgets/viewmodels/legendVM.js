@@ -221,7 +221,7 @@
 					// reset bases and layers
 					_self.legendBases(bases());
 					_self.legendLayers(layers());
-
+					
 					// refresh ui
 					$aut('.legendSortBases').accordion('refresh');
 					$aut('.legendSortLayers').accordion('refresh');
@@ -399,40 +399,50 @@
 				
 				_self.sortArray = function(item) {
 					var tree,
-						values;
+						lenOri, lenFlat,
+						values, data,
+						flat = [];
 					
 					// get the tree from html accordion structure
-					tree = _self.getArrayRec($aut(item));
+					tree = _self.getArrayHTML($aut(item));
 					
 					// flattened versions of the items
-					// http://jsfiddle.net/rniemeyer/VHEYK/
-					_self.flatItems = ko.computed(function() {
-						var result = [],
-							len;
-						_self.addChildren(_self.legendLayers(), result);
-						
-						// remove child items
-						len = result.length;
-						while (len--) {
-							result[len].items([]);
-						}
-						
-						return result;
-					});
+					lenOri = _self.legendLayers().length;
+					
+					while (lenOri--) {
+						flat = _self.addFlatChildren(_self.legendLayers, flat);
+					}
+					
+					// remove child items in flat array
+					lenFlat = flat.length;
+					while (lenFlat--) {
+						flat[lenFlat].items([]);
+					}
 					
 					// update the legendLayers or legendBases
-					values = _self.updateArrayRec(tree, _self.flatItems(), []);
+					values = _self.updateArrayRec(tree, flat, ko.observableArray([]));
+					_self.legendLayers(values());
+					
+					// dirty refresh the array to notify the changes			
+					data = _self.legendLayers().slice(0);
+    				_self.legendLayers([]);
+    				_self.legendLayers(data);
+    				
+    				// refresh ui
+					$aut('.legendSortLayers').accordion('refresh');
 				};
 				
 				// to be called recursively to flatten the array
-			    _self.addChildren = function(array, result) {
+			    _self.addFlatChildren = function(array, result) {
 			        array = ko.utils.unwrapObservable(array);
 			        if (array) {
 			            for (var i = 0, j = array.length; i < j; i++) {
 			                result.push(array[i]);
-			                _self.addChildren(array[i].items, result);
+			                _self.addFlatChildren(array[i].items, result);
 			            }        
 			        }
+			        
+			        return result;
 			    };
 				
 				// get item from flatten array
@@ -449,7 +459,7 @@
 				};
 				
 				// to be called recursively to create the tree of label from html
-				_self.getArrayRec = function(item) {
+				_self.getArrayHTML = function(item) {
 					var child,
 						label,
 						labels = [],
@@ -459,7 +469,7 @@
 					while (len--) {
 						child = $aut(children[len]);
 						label = { label: $aut(child.find('h3').find('span')[1]).text() };
-						label.labels = _self.getArrayRec(child.children('div').children('ul'));
+						label.labels = _self.getArrayHTML(child.children('div').children('ul'));
 						labels.push(label);
 					}
 					
@@ -476,7 +486,7 @@
 					while (len--) {
 						item = tree[len];
 						values.push(_self.getObject(array, item.label));
-						_self.updateArrayRec2(item.labels, array, values[i].items);
+						_self.updateArrayRec2(item.labels, array, values()[i].items);
 						i++;
 					}
 					

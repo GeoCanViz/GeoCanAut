@@ -188,7 +188,7 @@
 			if (typeof $refresh !== 'undefined') {
 				$refresh.focus(function() {
 					if (typeof $element !== 'undefined') {
-						if ($element.hasClass('ui.accordion')) {
+						if ($element.hasClass('ui-accordion')) {
 							$element.accordion('refresh');
 						}
 					}
