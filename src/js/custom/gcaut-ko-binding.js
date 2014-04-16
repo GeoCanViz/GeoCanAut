@@ -188,7 +188,9 @@
 			if (typeof $refresh !== 'undefined') {
 				$refresh.focus(function() {
 					if (typeof $element !== 'undefined') {
-						$element.accordion('refresh');
+						if ($element.hasClass('ui-accordion')) {
+							$element.accordion('refresh');
+						}
 					}
 				});
 			}

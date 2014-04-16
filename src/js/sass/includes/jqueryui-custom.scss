@@ -163,7 +163,7 @@
 	display: block;
 	cursor: pointer;
 	position: relative;
-	margin-top: 2px;
+	margin-top: 8px;
 	padding: .5em .5em .5em .7em;
 	min-height: 0; /* support: IE7 */
 }
@@ -186,6 +186,9 @@
 	padding: 1em 2.2em;
 	border-top: 0;
 	overflow: auto;
+}
+.ui-accordion-content > ul > li {
+	padding-bottom: 8px;
 }
 .ui-autocomplete {
 	position: absolute;

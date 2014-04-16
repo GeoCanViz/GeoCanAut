@@ -217,7 +217,9 @@
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
 					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ value: vm.map.selectMapSR, func: 'updateSR' }]);
-					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend, [{ value: vm.map.layers, func: 'updateLayers' }]);
+					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend,
+													[{ value: vm.map.layers, func: 'updateLayers' },
+													{ value: vm.map.bases, func: 'updateBases' }]);
 					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 

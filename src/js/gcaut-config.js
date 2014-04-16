@@ -195,6 +195,10 @@
 				location: locationPath + 'gcaut/js/formats',
 				main: 'gcaut-esri-min'
 			}, {
+				name: 'gcaut-wms',
+				location: locationPath + 'gcaut/js/formats',
+				main: 'gcaut-wms-min'
+			}, {
 				name: 'gcaut-gismap',
 				location: locationPath + 'gcaut/js/gistasks',
 				main: 'gisMapUtility-min'
