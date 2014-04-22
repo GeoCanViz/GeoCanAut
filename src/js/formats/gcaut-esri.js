@@ -17,6 +17,7 @@
 		readInfo = function(sender, _self, urlObject, typeObject) {
 			var item, itemName, itemId,
 				layer,
+				typeId,
 				layers = [],
 				len = sender.layers.length - 1,
 				index = -1,
@@ -27,6 +28,12 @@
 				lods, lenlods;
 
 			while (index !== len) {
+				if (typeObject === 'base') {
+					typeId = _self.selectBaseLayerType().id;
+				} else {
+					typeId = _self.selectLayerType().id;
+				}
+					
 				// set attribute the get sublayers
 				layer = {};
 				item = sendLayers[index + 1];
@@ -47,7 +54,8 @@
 								maxsizeprop: ko.observable(50).extend({ numeric: 0 }),
 								maxdataprop: ko.observable(1000).extend({ numeric: 0 }) };
 				layer.category = typeObject;
-				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, typeObject);
+				layer.type = typeId;
+				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, typeObject, typeId);
 
 				// knockout checkbox and label binding
 				layer.isChecked = ko.observable(false);
@@ -96,19 +104,12 @@
 			}
 		};
 
-		getSublayer = function(parent, sendLayers, layers, url, fullname, _self, typeObject) {
+		getSublayer = function(parent, sendLayers, layers, url, fullname, _self, typeObject, typeId) {
 			var sublayer = {},
 				subLayerIds,
 				child,
 				childName, childId,
-				len,
-				typeid;
-
-			if (typeObject === 'base') {
-				typeid = _self.selectBaseLayerType().id;
-			} else {
-				typeid = _self.selectLayerType().id;
-			}
+				len;
 
 			// if there is sublayers add them
 			subLayerIds = parent.subLayerIds;
@@ -137,7 +138,7 @@
 					sublayer.isChecked = ko.observable(false);
 					sublayer.isUse = ko.observable(false);
 					sublayer.category = typeObject;
-					sublayer.type = typeid;
+					sublayer.type = typeId;
 					layers.push(sublayer);
 
 					// call the same function to know if there is child within the child sublayers array to add to
@@ -147,7 +148,8 @@
 							url,
 							sublayer.fullname,
 							_self,
-							typeObject);
+							typeObject,
+							typeId);
 				}
 			}
 

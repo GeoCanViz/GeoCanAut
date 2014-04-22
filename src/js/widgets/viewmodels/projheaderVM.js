@@ -158,8 +158,11 @@
 						content += ',';
 					});
 
-					// remove last comma, close brackets
-					content = content.slice(0, - 1);
+					// add inset frame (TODO: remove when insets will be enable)
+					content +=	'"insetframe": {"enable": false},';
+					
+					// add custom widget section and close brackets
+					content += '"customwidgets": []';
 					content += '}}';
 
 					// generate the iframe then call the php. Then remove the iframe

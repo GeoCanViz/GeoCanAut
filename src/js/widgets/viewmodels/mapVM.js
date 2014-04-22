@@ -75,7 +75,8 @@
 				_self.lblLevel = i18n.getDict('%map-level');
 				_self.lblBasemap = i18n.getDict('%map-basemap');
 				_self.lblMapSR = i18n.getDict('%map-spatialref');
-				_self.lblUrlGeomServer = i18n.getDict('%map-urlGeomServer');
+				_self.lblUrlGeomServer = i18n.getDict('%map-urlgeomserver');
+				_self.lblUrlProxy = i18n.getDict('%map-urlproxy');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
 				_self.lblExtentInit = i18n.getDict('%map-extentinit');
 				_self.lblExtentMinX = i18n.getDict('%map-extentminx');
@@ -114,25 +115,32 @@
 				_self.layerURL = ko.observable();
 				_self.availServ = ko.observableArray([]);
 
+				// geometry server and proxy
+				_self.urlGeomServer = ko.observable(map.urlgeomserv);
+				_self.urlProxy = ko.observable(map.urlproxy);
+				
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: 0 });
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: 0 });
 				_self.isLink = ko.observable(map.link);
 
 				// set extent variable (for the dialog box)
-				_self.setExtentMinX = ko.observable();
-				_self.setExtentMinY = ko.observable();
-				_self.setExtentMaxX = ko.observable();
-				_self.setExtentMaxY = ko.observable();
+				_self.setExtentMinX = ko.observable().extend({ numeric: 5 });
+				_self.setExtentMinY = ko.observable().extend({ numeric: 5 });
+				_self.setExtentMaxX = ko.observable().extend({ numeric: 5 });
+				_self.setExtentMaxY = ko.observable().extend({ numeric: 5 });
 
 				// base layer input
 				_self.bases = ko.observableArray();
 				_self.selectBaseLayerType = ko.observable();
 				if (typeof base !== 'undefined') {
-					_self.bases.push({ id: base.id,
+					// set a timeout to fired updatebases in legendVM
+					setTimeout(function() {
+						_self.bases.push({ id: base.id,
 										type: base.type,
 										category: 'base',
 										url: base.url });
+					}, 500);
 
 					_self.selectBaseLayerType(layerType[base.type - 1]);
 				}
@@ -140,16 +148,15 @@
 				_self.srType = srType;
 				_self.isLods = ko.observable(lods.enable);
 				_self.lods = ko.observableArray(lods.values);
-				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.selectMapSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, map.sr.wkid)]);
-				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 10 });
-				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 10 });
-				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 10 });
-				_self.maxExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 10 });
-				_self.initExtentMinX = ko.observable(extentInit.xmin).extend({ numeric: 10 });
-				_self.initExtentMinY = ko.observable(extentInit.ymin).extend({ numeric: 10 });
-				_self.initExtentMaxX = ko.observable(extentInit.xmax).extend({ numeric: 10 });
-				_self.initExtentMaxY = ko.observable(extentInit.ymax).extend({ numeric: 10 });
+				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 5 });
+				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 5 });
+				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 5 });
+				_self.maxExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 5 });
+				_self.initExtentMinX = ko.observable(extentInit.xmin).extend({ numeric: 5 });
+				_self.initExtentMinY = ko.observable(extentInit.ymin).extend({ numeric: 5 });
+				_self.initExtentMaxX = ko.observable(extentInit.xmax).extend({ numeric: 5 });
+				_self.initExtentMaxY = ko.observable(extentInit.ymax).extend({ numeric: 5 });
 
 				// layer input
 				_self.isLayer = ko.observable(false);
@@ -236,7 +243,7 @@
 						while (len--) {
 							layer = layers[len];
 							servLayers = layer.servLayers;
-
+							
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
 									_self.layers.push({ id: layer.fullname,
@@ -421,6 +428,7 @@
 				_self.validateURL = function(type) {
 					var isValid,
 						url,
+						addUrl,
 						layerType;
 
 					if (type === 'base') {
@@ -444,15 +452,17 @@
 						gisServInfo.getResourceInfo(url, layerType, _self.readServInfo, function() { _self.errortext(_self.txtLayerErr); });
 
 						// remove duplicate in service array and copy to localstorage
+						_self.availServ.push(url);
 						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
+						addUrl = _self.availServ().join(';');
 						if (layerType === 1) {
-							localStorage.setItem('servnameWMS', _self.availServ().join(';'));
+							localStorage.setItem('servnameWMS', addUrl);
 						} else if (layerType === 2)  {
-							localStorage.setItem('servnameWMTS', _self.availServ().join(';'));
+							localStorage.setItem('servnameWMTS', addUrl);
 						} else if (layerType === 3)  {
-							localStorage.setItem('servnameCacheREST', _self.availServ().join(';'));
+							localStorage.setItem('servnameCacheREST', addUrl);
 						} else if (layerType === 4)  {
-							localStorage.setItem('servnameDynamicREST', _self.availServ().join(';'));
+							localStorage.setItem('servnameDynamicREST', addUrl);
 						}
 
 					} else {
@@ -517,6 +527,7 @@
 								'},' +
 								'"map": {' +
 									'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
+									'"urlproxy": "' + _self.urlProxy() + '",' +
 									'"sr": {' +
 										'"wkid": ' + sr +
 									'},' +

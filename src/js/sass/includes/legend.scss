@@ -4,3 +4,9 @@
 	height: (2 * $rembase) + rem;
 	line-height: (1.5 * $rembase) + rem;
 }
+
+.gcaut-symbol {
+	width: (40 * $rembase) + rem;
+	height: (15 * $rembase) + rem;
+	overflow: auto;
+}
