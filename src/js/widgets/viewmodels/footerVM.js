@@ -65,12 +65,9 @@
 				};
 
 				_self.write = function() {
-					var value,
-						// get value from map viewmodel
-						url = gcautFunc.getElemValueVM('map', 'urlGeomServer');
+					var value;
 
 					value = '"footer": {' +
-								'"urlgeomserv": "' + url + '",' +
 								'"northarrow": {' +
 									'"enable": ' + _self.isArrow() +
 									',"inwkid": ' + _self.selectArrowSR().id +

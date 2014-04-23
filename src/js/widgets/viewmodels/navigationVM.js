@@ -84,16 +84,13 @@
 				};
 
 				_self.write = function() {
-					var value,
-						// get value from map viewmodel
-						url = gcautFunc.getElemValueVM('map', 'urlGeomServer');
+					var value;
 
 					value = '"toolbarnav": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
 								',"zoom": ' + _self.isZoom() +
-								',"urlgeomserv": "' + url + '",' +
-								'"geolocation": {' +
+								',"geolocation": {' +
 									'"enable": ' + _self.isGeoloc() +
 									',"type": -1' +
 								'},' +

@@ -11,8 +11,9 @@
     define(['jquery-private',
 			'knockout',
 			'gcaut-i18n',
-			'gcaut-func'
-	], function($aut, ko, i18n, gcautFunc) {
+			'gcaut-func',
+			'gcaut-gisservinfo'
+	], function($aut, ko, i18n, gcautFunc, gisServInfo) {
 		var initialize,
 			clean,
 			createItem,
@@ -49,6 +50,7 @@
 				_self.lblVisibilityType = i18n.getDict('%legend-visibilitytype');
 				_self.lblVisibilityRadio = i18n.getDict('%legend-visibilityradioid');
 				_self.lblDisplayChild = i18n.getDict('%legend-displaychild');
+				_self.lblDisplayChildSymbol = i18n.getDict('%legend-displaychildsymbol');
 				_self.lblCustomImage = i18n.getDict('%legend-customimage');
 				_self.lblCustomImageUrl = i18n.getDict('%legend-customimageurl');
 				_self.lblCustomImageText = i18n.getDict('%legend-customimagetext');
@@ -109,6 +111,7 @@
 						metadata = item.metadata,
 						opacity = item.opacity,
 						visibility = item.visibility,
+						displaychild = item.displaychild,
 						customimage = item.customimage,
 						opacityGlobal = opacity.enable;
 
@@ -130,7 +133,8 @@
 					item.visibility.initstate = ko.observable(visibility.initstate);
 					item.visibility.type = ko.observable(_self.visibilityType[visibility.type - 1]);
 					item.visibility.radioid = ko.observable(visibility.radioid).extend({ numeric: 0 });
-					item.displaychild = ko.observable(item.displaychild);
+					item.displaychild.enable = ko.observable(displaychild.enable);
+					item.displaychild.symbol = ko.observable(displaychild.symbol);
 					item.customimage.enable = ko.observable(customimage.enable);
 					item.customimage.url = ko.observable(customimage.url);
 					item.customimage.alttext = ko.observable(customimage.alttext);
@@ -144,8 +148,8 @@
 
 					// subscribe to change on displaychils because if it is true
 					// customimage.enable should be false
-					item.displaychild.subscribe(function() {
-						_self.updateCustom(item.displaychild(), item.customimage.enable);
+					item.displaychild.enable.subscribe(function() {
+						_self.updateCustom(item.displaychild.enable(), item.customimage.enable);
 					});
 
 					// subscribe to change on opacity.enable because if it is true
@@ -190,26 +194,22 @@
 
 				_self.bind = function() {
 					// refresh ui and bind the update event
+					// set timeout to have the object created before we assign
+					// events
 					setTimeout(function() {
-						// workaround to solve holderBases array to be empty when we delete element in bases. If reset it run once
-						// before, only legendBases get empty (not holderBases)
-						var bases = _self.resetArray(_self.holderBases),
-							$accBases = $aut('.legendSortBases'),
+						var	$accBases = $aut('.legendSortBases'),
 							$accLayers = $aut('.legendSortLayers');
-							
-						bases()[0] = _self.holderBases[0];
-						_self.legendBases(bases());
-						
+		
 						$accBases.accordion('refresh');
 						$accBases.on('sortupdate', gcautFunc.debounce(function(event) {
-																		_self.sortArray($accBases); 
-																	}, 1000, false));
+																_self.sortArray($accBases); 
+															}, 1000, false));
 						$accLayers.accordion('refresh');
 						$accLayers.on('sortupdate', gcautFunc.debounce(function(event) {
-																		_self.sortArray($aut('.legendSortLayers-lvl1'));
-																	}, 1000, false));
+																_self.sortArray($aut('.legendSortLayers-lvl1'));
+															}, 1000, false));
 					}, 1000);
-
+					
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
@@ -228,20 +228,22 @@
 				};
 
 				_self.resetArray = function(list) {
-					var arr, id, fullid, lensplit, last,
-						value = list,
+					var arr, id, fullid, lensplit, url, value, last,
+						values = (typeof list === 'undefined') ? [] : list,
 						split = [],
 						items = ko.observableArray(),
-						len = value.length - 1,
+						len = values.length - 1,
 						i = 0, j = 0;
 
 					while (i <= len) {
-						if (typeof value[i].id === 'function') {
-							id = value[i].id().replace(' / ', ' - ');
+						value = values[i];
+						if (typeof value.id === 'function') {
+							id = value.id().replace(' / ', ' - ');
 						} else {
-							id = value[i].id.replace(' / ', ' - ');
+							id = value.id.replace(' / ', ' - ');
 						}
 						fullid = id;
+						url = value.url;
 						split = id.split('/');
 						lensplit = split.length - 1;
 						j = 0;
@@ -249,12 +251,12 @@
 						// check if the item already exist. If not create a new one and
 						// if it exsit return the reference.
 						last = (lensplit === 0) ? true : false;
-						arr = _self.unique(items, split[0], fullid, last);
+						arr = _self.unique(items, split[0], fullid, last, url);
 						j++;
 
 						while (j <= lensplit) {
 							last = (j === lensplit) ? true : false;
-							arr = _self.unique(arr.items, split[j], fullid, last);
+							arr = _self.unique(arr.items, split[j], fullid, last, url);
 							j++;
 						}
 
@@ -272,7 +274,7 @@
 					_self.holderBases = value;
 				};
 
-				_self.unique = function(items, value, fullid, last) {
+				_self.unique = function(items, value, fullid, last, url) {
 					var item,
 						len = items().length;
 
@@ -286,11 +288,11 @@
 					}
 
 					// the item does not exist so create a new one
-					items.push(addArray(value, fullid, last));
+					items.push(addArray(value, fullid, last, url));
 					return items()[items().length - 1];
 				};
 
-				addArray = function(value, fullid, last) {
+				addArray = function(value, fullid, last, url) {
 					var item;
 
 					item = { expand : ko.observable(false),
@@ -315,11 +317,14 @@
 								},
 								visibility: {
 									enable: ko.observable(true),
-									initstate: ko.observable(false),
+									initstate: ko.observable(true),
 									type: ko.observable(_self.visibilityType[0]),
 									radioid: ko.observable().extend({ numeric: 0 })
 								},
-								displaychild: ko.observable(true),
+								displaychild: {
+									enable: ko.observable(true),
+									symbol: ko.observable(),
+								},
 								customimage: {
 									enable: ko.observable(false),
 									url: ko.observable(),
@@ -327,6 +332,11 @@
 								},
 								items: ko.observableArray()
 							};
+					
+					// set renderer
+					if (last) {
+						gisServInfo.getEsriRendererInfo(url, item);
+					}
 
 					// subscribe to change on visibility.enable because if it is false
 					// visibility.initstate should be true
@@ -336,8 +346,8 @@
 
 					// subscribe to change on displaychils because if it is true
 					// customimage.enable should be false
-					item.displaychild.subscribe(function() {
-						_self.updateCustom(item.displaychild(), item.customimage.enable);
+					item.displaychild.enable.subscribe(function() {
+						_self.updateCustom(item.displaychild.enable(), item.customimage.enable);
 					});
 
 					// subscribe to change on opacity.enable because if it is true
