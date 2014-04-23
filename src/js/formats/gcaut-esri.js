@@ -14,10 +14,9 @@
 			getSublayer,
 			getIndex;
 
-		readInfo = function(sender, _self, urlObject, typeObject) {
+		readInfo = function(sender, _self, urlObject, type, category) {
 			var item, itemName, itemId,
 				layer,
-				typeId,
 				layers = [],
 				len = sender.layers.length - 1,
 				index = -1,
@@ -27,13 +26,7 @@
 				url = urlObject,
 				lods, lenlods;
 
-			while (index !== len) {
-				if (typeObject === 'base') {
-					typeId = _self.selectBaseLayerType().id;
-				} else {
-					typeId = _self.selectLayerType().id;
-				}
-					
+			while (index !== len) {				
 				// set attribute the get sublayers
 				layer = {};
 				item = sendLayers[index + 1];
@@ -53,9 +46,8 @@
 								symbol: ko.observable(false),
 								maxsizeprop: ko.observable(50).extend({ numeric: 0 }),
 								maxdataprop: ko.observable(1000).extend({ numeric: 0 }) };
-				layer.category = typeObject;
-				layer.type = typeId;
-				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, typeObject, typeId);
+				layer.type = type;
+				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, type);
 
 				// knockout checkbox and label binding
 				layer.isChecked = ko.observable(false);
@@ -76,7 +68,7 @@
 			_self.servLayers(layers);
 
 			// update base layer info
-			if (typeObject === 'base') {
+			if (category === 'base') {
 				_self.selectMapSR(
 				_self.srType[gcautFunc.getSrTypeIndex(
 				_self.srType,
@@ -104,7 +96,7 @@
 			}
 		};
 
-		getSublayer = function(parent, sendLayers, layers, url, fullname, _self, typeObject, typeId) {
+		getSublayer = function(parent, sendLayers, layers, url, fullname, _self, type) {
 			var sublayer = {},
 				subLayerIds,
 				child,
@@ -137,8 +129,7 @@
 							};
 					sublayer.isChecked = ko.observable(false);
 					sublayer.isUse = ko.observable(false);
-					sublayer.category = typeObject;
-					sublayer.type = typeId;
+					sublayer.type = type;
 					layers.push(sublayer);
 
 					// call the same function to know if there is child within the child sublayers array to add to
@@ -148,8 +139,7 @@
 							url,
 							sublayer.fullname,
 							_self,
-							typeObject,
-							typeId);
+							type);
 				}
 			}
 

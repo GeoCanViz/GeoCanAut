@@ -36,7 +36,8 @@
 					pathCheckAll = locationPath + 'gcaut/images/mapCheckAll.png',
 					pathUncheckAll = locationPath + 'gcaut/images/mapUncheckAll.png',
 					srType = gcautFunc.getSrType(i18n.getDict('%map-sr')),
-					layerType = [{ id: 1, val: 'WMS' }, { id: 2, val: 'WMTS' }, { id: 3, val: 'esriREST Cache' }, { id: 4, val: 'esriREST Dynamic' }],
+					baseType = gcautFunc.getListCB(i18n.getDict('%map-basetypelist')),
+					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
 					size = mapin.size,
 					map = mapin.map,
 					base = map.bases[0],
@@ -130,21 +131,21 @@
 				_self.setExtentMaxX = ko.observable().extend({ numeric: 5 });
 				_self.setExtentMaxY = ko.observable().extend({ numeric: 5 });
 
+				// hold selected layer type id when we request layers info
+				_self.selectedType = ko.observable(0);
+				
 				// base layer input
 				_self.bases = ko.observableArray();
+				_self.baseType = baseType;
 				_self.selectBaseLayerType = ko.observable();
-				if (typeof base !== 'undefined') {
-					// set a timeout to fired updatebases in legendVM
-					setTimeout(function() {
-						_self.bases.push({ id: base.id,
-										type: base.type,
-										category: 'base',
-										url: base.url });
-					}, 500);
 
-					_self.selectBaseLayerType(layerType[base.type - 1]);
-				}
+				// set a timeout to fired updatebases in legendVM (workaround to avoid bad array)
+				setTimeout(function() {
+					_self.bases(map.bases);					
+					_self.selectBaseLayerType(baseType[base.type - 1]);
+				}, 750);
 
+				// continue base layer input
 				_self.srType = srType;
 				_self.isLods = ko.observable(lods.enable);
 				_self.lods = ko.observableArray(lods.values);
@@ -219,9 +220,14 @@
 					ko.applyBindings(_self, elem);
 				};
 
+				// get the selected layer value from index
+				_self.getLayerType = function(data) {
+					return gcautFunc.getListValue(_self.layerType, data.type);
+				};
+				
 				// select layers dialog buttons functions (ok and cancel)
 				_self.dialogLayerOk = function() {
-					_self.updateLayers(_self.servLayers(), layers);
+					_self.updateLayers(_self.servLayers(), layers, _self.selectedType());
 					_self.dialogLayerCancel();
 				};
 
@@ -233,36 +239,50 @@
 				};
 
 				// update layers array when they are selected from the dialog box
-				_self.updateLayers = function(elem, list) {
+				_self.updateLayers = function(elem, list, type) {
 					var layer,
 						servLayers,
+						url,
 						layers = elem,
+						category = _self.isLayer() ? 'layer' : 'base',
 						len = layers.length;
 
-					if (_self.isLayer()) {
+					if (type === 2 || type === 4) {
+						layer = layers[0];
+						url = layer.url.substring(0, layer.url.indexOf('MapServer')) + 'MapServer';
+						
+						if (category === 'base') {
+							_self.bases.push({ label: layer.fullname,
+										id: gcautFunc.getUUID(),
+										type: layer.type,
+										url: url });
+						} else {
+							_self.layers.push({ label: layer.fullname,
+											id: gcautFunc.getUUID(),
+											type: layer.type,
+											url: url,
+											scale: layer.scale,
+											cluster: layer.cluster });
+						}
+						
+					} else if (type === 5) {
 						while (len--) {
 							layer = layers[len];
 							servLayers = layer.servLayers;
 							
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
-									_self.layers.push({ id: layer.fullname,
+									_self.layers.push({ label: layer.fullname,
+														id: gcautFunc.getUUID(),
 														type: layer.type,
-														category: layer.category,
 														url: layer.url,
 														scale: layer.scale,
 														cluster: layer.cluster });
 								}
 							} else {
-								_self.updateLayers(servLayers, list);
+								_self.updateLayers(servLayers, list, type);
 							}
 						}
-					} else {
-						layer = layers[0];
-						_self.bases.push({ id: layer.fullname,
-											type: _self.selectBaseLayerType().id,
-											category: layer.category,
-											url: _self.baseURL() });
 					}
 				};
 
@@ -389,12 +409,14 @@
 					var array;
 
 					if (id === 1) {
-						array = localStorage.servnameWMS.split(';');
+						array = localStorage.servnameWMST.split(';');
 					} else if (id === 2)  {
-						array = localStorage.servnameWMTS.split(';');
-					} else if (id === 3)  {
 						array = localStorage.servnameCacheREST.split(';');
+					} else if (id === 3)  {
+						array = localStorage.servnameWMS.split(';');
 					} else if (id === 4)  {
+						array = localStorage.servnameDynamicREST.split(';');
+					} else if (id === 5)  {
 						array = localStorage.servnameDynamicREST.split(';');
 					}
 
@@ -456,12 +478,14 @@
 						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
 						addUrl = _self.availServ().join(';');
 						if (layerType === 1) {
-							localStorage.setItem('servnameWMS', addUrl);
-						} else if (layerType === 2)  {
 							localStorage.setItem('servnameWMTS', addUrl);
-						} else if (layerType === 3)  {
+						} else if (layerType === 2)  {
 							localStorage.setItem('servnameCacheREST', addUrl);
+						} else if (layerType === 3)  {
+							localStorage.setItem('servnameWMTS', addUrl);
 						} else if (layerType === 4)  {
+							localStorage.setItem('servnameDynamicREST', addUrl);
+						} else if (layerType === 5)  {
 							localStorage.setItem('servnameDynamicREST', addUrl);
 						}
 
@@ -471,23 +495,18 @@
 				};
 
 				// callback function for gisServInfo.getResourceInfo
-				_self.readServInfo = function(sender) {
+				_self.readServInfo = function(url, type, sender) {
 					var url,
-						type = _self.isLayer() ? 'layer' : 'base';
+						category = _self.isLayer() ? 'layer' : 'base';
 
-					if (type === 'base') {
-						url = _self.baseURL();
-					} else {
-						url = _self.layerURL();
-					}
-
+					// set the selected type (use to show or hide checkbox)
+					_self.selectedType(type);
+					
 					if (sender.hasOwnProperty('error')) {
 						_self.errortext(_self.txtLayerErr);
 					} else {
-						if (sender.hasOwnProperty('layers')) {
-							esriData.readInfo(sender, _self, url, type);
-						} else {
-							
+						if (type === 2 || type === 4 || type === 5) {
+							esriData.readInfo(sender, _self, url, type, category);
 						}
 						
 						// show window to select layers

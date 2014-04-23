@@ -27,6 +27,7 @@
 				var _self = this,
 					lenControls = controls.length,
 					visibilityType = gcautFunc.getListCB(i18n.getDict('%legend-visibilitytypelist')),
+					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
 					pathOpen = locationPath + 'gcaut/images/legendOpen.png';
 
 				// images path
@@ -70,6 +71,9 @@
 				// global opacity value to update children
 				_self.opacityValue = false;
 
+				// layer type array
+				_self.layerType = layerType;
+				
 				// legend layers and bases
 				_self.holderLayers = map.items;
 				_self.legendLayers = ko.observableArray(map.items);
@@ -116,8 +120,8 @@
 						opacityGlobal = opacity.enable;
 
 					item.expand = ko.observable(item.expand);
-					item.fullid = ko.observable(item.fullid);
 					item.last = ko.observable(item.last);
+					item.type = ko.observable(item.type);
 					item.id = ko.observable(item.id);
 					item.displayfields = ko.observable(item.displayfields),
 					item.label.value = ko.observable(label.value);
@@ -214,6 +218,11 @@
 					ko.applyBindings(_self, elem);
 				};
 
+				// get the selected layer value from index
+				_self.getLayerType = function(data) {
+					return gcautFunc.getListValue(_self.layerType, data.type());
+				};
+				
 				_self.reset = function() {
 					var bases = _self.resetArray(_self.holderBases),
 						layers = _self.resetArray(_self.holderLayers);
@@ -228,7 +237,7 @@
 				};
 
 				_self.resetArray = function(list) {
-					var arr, id, fullid, lensplit, url, value, last,
+					var arr, id, ori, title, lensplit, url, value, last, type,
 						values = (typeof list === 'undefined') ? [] : list,
 						split = [],
 						items = ko.observableArray(),
@@ -237,26 +246,28 @@
 
 					while (i <= len) {
 						value = values[i];
-						if (typeof value.id === 'function') {
-							id = value.id().replace(' / ', ' - ');
+						if (typeof value.label === 'function') {
+							title = value.label().replace(' / ', ' - ');
 						} else {
-							id = value.id.replace(' / ', ' - ');
+							title = value.label.replace(' / ', ' - ');
 						}
-						fullid = id;
+						
+						id = value.id;
 						url = value.url;
-						split = id.split('/');
+						type = value.type;
+						split = title.split('/');
 						lensplit = split.length - 1;
 						j = 0;
 
 						// check if the item already exist. If not create a new one and
 						// if it exsit return the reference.
 						last = (lensplit === 0) ? true : false;
-						arr = _self.unique(items, split[0], fullid, last, url);
+						arr = _self.unique(items, split[0], id, last, url, type);
 						j++;
 
 						while (j <= lensplit) {
 							last = (j === lensplit) ? true : false;
-							arr = _self.unique(arr.items, split[j], fullid, last, url);
+							arr = _self.unique(arr.items, split[j], id, last, url, type);
 							j++;
 						}
 
@@ -274,31 +285,31 @@
 					_self.holderBases = value;
 				};
 
-				_self.unique = function(items, value, fullid, last, url) {
+				_self.unique = function(items, value, id, last, url, type) {
 					var item,
 						len = items().length;
 
 					while (len--) {
 						item = items()[len];
 
-						if (item.id() === value) {
+						if (item.label.value() === value) {
 							// the item exist, return the reference
 							return item;
 						}
 					}
 
 					// the item does not exist so create a new one
-					items.push(addArray(value, fullid, last, url));
+					items.push(addArray(value, id, last, url, type));
 					return items()[items().length - 1];
 				};
 
-				addArray = function(value, fullid, last, url) {
+				addArray = function(value, id, last, url, type) {
 					var item;
 
 					item = { expand : ko.observable(false),
-								fullid: ko.observable(fullid),
 								last: ko.observable(last),
-								id: ko.observable(value),
+								type: ko.observable(type),
+								id: ko.observable(id),
 								displayfields: ko.observable(false),
 								label: {
 									value: ko.observable(value),
@@ -334,7 +345,7 @@
 							};
 					
 					// set renderer
-					if (last) {
+					if (last && type === 5) {
 						gisServInfo.getEsriRendererInfo(url, item);
 					}
 
@@ -478,8 +489,8 @@
 					
 					while (len--) {
 						child = $aut(children[len]);
-						label = { label: $aut(child.find('h3').find('span')[1]).text() };
-						label.labels = _self.getArrayHTML(child.children('div').children('ul'));
+						label = { label: $aut(child.find('h3').find('span')[1]).attr('id') };
+						label.labels = _self.getArrayHTML(child.children('div').children('.inner-layer-list').children('ul'));
 						labels.push(label);
 					}
 					

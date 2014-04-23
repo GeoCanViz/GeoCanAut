@@ -56,11 +56,11 @@
 		createLayer = function(type, url) {
 			var layer;
 
-			if (type === 3) {
+			if (type === 2) {
 				layer = new esriRestC(url);
 			} else if (type === 4) {
 				layer = new esriRestD(url);
-			} else if (type === 'feature') {
+			} else if (type === 5) {
 				layer = new esriFL(url, {
                     mode: esriFL.MODE_ONDEMAND,
                     outFields: ['*']

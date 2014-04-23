@@ -20,12 +20,12 @@
 			var requestHandle,
 				options;
 				
-			if (layerType <= 2) {
-				options = { url: url + '?/request=GetCapabilities',
+			if (layerType === 1 || layerType === 3) {
+				options = { url: url + '?request=GetCapabilities',
 							handleAs: 'xml'
 					};
 				
-			} else if (layerType <= 4) {
+			} else if (layerType === 2 || layerType === 4 || layerType === 5) {
 				options = { url: url,
 							content: { f: 'json' },
 							handleAs: 'json',
@@ -33,8 +33,11 @@
 					};
 			}
 			
-			requestHandle = esriRequest(options);				
-			requestHandle.then(success, error);
+			options.load = function(response) { 
+								success(url, layerType, response); 
+							};
+			options.error = error;
+			esriRequest(options);
 		};
 
 		getEsriRendererInfo = function(url, item) {

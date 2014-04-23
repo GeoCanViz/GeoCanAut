@@ -156,7 +156,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									<div class="gcaut-mapinfo">
 										<div style="clear: both"></div>
 										<label for="cb_basetype" data-bind="text: lblLayerType"></label>
-										<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
+										<select id="cb_basetype" data-bind="options: baseType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
 										<div style="clear: both"></div>
 										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
 										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
@@ -167,9 +167,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<div data-bind="visible: bases().length > 0">
 											<div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
 											<script type="text/html" id="mapBaseLayers">
-												<div data-bind="visible: $data.category === 'base'">
+												<div>
 													<button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'base'), text: $root.lblRemove"></button>
-													<span data-bind="text: id"></span>
+													<span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
 						        				</div>
 											</script>
 											<div class="row">
@@ -282,7 +282,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<script type="text/html" id="mapLayers">
 											<li style="white-space: nowrap;">
 												<button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer'), text: $root.lblRemove"></img></button>
-												<span data-bind="text: id"></span>
+												<span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
 					        				</li>
 										</script>
 									</div>
@@ -296,12 +296,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
 						</div>
 						<script id="selectLayers" type="text/html">
-							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), true), visible: $root.isLayer"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgCheckAll }"></img></button>
-							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), false), visible: $root.isLayer"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgUncheckAll }"></img></button>
+							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), true), visible: selectedType() === 5"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgCheckAll }"></img></button>
+							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), false), visible: selectedType() === 5"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgUncheckAll }"></img></button>
 						</script>
 						<script id="serviceLayers" type="text/html">
 							<li>
-								<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.isLayer, checked: isChecked, attr: { id: $data.name }"></input>
+								<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.selectedType() === 5, checked: isChecked, attr: { id: $data.name }"></input>
 								<label data-bind="text: name, attr: { for: $data.name }, style: { 'font-weight': isUse() ? 'bold' : 'normal' }"></label>
 								<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
 							</li>
@@ -333,7 +333,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<script type="text/html" id="mapLayersOrder">
 									<li class="ui-state-default">
 										<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-										<span data-bind="text: id, css: { 'layerTitle': true }" style="white-space: nowrap;"></span>
+										<span data-bind="text: label, css: { 'layerTitle': true }" style="white-space: nowrap;"></span>
 		        					</li>
 							</script>
 						</div>
@@ -342,7 +342,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<div data-bind="visible: layers().length > 0" tabindex="0">
 							<div id="layersoptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
 							<script type="text/html" id="mapLayersOption">
-									<h3 class="ui-accordion-header" data-bind="text: id"></h3>
+									<h3 class="ui-accordion-header" data-bind="text: label"></h3>
 									<div>
 										<span data-bind="text: $root.lblScale"></span>
 										<div class="row">
@@ -441,7 +441,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<script type="text/html" id="legendBases">
 								<li>
 									<h3>
-										<span data-bind="text: $data.label.value"></span>
+										<span data-bind="attr: { id: $data.label.value() }, text: $data.label.value()  + ' - type: ' + $root.getLayerType($data)"></span>
 										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></img></button>
 									</h3>
 									<div>
@@ -493,9 +493,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<h4><label data-bind="text: lblSectLayers"></label></h4>
 							<ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
 							<script type="text/html" id="legendLayers">
-								<li>
+								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
 									<h3>
-										<span data-bind="text: $data.label.value"></span>
+										<span data-bind="attr: { id: $data.label.value() }, text: $data.label.value()  + ' - type: ' + $root.getLayerType($data)"></span>
 										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></img></button>
 										<button class="gcaut-button" tabindex="0" data-bind="click: $root.openCloseAll, tooltip: { content: $root.tpRefresh }, clickBubble: false"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgOpen }"></img></button>
 									</h3>
@@ -539,8 +539,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
 										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>
 										<div style="clear: both"></div>
-										<label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.items().length === 0 && $data.displaychild.enable()"></label>
-										<textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.items().length === 0 && $data.displaychild.enable()"></textarea>			
+										<label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.items().length === 0 && $data.displaychild.enable() && $data.type() === 5"></label>
+										<textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.items().length === 0 && $data.displaychild.enable() && $data.type() === 5"></textarea>			
 										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
 											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
 											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
@@ -549,7 +549,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="customTextLeg" data-bind="text: $root.lblCustomImageText, visible: $data.customimage.enable"></label>
 											<input id="customTextLeg" data-bind="value: $data.customimage.alttext, visible: $data.customimage.enable"></input>
 										</div>
-										<ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>				
+										<div class="inner-layer-list" data-bind="if: $data.type() === 5">
+											<ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>
+										</div>				
 									</div>
 								</li>
 							</script>
