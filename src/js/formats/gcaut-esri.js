@@ -36,16 +36,16 @@
 				layer.fullname = itemName;
 				layer.url = url + '/' + itemId;
 				layer.id = itemId;
-				layer.scale = { min: ko.observable(item.minScale).extend({ numeric: 0 }),
-								max: ko.observable(item.maxScale).extend({ numeric: 0 }) };
+				layer.scale = { min: ko.observable(item.minScale).extend({ numeric: { precision: 0 } }),
+								max: ko.observable(item.maxScale).extend({ numeric: { precision: 0 } }) };
 				layer.isChecked = ko.observable(false);
 				layer.isUse = ko.observable(false);
 				layer.cluster = { enable: ko.observable(false),
-								distance: ko.observable(50).extend({ numeric: 0 }),
+								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),
 								label: ko.observable(false),
 								symbol: ko.observable(false),
-								maxsizeprop: ko.observable(50).extend({ numeric: 0 }),
-								maxdataprop: ko.observable(1000).extend({ numeric: 0 }) };
+								maxsizeprop: ko.observable(50).extend({ numeric: { precision: 0 } }),
+								maxdataprop: ko.observable(1000).extend({ numeric: { precision: 0 } }) };
 				layer.type = type;
 				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, type);
 
@@ -121,11 +121,11 @@
 					sublayer.id = childId;
 					sublayer.scale = { min: child.minScale, max: child.maxScale};
 					sublayer.cluster = { enable: ko.observable(false),
-								distance: ko.observable(50).extend({ numeric: 0 }),
+								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),
 								label: ko.observable(false),
 								symbol: ko.observable(false),
-								maxsizeprop: ko.observable(50).extend({ numeric: 0 }),
-								maxdataprop: ko.observable(1000).extend({ numeric: 0 })
+								maxsizeprop: ko.observable(50).extend({ numeric: { precision: 0 } }),
+								maxdataprop: ko.observable(1000).extend({ numeric: { precision: 0 } })
 							};
 					sublayer.isChecked = ko.observable(false);
 					sublayer.isUse = ko.observable(false);

@@ -9,8 +9,9 @@
 	'use strict';
 	define(['jquery-private',
 			'knockout',
-			'jqueryui'
-	], function($aut, ko) {
+			'jqueryui',
+			'gcaut-func'
+	], function($aut, ko, gcautFunc) {
 
     ko.bindingHandlers.tooltip = {
 		init: function(element, valueAccessor) {
@@ -47,17 +48,27 @@
 	};
 
 	// http://knockoutjs.com/documentation/extenders.html
-	ko.extenders.numeric = function(target, precision) {
+	ko.extenders.numeric = function(target, options) {
 		// create a writeable computed observable to intercept writes to our observable
 		var result = ko.computed({
 			read: target,  // always return the original observables value
 			write: function(newValue) {
-				var current = target(),
+				var min, max,
+					current = target(),
+					precision = options.precision,
+					validation = options.validation,
+					roundingMultiplier = Math.pow(10, precision),
+					newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
+					valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
 
-				roundingMultiplier = Math.pow(10, precision),
-				newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
-				valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
-
+				if (typeof validation !== 'undefined') {
+					if (valueToWrite < validation.min || valueToWrite > validation.max) { 
+						$aut('#' + validation.id).text(validation.msg);
+					} else {
+						$aut('#' + validation.id).text('');
+					}
+				}
+					             
 				// only write if it changed
 				if (valueToWrite !== current) {
 					target(valueToWrite);

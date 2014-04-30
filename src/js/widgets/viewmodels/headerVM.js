@@ -17,10 +17,12 @@
 			clean,
 			vm;
 
-		initialize = function(elem, map) {
+		initialize = function(elem, map, controls) {
+
 			// data model
-			var headerViewModel = function(elem, map) {
+			var headerViewModel = function(elem, map, controls) {
 				var _self = this,
+					lenControls = controls.length,
 					title = map.title,
 					about = map.about,
 					print = map.print,
@@ -41,7 +43,7 @@
 
 				// label
 				_self.lblMapTitle = i18n.getDict('%header-mapname');
-				_self.lblMapAlt = i18n.getDict('%header-mapname');
+				_self.lblMapTitleAlt = i18n.getDict('%header-mapnamealt');
 				_self.lblEnbTools = i18n.getDict('%header-lblbutton');
 				_self.lblTools = i18n.getDict('%header-tools');
 				_self.lblAbout = i18n.getDict('%header-about');
@@ -55,6 +57,7 @@
 				// title
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
+				_self.mapTitleWidth = ko.observable();
 
 				// tools
 				_self.isTools = ko.observable(map.tools);
@@ -80,6 +83,10 @@
 				clean(ko, elem);
 
 				_self.init = function() {
+					// wait until all vm are set
+					setTimeout(function() {
+						_self.mapTitleWidth(gcautFunc.getElemValueVM('map', 'mapWidthValue'));
+					}, 500);
 					return { controlsDescendantBindings: true };
 				};
 
@@ -88,6 +95,17 @@
 					ko.applyBindings(_self, elem);
 				};
 
+				_self.updateTitle = function(value) {
+					var width = value - 325;
+					
+					// set map title width (check if it exceed maximum)
+					if (width > 1000) {
+						width = 1000;
+					}
+					
+					_self.mapTitleWidth(width);
+				};
+				
 				_self.write = function() {
 					var value;
 
@@ -112,10 +130,16 @@
 					return value;
 				};
 
+				// object from other view model to be able to subscribe to change event with a custom
+				// binding
+				while (lenControls--) {
+					controls[lenControls].value.subscribe(_self[controls[lenControls].func], _self);
+				}
+				
 				_self.init();
 			};
 
-			vm = new headerViewModel(elem, map);
+			vm = new headerViewModel(elem, map, controls);
 			ko.applyBindings(vm, elem); // This makes Knockout get to work
 			return vm;
 		};

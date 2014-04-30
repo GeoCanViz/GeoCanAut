@@ -218,7 +218,7 @@
 
 					// create the master view model (launch every view model one after the other)
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
-					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header);
+					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header, [{ value: vm.map.mapWidthValue, func: 'updateTitle' }]);
 					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ value: vm.map.selectMapSR, func: 'updateSR' }]);
 					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend,
 													[{ value: vm.map.layers, func: 'updateLayers' },

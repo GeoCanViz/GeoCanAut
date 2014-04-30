@@ -28,10 +28,12 @@
 					lenControls = controls.length,
 					visibilityType = gcautFunc.getListCB(i18n.getDict('%legend-visibilitytypelist')),
 					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
-					pathOpen = locationPath + 'gcaut/images/legendOpen.png';
+					pathOpen = locationPath + 'gcaut/images/legendOpen.png',
+					pathAddGroup = locationPath + 'gcaut/images/legendOpen.png';
 
 				// images path
 				_self.imgOpen = pathOpen;
+				_self.imgAddGroup = pathAddGroup;
 				
 				// label
 				_self.lblReset = i18n.getDict('%reset');
@@ -57,10 +59,18 @@
 				_self.lblCustomImageText = i18n.getDict('%legend-customimagetext');
 				_self.lblSectBases = i18n.getDict('%legend-sectbases');
 				_self.lblSectLayers = i18n.getDict('%legend-sectlayers');
+				_self.lblEmptyGrp = i18n.getDict('%legend-emptygrp');
 
+				// dialog window
+				_self.lblResetTitle = i18n.getDict('%legend-titlereset');
+				_self.lblResetText = i18n.getDict('%legend-txtreset');
+				
 				// tooltip
 				_self.tpRefresh = i18n.getDict('%projheader-tpnewmap');
-
+				
+				// class
+				_self.hiddenReset = ko.observable('gcaut-hidden');
+				
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
@@ -80,6 +90,9 @@
 				_self.holderBases = map.basemaps;
 				_self.legendBases = ko.observableArray(map.basemaps);
 
+				// init warning
+				_self.isResetDialogOpen = ko.observable();
+				
 				// functions to create observable from the legend items
 				_self.updateInitState = function(value, element) {
 					if (!value) {
@@ -131,12 +144,12 @@
 					item.metadata.alttext = ko.observable(metadata.alttext);
 					item.opacity.enable = ko.observable(opacity.enable);
 					item.opacity.canenable = ko.observable(_self.opacityValue);
-					item.opacity.min = ko.observable(opacity.min).extend({ numeric: 2 });
-					item.opacity.max = ko.observable(opacity.max).extend({ numeric: 2 });
+					item.opacity.min = ko.observable(opacity.min).extend({ numeric: { precision: 2 } });
+					item.opacity.max = ko.observable(opacity.max).extend({ numeric: { precision: 2 } });
 					item.visibility.enable = ko.observable(visibility.enable);
 					item.visibility.initstate = ko.observable(visibility.initstate);
 					item.visibility.type = ko.observable(_self.visibilityType[visibility.type - 1]);
-					item.visibility.radioid = ko.observable(visibility.radioid).extend({ numeric: 0 });
+					item.visibility.radioid = ko.observable(visibility.radioid).extend({ numeric: { precision: 0 } });
 					item.displaychild.enable = ko.observable(displaychild.enable);
 					item.displaychild.symbol = ko.observable(displaychild.symbol);
 					item.customimage.enable = ko.observable(customimage.enable);
@@ -207,12 +220,15 @@
 						$accBases.accordion('refresh');
 						$accBases.on('sortupdate', gcautFunc.debounce(function(event) {
 																_self.sortArray($accBases); 
-															}, 1000, false));
+															}, 500, false));
 						$accLayers.accordion('refresh');
 						$accLayers.on('sortupdate', gcautFunc.debounce(function(event) {
 																_self.sortArray($aut('.legendSortLayers-lvl1'));
-															}, 1000, false));
-					}, 1000);
+															}, 500, false));
+					}, 500);
+					
+					// destroy dialog box we need to do this because it disapears from elem
+					clean(ko, $aut('#legend_reset')[0]);
 					
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
@@ -221,19 +237,6 @@
 				// get the selected layer value from index
 				_self.getLayerType = function(data) {
 					return gcautFunc.getListValue(_self.layerType, data.type());
-				};
-				
-				_self.reset = function() {
-					var bases = _self.resetArray(_self.holderBases),
-						layers = _self.resetArray(_self.holderLayers);
-					
-					// reset bases and layers
-					_self.legendBases(bases());
-					_self.legendLayers(layers());
-					
-					// refresh ui
-					$aut('.legendSortBases').accordion('refresh');
-					$aut('.legendSortLayers').accordion('refresh');
 				};
 
 				_self.resetArray = function(list) {
@@ -323,14 +326,14 @@
 								opacity: {
 									enable: ko.observable(false),
 									canenable: ko.observable(true),
-									min: ko.observable(0).extend({ numeric: 2 }),
-									max: ko.observable(100).extend({ numeric: 2 })
+									min: ko.observable(0).extend({ numeric: { precision: 2 } }),
+									max: ko.observable(100).extend({ numeric: { precision: 2 } })
 								},
 								visibility: {
 									enable: ko.observable(true),
 									initstate: ko.observable(true),
 									type: ko.observable(_self.visibilityType[0]),
-									radioid: ko.observable().extend({ numeric: 0 })
+									radioid: ko.observable().extend({ numeric: { precision: 0 } })
 								},
 								displaychild: {
 									enable: ko.observable(true),
@@ -387,34 +390,13 @@
 				};
 				
 				_self.removeItem = function(parent, array, item) {
-					var father, son,
-						len = parent.length - 1,
+					var len = parent.length - 1,
 						i = 0;
 
 					if (len === 0) {
 						array.remove(item);
 					} else {
 						parent[0].items.remove(item);
-
-						// remove parent if no child exist
-						while (i < len) {
-							son = parent[i];
-
-							if (i + 1 === len) {
-								father = parent[i + 1].array;
-							} else {
-								father = parent[i + 1].items;
-							}
-
-							_self.existChild(son, father);
-							i++;
-						}
-					}
-				};
-				
-				_self.existChild = function(item, parent) {
-					if (item.items().length === 0) {
-						parent.remove(item);
 					}
 				};
 				
@@ -564,6 +546,40 @@
 					}
 					
 					event.preventDefault();
+				};
+				
+				_self.createEmptyGrp = function() {
+					var item = addArray(_self.lblEmptyGrp, gcautFunc.getUUID(), false, '', 0);
+					_self.legendLayers.push(item);
+					
+					// refresh ui
+					$aut('.legendSortLayers').accordion('refresh');
+				};
+				
+				_self.reset = function() {
+					_self.isResetDialogOpen(true);
+					_self.hiddenReset('');
+				};
+				
+				// reset legend dialog buttons functions (ok and cancel)
+				_self.dialogResetOk = function() {
+					var bases = _self.resetArray(_self.holderBases),
+						layers = _self.resetArray(_self.holderLayers);
+					
+					// reset bases and layers
+					_self.legendBases(bases());
+					_self.legendLayers(layers());
+					
+					// refresh ui
+					$aut('.legendSortBases').accordion('refresh');
+					$aut('.legendSortLayers').accordion('refresh');
+					
+					_self.dialogResetCancel();
+				};
+
+				_self.dialogResetCancel = function() {
+					_self.hiddenReset('gcaut-hidden');
+					_self.isResetDialogOpen(false);
 				};
 				
 				_self.write = function() {
