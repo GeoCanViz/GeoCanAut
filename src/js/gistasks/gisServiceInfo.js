@@ -13,7 +13,8 @@
 			], function($aut, i18n, esriRequest) {
 
 		var getResourceInfo,
-			getEsriRendererInfo;
+			getEsriRendererInfo,
+			getEsriServRendererInfo;
 
 		getResourceInfo = function(url, layerType, success, error) {
 			//http://resources.esri.com/help/9.3/arcgisserver/apis/javascript/ve/help/Getting%20Started/DiscoverMapServices.html
@@ -63,9 +64,27 @@
 			});
 		};
 
+		getEsriServRendererInfo = function(items, url, success) {
+			var urlOut = url.substring(0, url.indexOf('MapServer')) + 'MapServer/layers';
+			
+			esriRequest({
+				url: urlOut,
+				content: { f: 'json' },
+				handleAs: 'json',
+				callbackParamName: 'callback',
+				load: function(response) {
+					success(items, url, response.layers);
+				},
+				error: function(err) {
+					console.log('Not able to get renderer: ' + err);
+				}
+			});
+		};
+		
 		return {
 			getResourceInfo: getResourceInfo,
-			getEsriRendererInfo: getEsriRendererInfo
+			getEsriRendererInfo: getEsriRendererInfo,
+			getEsriServRendererInfo: getEsriServRendererInfo
 		};
 	});
 }());

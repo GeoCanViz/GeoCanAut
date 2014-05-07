@@ -53,12 +53,16 @@
 				_self.lblPrintType = i18n.getDict('%header-printtype');
 				_self.lblInset = i18n.getDict('%header-inset');
 				_self.lblFulscreen = i18n.getDict('%header-fullscreen');
+				_self.lblTitleChar = i18n.getDict('%header-msgtitle');
 
 				// title
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
 				_self.mapTitleWidth = ko.observable();
-
+				self.mapTitleCount = ko.computed(function() {
+					return (_self.mapTitleWidth() - _self.mapTitleValue().length) + _self.lblTitleChar;
+				});
+				
 				// tools
 				_self.isTools = ko.observable(map.tools);
 
@@ -85,7 +89,7 @@
 				_self.init = function() {
 					// wait until all vm are set
 					setTimeout(function() {
-						_self.mapTitleWidth(gcautFunc.getElemValueVM('map', 'mapWidthValue'));
+						_self.mapTitleWidth((gcautFunc.getElemValueVM('map', 'mapWidthValue') - 325) / 5);
 					}, 500);
 					return { controlsDescendantBindings: true };
 				};
@@ -96,14 +100,7 @@
 				};
 
 				_self.updateTitle = function(value) {
-					var width = value - 325;
-					
-					// set map title width (check if it exceed maximum)
-					if (width > 1000) {
-						width = 1000;
-					}
-					
-					_self.mapTitleWidth(width);
+					_self.mapTitleWidth((value - 325) / 5);
 				};
 				
 				_self.write = function() {

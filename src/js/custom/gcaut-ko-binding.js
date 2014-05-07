@@ -88,6 +88,17 @@
 		return result;
 	};
 
+	// https://groups.google.com/forum/#!topic/knockoutjs/jhRFqClj4L4 (http://jsfiddle.net/R3Pxf/)
+	ko.bindingHandlers.limitCharacters = {
+		update: function(element, valueAccessor, allBindingsAccessor, viewModel)
+		{
+			var allowedNumberOfCharacters = valueAccessor(),
+				currentValue = allBindingsAccessor.get('value'),
+				cutText = ko.unwrap(currentValue).substr(0, allowedNumberOfCharacters);
+			currentValue(cutText);
+		}
+	};
+
 	// http://stackoverflow.com/questions/12856112/using-knockout-js-with-jquery-ui-sliders
 	ko.bindingHandlers.uiSlider = {
 		init: function (element, valueAccessor, allBindingsAccessor) {

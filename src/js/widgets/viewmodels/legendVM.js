@@ -61,6 +61,9 @@
 				_self.lblSectLayers = i18n.getDict('%legend-sectlayers');
 				_self.lblEmptyGrp = i18n.getDict('%legend-emptygrp');
 
+				// empty group counter
+				_self.emptyGrpCount = 1;
+				
 				// dialog window
 				_self.lblResetTitle = i18n.getDict('%legend-titlereset');
 				_self.lblResetText = i18n.getDict('%legend-txtreset');
@@ -90,6 +93,10 @@
 				_self.holderBases = map.basemaps;
 				_self.legendBases = ko.observableArray(map.basemaps);
 
+				// array to create legend after reset
+				_self.itemsBases = ko.observableArray();
+				_self.itemsLayers = ko.observableArray();
+				
 				// init warning
 				_self.isResetDialogOpen = ko.observable();
 				
@@ -220,11 +227,11 @@
 						$accBases.accordion('refresh');
 						$accBases.on('sortupdate', gcautFunc.debounce(function(event) {
 																_self.sortArray($accBases); 
-															}, 500, false));
+															}, 250, false));
 						$accLayers.accordion('refresh');
 						$accLayers.on('sortupdate', gcautFunc.debounce(function(event) {
 																_self.sortArray($aut('.legendSortLayers-lvl1'));
-															}, 500, false));
+															}, 250, false));
 					}, 500);
 					
 					// destroy dialog box we need to do this because it disapears from elem
@@ -239,14 +246,20 @@
 					return gcautFunc.getListValue(_self.layerType, data.type());
 				};
 
-				_self.resetArray = function(list) {
-					var arr, id, ori, title, lensplit, url, value, last, type,
+				_self.resetArray = function(list, section) {
+					var arr, id, ori, title, lensplit, url, value, last, type, items,
 						values = (typeof list === 'undefined') ? [] : list,
 						split = [],
-						items = ko.observableArray(),
 						len = values.length - 1,
 						i = 0, j = 0;
 
+					// we need to set the array in function of the section
+					if (section === 'bases') {
+						items = _self.itemsBases;
+					} else if (section === 'layers') {
+						items = _self.itemsLayers;
+					}
+					
 					while (i <= len) {
 						value = values[i];
 						if (typeof value.label === 'function') {
@@ -262,22 +275,24 @@
 						lensplit = split.length - 1;
 						j = 0;
 
-						// check if the item already exist. If not create a new one and
-						// if it exsit return the reference.
-						last = (lensplit === 0) ? true : false;
-						arr = _self.unique(items, split[0], id, last, url, type);
-						j++;
-
-						while (j <= lensplit) {
-							last = (j === lensplit) ? true : false;
-							arr = _self.unique(arr.items, split[j], id, last, url, type);
+						if (type === 5 || type === 2) {
+							// check if the item already exist. If not create a new one and
+							// if it exsit return the reference.
+							last = (lensplit === 0) ? true : false;
+							arr = _self.unique(items, split[0], id, last, url, type);
 							j++;
+	
+							while (j <= lensplit) {
+								last = (j === lensplit) ? true : false;
+								arr = _self.unique(arr.items, split[j], id, last, url, type);
+								j++;
+							}
+						} else if (type === 4) {
+							gisServInfo.getEsriServRendererInfo(items, url, _self.esriDymanicServ);
 						}
-
+						
 						i++;
 					}
-					
-					return items;
 				};
 				
 				_self.updateLayers = function(value) {
@@ -286,6 +301,34 @@
 				
 				_self.updateBases = function(value) {
 					_self.holderBases = value;
+				};
+
+				_self.esriDymanicServ = function(items, url, layers) {
+					var layer, lenSub,
+						index = 0,
+						len = layers.length;
+					
+					while (index !== len) {
+						layer = layers[index];
+						lenSub = layer.subLayers.length;
+						
+						items.push(addArray(layer.name, layer.name, false, '', 4));
+						index++;
+						index = _self.esriDynamicSublayer(items()[items().length - 1], layer.subLayers, index);				
+					}
+				};
+				
+				_self.esriDynamicSublayer = function(items, sublayers, index) {
+					var layer,
+						len = sublayers.length;
+					
+					while (len--) {
+						layer = sublayers[len];
+						items.items.push(addArray(layer.name, layer.name, false, '', 4));
+						index++;
+					}
+					
+					return index;
 				};
 
 				_self.unique = function(items, value, id, last, url, type) {
@@ -351,7 +394,7 @@
 					if (last && type === 5) {
 						gisServInfo.getEsriRendererInfo(url, item);
 					}
-
+					
 					// subscribe to change on visibility.enable because if it is false
 					// visibility.initstate should be true
 					item.visibility.enable.subscribe(function() {
@@ -549,8 +592,9 @@
 				};
 				
 				_self.createEmptyGrp = function() {
-					var item = addArray(_self.lblEmptyGrp, gcautFunc.getUUID(), false, '', 0);
+					var item = addArray(_self.lblEmptyGrp + ' ' + _self.emptyGrpCount, gcautFunc.getUUID(), false, '', 0);
 					_self.legendLayers.push(item);
+					_self.emptyGrpCount++;
 					
 					// refresh ui
 					$aut('.legendSortLayers').accordion('refresh');
@@ -563,18 +607,25 @@
 				
 				// reset legend dialog buttons functions (ok and cancel)
 				_self.dialogResetOk = function() {
-					var bases = _self.resetArray(_self.holderBases),
-						layers = _self.resetArray(_self.holderLayers);
+					_self.resetArray(_self.holderBases, 'bases');
+					_self.resetArray(_self.holderLayers, 'layers');
 					
-					// reset bases and layers
-					_self.legendBases(bases());
-					_self.legendLayers(layers());
-					
-					// refresh ui
-					$aut('.legendSortBases').accordion('refresh');
-					$aut('.legendSortLayers').accordion('refresh');
-					
-					_self.dialogResetCancel();
+					// we need a timeout because many function updates the array at the same time
+					// and we dont know when they finish
+					setTimeout(function() {
+						// reset bases and layers
+						_self.legendBases(_self.itemsBases());
+						_self.legendLayers(_self.itemsLayers());
+						
+						// refresh ui
+						$aut('.legendSortBases').accordion('refresh');
+						$aut('.legendSortLayers').accordion('refresh');
+						
+						// reset empty group counter
+						_self.emptyGrpCount = 1;
+						
+						_self.dialogResetCancel();
+					}, 1500);
 				};
 
 				_self.dialogResetCancel = function() {

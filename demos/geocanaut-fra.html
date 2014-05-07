@@ -377,10 +377,11 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		<div id="tab-head" class="gcaut-tabs">
 			<section id="headerMap">
 				<label for="headerMapTitle" data-bind="text: lblMapTitle"></label>
-				<input id="headerMapTitle" type="text" data-bind="value: mapTitleValue, style: { width: mapTitleWidth() + 'px' }"></input>
+				<input id="headerMapTitle" type="text" class="gcaut-titlew" data-bind="value: mapTitleValue, valueUpdate: 'afterkeydown', limitCharacters: mapTitleWidth()"></input>
+				<span id="msg_title" data-bind="text: mapTitleCount"></span>
 				<div style="clear: both"></div>
 				<label for="headerMapAlt" class="form-textarea" data-bind="text: lblMapTitleAlt"></label>
-				<textarea id="headerMapAlt" type="text" data-bind="value: mapAltValue, style: { width: mapTitleWidth() + 'px' }"></textarea>
+				<textarea id="headerMapAlt" type="text" class="gcaut-titlew" data-bind="value: mapAltValue"></textarea>
 				<div style="clear: both"></div>
 				<h4><label data-bind="text: lblEnbTools"></label></h4>
 				<div style="clear: both"></div>
@@ -548,7 +549,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="customTextLeg" data-bind="text: $root.lblCustomImageText, visible: $data.customimage.enable"></label>
 											<input id="customTextLeg" data-bind="value: $data.customimage.alttext, visible: $data.customimage.enable"></input>
 										</div>
-										<div class="inner-layer-list" data-bind="if: $data.type() === 5 || $data.type() === 0">
+										<div class="inner-layer-list" data-bind="if: $data.type() === 5 || $data.type() === 4 || $data.type() === 0">
 											<ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>
 										</div>				
 									</div>
