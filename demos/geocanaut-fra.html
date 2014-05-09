@@ -495,7 +495,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<script type="text/html" id="legendLayers">
 								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
 									<h3>
-										<span data-bind="attr: { id: $data.label.value(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#2e6e9e' }, text: $data.label.value()"></span>
+										<span data-bind="attr: { id: $data.graphid(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#2e6e9e' }, text: $data.label.value()"></span>
 										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></img></button>
 										<button class="gcaut-button" tabindex="0" data-bind="click: $root.openCloseAll, tooltip: { content: $root.tpRefresh }, clickBubble: false"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgOpen }"></img></button>
 									</h3>
@@ -539,8 +539,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
 										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>
 										<div style="clear: both"></div>
-										<label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.items().length === 0 && $data.displaychild.enable() && $data.type() === 5"></label>
-										<textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.items().length === 0 && $data.displaychild.enable() && $data.type() === 5"></textarea>			
+										<label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></label>
+										<textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></textarea>			
 										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
 											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
 											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
@@ -549,7 +549,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="customTextLeg" data-bind="text: $root.lblCustomImageText, visible: $data.customimage.enable"></label>
 											<input id="customTextLeg" data-bind="value: $data.customimage.alttext, visible: $data.customimage.enable"></input>
 										</div>
-										<div class="inner-layer-list" data-bind="if: $data.type() === 5 || $data.type() === 4 || $data.type() === 0">
+										<div class="inner-layer-list" data-bind="visible: $data.type() === 5 || $data.type() === 0">
 											<ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>
 										</div>				
 									</div>

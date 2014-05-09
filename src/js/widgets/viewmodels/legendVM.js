@@ -34,7 +34,7 @@
 				// images path
 				_self.imgOpen = pathOpen;
 				_self.imgAddGroup = pathAddGroup;
-				
+
 				// label
 				_self.lblReset = i18n.getDict('%reset');
 				_self.lblRemove = i18n.getDict('%remove');
@@ -61,19 +61,16 @@
 				_self.lblSectLayers = i18n.getDict('%legend-sectlayers');
 				_self.lblEmptyGrp = i18n.getDict('%legend-emptygrp');
 
-				// empty group counter
-				_self.emptyGrpCount = 1;
-				
 				// dialog window
 				_self.lblResetTitle = i18n.getDict('%legend-titlereset');
 				_self.lblResetText = i18n.getDict('%legend-txtreset');
-				
+
 				// tooltip
 				_self.tpRefresh = i18n.getDict('%projheader-tpnewmap');
-				
+
 				// class
 				_self.hiddenReset = ko.observable('gcaut-hidden');
-				
+
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
@@ -86,7 +83,7 @@
 
 				// layer type array
 				_self.layerType = layerType;
-				
+
 				// legend layers and bases
 				_self.holderLayers = map.items;
 				_self.legendLayers = ko.observableArray(map.items);
@@ -96,10 +93,10 @@
 				// array to create legend after reset
 				_self.itemsBases = ko.observableArray();
 				_self.itemsLayers = ko.observableArray();
-				
+
 				// init warning
 				_self.isResetDialogOpen = ko.observable();
-				
+
 				// functions to create observable from the legend items
 				_self.updateInitState = function(value, element) {
 					if (!value) {
@@ -143,6 +140,7 @@
 					item.last = ko.observable(item.last);
 					item.type = ko.observable(item.type);
 					item.id = ko.observable(item.id);
+					item.graphid = ko.observable(item.graphid);
 					item.displayfields = ko.observable(item.displayfields),
 					item.label.value = ko.observable(label.value);
 					item.label.alttext = ko.observable(label.alttext);
@@ -202,7 +200,7 @@
 					item = createItem(item);
 					_self.createArray(item);
 				});
-				
+
 				ko.utils.arrayForEach(_self.legendBases(), function(item) {
 					_self.opacityValue = true;
 					item = createItem(item);
@@ -223,20 +221,20 @@
 					setTimeout(function() {
 						var	$accBases = $aut('.legendSortBases'),
 							$accLayers = $aut('.legendSortLayers');
-		
+
 						$accBases.accordion('refresh');
-						$accBases.on('sortupdate', gcautFunc.debounce(function(event) {
-																_self.sortArray($accBases); 
+						$accBases.on('sortupdate', gcautFunc.debounce(function() {
+																_self.sortArray($accBases);
 															}, 250, false));
 						$accLayers.accordion('refresh');
-						$accLayers.on('sortupdate', gcautFunc.debounce(function(event) {
+						$accLayers.on('sortupdate', gcautFunc.debounce(function() {
 																_self.sortArray($aut('.legendSortLayers-lvl1'));
 															}, 250, false));
 					}, 500);
-					
+
 					// destroy dialog box we need to do this because it disapears from elem
 					clean(ko, $aut('#legend_reset')[0]);
-					
+
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
@@ -247,7 +245,7 @@
 				};
 
 				_self.resetArray = function(list, section) {
-					var arr, id, ori, title, lensplit, url, value, last, type, items,
+					var arr, id, lensplit, url, value, last, type, items,
 						values = (typeof list === 'undefined') ? [] : list,
 						split = [],
 						len = values.length - 1,
@@ -255,23 +253,21 @@
 
 					// we need to set the array in function of the section
 					if (section === 'bases') {
+						_self.legendBases([]);
+						_self.itemsBases([]);
 						items = _self.itemsBases;
 					} else if (section === 'layers') {
+						_self.legendLayers([]);
+						_self.itemsLayers([]);
 						items = _self.itemsLayers;
 					}
-					
+
 					while (i <= len) {
 						value = values[i];
-						if (typeof value.label === 'function') {
-							title = value.label().replace(' / ', ' - ');
-						} else {
-							title = value.label.replace(' / ', ' - ');
-						}
-						
 						id = value.id;
 						url = value.url;
 						type = value.type;
-						split = title.split('/');
+						split = value.label.split('***');
 						lensplit = split.length - 1;
 						j = 0;
 
@@ -281,54 +277,77 @@
 							last = (lensplit === 0) ? true : false;
 							arr = _self.unique(items, split[0], id, last, url, type);
 							j++;
-	
+
 							while (j <= lensplit) {
 								last = (j === lensplit) ? true : false;
 								arr = _self.unique(arr.items, split[j], id, last, url, type);
 								j++;
 							}
 						} else if (type === 4) {
-							gisServInfo.getEsriServRendererInfo(items, url, _self.esriDymanicServ);
+							gisServInfo.getEsriServRendererInfo(items, url, id, _self.esriDymanicServ);
 						}
-						
+
 						i++;
 					}
 				};
-				
+
 				_self.updateLayers = function(value) {
 					_self.holderLayers = value;
 				};
-				
+
 				_self.updateBases = function(value) {
 					_self.holderBases = value;
 				};
 
-				_self.esriDymanicServ = function(items, url, layers) {
-					var layer, lenSub,
-						index = 0,
-						len = layers.length;
-					
-					while (index !== len) {
-						layer = layers[index];
-						lenSub = layer.subLayers.length;
-						
-						items.push(addArray(layer.name, layer.name, false, '', 4));
-						index++;
-						index = _self.esriDynamicSublayer(items()[items().length - 1], layer.subLayers, index);				
+				_self.esriDymanicServ = function(items, url, id, layers) {
+					var layer,
+						firstIndex, lastIndex, name,
+						i = 0,
+						len = layers.length - 1;
+
+					// create the first holder
+					lastIndex = url.lastIndexOf('/');
+					url = url.substring(0, lastIndex);
+					firstIndex = url.lastIndexOf('/') + 1;
+					name = url.substring(firstIndex, lastIndex);
+					items.push(addArray(name, name, false, '', 4));
+					items = items()[items().length - 1].items;
+
+					// create children. Author cant see them because it is a service so it is not customizable
+					// but we need the info for gcviz.
+					while (i !== len) {
+						layer = layers[i];
+						i++;
+
+						if (layer.type === 'Feature Layer' && layer.parentLayer === null) {
+							items.push(addArray(layer.name, id, true, '', 4, layer.drawingInfo.renderer));
+						} else if (layer.type === 'Group Layer' && layer.parentLayer === null) {
+							items.push(addArray(layer.name, id, false, '', 4));
+							_self.esriDynamicSublayer(items()[items().length - 1].items, layer.subLayers, id, layers);
+						}
 					}
 				};
-				
-				_self.esriDynamicSublayer = function(items, sublayers, index) {
-					var layer,
+
+				_self.esriDynamicSublayer = function(items, arrSublayers, id, layers) {
+					var layer, foundLayer, name,
+						sublayers = arrSublayers.reverse(),
 						len = sublayers.length;
-					
+
 					while (len--) {
 						layer = sublayers[len];
-						items.items.push(addArray(layer.name, layer.name, false, '', 4));
-						index++;
+
+						// find the element with the same id and remove it
+						// from the array of layers
+						foundLayer = layers[layer.id];
+						name = foundLayer.name;
+
+						if (foundLayer.type === 'Feature Layer') {
+							items.push(addArray(name, id, true, '', 4, foundLayer.drawingInfo.renderer));
+						} else if (foundLayer.type === 'Group Layer') {
+							items.push(addArray(name, id, false, '', 4));
+							_self.esriDynamicSublayer(items()[items().length - 1].items, foundLayer.subLayers, id, layers);
+						}
 					}
-					
-					return index;
 				};
 
 				_self.unique = function(items, value, id, last, url, type) {
@@ -349,13 +368,14 @@
 					return items()[items().length - 1];
 				};
 
-				addArray = function(value, id, last, url, type) {
+				addArray = function(value, id, last, url, type, renderer) {
 					var item;
 
 					item = { expand : ko.observable(false),
 								last: ko.observable(last),
 								type: ko.observable(type),
 								id: ko.observable(id),
+								graphid: ko.observable(gcautFunc.getUUID()),
 								displayfields: ko.observable(false),
 								label: {
 									value: ko.observable(value),
@@ -380,7 +400,7 @@
 								},
 								displaychild: {
 									enable: ko.observable(true),
-									symbol: ko.observable(),
+									symbol: ko.observable()
 								},
 								customimage: {
 									enable: ko.observable(false),
@@ -389,12 +409,14 @@
 								},
 								items: ko.observableArray()
 							};
-					
+
 					// set renderer
-					if (last && type === 5) {
+					if (last && typeof renderer === 'undefined') {
 						gisServInfo.getEsriRendererInfo(url, item);
+					} else if (last && typeof renderer !== 'undefined') {
+						item.displaychild.symbol(JSON.stringify(renderer));
 					}
-					
+
 					// subscribe to change on visibility.enable because if it is false
 					// visibility.initstate should be true
 					item.visibility.enable.subscribe(function() {
@@ -431,10 +453,9 @@
 					// refresh ui
 					$aut('.legendSortLayers').accordion('refresh');
 				};
-				
+
 				_self.removeItem = function(parent, array, item) {
-					var len = parent.length - 1,
-						i = 0;
+					var len = parent.length - 1;
 
 					if (len === 0) {
 						array.remove(item);
@@ -442,122 +463,105 @@
 						parent[0].items.remove(item);
 					}
 				};
-				
+
 				_self.sortArray = function(item) {
 					var tree,
 						lenOri, lenFlat,
 						values, data,
 						flat = [];
-					
+
 					// get the tree from html accordion structure
 					tree = _self.getArrayHTML($aut(item));
-					
+
 					// flattened versions of the items
 					lenOri = _self.legendLayers().length;
-					
 					while (lenOri--) {
 						flat = _self.addFlatChildren(_self.legendLayers, flat);
 					}
-					
+
 					// remove child items in flat array
 					lenFlat = flat.length;
 					while (lenFlat--) {
 						flat[lenFlat].items([]);
 					}
-					
+
 					// update the legendLayers or legendBases
 					values = _self.updateArrayRec(tree, flat, ko.observableArray([]));
 					_self.legendLayers(values());
-					
+
 					// dirty refresh the array to notify the changes			
 					data = _self.legendLayers().slice(0);
-    				_self.legendLayers([]);
-    				_self.legendLayers(data);
-    				
-    				// refresh ui
+					_self.legendLayers([]);
+					_self.legendLayers(data);
+
+					// refresh ui
 					$aut('.legendSortLayers').accordion('refresh');
 				};
-				
+
 				// to be called recursively to flatten the array
-			    _self.addFlatChildren = function(array, result) {
-			        array = ko.utils.unwrapObservable(array);
-			        if (array) {
-			            for (var i = 0, j = array.length; i < j; i++) {
-			                result.push(array[i]);
-			                _self.addFlatChildren(array[i].items, result);
-			            }        
-			        }
-			        
-			        return result;
-			    };
-				
+				_self.addFlatChildren = function(array, result) {
+					var val;
+
+					array = ko.utils.unwrapObservable(array);
+					if (array) {
+						for (var i = 0, j = array.length; i < j; i++) {
+							val = array[i];
+							result.push(val);
+							_self.addFlatChildren(val.items, result);
+						}
+					}
+
+					return result;
+				};
+
 				// get item from flatten array
-				_self.getObject = function(items, label) {
+				_self.getObject = function(items, graphid) {
 					var item,
 						len = items.length;
-					
+
 					while (len--) {
 						item = items[len];
-						if (label === item.label.value()) {
+						if (graphid === item.graphid()) {
 							return item;
 						}
 					}
 				};
-				
-				// to be called recursively to create the tree of label from html
+
+				// to be called recursively to create the tree of label id from html
 				_self.getArrayHTML = function(item) {
 					var child,
-						label,
-						labels = [],
+						grapid,
+						grapids = [],
 						children = $aut(item).children(),
 						len = children.length;
-					
+
 					while (len--) {
 						child = $aut(children[len]);
-						label = { label: $aut(child.find('h3').find('span')[1]).attr('id') };
-						label.labels = _self.getArrayHTML(child.children('div').children('.inner-layer-list').children('ul'));
-						labels.push(label);
+						grapid = { graphid: $aut(child.find('h3').find('span')[1]).attr('id') };
+						grapid.graphids = _self.getArrayHTML(child.children('div').children('.inner-layer-list').children('ul'));
+						grapids.push(grapid);
 					}
-					
-					return labels;
+
+					return grapids;
 				};
-				
+
 				_self.updateArrayRec = function(tree, array, values) {
 					var item,
-						val,
-						label,
 						i = 0,
 						len = tree.length;
-					
+
 					while (len--) {
 						item = tree[len];
-						values.push(_self.getObject(array, item.label));
-						_self.updateArrayRec2(item.labels, array, values()[i].items);
-						i++;
-					}
-					
-					return values;
-				};
-				
-				_self.updateArrayRec2 = function(tree, array, values) {
-					var item,
-						val,
-						label,
-						i = 0,
-						len = tree.length;
-					
-					while (len--) {
-						item = tree[len];
-						
-						if (item.labels.length === 0) {
-							values.push(_self.getObject(array, item.label));
+
+						if (item.graphids.length === 0) {
+							values.push(_self.getObject(array, item.graphid));
 						} else {
-							values().push(_self.getObject(array, item.label));
-							_self.updateArrayRec2(item.labels, array, values()[i].items);
+							values().push(_self.getObject(array, item.graphid));
+							_self.updateArrayRec(item.graphids, array, values()[i].items);
 						}
 						i++;
 					}
-					
+
 					return values;
 				};
 
@@ -568,7 +572,6 @@
 						$masterBody = $node.find('#' + id.replace('header', 'panel')),
 						$head = $masterBody.find('li > h3'),
 						$body = $masterBody.find('li > div');
-					
 
 					if ($masterHead.hasClass('ui-accordion-header-active')) {
 						// close
@@ -587,52 +590,48 @@
 						$head.find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
 						$body.addClass('ui-accordion-content-active').attr({ 'aria-expanded': 'true', 'aria-hidden': 'false' }).show();
 					}
-					
+
 					event.preventDefault();
 				};
-				
+
 				_self.createEmptyGrp = function() {
-					var item = addArray(_self.lblEmptyGrp + ' ' + _self.emptyGrpCount, gcautFunc.getUUID(), false, '', 0);
+					var item = addArray(_self.lblEmptyGrp, gcautFunc.getUUID(), false, '', 0);
 					_self.legendLayers.push(item);
-					_self.emptyGrpCount++;
-					
+
 					// refresh ui
 					$aut('.legendSortLayers').accordion('refresh');
 				};
-				
+
 				_self.reset = function() {
 					_self.isResetDialogOpen(true);
 					_self.hiddenReset('');
 				};
-				
+
 				// reset legend dialog buttons functions (ok and cancel)
 				_self.dialogResetOk = function() {
 					_self.resetArray(_self.holderBases, 'bases');
 					_self.resetArray(_self.holderLayers, 'layers');
-					
+
 					// we need a timeout because many function updates the array at the same time
 					// and we dont know when they finish
 					setTimeout(function() {
 						// reset bases and layers
 						_self.legendBases(_self.itemsBases());
 						_self.legendLayers(_self.itemsLayers());
-						
+
 						// refresh ui
 						$aut('.legendSortBases').accordion('refresh');
 						$aut('.legendSortLayers').accordion('refresh');
-						
-						// reset empty group counter
-						_self.emptyGrpCount = 1;
-						
+
 						_self.dialogResetCancel();
-					}, 1500);
+					}, 1000);
 				};
 
 				_self.dialogResetCancel = function() {
 					_self.hiddenReset('gcaut-hidden');
 					_self.isResetDialogOpen(false);
 				};
-				
+
 				_self.write = function() {
 					var value,
 						basesItems,

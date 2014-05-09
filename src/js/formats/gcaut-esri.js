@@ -26,7 +26,7 @@
 				url = urlObject,
 				lods, lenlods;
 
-			while (index !== len) {				
+			while (index !== len) {
 				// set attribute the get sublayers
 				layer = {};
 				item = sendLayers[index + 1];
@@ -116,7 +116,7 @@
 					childName = child.name;
 					childId = child.id;
 					sublayer.name = childName;
-					sublayer.fullname = fullname + '/' + childName;
+					sublayer.fullname = fullname + '***' + childName;
 					sublayer.url = url + '/' + childId;
 					sublayer.id = childId;
 					sublayer.scale = { min: child.minScale, max: child.maxScale};

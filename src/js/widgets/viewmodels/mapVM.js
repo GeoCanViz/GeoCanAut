@@ -40,7 +40,6 @@
 					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
 					size = mapin.size,
 					map = mapin.map,
-					base = map.bases[0],
 					layers = map.layers,
 					extentMax = map.extentmax,
 					extentInit = map.extentinit,
@@ -121,7 +120,7 @@
 				// geometry server and proxy
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.urlProxy = ko.observable(map.urlproxy);
-				
+
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: { precision: 0, validation: { min: 500, max: 2000, id: 'msg_width', msg: _self.msgWidth } } });
@@ -135,7 +134,7 @@
 
 				// hold selected layer type id when we request layers info
 				_self.selectedType = ko.observable(0);
-				
+
 				// base layer input
 				_self.bases = ko.observableArray();
 				_self.baseType = baseType;
@@ -143,7 +142,7 @@
 
 				// set a timeout to fired updatebases in legendVM (workaround to avoid bad array)
 				setTimeout(function() {
-					_self.bases(map.bases);					
+					_self.bases(map.bases);
 					_self.selectBaseLayerType(baseType[1]);
 				}, 750);
 
@@ -194,11 +193,11 @@
 				ko.utils.arrayForEach(_self.layers(), function(item) {
 					var scale = item.scale,
 						cluster= item.cluster;
-						
+
 					// scale
 					scale.min = ko.observable(scale.min).extend({ numeric: { precision: 0 } });
 					scale.max = ko.observable(scale.max).extend({ numeric: { precision: 0 } });
-					
+
 					// cluster
 					cluster.enable = ko.observable(cluster.enable);
 					cluster.distance = ko.observable(cluster.distance).extend({ numeric: { precision: 0 } });
@@ -207,7 +206,7 @@
 					cluster.maxsizeprop = ko.observable(cluster.maxsizeprop).extend({ numeric: { precision: 0 } });
 					cluster.maxdataprop = ko.observable(cluster.maxdataprop).extend({ numeric: { precision: 0 } });
 				});
-				
+
 				// clean the view model
 				clean(ko, elem);
 
@@ -221,7 +220,7 @@
 					// destroy dialog box we need to do this because it disapears from elem
 					clean(ko, $aut('#map_addlayer')[0]);
 					clean(ko, $aut('#map_extent')[0]);
-					
+
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
@@ -230,7 +229,7 @@
 				_self.getLayerType = function(data) {
 					return gcautFunc.getListValue(_self.layerType, data.type);
 				};
-				
+
 				// select layers dialog buttons functions (ok and cancel)
 				_self.dialogLayerOk = function() {
 					_self.updateLayers(_self.servLayers(), layers, _self.selectedType());
@@ -249,36 +248,45 @@
 					var layer,
 						servLayers,
 						url,
+						lastIndex, firstIndex, name,
 						layers = elem,
 						category = _self.isLayer() ? 'layer' : 'base',
 						len = layers.length;
 
 					if (type === 2 || type === 4) {
 						layer = layers[0];
-						url = layer.url.substring(0, layer.url.indexOf('MapServer')) + 'MapServer';
-						
+						lastIndex = layer.url.indexOf('MapServer') - 1;
+						url = layer.url.substring(0, lastIndex);
+						firstIndex = url.lastIndexOf('/') + 1;
+						url = url + '/MapServer';
+						name = url.substring(firstIndex, lastIndex);
+
 						if (category === 'base') {
-							_self.bases.push({ label: layer.fullname,
+							_self.bases.push({ label: name,
 										id: gcautFunc.getUUID(),
 										type: layer.type,
 										url: url });
 						} else {
-							_self.layers.push({ label: layer.fullname,
+							_self.layers.push({ label: name,
 											id: gcautFunc.getUUID(),
 											type: layer.type,
 											url: url,
 											scale: layer.scale,
 											cluster: layer.cluster });
 						}
-						
+
 					} else if (type === 5) {
 						while (len--) {
 							layer = layers[len];
+							lastIndex = layer.url.indexOf('MapServer') - 1;
+							url = layer.url.substring(0, lastIndex);
+							firstIndex = url.lastIndexOf('/') + 1;
+							name = url.substring(firstIndex, lastIndex);
 							servLayers = layer.servLayers;
-							
+
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
-									_self.layers.push({ label: layer.fullname,
+									_self.layers.push({ label: name + '***' + layer.fullname,
 														id: gcautFunc.getUUID(),
 														type: layer.type,
 														url: layer.url,
@@ -502,19 +510,18 @@
 
 				// callback function for gisServInfo.getResourceInfo
 				_self.readServInfo = function(url, type, sender) {
-					var url,
-						category = _self.isLayer() ? 'layer' : 'base';
+					var category = _self.isLayer() ? 'layer' : 'base';
 
 					// set the selected type (use to show or hide checkbox)
 					_self.selectedType(type);
-					
+
 					if (sender.hasOwnProperty('error')) {
 						_self.errortext(_self.txtLayerErr);
 					} else {
 						if (type === 2 || type === 4 || type === 5) {
 							esriData.readInfo(sender, _self, url, type, category);
 						}
-						
+
 						// show window to select layers
 						_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');

@@ -59,10 +59,10 @@
 				_self.mapTitleValue = ko.observable(title.value);
 				_self.mapAltValue = ko.observable(title.alttext);
 				_self.mapTitleWidth = ko.observable();
-				self.mapTitleCount = ko.computed(function() {
+				_self.mapTitleCount = ko.computed(function() {
 					return (_self.mapTitleWidth() - _self.mapTitleValue().length) + _self.lblTitleChar;
 				});
-				
+
 				// tools
 				_self.isTools = ko.observable(map.tools);
 
@@ -102,7 +102,7 @@
 				_self.updateTitle = function(value) {
 					_self.mapTitleWidth((value - 325) / 5);
 				};
-				
+
 				_self.write = function() {
 					var value;
 
@@ -132,7 +132,7 @@
 				while (lenControls--) {
 					controls[lenControls].value.subscribe(_self[controls[lenControls].func], _self);
 				}
-				
+
 				_self.init();
 			};
 

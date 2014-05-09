@@ -160,7 +160,7 @@
 
 					// add inset frame (TODO: remove when insets will be enable)
 					content += '"insetframe": {"enable": false},';
-					
+
 					// add custom widget section and close brackets
 					content += '"customwidgets": []';
 					content += '}}';

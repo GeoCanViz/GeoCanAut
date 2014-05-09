@@ -19,7 +19,8 @@
 			getElemValueVM,
 			setVM,
 			vmObject,
-			getUUID;
+			getUUID,
+			checkDuplicate;
 
 		debounce = function(func, threshold, execAsap) {
 
@@ -88,11 +89,11 @@
 				}
 			}
 		};
-		
+
 		getListValue = function(array, id) {
 			var item,
 				len = array.length;
-			
+
 			while (len--) {
 				item = array[len];
 				if (item.id === id) {
@@ -100,7 +101,7 @@
 				}
 			}
 		};
-		
+
 		checkFormatURL = function(url, type) {
 			var regObj,
 				flag = false,
@@ -142,7 +143,7 @@
 		setVM = function(vm) {
 			vmObject = vm;
 		};
-		
+
 		// http://slavik.meltser.info/?p=142
 		getUUID = function() {
 			function _p8(s) {
@@ -151,7 +152,20 @@
 			}
 			return _p8() + _p8(true) + _p8(true) + _p8();
 		};
-		
+
+		checkDuplicate = function(array, value) {
+			var len = array.length,
+				flag = false;
+
+			while (len--) {
+				if (array[len] === value) {
+					flag = true;
+				}
+			}
+
+			return flag;
+		};
+
 		return {
 			debounce: debounce,
 			getListCB: getListCB,
@@ -162,7 +176,8 @@
 			getObject: getObject,
 			getElemValueVM: getElemValueVM,
 			setVM: setVM,
-			getUUID: getUUID
+			getUUID: getUUID,
+			checkDuplicate: checkDuplicate
 		};
 	});
 }());

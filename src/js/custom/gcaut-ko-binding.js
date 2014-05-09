@@ -9,9 +9,8 @@
 	'use strict';
 	define(['jquery-private',
 			'knockout',
-			'jqueryui',
-			'gcaut-func'
-	], function($aut, ko, gcautFunc) {
+			'jqueryui'
+	], function($aut, ko) {
 
     ko.bindingHandlers.tooltip = {
 		init: function(element, valueAccessor) {
@@ -53,8 +52,7 @@
 		var result = ko.computed({
 			read: target,  // always return the original observables value
 			write: function(newValue) {
-				var min, max,
-					current = target(),
+				var current = target(),
 					precision = options.precision,
 					validation = options.validation,
 					roundingMultiplier = Math.pow(10, precision),
@@ -62,13 +60,13 @@
 					valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
 
 				if (typeof validation !== 'undefined') {
-					if (valueToWrite < validation.min || valueToWrite > validation.max) { 
+					if (valueToWrite < validation.min || valueToWrite > validation.max) {
 						$aut('#' + validation.id).text(validation.msg);
 					} else {
 						$aut('#' + validation.id).text('');
 					}
 				}
-					             
+
 				// only write if it changed
 				if (valueToWrite !== current) {
 					target(valueToWrite);
@@ -90,7 +88,7 @@
 
 	// https://groups.google.com/forum/#!topic/knockoutjs/jhRFqClj4L4 (http://jsfiddle.net/R3Pxf/)
 	ko.bindingHandlers.limitCharacters = {
-		update: function(element, valueAccessor, allBindingsAccessor, viewModel)
+		update: function(element, valueAccessor, allBindingsAccessor)
 		{
 			var allowedNumberOfCharacters = valueAccessor(),
 				currentValue = allBindingsAccessor.get('value'),
