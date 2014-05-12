@@ -132,6 +132,12 @@ label {
 	}
 }
 
+.gcaut-sect-title {
+	padding-top: (2 * $rembase) + rem;
+	vertical-align: bottom;
+	@include app-text(2)
+}
+
 .gcaut-subtitle {
   @include app-text(1.75, bold);
 }

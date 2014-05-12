@@ -36,10 +36,10 @@
 					pathCheckAll = locationPath + 'gcaut/images/mapCheckAll.png',
 					pathUncheckAll = locationPath + 'gcaut/images/mapUncheckAll.png',
 					srType = gcautFunc.getSrType(i18n.getDict('%map-sr')),
-					layerType = [{ id: 1, val: 'WMS' }, { id: 2, val: 'WMTS' }, { id: 3, val: 'esriREST Cache' }, { id: 4, val: 'esriREST Dynamic' }],
+					baseType = gcautFunc.getListCB(i18n.getDict('%map-basetypelist')),
+					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
 					size = mapin.size,
 					map = mapin.map,
-					base = map.bases[0],
 					layers = map.layers,
 					extentMax = map.extentmax,
 					extentInit = map.extentinit,
@@ -63,6 +63,8 @@
 
 				// error message
 				_self.errortext = ko.observable();
+				_self.msgHeight = i18n.getDict('%map-msgheight');
+				_self.msgWidth = i18n.getDict('%map-msgwidth');
 
 				// label
 				_self.lblRemove = i18n.getDict('%remove');
@@ -118,45 +120,45 @@
 				// geometry server and proxy
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.urlProxy = ko.observable(map.urlproxy);
-				
+
 				// map input
-				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: 0 });
-				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: 0 });
+				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
+				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: { precision: 0, validation: { min: 500, max: 2000, id: 'msg_width', msg: _self.msgWidth } } });
 				_self.isLink = ko.observable(map.link);
 
 				// set extent variable (for the dialog box)
-				_self.setExtentMinX = ko.observable().extend({ numeric: 5 });
-				_self.setExtentMinY = ko.observable().extend({ numeric: 5 });
-				_self.setExtentMaxX = ko.observable().extend({ numeric: 5 });
-				_self.setExtentMaxY = ko.observable().extend({ numeric: 5 });
+				_self.setExtentMinX = ko.observable().extend({ numeric: { precision: 5 } });
+				_self.setExtentMinY = ko.observable().extend({ numeric: { precision: 5 } });
+				_self.setExtentMaxX = ko.observable().extend({ numeric: { precision: 5 } });
+				_self.setExtentMaxY = ko.observable().extend({ numeric: { precision: 5 } });
+
+				// hold selected layer type id when we request layers info
+				_self.selectedType = ko.observable(0);
 
 				// base layer input
 				_self.bases = ko.observableArray();
+				_self.baseType = baseType;
 				_self.selectBaseLayerType = ko.observable();
-				if (typeof base !== 'undefined') {
-					// set a timeout to fired updatebases in legendVM
-					setTimeout(function() {
-						_self.bases.push({ id: base.id,
-										type: base.type,
-										category: 'base',
-										url: base.url });
-					}, 500);
 
-					_self.selectBaseLayerType(layerType[base.type - 1]);
-				}
+				// set a timeout to fired updatebases in legendVM (workaround to avoid bad array)
+				setTimeout(function() {
+					_self.bases(map.bases);
+					_self.selectBaseLayerType(baseType[1]);
+				}, 750);
 
+				// continue base layer input
 				_self.srType = srType;
 				_self.isLods = ko.observable(lods.enable);
 				_self.lods = ko.observableArray(lods.values);
 				_self.selectMapSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, map.sr.wkid)]);
-				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: 5 });
-				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: 5 });
-				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: 5 });
-				_self.maxExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: 5 });
-				_self.initExtentMinX = ko.observable(extentInit.xmin).extend({ numeric: 5 });
-				_self.initExtentMinY = ko.observable(extentInit.ymin).extend({ numeric: 5 });
-				_self.initExtentMaxX = ko.observable(extentInit.xmax).extend({ numeric: 5 });
-				_self.initExtentMaxY = ko.observable(extentInit.ymax).extend({ numeric: 5 });
+				_self.maxExtentMinX = ko.observable(extentMax.xmin).extend({ numeric: { precision: 5 } });
+				_self.maxExtentMinY = ko.observable(extentMax.ymin).extend({ numeric: { precision: 5 } });
+				_self.maxExtentMaxX = ko.observable(extentMax.xmax).extend({ numeric: { precision: 5 } });
+				_self.maxExtentMaxY = ko.observable(extentMax.ymax).extend({ numeric: { precision: 5 } });
+				_self.initExtentMinX = ko.observable(extentInit.xmin).extend({ numeric: { precision: 5 } });
+				_self.initExtentMinY = ko.observable(extentInit.ymin).extend({ numeric: { precision: 5 } });
+				_self.initExtentMaxX = ko.observable(extentInit.xmax).extend({ numeric: { precision: 5 } });
+				_self.initExtentMaxY = ko.observable(extentInit.ymax).extend({ numeric: { precision: 5 } });
 
 				// layer input
 				_self.isLayer = ko.observable(false);
@@ -191,20 +193,20 @@
 				ko.utils.arrayForEach(_self.layers(), function(item) {
 					var scale = item.scale,
 						cluster= item.cluster;
-						
+
 					// scale
-					scale.min = ko.observable(scale.min).extend({ numeric: 0 });
-					scale.max = ko.observable(scale.max).extend({ numeric: 0 });
-					
+					scale.min = ko.observable(scale.min).extend({ numeric: { precision: 0 } });
+					scale.max = ko.observable(scale.max).extend({ numeric: { precision: 0 } });
+
 					// cluster
 					cluster.enable = ko.observable(cluster.enable);
-					cluster.distance = ko.observable(cluster.distance).extend({ numeric: 0 });
+					cluster.distance = ko.observable(cluster.distance).extend({ numeric: { precision: 0 } });
 					cluster.label = ko.observable(cluster.label);
 					cluster.symbol = ko.observable(cluster.symbol);
-					cluster.maxsizeprop = ko.observable(cluster.maxsizeprop).extend({ numeric: 0 });
-					cluster.maxdataprop = ko.observable(cluster.maxdataprop).extend({ numeric: 0 });
+					cluster.maxsizeprop = ko.observable(cluster.maxsizeprop).extend({ numeric: { precision: 0 } });
+					cluster.maxdataprop = ko.observable(cluster.maxdataprop).extend({ numeric: { precision: 0 } });
 				});
-				
+
 				// clean the view model
 				clean(ko, elem);
 
@@ -215,13 +217,22 @@
 				};
 
 				_self.bind = function() {
+					// destroy dialog box we need to do this because it disapears from elem
+					clean(ko, $aut('#map_addlayer')[0]);
+					clean(ko, $aut('#map_extent')[0]);
+
 					clean(ko, elem);
 					ko.applyBindings(_self, elem);
 				};
 
+				// get the selected layer value from index
+				_self.getLayerType = function(data) {
+					return gcautFunc.getListValue(_self.layerType, data.type);
+				};
+
 				// select layers dialog buttons functions (ok and cancel)
 				_self.dialogLayerOk = function() {
-					_self.updateLayers(_self.servLayers(), layers);
+					_self.updateLayers(_self.servLayers(), layers, _self.selectedType());
 					_self.dialogLayerCancel();
 				};
 
@@ -233,36 +244,59 @@
 				};
 
 				// update layers array when they are selected from the dialog box
-				_self.updateLayers = function(elem, list) {
+				_self.updateLayers = function(elem, list, type) {
 					var layer,
 						servLayers,
+						url,
+						lastIndex, firstIndex, name,
 						layers = elem,
+						category = _self.isLayer() ? 'layer' : 'base',
 						len = layers.length;
 
-					if (_self.isLayer()) {
+					if (type === 2 || type === 4) {
+						layer = layers[0];
+						lastIndex = layer.url.indexOf('MapServer') - 1;
+						url = layer.url.substring(0, lastIndex);
+						firstIndex = url.lastIndexOf('/') + 1;
+						url = url + '/MapServer';
+						name = url.substring(firstIndex, lastIndex);
+
+						if (category === 'base') {
+							_self.bases.push({ label: name,
+										id: gcautFunc.getUUID(),
+										type: layer.type,
+										url: url });
+						} else {
+							_self.layers.push({ label: name,
+											id: gcautFunc.getUUID(),
+											type: layer.type,
+											url: url,
+											scale: layer.scale,
+											cluster: layer.cluster });
+						}
+
+					} else if (type === 5) {
 						while (len--) {
 							layer = layers[len];
+							lastIndex = layer.url.indexOf('MapServer') - 1;
+							url = layer.url.substring(0, lastIndex);
+							firstIndex = url.lastIndexOf('/') + 1;
+							name = url.substring(firstIndex, lastIndex);
 							servLayers = layer.servLayers;
-							
+
 							if (servLayers.length === 0) {
 								if (layer.isChecked()) {
-									_self.layers.push({ id: layer.fullname,
+									_self.layers.push({ label: name + '***' + layer.fullname,
+														id: gcautFunc.getUUID(),
 														type: layer.type,
-														category: layer.category,
 														url: layer.url,
 														scale: layer.scale,
 														cluster: layer.cluster });
 								}
 							} else {
-								_self.updateLayers(servLayers, list);
+								_self.updateLayers(servLayers, list, type);
 							}
 						}
-					} else {
-						layer = layers[0];
-						_self.bases.push({ id: layer.fullname,
-											type: _self.selectBaseLayerType().id,
-											category: layer.category,
-											url: _self.baseURL() });
 					}
 				};
 
@@ -389,12 +423,14 @@
 					var array;
 
 					if (id === 1) {
-						array = localStorage.servnameWMS.split(';');
+						array = localStorage.servnameWMST.split(';');
 					} else if (id === 2)  {
-						array = localStorage.servnameWMTS.split(';');
-					} else if (id === 3)  {
 						array = localStorage.servnameCacheREST.split(';');
+					} else if (id === 3)  {
+						array = localStorage.servnameWMS.split(';');
 					} else if (id === 4)  {
+						array = localStorage.servnameDynamicREST.split(';');
+					} else if (id === 5)  {
 						array = localStorage.servnameDynamicREST.split(';');
 					}
 
@@ -456,12 +492,14 @@
 						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
 						addUrl = _self.availServ().join(';');
 						if (layerType === 1) {
-							localStorage.setItem('servnameWMS', addUrl);
-						} else if (layerType === 2)  {
 							localStorage.setItem('servnameWMTS', addUrl);
-						} else if (layerType === 3)  {
+						} else if (layerType === 2)  {
 							localStorage.setItem('servnameCacheREST', addUrl);
+						} else if (layerType === 3)  {
+							localStorage.setItem('servnameWMTS', addUrl);
 						} else if (layerType === 4)  {
+							localStorage.setItem('servnameDynamicREST', addUrl);
+						} else if (layerType === 5)  {
 							localStorage.setItem('servnameDynamicREST', addUrl);
 						}
 
@@ -471,25 +509,19 @@
 				};
 
 				// callback function for gisServInfo.getResourceInfo
-				_self.readServInfo = function(sender) {
-					var url,
-						type = _self.isLayer() ? 'layer' : 'base';
+				_self.readServInfo = function(url, type, sender) {
+					var category = _self.isLayer() ? 'layer' : 'base';
 
-					if (type === 'base') {
-						url = _self.baseURL();
-					} else {
-						url = _self.layerURL();
-					}
+					// set the selected type (use to show or hide checkbox)
+					_self.selectedType(type);
 
 					if (sender.hasOwnProperty('error')) {
 						_self.errortext(_self.txtLayerErr);
 					} else {
-						if (sender.hasOwnProperty('layers')) {
-							esriData.readInfo(sender, _self, url, type);
-						} else {
-							
+						if (type === 2 || type === 4 || type === 5) {
+							esriData.readInfo(sender, _self, url, type, category);
 						}
-						
+
 						// show window to select layers
 						_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');
@@ -498,14 +530,14 @@
 
 				_self.updateOrder = function() {
 					// reorder layers array after sort
-					var text,
-						$elems = $aut('#layersorder').find('.layerTitle'),
+					var id,
+						$elems = $aut('#layersoptions').find('.layeroption-title'),
 						len = $elems.length,
 						tmpLayers = [];
 
 					while (len--) {
-						text = $aut($elems[len]).text();
-						tmpLayers.push(gcautFunc.getObject(_self.layers(), 'id', text));
+						id = $aut($elems[len]).attr('id');
+						tmpLayers.push(gcautFunc.getObject(_self.layers(), 'id', id));
 					}
 
 					_self.layers(tmpLayers.reverse());

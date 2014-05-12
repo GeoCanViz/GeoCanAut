@@ -47,16 +47,25 @@
 	};
 
 	// http://knockoutjs.com/documentation/extenders.html
-	ko.extenders.numeric = function(target, precision) {
+	ko.extenders.numeric = function(target, options) {
 		// create a writeable computed observable to intercept writes to our observable
 		var result = ko.computed({
 			read: target,  // always return the original observables value
 			write: function(newValue) {
 				var current = target(),
+					precision = options.precision,
+					validation = options.validation,
+					roundingMultiplier = Math.pow(10, precision),
+					newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
+					valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
 
-				roundingMultiplier = Math.pow(10, precision),
-				newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
-				valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+				if (typeof validation !== 'undefined') {
+					if (valueToWrite < validation.min || valueToWrite > validation.max) {
+						$aut('#' + validation.id).text(validation.msg);
+					} else {
+						$aut('#' + validation.id).text('');
+					}
+				}
 
 				// only write if it changed
 				if (valueToWrite !== current) {
@@ -75,6 +84,17 @@
 
 		// return the new computed observable
 		return result;
+	};
+
+	// https://groups.google.com/forum/#!topic/knockoutjs/jhRFqClj4L4 (http://jsfiddle.net/R3Pxf/)
+	ko.bindingHandlers.limitCharacters = {
+		update: function(element, valueAccessor, allBindingsAccessor)
+		{
+			var allowedNumberOfCharacters = valueAccessor(),
+				currentValue = allBindingsAccessor.get('value'),
+				cutText = ko.unwrap(currentValue).substr(0, allowedNumberOfCharacters);
+			currentValue(cutText);
+		}
 	};
 
 	// http://stackoverflow.com/questions/12856112/using-knockout-js-with-jquery-ui-sliders

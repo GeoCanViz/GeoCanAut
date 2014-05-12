@@ -13,11 +13,14 @@
 			getListCB,
 			getSrType,
 			getSrTypeIndex,
+			getListValue,
 			checkFormatURL,
 			getObject,
 			getElemValueVM,
 			setVM,
-			vmObject;
+			vmObject,
+			getUUID,
+			checkDuplicate;
 
 		debounce = function(func, threshold, execAsap) {
 
@@ -87,13 +90,25 @@
 			}
 		};
 
+		getListValue = function(array, id) {
+			var item,
+				len = array.length;
+
+			while (len--) {
+				item = array[len];
+				if (item.id === id) {
+					return item.val;
+				}
+			}
+		};
+
 		checkFormatURL = function(url, type) {
 			var regObj,
 				flag = false,
 				regexp = '(^(http|https):\\/\\/)';
 
 			// create regex from type
-			if (type === 3 || type === 4) {
+			if (type === 2 || type === 4 || type === 5) {
 				// esri cache or dynamic
 				regexp += '*(/rest/services/)*\/(MapServer)';
 			}
@@ -129,15 +144,40 @@
 			vmObject = vm;
 		};
 
+		// http://slavik.meltser.info/?p=142
+		getUUID = function() {
+			function _p8(s) {
+				var p = (Math.random().toString(16) + '000000000').substr(2,8);
+				return s ? '-' + p.substr(0,4) + '-' + p.substr(4,4) : p ;
+			}
+			return _p8() + _p8(true) + _p8(true) + _p8();
+		};
+
+		checkDuplicate = function(array, value) {
+			var len = array.length,
+				flag = false;
+
+			while (len--) {
+				if (array[len] === value) {
+					flag = true;
+				}
+			}
+
+			return flag;
+		};
+
 		return {
 			debounce: debounce,
 			getListCB: getListCB,
 			getSrType: getSrType,
 			getSrTypeIndex: getSrTypeIndex,
+			getListValue: getListValue,
 			checkFormatURL: checkFormatURL,
 			getObject: getObject,
 			getElemValueVM: getElemValueVM,
-			setVM: setVM
+			setVM: setVM,
+			getUUID: getUUID,
+			checkDuplicate: checkDuplicate
 		};
 	});
 }());

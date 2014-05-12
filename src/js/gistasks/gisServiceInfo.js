@@ -13,39 +13,42 @@
 			], function($aut, i18n, esriRequest) {
 
 		var getResourceInfo,
-			getEsriRendererInfo;
+			getEsriRendererInfo,
+			getEsriServRendererInfo;
 
 		getResourceInfo = function(url, layerType, success, error) {
 			//http://resources.esri.com/help/9.3/arcgisserver/apis/javascript/ve/help/Getting%20Started/DiscoverMapServices.html
-			var requestHandle,
-				options;
-				
-			if (layerType <= 2) {
-				options = { url: url + '?/request=GetCapabilities',
+			var options;
+
+			if (layerType === 1 || layerType === 3) {
+				options = { url: url + '?request=GetCapabilities',
 							handleAs: 'xml'
 					};
-				
-			} else if (layerType <= 4) {
+
+			} else if (layerType === 2 || layerType === 4 || layerType === 5) {
 				options = { url: url,
 							content: { f: 'json' },
 							handleAs: 'json',
 							callbackParamName: 'callback'
 					};
 			}
-			
-			requestHandle = esriRequest(options);				
-			requestHandle.then(success, error);
+
+			options.load = function(response) {
+								success(url, layerType, response);
+							};
+			options.error = error;
+			esriRequest(options);
 		};
 
 		getEsriRendererInfo = function(url, item) {
 			var urlOut = url.substring(0, url.indexOf('MapServer')) + 'MapServer/layers',
 				layer = url.substring(url.lastIndexOf('/') + 1, url.length);
-			
+
 			// if it is a basemap, layer will not be a number
 			if (isNaN(layer)) {
 				layer = 0;
 			}
-			
+
 			esriRequest({
 				url: urlOut,
 				content: { f: 'json' },
@@ -60,9 +63,27 @@
 			});
 		};
 
+		getEsriServRendererInfo = function(items, url, id, success) {
+			var urlOut = url.substring(0, url.indexOf('MapServer')) + 'MapServer/layers';
+
+			esriRequest({
+				url: urlOut,
+				content: { f: 'json' },
+				handleAs: 'json',
+				callbackParamName: 'callback',
+				load: function(response) {
+					success(items, url, id, response.layers);
+				},
+				error: function(err) {
+					console.log('Not able to get renderer: ' + err);
+				}
+			});
+		};
+
 		return {
 			getResourceInfo: getResourceInfo,
-			getEsriRendererInfo: getEsriRendererInfo
+			getEsriRendererInfo: getEsriRendererInfo,
+			getEsriServRendererInfo: getEsriServRendererInfo
 		};
 	});
 }());
