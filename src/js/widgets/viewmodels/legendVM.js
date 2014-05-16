@@ -35,6 +35,9 @@
 				_self.imgOpen = pathOpen;
 				_self.imgAddGroup = pathAddGroup;
 
+				// error message
+				_self.msgOpacity = i18n.getDict('%legend-msgopacity');
+
 				// label
 				_self.lblReset = i18n.getDict('%reset');
 				_self.lblRemove = i18n.getDict('%remove');
@@ -46,6 +49,7 @@
 				_self.lblMetaUrl = i18n.getDict('%legend-metaurl');
 				_self.lblMetaText = i18n.getDict('%legend-metatext');
 				_self.lblOpacity = i18n.getDict('%legend-opacity');
+				_self.lblOpacityInit = i18n.getDict('%legend-opacityinit');
 				_self.lblOpacityMin = i18n.getDict('%minimum');
 				_self.lblOpacityMax = i18n.getDict('%maximum');
 				_self.lblVisibility = i18n.getDict('%legend-visibility');
@@ -151,6 +155,7 @@
 					item.opacity.canenable = ko.observable(_self.opacityValue);
 					item.opacity.min = ko.observable(opacity.min).extend({ numeric: { precision: 2 } });
 					item.opacity.max = ko.observable(opacity.max).extend({ numeric: { precision: 2 } });
+					item.opacity.initstate = ko.observable(opacity.initstate).extend({ numeric: { precision: 2, validation: { min: item.opacity.min, max: item.opacity.max, id: 'msg_opacityInit' + item.graphid(), msg: _self.msgOpacity } } });
 					item.visibility.enable = ko.observable(visibility.enable);
 					item.visibility.initstate = ko.observable(visibility.initstate);
 					item.visibility.type = ko.observable(_self.visibilityType[visibility.type - 1]);
@@ -326,6 +331,21 @@
 							_self.esriDynamicSublayer(items()[items().length - 1].items, layer.subLayers, id, layers);
 						}
 					}
+
+					// set visibility checkbox false for every child because there is one only on the first level
+					// and by default it is set to true when we create the array
+					_self.esriDynamicVis(items());
+				};
+
+				_self.esriDynamicVis = function(items) {
+					var item,
+						len = items.length;
+
+					while (len--) {
+						item = items[len];
+						item.visibility.enable(false);
+						_self.esriDynamicVis(item.items());
+					}
 				};
 
 				_self.esriDynamicSublayer = function(items, arrSublayers, id, layers) {
@@ -409,6 +429,9 @@
 								},
 								items: ko.observableArray()
 							};
+
+					// add the initila opacity outside object because it reference observable inside it
+					item.opacity.initstate = ko.observable(1).extend({ numeric: { precision: 2, validation: { min: item.opacity.min, max: item.opacity.max, id: 'msg_opacityInit' + item.graphid(), msg: _self.msgOpacity } } });
 
 					// set renderer
 					if (last && typeof renderer === 'undefined') {

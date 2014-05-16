@@ -26,14 +26,18 @@
 					scalebar = map.scalebar,
 					scale = map.scaledisplay,
 					overview = map.overview,
+					position = map.position,
 					scalebarType = gcautFunc.getListCB(i18n.getDict('%nav-scalebarlist')),
 					scaleType = gcautFunc.getListCB(i18n.getDict('%nav-scalelist')),
+					overType = gcautFunc.getListCB(i18n.getDict('%nav-overtypelist')),
 					pathZoom = locationPath + 'gcaut/images/navFullExtent.png',
-					pathGeoloc = locationPath + 'gcaut/images/navGeoloc.png';
+					pathGeoloc = locationPath + 'gcaut/images/navGeoloc.png',
+					pathPosition = locationPath + 'gcaut/images/navPosition.png';
 
 				// images path
 				_self.imgZoom = pathZoom;
 				_self.imgGeoloc = pathGeoloc;
+				_self.imgPosition = pathPosition;
 
 				// label
 				_self.lblEnable = i18n.getDict('%nav-enable');
@@ -45,7 +49,9 @@
 				_self.lblScale = i18n.getDict('%nav-scale');
 				_self.lblScaleFormat = i18n.getDict('%nav-scaleformat');
 				_self.lblOver = i18n.getDict('%nav-over');
-				_self.lblUrlOver = i18n.getDict('%nav-urlover');
+				_self.lblOverUrl = i18n.getDict('%nav-overurl');
+				_self.lblOverType = i18n.getDict('%nav-overtype');
+				_self.lblPosition = i18n.getDict('%nav-position');
 
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
@@ -69,7 +75,12 @@
 
 				// overview
 				_self.isOver = ko.observable(overview.enable);
-				_self.urlOver = ko.observable(map.overview.url);
+				_self.urlOver = ko.observable(overview.url);
+				_self.overType = overType;
+				_self.selectOver = ko.observable(_self.overType[overview.type - 1]);
+
+				// position
+				_self.isPosition = ko.observable(position.enable);
 
 				// clean the view model
 				clean(ko, elem);
@@ -84,11 +95,13 @@
 				};
 
 				_self.write = function() {
-					var value;
+					var value,
+						mapwkid = gcautFunc.getElemValueVM('map', 'selectMapSR');
 
 					value = '"toolbarnav": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
+								',"mapwkid": ' + mapwkid.id +
 								',"zoom": ' + _self.isZoom() +
 								',"geolocation": {' +
 									'"enable": ' + _self.isGeoloc() +
@@ -105,6 +118,10 @@
 								'"overview": {' +
 									'"enable": ' + _self.isOver() +
 									',"url": "' + _self.urlOver() + '"' +
+									',"type": "' + _self.selectOver().id + '"' +
+								'},' +
+								'"position": {' +
+									'"enable": ' + _self.isPosition() +
 								'}' +
 							'}';
 

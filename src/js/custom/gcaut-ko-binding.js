@@ -52,15 +52,27 @@
 		var result = ko.computed({
 			read: target,  // always return the original observables value
 			write: function(newValue) {
-				var current = target(),
+				var min, max,
+					current = target(),
 					precision = options.precision,
 					validation = options.validation,
 					roundingMultiplier = Math.pow(10, precision),
 					newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
 					valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
 
+				// if it is a float, let add '.'
+				if (typeof newValue === 'string' && precision > 0) {
+					if (newValue.indexOf('.') === newValue.length - 1) {
+						valueToWrite = newValue;
+					}
+				}
+
 				if (typeof validation !== 'undefined') {
-					if (valueToWrite < validation.min || valueToWrite > validation.max) {
+					// check if validation are observable, is fo get value
+					min = (typeof validation.min === 'function') ? validation.min() : validation.min;
+					max = (typeof validation.max === 'function') ? validation.max() : validation.max;
+
+					if (valueToWrite < min || valueToWrite > max) {
 						$aut('#' + validation.id).text(validation.msg);
 					} else {
 						$aut('#' + validation.id).text('');

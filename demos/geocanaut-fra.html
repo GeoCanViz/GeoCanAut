@@ -342,7 +342,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
 											<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
 										</div>
-										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tabmap-options' }">
+										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tabmap-options' }, visible: $data.type === 5">
 											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster"></h3>
 											<div>
 												<input type="checkbox" id="cb_cluster" data-bind="checked: $data.cluster.enable">
@@ -405,9 +405,6 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: isPrint"></select>
 				</div>
 				<div style="clear: both"></div>
-				<input type="checkbox" id="cb_inset" data-bind="checked: isInset, enable: false">
-				<label for="cb_inset" class="form-checkbox" data-bind="imgLabel: { text: lblInset, img: imgInset }"></label>
-				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
 				<label for="cb_fullscreen" class="form-checkbox" data-bind="imgLabel: { text: lblFulscreen, img: imgFullscreen }"></label>
 		</div>
@@ -460,7 +457,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										</div>
 										<div style="clear: both"></div>
 										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
-										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>			
+										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
+										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+											<label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
+											<input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
+											<span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
+										</div>	
 										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
 											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
 											<div class="row">
@@ -516,7 +518,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										</div>
 										<div style="clear: both"></div>
 										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
-										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>			
+										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
+										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+											<label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
+											<input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
+											<span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
+										</div>
 										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
 											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
 											<div class="row">
@@ -571,14 +578,15 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="textDraw" data-bind="checked: isText">
 							<label for="textDraw" class="form-checkbox" data-bind="imgLabel: { text: lblText, img: imgText }"></label>
 							<div style="clear: both"></div>
-							<input type="checkbox" id="measureDraw" data-bind="checked: isMeasure">
-							<label for="measureDraw" class="form-checkbox" data-bind="imgLabel: { text: lblMeasure, img: imgMeasure }"></label>
-							<div class="row">
-								<label for="measureTypeDraw" class="form-checkbox" data-bind="text: lblMeasureType"></label>
-								<select id="measureTypeDraw" data-bind="options: measureType, optionsText: 'val', value: selectMeasureType, enable: isMeasure"></select>
-								<label for="measureUnitDraw" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
-								<select id="measureUnitDraw" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnit, enable: isMeasure"></select>
-							</div>
+							<input type="checkbox" id="measureLength" data-bind="checked: isMeasureL">
+							<label for="measureLength" class="form-checkbox" data-bind="imgLabel: { text: lblMeasureL, img: imgMeasureL }"></label>
+							<label for="measureUnitDrawL" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+							<select id="measureUnitDrawL" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitL, enable: isMeasureL"></select>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="measureArea" data-bind="checked: isMeasureA">
+							<label for="measureArea" class="form-checkbox" data-bind="imgLabel: { text: lblMeasureA, img: imgMeasureA }"></label>
+							<label for="measureUnitDrawA" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+							<select id="measureUnitDrawA" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitA, enable: isMeasureA"></select>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="fileDraw" data-bind="checked: isFile">
 							<label for="fileDraw" class="form-checkbox" data-bind="imgLabel: { text: lblFile, imgs: imgImportExport }"></label>
@@ -615,9 +623,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="overNav" data-bind="checked: isOver">
 							<label for="overNav" class="form-checkbox" data-bind="text: lblOver"></label>							
 							<div class="row">
-								<label for="urlOverNav" data-bind="text: lblUrlOver, visible: isOver"></label>
+								<label for="overType" class="form-checkbox" data-bind="text: lblOverType, visible: isOver"></label>
+								<select id="overType" data-bind="options: overType, optionsText: 'val', value: selectOver, visible: isOver"></select>
+								<label for="urlOverNav" data-bind="text: lblOverUrl, visible: isOver"></label>
 								<input id="urlOverNav" class="gcaut-uri" type="text" data-bind="value: urlOver, visible: isOver"></input>
-							<div class="row">
+							</div>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="positionNav" data-bind="checked: isPosition">
+							<label for="positionNav" class="form-checkbox" data-bind="imgLabel: { text: lblPosition, imgs: imgPosition }"></label>		
 						</section>
 					</div>
 				</section>

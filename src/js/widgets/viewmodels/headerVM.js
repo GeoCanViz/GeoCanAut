@@ -66,8 +66,9 @@
 				// tools
 				_self.isTools = ko.observable(map.tools);
 
-				// insets
-				_self.isInset = ko.observable(true);
+				// insets and link
+				_self.isInset = ko.observable(false);
+				_self.isLink = ko.observable(map.link);
 
 				// full screen
 				_self.isFullscreen = ko.observable(map.fullscreen);
@@ -106,12 +107,18 @@
 				_self.write = function() {
 					var value;
 
+					// get inset and link info from other vm
+					// TODO set inset when insetVM will be created. In mean time hardcode
+					_self.isLink(gcautFunc.getElemValueVM('map', 'isLink'));
+					
 					value = '"header": {' +
 								'"title": {' +
 									'"value": "' + _self.mapTitleValue() +'",' +
 									'"alttext": "' + _self.mapAltValue() + '"' +
 								'},' +
 								'"tools": ' + _self.isTools() +
+								',"link": ' + _self.isLink() +
+								',"inset": ' + _self.isInset() +
 								',"about": {' +
 									'"enable": ' +  _self.isAbout() +
 									',"type": ' + _self.selectAbout().id +
