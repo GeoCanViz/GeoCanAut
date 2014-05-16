@@ -24,19 +24,21 @@
 				var _self = this,
 					line = map.drawline,
 					text = map.drawtext,
-					measure = map.measure,
+					measureline = map.measureline,
+					measurearea = map.measurearea,
 					file = map.importexport,
-					measureType = gcautFunc.getListCB(i18n.getDict('%draw-measuretypelist')),
 					measureUnit = gcautFunc.getListCB(i18n.getDict('%draw-measureunitlist')),
 					pathLine = locationPath + 'gcaut/images/drawDraw.png',
 					pathText = locationPath + 'gcaut/images/drawText.png',
-					pathMeasure = locationPath + 'gcaut/images/drawMeasure.png',
+					pathMeasureL = locationPath + 'gcaut/images/drawMeasureL.png',
+					pathMeasureA = locationPath + 'gcaut/images/drawMeasureA.png',
 					pathImportExport = locationPath + 'gcaut/images/drawImport.png;' +locationPath + 'gcaut/images/drawExport.png';
 
 				// images path
 				_self.imgLine = pathLine;
 				_self.imgText = pathText;
-				_self.imgMeasure = pathMeasure;
+				_self.imgMeasureL = pathMeasureL;
+				_self.imgMeasureA = pathMeasureA;
 				_self.imgImportExport = pathImportExport;
 
 				// label
@@ -44,8 +46,8 @@
 				_self.lblExpand = i18n.getDict('%expand');
 				_self.lblLine = i18n.getDict('%draw-line');
 				_self.lblText = i18n.getDict('%draw-text');
-				_self.lblMeasure = i18n.getDict('%draw-measure');
-				_self.lblMeasureType = i18n.getDict('%draw-measuretype');
+				_self.lblMeasureL = i18n.getDict('%draw-measureline');
+				_self.lblMeasureA = i18n.getDict('%draw-measurearea');
 				_self.lblMeasureUnit = i18n.getDict('%draw-measureunit');
 				_self.lblFile = i18n.getDict('%draw-file');
 
@@ -60,11 +62,13 @@
 				_self.isText = ko.observable(text.enable);
 
 				// measure
-				_self.isMeasure = ko.observable(measure.enable);
-				_self.measureType = measureType;
-				_self.selectMeasureType = ko.observable(_self.measureType[measure.type - 1]);
+				_self.isMeasureL = ko.observable(measureline.enable);
+				_self.isMeasureA = ko.observable(measurearea.enable);
+				_self.measureUnitL = ko.observable(measureline.unit);
+				_self.measureUnitA = ko.observable(measurearea.unit);
 				_self.measureUnit = measureUnit;
-				_self.selectMeasureUnit = ko.observable(_self.measureUnit[measure.unit - 1]);
+				_self.selectMeasureUnitL = ko.observable(_self.measureUnit[measureline.unit - 1]);
+				_self.selectMeasureUnitA = ko.observable(_self.measureUnit[measurearea.unit - 1]);
 
 				// import/export file
 				_self.isFile = ko.observable(file.enable);
@@ -93,10 +97,13 @@
 								'"drawtext": {' +
 									'"enable": ' + _self.isText() +
 								'},' +
-								'"measure": {' +
-									'"enable": ' + _self.isMeasure() +
-									',"type": ' + _self.selectMeasureType().id +
-									',"unit": ' + _self.selectMeasureUnit().id +
+								'"measureline": {' +
+									'"enable": ' + _self.isMeasureL() +
+									',"unit": ' + _self.selectMeasureUnitL().id +
+								'},' +
+								'"measurearea": {' +
+									'"enable": ' + _self.isMeasureA() +
+									',"unit": ' + _self.selectMeasureUnitA().id +
 								'},' +
 								'"importexport": {' +
 									'"enable": ' + _self.isFile() +

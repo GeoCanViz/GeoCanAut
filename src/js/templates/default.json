@@ -9,7 +9,8 @@
 			"width": 500
 		},
 		"map": {
-			"urlgeomserv": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+			"urlgeomserv": "http://http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
+			"urlproxy": "http://localhost:8888/php/download.php",
 			"sr": {
 				"wkid": 4326
 			},
@@ -43,6 +44,8 @@
 			"alttext": ""
 		},
 		"tools": false,
+		"link": false,
+		"inset": false,
 		"about": {
 			"enable": false,
 			"type": 1,
@@ -63,9 +66,12 @@
 		"drawtext": {
 			"enable": false
 		},
-		"measure": {
+		"measureline": {
 			"enable": false,
-			"type": 3,
+			"unit": 1
+		},
+		"measurearea": {
+			"enable": false,
 			"unit": 1
 		},
 		"importexport": {
@@ -92,7 +98,14 @@
 		},
 		"overview": {
 			"enable": false,
-			"url": ""
+			"url": "",
+			"type": 2
+		},
+		"position": {
+			"enable": false,
+			"section1": true,
+			"section2": true,
+			"section3": true
 		}
 	},
 	"toolbarlegend": {
