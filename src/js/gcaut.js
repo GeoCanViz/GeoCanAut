@@ -39,24 +39,36 @@ var locationPath;
 			// set location path
 			setLocationPath();
 
-			// set localstorage for services name
-			setStorage(wms, wmts, cacheRest, dynamicRest);
-
-			// set proxy for esri request (https://github.com/Esri/resource-proxy)
-			// proxy needs to be in the same domain
-			//esriConfig.defaults.io.proxyUrl = 'http://s-bsc-geoappint.nrn.nrcan.gc.ca/DotNet/proxy.ashx';
-			esriConfig.defaults.io.proxyUrl = 'http://localhost:8888/php/proxy.php';
-			esriConfig.defaults.io.alwaysUseProxy = false;
-
-			// initialize jQueryUI tabs container
-			// not bind with knockout because they are not part of the viewmodel, they are containers
-			$tabs.removeAttr('style');
-			$tabs.tabs({ heightStyle: 'auto', collapsible: true, active: false, disabled: true });
-			$('#gcautmaptabs').tabs({ heightStyle: 'auto' });
-			$('#gcauttoolstabs').tabs({ heightStyle: 'auto' });
-
-			// launch project header
-			projheaderVM.initialize(elem);
+			// read GCAut config file to set author configurations then launch project header
+			$aut.ajax({
+				url: locationPath + 'gcaut/config/gcaut-default.json',
+				crossDomain: false,
+				dataType: 'json',
+				async: false,
+				success: function(config) {
+					// set proxy for esri request (https://github.com/Esri/resource-proxy)
+					// proxy needs to be in the same domain
+					//esriConfig.defaults.io.proxyUrl = 'http://s-bsc-geoappint.nrn.nrcan.gc.ca/DotNet/proxy.ashx';
+					esriConfig.defaults.io.proxyUrl = config.proxy;
+					esriConfig.defaults.io.alwaysUseProxy = false;
+					
+					// set localstorage for services name
+					setStorage(config.services);
+					
+					// initialize jQueryUI tabs container
+					// not bind with knockout because they are not part of the viewmodel, they are containers
+					$tabs.removeAttr('style');
+					$tabs.tabs({ heightStyle: 'auto', collapsible: true, active: false, disabled: true });
+					$('#gcautmaptabs').tabs({ heightStyle: 'auto' });
+					$('#gcauttoolstabs').tabs({ heightStyle: 'auto' });
+		
+					// launch project header
+					projheaderVM.initialize(elem, config);
+				},
+				error: function() {
+					console.log('Error in gcaut-default.json');
+				}
+			}); // end ajax
 		};
 
 		setLocationPath = function() {
@@ -80,18 +92,18 @@ var locationPath;
 			}
 		};
 
-		setStorage = function(wms, wmts, cacheRest, dynamicRest) {
+		setStorage = function(services) {
 			if (typeof localStorage.servnameWMS === 'undefined') {
-				localStorage.setItem('servnameWMS', wms);
+				localStorage.setItem('servnameWMS', services.wms);
 			}
 			if (typeof localStorage.servnameWMTS === 'undefined') {
-				localStorage.setItem('servnameWMTS', wmts);
+				localStorage.setItem('servnameWMTS', services.wmts);
 			}
 			if (typeof localStorage.servnameCacheREST === 'undefined') {
-				localStorage.setItem('servnameCacheREST', cacheRest);
+				localStorage.setItem('servnameCacheREST', services.esritiled);
 			}
 			if (typeof localStorage.servnameDynamicREST === 'undefined') {
-				localStorage.setItem('servnameDynamicREST', dynamicRest);
+				localStorage.setItem('servnameDynamicREST', services.esridynamic);
 			}
 		};
 

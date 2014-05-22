@@ -1,0 +1,129 @@
+{
+"gcviz": {
+	"mapframe": {
+		"size": {
+			"height": 400,
+			"width": 500
+		},
+		"map": {
+			"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
+			"urlproxy": "http://localhost:8888/php/proxy.php",
+			"sr": {
+				"wkid": 4326
+			},
+			"extentmax": {
+			"xmin": 0.0,
+			"ymin": 0.0,
+			"xmax": 0.0,
+			"ymax": 0.0
+			},
+			"extentinit": {
+				"xmin": 0.0,
+				"ymin": 0.0,
+				"xmax": 0.0,
+				"ymax": 0.0
+			},
+			"lods": {
+				"enable": false,
+				"values": []
+			},
+			"link": false,
+			"bases": [],
+			"layers": []
+		}
+	},
+	"insetframe": {
+		"enable": false
+	},
+	"header": {
+		"title": {
+			"value": "",
+			"alttext": ""
+		},
+		"tools": false,
+		"link": false,
+		"inset": false,
+		"about": {
+			"enable": false,
+			"type": 1,
+			"value": ""
+		},
+		"print": {
+			"enable": false,
+			"type": 1,
+			"urlprinttask": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+		},
+		"fullscreen": false
+	},
+	"toolbardraw": {
+		"enable": false,
+		"expand": false,
+		"drawline": {
+			"enable": false
+		},
+		"drawtext": {
+			"enable": false
+		},
+		"measureline": {
+			"enable": false,
+			"unit": 1
+		},
+		"measurearea": {
+			"enable": false,
+			"unit": 1
+		},
+		"importexport": {
+			"enable": false,
+			"format": 1
+		}
+	},
+	"toolbarnav": {
+		"enable": false,
+		"expand": false,
+		"zoom": false,
+		"urlgeomserv": "",
+		"geolocation": {
+			"enable": false,
+			"type": 2
+		},
+		"scalebar": {
+			"enable": false,
+			"unit": 1
+		},
+		"scaledisplay": {
+			"enable": false,
+			"format": 1
+		},
+		"overview": {
+			"enable": false,
+			"url": "",
+			"type": 2
+		},
+		"position": {
+			"enable": false,
+			"section1": true,
+			"section2": true,
+			"section3": true
+		}
+	},
+	"toolbarlegend": {
+		"enable": false,
+		"expand": false,		
+		"items": []
+	},
+	"footer": {
+		"urlgeomserv": "",
+		"northarrow": {
+			"enable": false,
+			"inwkid": 4326
+		},
+		"mousecoords": {
+			"enable": false,
+			"outwkid": 4326
+		},
+		"datatable": {
+			"direction": "in"
+		}
+	},
+	"customwidgets": []
+}}

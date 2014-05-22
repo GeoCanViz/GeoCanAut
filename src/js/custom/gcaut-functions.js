@@ -11,6 +11,7 @@
 
 		var debounce,
 			getListCB,
+			getListCBCust,
 			getSrType,
 			getSrTypeIndex,
 			getListValue,
@@ -58,6 +59,20 @@
 			while (len--) {
 				typeArr.push({ id: i, val: array[len] });
 				i++;
+			}
+
+			return typeArr;
+		};
+
+		getListCBCust = function(id, val) {
+			var id = id.reverse(),
+				typeArr = [],
+				array = val.split(';'),
+				len = array.length;
+
+			array = array.reverse();
+			while (len--) {
+				typeArr.push({ id: id[len], val: array[len] });
 			}
 
 			return typeArr;
@@ -169,6 +184,7 @@
 		return {
 			debounce: debounce,
 			getListCB: getListCB,
+			getListCBCust: getListCBCust,
 			getSrType: getSrType,
 			getSrTypeIndex: getSrTypeIndex,
 			getListValue: getListValue,

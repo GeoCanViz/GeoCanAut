@@ -26,17 +26,17 @@
 			setFocus,
 			vm;
 
-		initialize = function(elem) {
+		initialize = function(elem, config) {
 
 			// data model
-			var projheaderViewModel = function() {
+			var projheaderViewModel = function(config) {
 				var _self = this,
 					pathNew = locationPath + 'gcaut/images/projNew.png',
 					pathOpen = locationPath + 'gcaut/images/projOpen.png',
 					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
 					pathRestore = locationPath + 'gcaut/images/projRestore.gif',
 					pathSave = locationPath + 'gcaut/images/projSave.png',
-					pathTemplate = locationPath + 'src/js/templates/default.json';
+					pathTemplate = locationPath + 'gcaut/config/gcviz-default.json';
 
 				// images path
 				_self.imgNew = pathNew;
@@ -98,6 +98,10 @@
 						reader.onload = loadFile();
 						reader.readAsText(file);
 					}
+					
+					// clear the selected file
+					document.getElementById('fileDialogFF').value = '';
+					document.getElementById('fileDialog').value = '';
 				};
 
 				loadFile = function() {
@@ -106,7 +110,7 @@
 
 						try {
 							config = JSON.parse(e.target.result);
-							_self.initMap(config, config.gcaut.name);
+							_self.initMap(config);
 						} catch(error) {
 							console.log(_self.txtConfigErr + ': ' + error);
 						}
@@ -150,7 +154,7 @@
 					// get the active map id
 					var id = _self.mapsIDValue(),
 						vm = _self.maps[parseInt(id.split(' ')[1], 10) - 1],
-						content = '{"gcaut": {"name": "' + id + '.json"},"gcviz": {';
+						content = '{"gcviz": {';
 
 					// loop trought viewmodels and get info to write
 					Object.keys(vm).forEach(function(key) {
@@ -170,7 +174,7 @@
 					$aut.generateFile({
 						filename	: id + '.json',
 						content		: content,
-						script		: 'http://localhost:8888/php/download.php' //TODO: put ext server when php installed
+						script		: config.phpdownload
 					});
 
 					setTimeout(function() { $aut('#gcaut-download').remove(); }, 3000, false);
@@ -210,7 +214,7 @@
 					}); // end ajax
 				};
 
-				_self.initMap = function(config, url) {
+				_self.initMap = function(config) {
 					var vm = {},
 						id = _self.maps.length + 1,
 						mapVal = _self.mapLabel + id,
@@ -233,7 +237,7 @@
 					_self.mapsID.push(mapVal);
 					_self.mapsIDValue(mapVal);
 					_self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
-					console.log(_self.txtConfig + url);
+					console.log(_self.txtConfig);
 
 					// set vm object in custom function to be access by other view model
 					gcautFunc.setVM(vm);
@@ -288,7 +292,7 @@
 				_self.init();
 			};
 
-			vm = new projheaderViewModel();
+			vm = new projheaderViewModel(config);
 			ko.applyBindings(vm, elem); // this makes Knockout get to work
 		};
 

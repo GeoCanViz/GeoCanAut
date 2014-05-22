@@ -221,12 +221,18 @@
 		</copy>
 	</target>
 
-	<!-- copy templates -->
-	<target name="copy-templates">
-    	<echo level="info" message="---Copying templates---"/>
-		<copy todir="${dist.dir}/templates">
-			<fileset dir="${src.dir}/js/templates"/>
+	<!-- copy config files -->
+	<target name="copy-config">
+    	<echo level="info" message="---Copying config files---"/>
+		<copy todir="${dist.dir}/config">
+			<fileset dir="${src.dir}/config"/>
 		</copy>
+	</target>
+	
+	<!-- copy init config file -->
+	<target name="copy-init">
+    	<echo level="info" message="---Copying init config file---"/>
+    	<copy file="${src.dir}/js/${name.init.json}" tofile="${file.consolidated.json}"/>
 	</target>
 
 	<!-- update header -->
@@ -245,5 +251,5 @@
 	</target>
 
 	<!-- build -->
-	<target name="build" depends="classpath-lib, create-dist, build-jruby, compile-sass, call-jshint, consolidate-css, minify, create-i18n, copy-images, copy-dependencies, update-headers, finish"></target>
+	<target name="build" depends="classpath-lib, create-dist, build-jruby, compile-sass, call-jshint, consolidate-css, minify, create-i18n, copy-images, copy-dependencies, copy-config, update-headers, finish"></target>
 </project>
