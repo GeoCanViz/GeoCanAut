@@ -95,7 +95,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 <!-- MainContentStart -->
 <div id="header" class="gcviz-head" style="min-width: 961px;">
 	<img class="gcviz-head-logo" src="images/geocanviz.gif"></img>
-	<h1 class="gcviz-head-h1">Working examples</h1>
+	<h1 class="gcviz-head-h1">Working Examples</h1>
 	<div style="background-color: black; height: 10px;"></div>
 
 	<section id="projectHeader" class="gcaut-projheader">
@@ -106,7 +106,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 			<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
 			<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
 			<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
-				<input type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+				<input id="fileDialog" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
 				<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
 			</button>
 		</div>
@@ -121,7 +121,6 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 	<div id="gcauttabs" style="display: none;">
 		<ul>
 			<li><a href="#tab-map">Map</a></li>
-			<li><a href="#tab-inset">Inset</a></li>
 			<li><a href="#tab-head">Header</a></li>
 			<li><a href="#tab-tools">Tools</a></li>
 			<li><a href="#tab-foot">Footer</a></li>
@@ -130,50 +129,53 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 			<div id="gcautmaptabs">
 				<ul>
 					<li><a href="#tabmap-gen">General</a></li>
-					<li><a href="#tabmap-order">Layers Order</a></li>
 					<li><a href="#tabmap-options">Layers Options</a></li>
 				</ul>
 				<section id="map">
 					<div id="tabmap-gen" class="gcaut-tabs">
 						<span data-bind="text: lblMapSize"></span>
 						<label for="txt_mapHeight" data-bind="text: lblMapHeight"></label>
-						<input id="txt_mapHeight" data-bind="value: mapHeightValue, valueUpdate: 'afterkeydown', hasFocus: focusMapHeight"></input>
+						<input id="txt_mapHeight" data-bind="value: mapHeightValue, valueUpdate: 'input', hasFocus: focusMapHeight"></input>
+						<span id="msg_height" class="gcaut-message-error"></span>
 						<label for="txt_mapWidth" data-bind="text: lblMapWidth"></label>
 						<input id="txt_mapWidth" data-bind="value: mapWidthValue, valueUpdate: 'afterkeydown'"></input>
+						<span id="msg_width" class="gcaut-message-error"></span>
 						<div style="clear: both"></div>
 						<label for="cb_link" data-bind="text: lblLink"></label>
 						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
 						<div style="clear: both"></div>
-						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() > 0 && mapWidthValue() > 0">
+						<label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
+						<input id="urlGeomServer" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
+						<div style="clear: both"></div>
+						<label for="urlProxy" data-bind="text: lblUrlProxy"></label>
+						<input id="urlProxy" class="gcaut-uri" type="text" data-bind="value: urlProxy"></input>
+						<div style="clear: both"></div>
+						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500">
 							<h3 class="ui-accordion-header" data-bind="text: lblBasemap"></h3>
 							<div>
 								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
 									<div class="gcaut-mapinfo">
 										<div style="clear: both"></div>
 										<label for="cb_basetype" data-bind="text: lblLayerType"></label>
-										<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
+										<select id="cb_basetype" data-bind="options: baseType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
 										<div style="clear: both"></div>
 										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
+										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServBase(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
 										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: bases().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 										<div style="clear: both"></div>
-										<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
+										<span id="baseMessage" data-bind="text: errortextbase, css: errormsg"></span>
 										<div style="clear: both"></div>
 										<div data-bind="visible: bases().length > 0">
 											<div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
 											<script type="text/html" id="mapBaseLayers">
-												<div data-bind="visible: $data.category === 'base'">
+												<div>
 													<button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'base'), text: $root.lblRemove"></button>
-													<span data-bind="text: id"></span>
+													<span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
 						        				</div>
 											</script>
 											<div class="row">
 												<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
 												<select id="cb_mapsr" data-bind="options: srType, optionsText: 'val', value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
-											</div>
-											<div class="row">
-												<label for="urlGeomServerNav" data-bind="text: lblUrlGeomServer"></label>
-												<input id="urlGeomServerNav" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
 											</div>
 											<div class="row">
 												<div class="span12">
@@ -239,12 +241,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 													</div>
 													<div class="row">
 														<div class="span4">
-															<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
-															<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
+															<label for="txt_mextentMaxX" data-bind="text: lblExtentMaxX"></label>
+															<input id="txt_mextentMaxX" data-bind="value: maxExtentMaxX, enable: false"></input>
 														</div>
 														<div class="span4">
-															<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
-															<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
+															<label for="txt_iextentMaxX" data-bind="text: lblExtentMaxX"></label>
+															<input id="txt_iextentMaxX" data-bind="value: initExtentMaxX, enable: false"></input>
 														</div>
 													</div>
 													<div class="row">
@@ -271,8 +273,10 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
 									<div style="clear: both"></div>
 									<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
-									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectLayerType"/>
+									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServLayer(), select: setURL }, visible: $root.selectLayerType"/>
 									<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+									<div style="clear: both"></div>
+									<span id="layerMessage" data-bind="text: errortextlayer, css: errormsg"></span>
 									<div style="clear: both"></div>
 									<span id="layerMessage"></span>
 									<div style="clear: both"></div>
@@ -281,67 +285,57 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<script type="text/html" id="mapLayers">
 											<li style="white-space: nowrap;">
 												<button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer'), text: $root.lblRemove"></img></button>
-												<span data-bind="text: id"></span>
+												<span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
 					        				</li>
 										</script>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel, openDialog: 'isLayerDialogOpen' }, css: hiddenLayer">
-						<div class="gcaut-layers">
-							<div data-bind="template: { name: 'selectLayers' }"></div>
-							<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
-						</div>
-						<script id="selectLayers" type="text/html">
-							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), true), visible: $root.isLayer"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgCheckAll }"></img></button>
-							<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), false), visible: $root.isLayer"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgUncheckAll }"></img></button>
-						</script>
-						<script id="serviceLayers" type="text/html">
-							<li>
-								<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.isLayer, checked: isChecked, attr: { id: $data.name }"></input>
-								<label data-bind="text: name, attr: { for: $data.name }, style: { 'font-weight': isUse() ? 'bold' : 'normal' }"></label>
+						<div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel, openDialog: 'isLayerDialogOpen' }, css: hiddenLayer">
+							<div class="gcaut-layers">
+								<div data-bind="template: { name: 'selectLayers' }"></div>
 								<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
-							</li>
-						</script>
-					</div>
-					<div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 800, height: 600, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel, openDialog: 'isExtentDialogOpen' }, css: hiddenMap">
-						<div class="row">
-							<div class="span3">
-								<span data-bind="text: lblExtentMinX"></span>
-						<span data-bind="text: setExtentMinX"></span>
 							</div>
-							<div class="span3">
-								<span data-bind="text: lblExtentMinY"></span>
-						<span data-bind="text: setExtentMinY"></span>
-							</div>
-							<div class="span3">
-								<span data-bind="text: lblExtentMaxX"></span>
-						<span data-bind="text: setExtentMaxX"></span>
-							</div>
-							<div class="span3">
-								<span data-bind="text: lblExtentMaxY"></span>
-						<span data-bind="text: setExtentMaxY"></span>
-							</div>
-						</div>
-					</div>
-					<div id="tabmap-order" class="gcaut-tabs">
-						<div class="gcaut-mapinfo" data-bind="visible: layers().length > 0">
-							<ul id="layersorder" data-bind="uiSortable: { refresh: 'tabmap-order', update: $root.updateOrder }, template: { name: 'mapLayersOrder', foreach: layers }"></ul>
-							<script type="text/html" id="mapLayersOrder">
-									<li class="ui-state-default">
-										<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-										<span data-bind="text: id, css: { 'layerTitle': true }" style="white-space: nowrap;"></span>
-		        					</li>
+							<script id="selectLayers" type="text/html">
+								<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), true), visible: selectedType() === 5"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgCheckAll }"></img></button>
+								<button class="gcaut-button" tabindex="0" data-bind="click: $root.checkAll.bind($root, $data.servLayers(), false), visible: selectedType() === 5"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgUncheckAll }"></img></button>
 							</script>
+							<script id="serviceLayers" type="text/html">
+								<li>
+									<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.selectedType() === 5, checked: isChecked, attr: { id: $data.name }"></input>
+									<label data-bind="text: name, attr: { for: $data.name }, style: { 'font-weight': isUse() ? 'bold' : 'normal' }"></label>
+									<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
+								</li>
+							</script>
+						</div>
+						<div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 1000, height: 700, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel, openDialog: 'isExtentDialogOpen' }, css: hiddenMap">
+							<div class="row">
+								<div class="span2">
+									<span data-bind="text: lblExtentMinX"></span>
+							<span data-bind="text: setExtentMinX"></span>
+								</div>
+								<div class="span2">
+									<span data-bind="text: lblExtentMinY"></span>
+							<span data-bind="text: setExtentMinY"></span>
+								</div>
+								<div class="span2">
+									<span data-bind="text: lblExtentMaxX"></span>
+							<span data-bind="text: setExtentMaxX"></span>
+								</div>
+								<div class="span2">
+									<span data-bind="text: lblExtentMaxY"></span>
+							<span data-bind="text: setExtentMaxY"></span>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div id="tabmap-options" class="gcaut-tabs">
 						<div data-bind="visible: layers().length > 0" tabindex="0">
-							<div id="layersoptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', refresh: 'tabmap-options' }, template: { name: 'mapLayersOption', foreach: layers }"></div>
+							<ul id="layersoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabmap-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapLayersOption', foreach: layers }"></ul>
 							<script type="text/html" id="mapLayersOption">
-									<h3 class="ui-accordion-header" data-bind="text: id"></h3>
+								<li>
+									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }"></h3>
 									<div>
 										<span data-bind="text: $root.lblScale"></span>
 										<div class="row">
@@ -350,10 +344,10 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
 											<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
 										</div>
-										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tabmap-options' }">
+										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tabmap-options' }, visible: $data.type === 5">
 											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster"></h3>
 											<div>
-												<input type="checkbox" id="cb_cluster" data-bind="checked: $data.cluster.enable">
+												<input type="checkbox" id="cb_cluster" data-bind="click: $root.updateType, checked: $data.cluster.enable">
 												<label for="cb_cluster" class="form-checkbox" data-bind="text: $root.lblClusterEnable"></label>
 												<div data-bind="visible: $data.cluster.enable">
 													<label for="cb_clusterdist" data-bind="text: $root.lblClusterDist"></label>
@@ -375,22 +369,21 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											</div>
 										</div>
 									</div>
+								</li>
 							</script>
 						</div>
 					</div>
 				</section>
 			</div>
 		</div>
-		<div id="tab-inset" class="gcaut-tabs">
-			<p>Inset</p>
-		</div>
 		<div id="tab-head" class="gcaut-tabs">
 			<section id="headerMap">
 				<label for="headerMapTitle" data-bind="text: lblMapTitle"></label>
-				<input id="headerMapTitle" type="text" data-bind="value: mapTitleValue"></input>
+				<input id="headerMapTitle" type="text" class="gcaut-titlew" data-bind="value: mapTitleValue, valueUpdate: 'afterkeydown', limitCharacters: mapTitleWidth()"></input>
+				<span id="msg_title" data-bind="text: mapTitleCount"></span>
 				<div style="clear: both"></div>
-				<label for="headerMapAlt" data-bind="text: lblMapAlt"></label>
-				<input id="headerMapAlt" type="text" data-bind="value: mapAltValue"></input>
+				<label for="headerMapAlt" class="form-textarea" data-bind="text: lblMapTitleAlt"></label>
+				<textarea id="headerMapAlt" type="text" class="gcaut-titlew" data-bind="value: mapAltValue"></textarea>
 				<div style="clear: both"></div>
 				<h4><label data-bind="text: lblEnbTools"></label></h4>
 				<div style="clear: both"></div>
@@ -414,9 +407,6 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: isPrint"></select>
 				</div>
 				<div style="clear: both"></div>
-				<input type="checkbox" id="cb_inset" data-bind="checked: isInset, enable: false">
-				<label for="cb_inset" class="form-checkbox" data-bind="imgLabel: { text: lblInset, img: imgInset }"></label>
-				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
 				<label for="cb_fullscreen" class="form-checkbox" data-bind="imgLabel: { text: lblFulscreen, img: imgFullscreen }"></label>
 		</div>
@@ -431,6 +421,11 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					<div id="tabtool-legend" class="gcaut-tabs">
 						<section id="legendMap">
 							<button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
+							<div id="legend_reset" data-bind="uiDialog: { title: $root.lblResetTitle, width: 400, ok: $root.dialogResetOk, cancel: $root.dialogResetCancel, openDialog: 'isResetDialogOpen' }, css: hiddenReset">
+								<div>
+									<span data-bind="text: lblResetText"></span>
+								</div>
+							</div>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="enableLegend" data-bind="checked: isEnable">
 							<label for="enableLegend" class="form-checkbox" data-bind="text: lblEnable"></label>
@@ -438,12 +433,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
 							<label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
 							<div style="clear: both"></div>
-							<ul class="legendSort" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, sortable: { connectWith: '.legendSort' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
-							<script type="text/html" id="legendLayers">
-								<li>
+							<label class="gcaut-sect-title" data-bind="text: lblSectBases"></label>
+							<ul class="legendSortBases" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortBases' } }, template: { name: 'legendBases', foreach: $data.legendBases }"></ul>
+							<script type="text/html" id="legendBases">
+								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
 									<h3>
-										<span data-bind="text: id"></span>
-										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove"></img></button>
+										<span data-bind="attr: { id: $data.label.value() }, text: $data.label.value()"></span>
+										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></img></button>
+										<button class="gcaut-button" tabindex="0" data-bind="click: $root.openCloseAll, tooltip: { content: $root.tpRefresh }, clickBubble: false"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgOpen }"></img></button>
 									</h3>
 									<div>
 										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
@@ -462,7 +459,73 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										</div>
 										<div style="clear: both"></div>
 										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
-										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>			
+										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
+										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+											<label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
+											<input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
+											<span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
+										</div>	
+										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
+											<div class="row">
+												<span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
+												<span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>
+											</div>
+										</div>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="visLeg" data-bind="checked: $data.visibility.enable">
+										<label for="visLeg" class="form-checkbox" data-bind="text: $root.lblVisibility"></label>			
+										<div class="row gcaut-subinfo" data-bind="visible: $data.visibility.enable">
+											<input type="checkbox" id="visInitLeg" data-bind="checked: $data.visibility.initstate">
+											<label for="visInitLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityState"></label>
+										</div>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
+										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>			
+										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
+											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
+											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
+											<label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl, visible: $data.customimage.enable"></label>
+											<input id="customUrlLeg" data-bind="value: $data.customimage.url, visible: $data.customimage.enable"></input>
+											<label for="customTextLeg" data-bind="text: $root.lblCustomImageText, visible: $data.customimage.enable"></label>
+											<input id="customTextLeg" data-bind="value: $data.customimage.alttext, visible: $data.customimage.enable"></input>
+										</div>
+									</div>
+								</li>
+							</script>
+							<label class="gcaut-sect-title" data-bind="text: lblSectLayers"></label>
+							<button class="gcaut-button" tabindex="0" data-bind="click: createEmptyGrp"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgAddGroup }"></img></button>
+							<ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
+							<script type="text/html" id="legendLayers">
+								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
+									<h3>
+										<span data-bind="attr: { id: $data.graphid(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#2e6e9e' }, text: $data.label.value()"></span>
+										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></img></button>
+										<button class="gcaut-button" tabindex="0" data-bind="click: $root.openCloseAll, tooltip: { content: $root.tpRefresh }, clickBubble: false"><img class="gcaut-img-button" data-bind="attr: { src: $root.imgOpen }"></img></button>
+									</h3>
+									<div>
+										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
+										<label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
+										<div style="clear: both"></div>
+										<label for="item_title" data-bind="text: $root.lblLabel"></label>
+										<input id="item_title" type="text" data-bind="value: $data.label.value"></input>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="metaLeg" data-bind="checked: $data.metadata.enable">
+										<label for="metaLeg" class="form-checkbox" data-bind="text: $root.lblMeta"></label>			
+										<div class="row" data-bind="visible: $data.metadata.enable">
+											<label for="leg_metaurl" class="form-checkbox" data-bind="text: $root.lblMetaUrl"></label>
+											<input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
+											<label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
+											<input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
+										</div>
+										<div style="clear: both"></div>
+										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
+										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
+										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+											<label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
+											<input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
+											<span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
+										</div>
 										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
 											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
 											<div class="row">
@@ -482,9 +545,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<input id="visRadioLeg" data-bind="value: $data.visibility.radioid, visible: $data.visibility.type().val === 'radio'"></input>
 										</div>
 										<div style="clear: both"></div>
-										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild">
-										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>			
-										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild()">
+										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
+										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>
+										<div style="clear: both"></div>
+										<label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></label>
+										<textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></textarea>			
+										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
 											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
 											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
 											<label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl, visible: $data.customimage.enable"></label>
@@ -492,7 +558,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="customTextLeg" data-bind="text: $root.lblCustomImageText, visible: $data.customimage.enable"></label>
 											<input id="customTextLeg" data-bind="value: $data.customimage.alttext, visible: $data.customimage.enable"></input>
 										</div>
-										<ul class="legendSort" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabmap-gen', sortable: { connectWith: '.legendSort' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>				
+										<div class="inner-layer-list" data-bind="visible: $data.type() === 5 || $data.type() === 0">
+											<ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>
+										</div>				
 									</div>
 								</li>
 							</script>
@@ -512,14 +580,15 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="textDraw" data-bind="checked: isText">
 							<label for="textDraw" class="form-checkbox" data-bind="imgLabel: { text: lblText, img: imgText }"></label>
 							<div style="clear: both"></div>
-							<input type="checkbox" id="measureDraw" data-bind="checked: isMeasure">
-							<label for="measureDraw" class="form-checkbox" data-bind="imgLabel: { text: lblMeasure, img: imgMeasure }"></label>
-							<div class="row">
-								<label for="measureTypeDraw" class="form-checkbox" data-bind="text: lblMeasureType"></label>
-								<select id="measureTypeDraw" data-bind="options: measureType, optionsText: 'val', value: selectMeasureType, enable: isMeasure"></select>
-								<label for="measureUnitDraw" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
-								<select id="measureUnitDraw" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnit, enable: isMeasure"></select>
-							</div>
+							<input type="checkbox" id="measureLength" data-bind="checked: isMeasureL">
+							<label for="measureLength" class="form-checkbox" data-bind="imgLabel: { text: lblMeasureL, img: imgMeasureL }"></label>
+							<label for="measureUnitDrawL" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+							<select id="measureUnitDrawL" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitL, enable: isMeasureL"></select>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="measureArea" data-bind="checked: isMeasureA">
+							<label for="measureArea" class="form-checkbox" data-bind="imgLabel: { text: lblMeasureA, img: imgMeasureA }"></label>
+							<label for="measureUnitDrawA" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+							<select id="measureUnitDrawA" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitA, enable: isMeasureA"></select>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="fileDraw" data-bind="checked: isFile">
 							<label for="fileDraw" class="form-checkbox" data-bind="imgLabel: { text: lblFile, imgs: imgImportExport }"></label>
@@ -556,9 +625,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="overNav" data-bind="checked: isOver">
 							<label for="overNav" class="form-checkbox" data-bind="text: lblOver"></label>							
 							<div class="row">
-								<label for="urlOverNav" data-bind="text: lblUrlOver, visible: isOver"></label>
+								<label for="overType" class="form-checkbox" data-bind="text: lblOverType, visible: isOver"></label>
+								<select id="overType" data-bind="options: overType, optionsText: 'val', value: selectOver, visible: isOver"></select>
+								<label for="urlOverNav" data-bind="text: lblOverUrl, visible: isOver"></label>
 								<input id="urlOverNav" class="gcaut-uri" type="text" data-bind="value: urlOver, visible: isOver"></input>
-							<div class="row">
+							</div>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="positionNav" data-bind="checked: isPosition">
+							<label for="positionNav" class="form-checkbox" data-bind="imgLabel: { text: lblPosition, imgs: imgPosition }"></label>		
 						</section>
 					</div>
 				</section>

@@ -228,12 +228,6 @@
 			<fileset dir="${src.dir}/config"/>
 		</copy>
 	</target>
-	
-	<!-- copy init config file -->
-	<target name="copy-init">
-    	<echo level="info" message="---Copying init config file---"/>
-    	<copy file="${src.dir}/js/${name.init.json}" tofile="${file.consolidated.json}"/>
-	</target>
 
 	<!-- update header -->
 	<target name="update-headers">
