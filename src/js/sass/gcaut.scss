@@ -186,6 +186,8 @@ input[type="file"] {
 	left: 0rem;
 	position: absolute;
 	margin: 0 !important;
-	height: (2.2 * $rembase) + rem;
-	width: (2.2 * $rembase) + rem;
+	max-height: 0rem !important;
+	max-width: 0rem !important;
+	padding: 0rem !important;
+	border-width: 0rem !important;
 }

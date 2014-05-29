@@ -110,7 +110,7 @@
 					// get inset and link info from other vm
 					// TODO set inset when insetVM will be created. In mean time hardcode
 					_self.isLink(gcautFunc.getElemValueVM('map', 'isLink'));
-					
+
 					value = '"header": {' +
 								'"title": {' +
 									'"value": "' + _self.mapTitleValue() +'",' +

@@ -64,8 +64,8 @@
 			return typeArr;
 		};
 
-		getListCBCust = function(id, val) {
-			var id = id.reverse(),
+		getListCBCust = function(comp, val) {
+			var id = comp.reverse(),
 				typeArr = [],
 				array = val.split(';'),
 				len = array.length;

@@ -104,9 +104,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		<div id="mapnew" class="gcaut-projheader-new">
 			<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
 			<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
-			<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
-			<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
-				<input id="fileDialog" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+			<input id="fileDialogOpen" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+			<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="click: launchDialog, tooltip: { content: tpOpen }">
 				<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
 			</button>
 		</div>
@@ -149,6 +148,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<div style="clear: both"></div>
 						<label for="urlProxy" data-bind="text: lblUrlProxy"></label>
 						<input id="urlProxy" class="gcaut-uri" type="text" data-bind="value: urlProxy"></input>
+						<div style="clear: both"></div>
+						<label for="urlDownload" data-bind="text: lblUrlDownload"></label>
+						<input id="urlDownload" class="gcaut-uri" type="text" data-bind="value: urlDownload"></input>
 						<div style="clear: both"></div>
 						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500">
 							<h3 class="ui-accordion-header" data-bind="text: lblBasemap"></h3>

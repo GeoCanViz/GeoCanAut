@@ -209,6 +209,7 @@
 			<fileset dir="${src.dir}/js/images/legend"/>
 			<fileset dir="${src.dir}/js/images/draw"/>
 			<fileset dir="${src.dir}/js/images/nav"/>
+			<fileset dir="${src.dir}/js/images/data"/>
 			<fileset dir="${src.dir}/js/images/jqueryui"/>
 		</copy>
 	</target>

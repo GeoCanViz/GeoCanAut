@@ -80,6 +80,7 @@
 				_self.lblMapSR = i18n.getDict('%map-spatialref');
 				_self.lblUrlGeomServer = i18n.getDict('%map-urlgeomserver');
 				_self.lblUrlProxy = i18n.getDict('%map-urlproxy');
+				_self.lblUrlDownload = i18n.getDict('%map-urldownload');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
 				_self.lblExtentInit = i18n.getDict('%map-extentinit');
 				_self.lblExtentMinX = i18n.getDict('%map-extentminx');
@@ -122,6 +123,7 @@
 				// geometry server and proxy
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.urlProxy = ko.observable(map.urlproxy);
+				_self.urlDownload = ko.observable(map.urldownload);
 
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
@@ -482,8 +484,12 @@
 					isValid = gcautFunc.checkFormatURL(url, layerType);
 
 					// clean error message
-					type === 'base' ? _self.errortextbase('') : _self.errortextlayer('');
-					
+					if (type === 'base') {
+						_self.errortextbase('');
+					} else {
+						_self.errortextlayer('');
+					}
+
 					if (isValid) {
 						// get service info and validateURL as callback function
 						gisServInfo.getResourceInfo(url, layerType, _self.readServInfo, function() { type === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr); });
@@ -514,7 +520,7 @@
 						} else {
 							urlArr = _self.availServLayer();
 						}
-						
+
 						if (!gcautFunc.checkDuplicate(urlArr, url)) {
 							urlArr.push(url);
 							addUrl = urlArr.join(';');
@@ -530,7 +536,7 @@
 								localStorage.setItem('servnameDynamicREST', addUrl);
 							}
 						}
-						
+
 						// show window to select layers
 						_self.isLayerDialogOpen(true);
 						_self.hiddenLayer('');
@@ -551,7 +557,7 @@
 
 					_self.layers(tmpLayers.reverse());
 				};
-				
+
 				// if cluster is enable, update type from 5 to 6
 				_self.updateType = function(item) {
 					// enable is the oposite of the value because the vie wmodel
@@ -559,7 +565,7 @@
 					(item.cluster.enable()) ? item.type = 5 : item.type = 6;
 					return true;
 				};
-				
+
 				_self.write = function() {
 					var value;
 
@@ -571,6 +577,7 @@
 								'"map": {' +
 									'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
 									'"urlproxy": "' + _self.urlProxy() + '",' +
+									'"urldownload": "' + _self.urlDownload() + '",' +
 									'"sr": {' +
 										'"wkid": ' + _self.selectMapSR().id +
 									'},' +

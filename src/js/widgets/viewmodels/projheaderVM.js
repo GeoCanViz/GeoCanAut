@@ -19,8 +19,9 @@
 			'gcaut-vm-footer',
 			'gcaut-vm-legend',
 			'gcaut-vm-draw',
-			'gcaut-vm-nav'
-	], function($aut, ko, generateFile, i18n, binding, gcautFunc, mapVM, headerVM, footerVM, legendVM, drawVM, navVM) {
+			'gcaut-vm-nav',
+			'gcaut-vm-data'
+	], function($aut, ko, generateFile, i18n, binding, gcautFunc, mapVM, headerVM, footerVM, legendVM, drawVM, navVM, dataVM) {
 		var initialize,
 			loadFile,
 			setFocus,
@@ -72,16 +73,14 @@
 				_self.mapsIDValue = ko.observable();
 
 				_self.init = function() {
-
-					// work around for Firefox because we cant trigger the input if it is inside the button
-					// We need it inside the button to have our css
-					if (window.browser === 'Firefox') {
-						$aut('#openFileDialog').click(function() {
-							$aut(document.getElementById('fileDialogFF')).click();
-						});
-					}
-
 					return { controlsDescendantBindings: true };
+				};
+
+				_self.launchDialog = function() {
+					// launch the dialog. We cant put the dialog in the button because
+					// Firefox will not launch the window. To be able to open the window,
+					// we mimic the click
+					$aut(document.getElementById('fileDialogOpen'))[0].click();
 				};
 
 				_self.openMap = function(vm, event) {
@@ -98,10 +97,9 @@
 						reader.onload = loadFile();
 						reader.readAsText(file);
 					}
-					
+
 					// clear the selected file
-					document.getElementById('fileDialogFF').value = '';
-					document.getElementById('fileDialog').value = '';
+					document.getElementById('fileDialogOpen').value = '';
 				};
 
 				loadFile = function() {
@@ -150,7 +148,6 @@
 				};
 
 				_self.saveMap = function() {
-
 					// get the active map id
 					var id = _self.mapsIDValue(),
 						vm = _self.maps[parseInt(id.split(' ')[1], 10) - 1],
@@ -229,6 +226,7 @@
 													{ value: vm.map.bases, func: 'updateBases' }]);
 					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
+					vm.data = dataVM.initialize(document.getElementById('dataMap'), gcviz.toolbardata);
 
 					setFocus(vm.map.focusMapHeight);
 
