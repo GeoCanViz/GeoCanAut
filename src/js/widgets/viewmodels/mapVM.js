@@ -438,8 +438,6 @@
 						array = localStorage.servnameDynamicREST.split(';');
 					}
 
-					_self.layerURL('');
-					_self.baseURL('');
 					return array;
 				};
 

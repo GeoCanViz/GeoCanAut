@@ -203,7 +203,7 @@
 						dataType: 'json',
 						async: false,
 						success: function(config) {
-							_self.initMap(config, 'default template');
+							_self.initMap(config);
 						},
 						error: function() {
 							console.log(_self.txtConfigErr + ': ' + url);
