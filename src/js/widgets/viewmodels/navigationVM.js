@@ -29,7 +29,7 @@
 					position = map.position,
 					scalebarType = gcautFunc.getListCB(i18n.getDict('%nav-scalebarlist')),
 					scaleType = gcautFunc.getListCB(i18n.getDict('%nav-scalelist')),
-					overType = gcautFunc.getListCB(i18n.getDict('%nav-overtypelist')),
+					overType = gcautFunc.getListCBCust([2,4], i18n.getDict('%nav-overtypelist')),
 					pathZoom = locationPath + 'gcaut/images/navFullExtent.png',
 					pathGeoloc = locationPath + 'gcaut/images/navGeoloc.png',
 					pathPosition = locationPath + 'gcaut/images/navPosition.png';

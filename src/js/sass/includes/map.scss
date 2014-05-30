@@ -21,6 +21,10 @@
 	width: 60%;
 }
 
+.gcaut-baseurl {
+	@include app-text(1.2, normal, $gray);
+}
+
 #layersorder {
 	list-style-type: none;
 	margin: 0;

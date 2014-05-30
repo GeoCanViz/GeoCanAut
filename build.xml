@@ -209,6 +209,7 @@
 			<fileset dir="${src.dir}/js/images/legend"/>
 			<fileset dir="${src.dir}/js/images/draw"/>
 			<fileset dir="${src.dir}/js/images/nav"/>
+			<fileset dir="${src.dir}/js/images/data"/>
 			<fileset dir="${src.dir}/js/images/jqueryui"/>
 		</copy>
 	</target>
@@ -221,11 +222,11 @@
 		</copy>
 	</target>
 
-	<!-- copy templates -->
-	<target name="copy-templates">
-    	<echo level="info" message="---Copying templates---"/>
-		<copy todir="${dist.dir}/templates">
-			<fileset dir="${src.dir}/js/templates"/>
+	<!-- copy config files -->
+	<target name="copy-config">
+    	<echo level="info" message="---Copying config files---"/>
+		<copy todir="${dist.dir}/config">
+			<fileset dir="${src.dir}/config"/>
 		</copy>
 	</target>
 
@@ -245,5 +246,5 @@
 	</target>
 
 	<!-- build -->
-	<target name="build" depends="classpath-lib, create-dist, build-jruby, compile-sass, call-jshint, consolidate-css, minify, create-i18n, copy-images, copy-dependencies, update-headers, finish"></target>
+	<target name="build" depends="classpath-lib, create-dist, build-jruby, compile-sass, call-jshint, consolidate-css, minify, create-i18n, copy-images, copy-dependencies, copy-config, update-headers, finish"></target>
 </project>

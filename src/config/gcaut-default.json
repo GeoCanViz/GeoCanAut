@@ -1,0 +1,10 @@
+{
+	"proxy": "http://localhost:8888/php/proxy.php",
+	"phpdownload": "http://localhost:8888/php/download.php",
+	"services": {
+		"wms": "http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en;http://wms.ess-ws.nrcan.gc.ca/wms/toporama_fr",
+		"wmts": "null",
+		"esritiled": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer",
+		"esridynamic": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/GSCC/Geochronology/MapServer;http://maps.ottawa.ca/ArcGIS/rest/services/CyclingMap/MapServer;http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer"
+	}
+}

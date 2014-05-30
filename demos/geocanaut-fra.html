@@ -104,9 +104,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		<div id="mapnew" class="gcaut-projheader-new">
 			<span class="gcaut-projheader-newlabel" data-bind="text: newLabel"></span>
 			<button class="gcaut-button" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"><img class="gcaut-img-button" data-bind="attr: { src: imgNew }"></img></button>
-			<input id="fileDialogFF" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
-			<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="tooltip: { content: tpOpen }">
-				<input type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+			<input id="fileDialogOpen" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+			<button id="openFileDialog" class="gcaut-button" tabindex="0" data-bind="click: launchDialog, tooltip: { content: tpOpen }">
 				<img class="gcaut-img-button" data-bind="attr: { src: imgOpen }"></img>
 			</button>
 		</div>
@@ -150,6 +149,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<label for="urlProxy" data-bind="text: lblUrlProxy"></label>
 						<input id="urlProxy" class="gcaut-uri" type="text" data-bind="value: urlProxy"></input>
 						<div style="clear: both"></div>
+						<label for="urlDownload" data-bind="text: lblUrlDownload"></label>
+						<input id="urlDownload" class="gcaut-uri" type="text" data-bind="value: urlDownload"></input>
+						<div style="clear: both"></div>
 						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500">
 							<h3 class="ui-accordion-header" data-bind="text: lblBasemap"></h3>
 							<div>
@@ -160,10 +162,10 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<select id="cb_basetype" data-bind="options: baseType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem, enable: bases().length === 0"></select>
 										<div style="clear: both"></div>
 										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
+										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServBase(), select: setURL }, visible: $root.selectBaseLayerType, enable: bases().length === 0"></input>
 										<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'base'), tooltip: { content: tpNew }, visible: $root.selectBaseLayerType, enable: bases().length === 0"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
 										<div style="clear: both"></div>
-										<span id="layerMessage" data-bind="text: errortext, css: errormsg"></span>
+										<span id="baseMessage" data-bind="text: errortextbase, css: errormsg"></span>
 										<div style="clear: both"></div>
 										<div data-bind="visible: bases().length > 0">
 											<div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
@@ -273,8 +275,10 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									<select id="cb_basetype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
 									<div style="clear: both"></div>
 									<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
-									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServ(), select: setURL }, visible: $root.selectLayerType"/>
+									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServLayer(), select: setURL }, visible: $root.selectLayerType"/>
 									<button class="gcaut-button" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'layer'), tooltip: { content: tpNew }, visible: $root.selectLayerType"><img class="gcaut-img-button" data-bind="attr: { src: imgValid }"></img></button>
+									<div style="clear: both"></div>
+									<span id="layerMessage" data-bind="text: errortextlayer, css: errormsg"></span>
 									<div style="clear: both"></div>
 									<span id="layerMessage"></span>
 									<div style="clear: both"></div>
@@ -345,7 +349,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tabmap-options' }, visible: $data.type === 5">
 											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster"></h3>
 											<div>
-												<input type="checkbox" id="cb_cluster" data-bind="checked: $data.cluster.enable">
+												<input type="checkbox" id="cb_cluster" data-bind="click: $root.updateType, checked: $data.cluster.enable">
 												<label for="cb_cluster" class="form-checkbox" data-bind="text: $root.lblClusterEnable"></label>
 												<div data-bind="visible: $data.cluster.enable">
 													<label for="cb_clusterdist" data-bind="text: $root.lblClusterDist"></label>

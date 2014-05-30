@@ -234,6 +234,10 @@
 				name: 'gcaut-vm-draw',
 				location: locationPath + 'gcaut/js/viewmodels',
 				main: 'drawVM-min'
+			}, {
+				name: 'gcaut-vm-data',
+				location: locationPath + 'gcaut/js/viewmodels',
+				main: 'dataVM-min'
 			}
 		]
 	});

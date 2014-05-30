@@ -62,7 +62,8 @@
 				_self.errormsg = ko.observable('gcaut-message-error');
 
 				// error message
-				_self.errortext = ko.observable();
+				_self.errortextbase = ko.observable();
+				_self.errortextlayer = ko.observable();
 				_self.msgHeight = i18n.getDict('%map-msgheight');
 				_self.msgWidth = i18n.getDict('%map-msgwidth');
 
@@ -79,6 +80,7 @@
 				_self.lblMapSR = i18n.getDict('%map-spatialref');
 				_self.lblUrlGeomServer = i18n.getDict('%map-urlgeomserver');
 				_self.lblUrlProxy = i18n.getDict('%map-urlproxy');
+				_self.lblUrlDownload = i18n.getDict('%map-urldownload');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
 				_self.lblExtentInit = i18n.getDict('%map-extentinit');
 				_self.lblExtentMinX = i18n.getDict('%map-extentminx');
@@ -115,11 +117,13 @@
 				// services
 				_self.baseURL = ko.observable();
 				_self.layerURL = ko.observable();
-				_self.availServ = ko.observableArray([]);
+				_self.availServBase = ko.observableArray([]);
+				_self.availServLayer = ko.observableArray([]);
 
 				// geometry server and proxy
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.urlProxy = ko.observable(map.urlproxy);
+				_self.urlDownload = ko.observable(map.urldownload);
 
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
@@ -171,11 +175,11 @@
 
 				// subscribe functions
 				_self.selectBaseLayerType.subscribe(function(val) {
-					return _self.availServ(_self.setServName(val.id));
+					return _self.availServBase(_self.setServName(val.id));
 				});
 
 				_self.selectLayerType.subscribe(function(val) {
-					return _self.availServ(_self.setServName(val.id));
+					return _self.availServLayer(_self.setServName(val.id));
 				});
 
 				// functions to create isChecked observable on lods when read. This way we can have select/unselect
@@ -434,8 +438,6 @@
 						array = localStorage.servnameDynamicREST.split(';');
 					}
 
-					_self.layerURL('');
-					_self.baseURL('');
 					return array;
 				};
 
@@ -464,7 +466,6 @@
 				_self.validateURL = function(type) {
 					var isValid,
 						url,
-						addUrl,
 						layerType;
 
 					if (type === 'base') {
@@ -481,45 +482,57 @@
 					isValid = gcautFunc.checkFormatURL(url, layerType);
 
 					// clean error message
-					_self.errortext('');
+					if (type === 'base') {
+						_self.errortextbase('');
+					} else {
+						_self.errortextlayer('');
+					}
 
 					if (isValid) {
 						// get service info and validateURL as callback function
-						gisServInfo.getResourceInfo(url, layerType, _self.readServInfo, function() { _self.errortext(_self.txtLayerErr); });
-
-						// remove duplicate in service array and copy to localstorage
-						_self.availServ.push(url);
-						_self.availServ(ko.utils.arrayGetDistinctValues(_self.availServ()));
-						addUrl = _self.availServ().join(';');
-						if (layerType === 1) {
-							localStorage.setItem('servnameWMTS', addUrl);
-						} else if (layerType === 2)  {
-							localStorage.setItem('servnameCacheREST', addUrl);
-						} else if (layerType === 3)  {
-							localStorage.setItem('servnameWMTS', addUrl);
-						} else if (layerType === 4)  {
-							localStorage.setItem('servnameDynamicREST', addUrl);
-						} else if (layerType === 5)  {
-							localStorage.setItem('servnameDynamicREST', addUrl);
-						}
-
+						gisServInfo.getResourceInfo(url, layerType, _self.readServInfo, function() { type === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr); });
 					} else {
-						_self.errortext(_self.txtLayerErr);
+						type === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr);
 					}
 				};
 
 				// callback function for gisServInfo.getResourceInfo
 				_self.readServInfo = function(url, type, sender) {
-					var category = _self.isLayer() ? 'layer' : 'base';
+					var addUrl,
+						urlArr = [],
+						category = _self.isLayer() ? 'layer' : 'base';
 
 					// set the selected type (use to show or hide checkbox)
 					_self.selectedType(type);
 
 					if (sender.hasOwnProperty('error')) {
-						_self.errortext(_self.txtLayerErr);
+						category === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr);
 					} else {
 						if (type === 2 || type === 4 || type === 5) {
 							esriData.readInfo(sender, _self, url, type, category);
+						}
+
+						// check duplicate in service array and copy to localstorage
+						if (category === 'base') {
+							urlArr = _self.availServBase();
+						} else {
+							urlArr = _self.availServLayer();
+						}
+
+						if (!gcautFunc.checkDuplicate(urlArr, url)) {
+							urlArr.push(url);
+							addUrl = urlArr.join(';');
+							if (type === 1) {
+								localStorage.setItem('servnameWMTS', addUrl);
+							} else if (type === 2)  {
+								localStorage.setItem('servnameCacheREST', addUrl);
+							} else if (type === 3)  {
+								localStorage.setItem('servnameWMTS', addUrl);
+							} else if (type === 4)  {
+								localStorage.setItem('servnameDynamicREST', addUrl);
+							} else if (type === 5)  {
+								localStorage.setItem('servnameDynamicREST', addUrl);
+							}
 						}
 
 						// show window to select layers
@@ -543,14 +556,16 @@
 					_self.layers(tmpLayers.reverse());
 				};
 
-				_self.write = function() {
-					var value,
-						sr = 4326;
+				// if cluster is enable, update type from 5 to 6
+				_self.updateType = function(item) {
+					// enable is the oposite of the value because the vie wmodel
+					// is not updated yet.
+					(item.cluster.enable()) ? item.type = 5 : item.type = 6;
+					return true;
+				};
 
-					// check if value are undefined
-					if (_self.selectMapSR() !== undefined) {
-						sr = _self.selectMapSR().id;
-					}
+				_self.write = function() {
+					var value;
 
 					value = '"mapframe": {' +
 								'"size": {' +
@@ -560,8 +575,9 @@
 								'"map": {' +
 									'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
 									'"urlproxy": "' + _self.urlProxy() + '",' +
+									'"urldownload": "' + _self.urlDownload() + '",' +
 									'"sr": {' +
-										'"wkid": ' + sr +
+										'"wkid": ' + _self.selectMapSR().id +
 									'},' +
 									'"extentmax": {' +
 										'"xmin": ' + _self.maxExtentMinX() +
