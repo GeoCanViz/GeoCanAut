@@ -661,8 +661,8 @@
 						layersItems;
 
 					// remove value from the visibility type list
-					basesItems = JSON.stringify(ko.toJS(_self.legendBases)).replace(/{"id":/g, '').replace(/,"val":"radio"}/g, '').replace(/,"val":"case"}/g, '');
-					layersItems = JSON.stringify(ko.toJS(_self.legendLayers)).replace(/{"id":/g, '').replace(/,"val":"radio"}/g, '').replace(/,"val":"case"}/g, '');
+					basesItems = JSON.stringify(ko.toJS(_self.legendBases)).replace(/{"id":/g, '').replace(/,"val":"checkbox"}/g, '').replace(/,"val":"radio"}/g, '').replace(/,"val":"case"}/g, '');
+					layersItems = JSON.stringify(ko.toJS(_self.legendLayers)).replace(/{"id":/g, '').replace(/,"val":"checkbox"}/g, '').replace(/,"val":"radio"}/g, '').replace(/,"val":"case"}/g, '');
 
 					// remove canenable from opacity because it is an internal value
 					basesItems = basesItems.replace(/,"canenable":false/g, '').replace(/,"canenable":true/g, '');
