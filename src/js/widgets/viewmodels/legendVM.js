@@ -289,7 +289,7 @@
 								j++;
 							}
 						} else if (type === 4) {
-							gisServInfo.getEsriServRendererInfo(items, url, id, _self.esriDymanicServ);
+							gisServInfo.getEsriServRendererInfo(items, url, id, _self.esriDynamicServ);
 						}
 
 						i++;
@@ -304,7 +304,7 @@
 					_self.holderBases = value;
 				};
 
-				_self.esriDymanicServ = function(items, url, id, layers) {
+				_self.esriDynamicServ = function(items, url, id, layers) {
 					var layer,
 						firstIndex, lastIndex, name,
 						i = 0,
@@ -315,7 +315,7 @@
 					url = url.substring(0, lastIndex);
 					firstIndex = url.lastIndexOf('/') + 1;
 					name = url.substring(firstIndex, lastIndex);
-					items.push(addArray(name, name, false, '', 4));
+					items.push(addArray(name, id, false, '', 4));
 					items = items()[items().length - 1].items;
 
 					// create children. Author cant see them because it is a service so it is not customizable
