@@ -55,7 +55,60 @@
 				handleAs: 'json',
 				callbackParamName: 'callback',
 				load: function(response) {
-					item.displaychild.symbol(JSON.stringify(response.layers[layer].drawingInfo.renderer));
+					// clean renderer if uniqueValue. If the renderer as multiple item with the same label, just pick the
+					// first one. If we dont do this we have duplicate in the legend. This happen when data
+					// has more subclass with the same symbology e.g.
+						// Value: 1974 
+						// Label: 1965 - 1984 
+						// Description: 
+						// Symbol:
+							// Style: esriSFSSolid 
+							// Color: [0, 0, 0, 0] 
+							// Outline:
+							// Style: esriSLSSolid 
+							// Color: [245, 162, 122, 255] 
+							// Width: 0
+						// Value: 1973 
+						// Label: 1965 - 1984 
+						// Description: 
+						// Symbol:
+							// Style: esriSFSSolid 
+							// Color: [0, 0, 0, 0] 
+							// Outline:
+							// Style: esriSLSSolid 
+							// Color: [245, 162, 122, 255] 
+							// Width: 0
+					var uniqueVals, uniqueVal, len,
+						label, symbol,
+						labelPrev = '',
+						symbolPrev = {},
+						outUniqueVals = [],
+						renderer = response.layers[layer].drawingInfo.renderer,
+						type = renderer.type;
+					
+					if (type === 'simple') {
+						item.displaychild.symbol(JSON.stringify(renderer));
+					} else if (type === 'uniqueValue') {
+						uniqueVals = renderer.uniqueValueInfos.reverse();
+						len = uniqueVals.length;
+
+						while (len--) {
+							uniqueVal = uniqueVals[len];
+							label = uniqueVal.label;
+							symbol = uniqueVal.symbol;
+
+							// check if the previous symbol and label are the same. If so, do not add to the array
+							if (labelPrev !== label || JSON.stringify(symbolPrev) !== JSON.stringify(symbol)) {
+								outUniqueVals.push(uniqueVal);
+							}
+							
+							labelPrev = label;
+							symbolPrev = symbol;
+						}
+						
+						renderer.uniqueValueInfos = outUniqueVals;
+						item.displaychild.symbol(JSON.stringify(renderer));
+					}
 				},
 				error: function(err) {
 					console.log('Not able to get renderer: ' + err);

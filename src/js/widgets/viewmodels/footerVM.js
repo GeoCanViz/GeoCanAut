@@ -76,11 +76,12 @@
 									'"enable": ' + _self.isMouse() +
 									',"outwkid": ' + _self.selectMouseSR().id +
 								'},' +
-								'"datatable": {' +
-									'"direction": "in"' +
+								'"datagrid": {' +
+									'"enable": ' + false +
 								'}' +
-							'}';
-
+							'},' +
+							'"datagrid": { "enable": false }';
+					// TODO get info from the widget when it will be created
 					return value;
 				};
 
