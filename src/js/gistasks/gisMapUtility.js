@@ -18,18 +18,39 @@
 		var createMap,
 			createLayer;
 
-		createMap = function(id, typeLayer, urlLayer, size, holder) {
+		createMap = function(id, typeLayer, urlLayer, lods, size, holder) {
 			var map,
 				options,
+				lod,
+				useLods = [],
+				lenLods = lods.length,
 				width = size.width,
 				height = size.height;
 
-			options = {
-				logo: false,
-				showAttribution: false,
-				wrapAround180: true,
-				smartNavigation: false
-			};
+			// generate level of details
+			while (lenLods--) {
+				lod = lods[lenLods];
+				if (lod.isChecked()) {
+					useLods.push(lod);
+				}
+			}
+
+			if (useLods.length) {
+				options = {
+					logo: false,
+					showAttribution: false,
+					lods: useLods,
+					wrapAround180: true,
+					smartNavigation: false
+				};
+			} else {
+				options = {
+					logo: false,
+					showAttribution: false,
+					wrapAround180: true,
+					smartNavigation: false
+				};
+			}
 
 			// create map
 			$aut('#map_extent').prepend('<div id="' + id + '" style="border-style: solid;"></div>');

@@ -269,7 +269,8 @@
 							_self.bases.push({ label: name,
 										id: gcautFunc.getUUID(),
 										type: layer.type,
-										url: url });
+										url: url,
+										scale: layer.scale });
 						} else {
 							_self.layers.push({ label: name,
 											id: gcautFunc.getUUID(),
@@ -418,6 +419,7 @@
 					gisM.createMap('map_setExtent',
 									_self.selectBaseLayerType().id,
 									_self.bases()[0].url,
+									_self.lods(),
 									size,
 									holder);
 				};
@@ -451,13 +453,15 @@
 				};
 
 				// when one item in the autocomple is selected, update the input text
-				_self.setURL = function(event, ui) {
+				_self.setBaseURL = function(event, ui) {
+					_self.baseURL(ui.item.value);
 
-					if (_self.bases().length === 0) {
-						_self.baseURL(ui.item.value);
-					} else {
-						_self.layerURL(ui.item.value);
-					}
+					return false;
+				};
+				
+				// when one item in the autocomple is selected, update the input text
+				_self.setLayerURL = function(event, ui) {
+					_self.layerURL(ui.item.value);
 
 					return false;
 				};

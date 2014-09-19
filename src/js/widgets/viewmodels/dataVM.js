@@ -57,7 +57,7 @@
 					value = '"toolbardata": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
-								',"csv": {' +
+								',"data": {' +
 									'"enable": ' + _self.isCSV() +
 								'}' +
 							'}';

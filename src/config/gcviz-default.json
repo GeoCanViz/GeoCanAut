@@ -3,7 +3,7 @@
 	"mapframe": {
 		"size": {
 			"height": 400,
-			"width": 500
+			"width": 900
 		},
 		"map": {
 			"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
@@ -129,9 +129,12 @@
 			"enable": false,
 			"outwkid": 4326
 		},
-		"datatable": {
-			"direction": "in"
+		"datagrid": {
+			"enable": false
 		}
+	},
+	"datagrid": {
+		"enable": false
 	},
 	"customwidgets": []
 }}

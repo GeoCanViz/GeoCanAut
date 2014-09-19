@@ -308,7 +308,7 @@
 					var layer,
 						firstIndex, lastIndex, name,
 						i = 0,
-						len = layers.length - 1;
+						len = layers.length;
 
 					// create the first holder
 					lastIndex = url.lastIndexOf('/');
