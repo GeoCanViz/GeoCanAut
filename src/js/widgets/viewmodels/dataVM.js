@@ -21,7 +21,7 @@
 			// data model
 			var drawViewModel = function(elem, map) {
 				var _self = this,
-					csv = map.csv,
+					data = map.data,
 					pathCSV = locationPath + 'gcaut/images/dataCSV.png';
 
 				// images path
@@ -37,7 +37,7 @@
 				_self.isExpand = ko.observable(map.expand);
 
 				// csv
-				_self.isCSV = ko.observable(csv.enable);
+				_self.isCSV = ko.observable(data.enable);
 
 				// clean the view model
 				clean(ko, elem);

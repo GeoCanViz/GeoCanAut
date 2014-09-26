@@ -360,6 +360,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 								<li>
 									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }"></h3>
 									<div>
+										<input type="checkbox" id="cb_befBase" data-bind="checked: $data.beforebase">
+										<label for="cb_befBase" class="form-checkbox" data-bind="text: $root.lblBefBasemap"></label>
+										<div style="clear: both"></div>
 										<span data-bind="text: $root.lblScale"></span>
 										<div class="row">
 											<label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
@@ -412,6 +415,10 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_tools" data-bind="checked: isTools">
 				<label for="cb_tools" class="form-checkbox" data-bind="imgLabel: { text: lblTools, img: imgTools }"></label>
+				<div class="row">
+					<label for="cb_toolexpand" class="form-checkbox" data-bind="text: lblToolsExpand"></label>
+					<select id="cb_toolexpand" data-bind="options: toolsExpand, optionsText: 'val', value: selectTools, enable: isTools"></select>
+				</div>
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_about" data-bind="checked: isAbout">
 				<label for="cb_about" class="form-checkbox" data-bind="imgLabel: { text: lblAbout, img: imgAbout }"></label>

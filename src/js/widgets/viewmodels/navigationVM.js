@@ -77,7 +77,13 @@
 				_self.isOver = ko.observable(overview.enable);
 				_self.urlOver = ko.observable(overview.url);
 				_self.overType = overType;
-				_self.selectOver = ko.observable(_self.overType[overview.type - 1]);
+				
+				// the overview type id is not sequential so we need to use a if then else
+				if (overview.type === 2) {
+					_self.selectOver = ko.observable(_self.overType[overview.type - 2]);
+				} else {
+					_self.selectOver = ko.observable(_self.overType[overview.type - 3]);
+				}
 
 				// position
 				_self.isPosition = ko.observable(position.enable);
@@ -118,7 +124,7 @@
 								'"overview": {' +
 									'"enable": ' + _self.isOver() +
 									',"url": "' + _self.urlOver() + '"' +
-									',"type": "' + _self.selectOver().id + '"' +
+									',"type": ' + _self.selectOver().id +
 								'},' +
 								'"position": {' +
 									'"enable": ' + _self.isPosition() +

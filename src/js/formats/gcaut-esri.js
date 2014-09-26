@@ -40,6 +40,7 @@
 								max: ko.observable(item.maxScale).extend({ numeric: { precision: 0 } }) };
 				layer.isChecked = ko.observable(false);
 				layer.isUse = ko.observable(false);
+				layer.beforebase = ko.observable(false);
 				layer.cluster = { enable: ko.observable(false),
 								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),
 								label: ko.observable(false),
@@ -119,6 +120,7 @@
 					sublayer.fullname = fullname + '***' + childName;
 					sublayer.url = url + '/' + childId;
 					sublayer.id = childId;
+					sublayer.beforebase = ko.observable(false);
 					sublayer.scale = { min: child.minScale, max: child.maxScale};
 					sublayer.cluster = { enable: ko.observable(false),
 								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),

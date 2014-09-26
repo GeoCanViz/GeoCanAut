@@ -25,6 +25,7 @@
 			// data model
 			var legendViewModel = function(elem, map, controls) {
 				var _self = this,
+					splitLabel = '',
 					lenControls = controls.length,
 					visibilityType = gcautFunc.getListCB(i18n.getDict('%legend-visibilitytypelist')),
 					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
@@ -632,15 +633,27 @@
 
 				// reset legend dialog buttons functions (ok and cancel)
 				_self.dialogResetOk = function() {
+					// keep track of the first item
+					if (_self.holderLayers.length > 0) {
+						splitLabel = _self.holderLayers[0].label.split('***')[0];
+					}
+
 					_self.resetArray(_self.holderBases, 'bases');
 					_self.resetArray(_self.holderLayers, 'layers');
-
+					
 					// we need a timeout because many function updates the array at the same time
 					// and we dont know when they finish
 					setTimeout(function() {
 						// reset bases and layers
 						_self.legendBases(_self.itemsBases());
 						_self.legendLayers(_self.itemsLayers());
+						
+						// check if we need to reverse the array
+						if (_self.itemsLayers().length > 0) {
+							if (_self.itemsLayers()[0].label.value() === splitLabel) {
+								_self.legendLayers(_self.legendLayers.reverse());
+							}
+						}
 
 						// refresh ui
 						$aut('.legendSortBases').accordion('refresh');
