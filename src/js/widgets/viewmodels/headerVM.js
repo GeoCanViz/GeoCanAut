@@ -24,8 +24,10 @@
 				var _self = this,
 					lenControls = controls.length,
 					title = map.title,
+					tools = map.tools,
 					about = map.about,
 					print = map.print,
+					toolsType = gcautFunc.getListCB(i18n.getDict('%header-toolsexpandlist')),
 					aboutType = gcautFunc.getListCB(i18n.getDict('%header-abouttypelist')),
 					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist')),
 					pathTools = locationPath + 'gcaut/images/headTools.png',
@@ -46,6 +48,7 @@
 				_self.lblMapTitleAlt = i18n.getDict('%header-mapnamealt');
 				_self.lblEnbTools = i18n.getDict('%header-lblbutton');
 				_self.lblTools = i18n.getDict('%header-tools');
+				_self.lblToolsExpand = i18n.getDict('%header-toolsexpand');
 				_self.lblAbout = i18n.getDict('%header-about');
 				_self.lblAboutType = i18n.getDict('%header-abouttype');
 				_self.lblAboutValue = i18n.getDict('%header-aboutvalue');
@@ -64,7 +67,9 @@
 				});
 
 				// tools
-				_self.isTools = ko.observable(map.tools);
+				_self.isTools = ko.observable(tools.enable);
+				_self.toolsExpand = toolsType;
+				_self.selectTools = ko.observable(_self.toolsExpand[tools.expand - 1]);
 
 				// insets and link
 				_self.isInset = ko.observable(false);
@@ -116,8 +121,11 @@
 									'"value": "' + _self.mapTitleValue() +'",' +
 									'"alttext": "' + _self.mapAltValue() + '"' +
 								'},' +
-								'"tools": ' + _self.isTools() +
-								',"link": ' + _self.isLink() +
+								'"tools": {' + 
+									'"enable": ' + _self.isTools() +
+									',"expand": ' + _self.selectAbout().id +
+								'},' +
+								'"link": ' + _self.isLink() +
 								',"inset": ' + _self.isInset() +
 								',"about": {' +
 									'"enable": ' +  _self.isAbout() +

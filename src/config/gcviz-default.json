@@ -41,7 +41,10 @@
 			"value": "",
 			"alttext": ""
 		},
-		"tools": false,
+		"tools": {
+			"enable": false,
+			"expand": false
+		},
 		"link": false,
 		"inset": false,
 		"about": {
@@ -115,7 +118,7 @@
 	"toolbardata": {
 		"enable": false,
 		"expand": false,
-		"csv": {
+		"data": {
 			"enable": false
 		}
 	},

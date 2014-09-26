@@ -92,6 +92,7 @@
 				_self.lblLayerType = i18n.getDict('%map-layertype');
 				_self.lblLayerURL = i18n.getDict('%map-layerurl');
 				_self.lblSetExtent = i18n.getDict('%map-setextent');
+				_self.lblBefBasemap = i18n.getDict('%map-befbasemap');
 				_self.lblScale = i18n.getDict('%map-scale');
 				_self.lblScaleMin = i18n.getDict('%minimum');
 				_self.lblScaleMax = i18n.getDict('%maximum');
@@ -195,8 +196,12 @@
 
 				// functions to create observable on layers
 				ko.utils.arrayForEach(_self.layers(), function(item) {
-					var scale = item.scale,
+					var beforebase = item.beforebase,
+						scale = item.scale,
 						cluster= item.cluster;
+
+					// show before basemap
+					beforebase = ko.observable(beforebase);
 
 					// scale
 					scale.min = ko.observable(scale.min).extend({ numeric: { precision: 0 } });
@@ -276,6 +281,7 @@
 											id: gcautFunc.getUUID(),
 											type: layer.type,
 											url: url,
+											beforebase: layer.beforebase,
 											scale: layer.scale,
 											cluster: layer.cluster });
 						}
@@ -295,6 +301,7 @@
 														id: gcautFunc.getUUID(),
 														type: layer.type,
 														url: layer.url,
+														beforebase: layer.beforebase,
 														scale: layer.scale,
 														cluster: layer.cluster });
 								}
