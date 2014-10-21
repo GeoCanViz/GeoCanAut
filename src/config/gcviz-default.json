@@ -29,6 +29,10 @@
 				"values": []
 			},
 			"link": false,
+			"zoombar": {
+				"bar": false,
+				"zoom": false
+			},
 			"bases": [],
 			"layers": []
 		}
@@ -37,6 +41,7 @@
 		"enable": false
 	},
 	"header": {
+		"side": 1,
 		"title": {
 			"value": "",
 			"alttext": ""
@@ -84,7 +89,6 @@
 	"toolbarnav": {
 		"enable": false,
 		"expand": false,
-		"zoom": false,
 		"urlgeomserv": "",
 		"geolocation": {
 			"enable": false,
