@@ -57,6 +57,14 @@ body {
 	}
 }
 
+.row:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
 label {
 	display: inline-block;
 }

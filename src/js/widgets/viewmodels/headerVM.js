@@ -23,10 +23,12 @@
 			var headerViewModel = function(elem, map, controls) {
 				var _self = this,
 					lenControls = controls.length,
+					side = map.side,
 					title = map.title,
 					tools = map.tools,
 					about = map.about,
 					print = map.print,
+					sideType = gcautFunc.getListCB(i18n.getDict('%header-sidelist')),
 					toolsType = gcautFunc.getListCB(i18n.getDict('%header-toolsexpandlist')),
 					aboutType = gcautFunc.getListCB(i18n.getDict('%header-abouttypelist')),
 					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist')),
@@ -46,6 +48,7 @@
 				// label
 				_self.lblMapTitle = i18n.getDict('%header-mapname');
 				_self.lblMapTitleAlt = i18n.getDict('%header-mapnamealt');
+				_self.lblHeaderSide = i18n.getDict('%header-side');
 				_self.lblEnbTools = i18n.getDict('%header-lblbutton');
 				_self.lblTools = i18n.getDict('%header-tools');
 				_self.lblToolsExpand = i18n.getDict('%header-toolsexpand');
@@ -57,6 +60,10 @@
 				_self.lblInset = i18n.getDict('%header-inset');
 				_self.lblFulscreen = i18n.getDict('%header-fullscreen');
 				_self.lblTitleChar = i18n.getDict('%header-msgtitle');
+
+				// header side
+				_self.sideType = sideType;
+				_self.selectHeaderSide = ko.observable(_self.sideType[side - 1]);
 
 				// title
 				_self.mapTitleValue = ko.observable(title.value);
@@ -117,7 +124,8 @@
 					_self.isLink(gcautFunc.getElemValueVM('map', 'isLink'));
 
 					value = '"header": {' +
-								'"title": {' +
+								'"side": ' + _self.selectHeaderSide().id +
+								',"title": {' +
 									'"value": "' + _self.mapTitleValue() +'",' +
 									'"alttext": "' + _self.mapAltValue() + '"' +
 								'},' +

@@ -35,11 +35,13 @@
 					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
 					pathCheckAll = locationPath + 'gcaut/images/mapCheckAll.png',
 					pathUncheckAll = locationPath + 'gcaut/images/mapUncheckAll.png',
+					pathZoom = locationPath + 'gcaut/images/navFullExtent.png',
 					srType = gcautFunc.getSrType(i18n.getDict('%map-sr')),
 					baseType = gcautFunc.getListCB(i18n.getDict('%map-basetypelist')),
 					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
 					size = mapin.size,
 					map = mapin.map,
+					zoombar = map.zoombar,
 					layers = map.layers,
 					extentMax = map.extentmax,
 					extentInit = map.extentinit,
@@ -52,6 +54,7 @@
 				_self.imgDelete = pathDelete;
 				_self.imgCheckAll = pathCheckAll;
 				_self.imgUncheckAll = pathUncheckAll;
+				_self.imgZoom = pathZoom;
 
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');
@@ -73,6 +76,8 @@
 				_self.lblMapHeight = i18n.getDict('%height');
 				_self.lblMapWidth = i18n.getDict('%width');
 				_self.lblLink = i18n.getDict('%map-link');
+				_self.lblZoom = i18n.getDict('%map-zoom');
+				_self.lblZoombar = i18n.getDict('%map-zoombar');
 				_self.lblResol = i18n.getDict('%map-resolution');
 				_self.lblLods = i18n.getDict('%map-lods');
 				_self.lblLevel = i18n.getDict('%map-level');
@@ -130,6 +135,10 @@
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: { precision: 0, validation: { min: 500, max: 2000, id: 'msg_width', msg: _self.msgWidth } } });
 				_self.isLink = ko.observable(map.link);
+
+				// zoom to full extent and zoombar
+				_self.isZoomBar = ko.observable(zoombar.bar);
+				_self.isZoom = ko.observable(zoombar.zoom);
 
 				// set extent variable (for the dialog box)
 				_self.setExtentMinX = ko.observable().extend({ numeric: { precision: 5 } });
@@ -607,7 +616,11 @@
 										',"values": ' + JSON.stringify(ko.toJS(_self.lods())).replace(/isChecked/g, 'check') +
 									'},' +
 									'"link": ' + _self.isLink() +
-									',"bases": ' + JSON.stringify(ko.toJS(_self.bases())) +
+									',"zoombar": {' + 
+										'"bar": ' + _self.isZoomBar() +
+										',"zoom": ' + _self.isZoom() +
+									'},' +
+									'"bases": ' + JSON.stringify(ko.toJS(_self.bases())) +
 									',"layers": '+ JSON.stringify(ko.toJS(_self.layers())) +
 								'}' +
 							'}';

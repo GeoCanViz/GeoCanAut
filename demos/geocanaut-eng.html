@@ -144,6 +144,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<label for="cb_link" data-bind="text: lblLink"></label>
 						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
 						<div style="clear: both"></div>
+						<input type="checkbox" id="zoomNav" data-bind="checked: isZoom">
+						<label for="zoomNav" class="form-checkbox" data-bind="imgLabel: { text: lblZoom, imgs: imgZoom }"></label>
+						<div style="clear: both"></div>
+						<input type="checkbox" id="cb_zoombar" data-bind="checked: isZoomBar">
+						<label for="cb_zoombar" data-bind="text: lblZoombar"></label>
+						<div style="clear: both"></div>
 						<label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
 						<input id="urlGeomServer" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
 						<div style="clear: both"></div>
@@ -411,6 +417,11 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<label for="headerMapAlt" class="form-textarea" data-bind="text: lblMapTitleAlt"></label>
 				<textarea id="headerMapAlt" type="text" class="gcaut-titlew" data-bind="value: mapAltValue"></textarea>
 				<div style="clear: both"></div>
+				<div class="row">
+					<label for="headerSide" class="form-checkbox" data-bind="text: lblHeaderSide"></label>
+					<select id="headerSide" data-bind="options: sideType, optionsText: 'val', value: selectHeaderSide"></select>
+				</div>	
+				<div style="clear: both"></div>
 				<h4><label data-bind="text: lblEnbTools"></label></h4>
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_tools" data-bind="checked: isTools">
@@ -631,10 +642,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<label for="enableNav" class="form-checkbox" data-bind="text: lblEnable"></label>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="expandNav" data-bind="checked: isExpand">
-							<label for="expandNav" class="form-checkbox" data-bind="text: lblExpand"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="zoomNav" data-bind="checked: isZoom">
-							<label for="zoomNav" class="form-checkbox" data-bind="imgLabel: { text: lblZoom, imgs: imgZoom }"></label>							
+							<label for="expandNav" class="form-checkbox" data-bind="text: lblExpand"></label>							
 							<div style="clear: both"></div>
 							<input type="checkbox" id="geolocNav" data-bind="checked: isGeoloc">
 							<label for="geolocNav" class="form-checkbox" data-bind="imgLabel: { text: lblGeoloc, imgs: imgGeoloc }"></label>							

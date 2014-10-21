@@ -30,19 +30,16 @@
 					scalebarType = gcautFunc.getListCB(i18n.getDict('%nav-scalebarlist')),
 					scaleType = gcautFunc.getListCB(i18n.getDict('%nav-scalelist')),
 					overType = gcautFunc.getListCBCust([2,4], i18n.getDict('%nav-overtypelist')),
-					pathZoom = locationPath + 'gcaut/images/navFullExtent.png',
 					pathGeoloc = locationPath + 'gcaut/images/navGeoloc.png',
 					pathPosition = locationPath + 'gcaut/images/navPosition.png';
 
 				// images path
-				_self.imgZoom = pathZoom;
 				_self.imgGeoloc = pathGeoloc;
 				_self.imgPosition = pathPosition;
 
 				// label
 				_self.lblEnable = i18n.getDict('%nav-enable');
 				_self.lblExpand = i18n.getDict('%expand');
-				_self.lblZoom = i18n.getDict('%nav-zoom');
 				_self.lblGeoloc = i18n.getDict('%nav-geoloc');
 				_self.lblScalebar = i18n.getDict('%nav-scalebar');
 				_self.lblScalebarUnit = i18n.getDict('%nav-scalebarunit');
@@ -56,9 +53,6 @@
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
-
-				// zoom to full extent
-				_self.isZoom = ko.observable(map.zoom);
 
 				// zoom to geolocation
 				_self.isGeoloc = ko.observable(geoloc.enable);
@@ -108,7 +102,6 @@
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
 								',"mapwkid": ' + mapwkid.id +
-								',"zoom": ' + _self.isZoom() +
 								',"geolocation": {' +
 									'"enable": ' + _self.isGeoloc() +
 									',"type": -1' +
