@@ -12,9 +12,20 @@
 			'esri/request'
 			], function($aut, i18n, esriRequest) {
 
-		var getResourceInfo,
+		var getRestServiceInformation,
+			getResourceInfo,
 			getEsriRendererInfo,
 			getEsriServRendererInfo;
+
+		getRestServiceInformation = function(url) {
+			// Make an AJAX call to get REST service information in JSON
+			var request = $aut.ajax({
+				url: url+'?f=json',
+				async: false,
+				type: 'POST'
+			});
+			return request;
+		};
 
 		getResourceInfo = function(url, layerType, success, error) {
 			//http://resources.esri.com/help/9.3/arcgisserver/apis/javascript/ve/help/Getting%20Started/DiscoverMapServices.html
@@ -85,7 +96,7 @@
 						outUniqueVals = [],
 						renderer = response.layers[layer].drawingInfo.renderer,
 						type = renderer.type;
-					
+
 					if (type === 'simple') {
 						item.displaychild.symbol(JSON.stringify(renderer));
 					} else if (type === 'uniqueValue') {
@@ -101,11 +112,11 @@
 							if (labelPrev !== label || JSON.stringify(symbolPrev) !== JSON.stringify(symbol)) {
 								outUniqueVals.push(uniqueVal);
 							}
-							
+
 							labelPrev = label;
 							symbolPrev = symbol;
 						}
-						
+
 						renderer.uniqueValueInfos = outUniqueVals;
 						item.displaychild.symbol(JSON.stringify(renderer));
 					}
@@ -134,6 +145,7 @@
 		};
 
 		return {
+			getRestServiceInformation: getRestServiceInformation,
 			getResourceInfo: getResourceInfo,
 			getEsriRendererInfo: getEsriRendererInfo,
 			getEsriServRendererInfo: getEsriServRendererInfo

@@ -5,7 +5,6 @@
  *
  * Footer view model widget
  */
-/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -25,11 +24,9 @@
 					lenControls = controls.length,
 					arrow = map.northarrow,
 					mouse = map.mousecoords,
-					srType = gcautFunc.getSrType(i18n.getDict('%map-sr')),
-					pathArrow = locationPath + 'gcaut/images/footNorthArrow.png';
-
-				// images path
-				_self.imgArrow = pathArrow;
+					scalebar = map.scalebar,
+					scalebarType = gcautFunc.getListCB(i18n.getDict('%nav-scalebarlist')),
+					srType = gcautFunc.getSrType(i18n.getDict('%map-sr'));
 
 				// label
 				_self.lblEnbArrow = i18n.getDict('%footer-arrow');
@@ -37,6 +34,8 @@
 				_self.lblEnbMouse = i18n.getDict('%footer-mouse');
 				_self.lblMouseSR = i18n.getDict('%footer-mouseSR');
 				_self.lblSelectItem = i18n.getDict('%selectItem');
+				_self.lblScalebar = i18n.getDict('%nav-scalebar');
+				_self.lblScalebarUnit = i18n.getDict('%nav-scalebarunit');
 
 				// north arrow
 				_self.isArrow = ko.observable(arrow.enable);
@@ -47,6 +46,11 @@
 				_self.isMouse = ko.observable(mouse.enable);
 				_self.mouseSR = srType;
 				_self.selectMouseSR = ko.observable(srType[gcautFunc.getSrTypeIndex(srType, mouse.outwkid)]);
+
+				// scalebar
+				_self.isScalebar = ko.observable(scalebar.enable);
+				_self.scalebarType = scalebarType;
+				_self.selectScalebar = ko.observable(_self.scalebarType[scalebar.unit - 1]);
 
 				// clean the view model
 				clean(ko, elem);
@@ -75,6 +79,10 @@
 								'"mousecoords": {' +
 									'"enable": ' + _self.isMouse() +
 									',"outwkid": ' + _self.selectMouseSR().id +
+								'},' +
+								'"scalebar": {' +
+									'"enable": ' + _self.isScalebar() +
+									',"unit": ' + _self.selectScalebar().id +
 								'},' +
 								'"datagrid": {' +
 									'"enable": ' + false +

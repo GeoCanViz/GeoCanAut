@@ -5,7 +5,6 @@
  *
  * Legend view model widget
  */
-/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -23,26 +22,16 @@
 			var navViewModel = function(elem, map) {
 				var _self = this,
 					geoloc = map.geolocation,
-					scalebar = map.scalebar,
 					scale = map.scaledisplay,
 					overview = map.overview,
 					position = map.position,
-					scalebarType = gcautFunc.getListCB(i18n.getDict('%nav-scalebarlist')),
 					scaleType = gcautFunc.getListCB(i18n.getDict('%nav-scalelist')),
-					overType = gcautFunc.getListCBCust([2,4], i18n.getDict('%nav-overtypelist')),
-					pathGeoloc = locationPath + 'gcaut/images/navGeoloc.png',
-					pathPosition = locationPath + 'gcaut/images/navPosition.png';
-
-				// images path
-				_self.imgGeoloc = pathGeoloc;
-				_self.imgPosition = pathPosition;
+					overType = gcautFunc.getListCBCust([2,4], i18n.getDict('%nav-overtypelist'));
 
 				// label
 				_self.lblEnable = i18n.getDict('%nav-enable');
 				_self.lblExpand = i18n.getDict('%expand');
 				_self.lblGeoloc = i18n.getDict('%nav-geoloc');
-				_self.lblScalebar = i18n.getDict('%nav-scalebar');
-				_self.lblScalebarUnit = i18n.getDict('%nav-scalebarunit');
 				_self.lblScale = i18n.getDict('%nav-scale');
 				_self.lblScaleFormat = i18n.getDict('%nav-scaleformat');
 				_self.lblOver = i18n.getDict('%nav-over');
@@ -57,11 +46,6 @@
 				// zoom to geolocation
 				_self.isGeoloc = ko.observable(geoloc.enable);
 
-				// scalebar
-				_self.isScalebar = ko.observable(scalebar.enable);
-				_self.scalebarType = scalebarType;
-				_self.selectScalebar = ko.observable(_self.scalebarType[scalebar.unit - 1]);
-
 				// scale
 				_self.isScale = ko.observable(scale.enable);
 				_self.scaleType = scaleType;
@@ -71,7 +55,7 @@
 				_self.isOver = ko.observable(overview.enable);
 				_self.urlOver = ko.observable(overview.url);
 				_self.overType = overType;
-				
+
 				// the overview type id is not sequential so we need to use a if then else
 				if (overview.type === 2) {
 					_self.selectOver = ko.observable(_self.overType[overview.type - 2]);
@@ -105,10 +89,6 @@
 								',"geolocation": {' +
 									'"enable": ' + _self.isGeoloc() +
 									',"type": -1' +
-								'},' +
-								'"scalebar": {' +
-									'"enable": ' + _self.isScalebar() +
-									',"unit": ' + _self.selectScalebar().id +
 								'},' +
 								'"scaledisplay": {' +
 									'"enable": ' + _self.isScale() +

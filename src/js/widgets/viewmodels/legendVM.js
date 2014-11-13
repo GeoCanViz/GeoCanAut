@@ -5,7 +5,6 @@
  *
  * Legend view model widget
  */
-/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -28,13 +27,7 @@
 					splitLabel = '',
 					lenControls = controls.length,
 					visibilityType = gcautFunc.getListCB(i18n.getDict('%legend-visibilitytypelist')),
-					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
-					pathOpen = locationPath + 'gcaut/images/legendOpen.png',
-					pathAddGroup = locationPath + 'gcaut/images/legendOpen.png';
-
-				// images path
-				_self.imgOpen = pathOpen;
-				_self.imgAddGroup = pathAddGroup;
+					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist'));
 
 				// error message
 				_self.msgOpacity = i18n.getDict('%legend-msgopacity');
@@ -59,6 +52,7 @@
 				_self.lblVisibilityRadio = i18n.getDict('%legend-visibilityradioid');
 				_self.lblDisplayChild = i18n.getDict('%legend-displaychild');
 				_self.lblDisplayChildSymbol = i18n.getDict('%legend-displaychildsymbol');
+				_self.lblCreateEmptyGroup = i18n.getDict('%legend-createemptygroup');
 				_self.lblCustomImage = i18n.getDict('%legend-customimage');
 				_self.lblCustomImageUrl = i18n.getDict('%legend-customimageurl');
 				_self.lblCustomImageText = i18n.getDict('%legend-customimagetext');
@@ -72,6 +66,8 @@
 
 				// tooltip
 				_self.tpRefresh = i18n.getDict('%projheader-tpnewmap');
+				_self.tpOpenClose = i18n.getDict('%openclose');
+				_self.tpOpenCloseClickDrag = i18n.getDict('%opencloseclickdrag');
 
 				// class
 				_self.hiddenReset = ko.observable('gcaut-hidden');
@@ -640,14 +636,14 @@
 
 					_self.resetArray(_self.holderBases, 'bases');
 					_self.resetArray(_self.holderLayers, 'layers');
-					
+
 					// we need a timeout because many function updates the array at the same time
 					// and we dont know when they finish
 					setTimeout(function() {
 						// reset bases and layers
 						_self.legendBases(_self.itemsBases());
 						_self.legendLayers(_self.itemsLayers());
-						
+
 						// check if we need to reverse the array
 						if (_self.itemsLayers().length > 0) {
 							if (_self.itemsLayers()[0].label.value() === splitLabel) {

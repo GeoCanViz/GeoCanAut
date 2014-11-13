@@ -5,7 +5,6 @@
  *
  *  Project header view model widget
  */
-/* global locationPath: false */
 (function() {
 	'use strict';
 	define(['jquery-private',
@@ -29,13 +28,6 @@
 			// data model
 			var mapViewModel = function(elem, mapin) {
 				var _self = this,
-					pathNew = locationPath + 'gcaut/images/projNew.png',
-					pathValid = locationPath + 'gcaut/images/mapValidate.png',
-					pathExtent = locationPath + 'gcaut/images/mapExtent.png',
-					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
-					pathCheckAll = locationPath + 'gcaut/images/mapCheckAll.png',
-					pathUncheckAll = locationPath + 'gcaut/images/mapUncheckAll.png',
-					pathZoom = locationPath + 'gcaut/images/navFullExtent.png',
 					srType = gcautFunc.getSrType(i18n.getDict('%map-sr')),
 					baseType = gcautFunc.getListCB(i18n.getDict('%map-basetypelist')),
 					layerType = gcautFunc.getListCB(i18n.getDict('%map-layertypelist')),
@@ -47,17 +39,14 @@
 					extentInit = map.extentinit,
 					lods = map.lods;
 
-				// images path
-				_self.imgNew = pathNew;
-				_self.imgValid = pathValid;
-				_self.imgExtent = pathExtent;
-				_self.imgDelete = pathDelete;
-				_self.imgCheckAll = pathCheckAll;
-				_self.imgUncheckAll = pathUncheckAll;
-				_self.imgZoom = pathZoom;
-
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');
+				_self.tpSetMaxExtent = i18n.getDict('%map-tpsetmaxextent');
+				_self.tpSetInitExtent = i18n.getDict('%map-tpsetinitextent');
+				_self.tpVerifyURL = i18n.getDict('%map-tpverifyurl');
+				_self.tpCheckAllLods = i18n.getDict('%map-tpcheckalllods');
+				_self.tpUnCheckAllLods = i18n.getDict('%map-tpuncheckalllods');
+				_self.tpOpenClose = i18n.getDict('%openclose');
 
 				// class
 				_self.hiddenLayer = ko.observable('gcaut-hidden');
@@ -70,7 +59,14 @@
 				_self.msgHeight = i18n.getDict('%map-msgheight');
 				_self.msgWidth = i18n.getDict('%map-msgwidth');
 
+				// resolution
+				_self.lodsAreChecked = ko.observable(true);
+				_self.lblCheckUncheckAll = i18n.getDict('%map-checkuncheckall');
+
 				// label
+				_self.lblGeneralParams = i18n.getDict('%map-general');
+				_self.lblHelperServicesParams = i18n.getDict('%map-helperservices');
+				_self.lblMapServicesParams = i18n.getDict('%map-mapservices');
 				_self.lblRemove = i18n.getDict('%remove');
 				_self.lblMapSize = i18n.getDict('%size');
 				_self.lblMapHeight = i18n.getDict('%height');
@@ -108,6 +104,7 @@
 				_self.lblClusterSymbol = i18n.getDict('%map-lblclustersymbol');
 				_self.lblClusterSize = i18n.getDict('%map-lblclustersize');
 				_self.lblClusterData = i18n.getDict('%map-lblclusterdata');
+				_self.lblVerifyAdd = i18n.getDict('%map-lblverifyadd');
 
 				// text
 				_self.txtLayerErr = i18n.getDict('%map-layererror');
@@ -179,6 +176,7 @@
 				_self.layers = ko.observableArray(map.layers).extend({ rateLimit: { method: 'notifyWhenChangesStop', timeout: 500 } });
 				_self.layerType = layerType;
 				_self.selectLayerType = ko.observable();
+				_self.layersAreChecked = ko.observable(false);
 
 				// layer service info array
 				_self.servLayers = ko.observableArray();
@@ -196,6 +194,16 @@
 				ko.utils.arrayForEach(_self.lods(), function(item) {
 					item.isChecked = ko.observable(item.check);
 				});
+
+				_self.lodsCheckUncheck = function() {
+					if (_self.lodsAreChecked() === true) {
+						_self.lodsAreChecked(false);
+					} else {
+						_self.lodsAreChecked(true);
+					}
+					_self.checkLods(_self.lodsAreChecked());
+					return true;
+				};
 
 				_self.checkLods = function(value) {
 					ko.utils.arrayForEach(_self.lods(), function(item) {
@@ -292,6 +300,7 @@
 											url: url,
 											beforebase: layer.beforebase,
 											scale: layer.scale,
+											usecluster: layer.usecluster(),
 											cluster: layer.cluster });
 						}
 
@@ -312,6 +321,7 @@
 														url: layer.url,
 														beforebase: layer.beforebase,
 														scale: layer.scale,
+														usecluster: layer.usecluster(),
 														cluster: layer.cluster });
 								}
 							} else {
@@ -321,7 +331,17 @@
 					}
 				};
 
-				// four next function are use to check/uncheck element in layer dialog box
+				// five next function are use to check/uncheck element in layer dialog box
+				_self.checkUncheckAllLayers = function(layer) {
+					if (_self.layersAreChecked() === true) {
+						_self.layersAreChecked(false);
+					} else {
+						_self.layersAreChecked(true);
+					}
+					_self.checkAll(layer, _self.layersAreChecked());
+					return true;
+				};
+
 				_self.checkAll = function(layers, value) {
 					var layer,
 						len = layers.length;
@@ -341,11 +361,24 @@
 				};
 
 				_self.cascadeCheck = function(parents, item) {
-					var check = !item.isChecked();
+					var check = !item.isChecked(),
+						getRestInfo,
+						serviceInfo,
+						serviceJSON;
 
 					// Set isUse for all parents;
 					item.isUse(check);
 					checkParentlayers(parents, check);
+
+					// If feature layer and a point layer. set item.usecluster
+					if (item.type === 5) {
+						getRestInfo = gisServInfo.getRestServiceInformation(item.url);
+						serviceInfo = getRestInfo.responseText;
+						serviceJSON = $aut.parseJSON(serviceInfo);
+						if (serviceJSON.geometryType === 'esriGeometryPoint') {
+							item.usecluster(true);
+						}
+					}
 
 					// check or uncheck all child layers and set the isUse
 					checkSublayers(item, 0);
@@ -382,11 +415,24 @@
 				};
 
 				checkSublayers = function(item, level) {
-					var checked = level ? !item.isChecked() : item.isChecked();
+					var checked = level ? !item.isChecked() : item.isChecked(),
+						getRestInfo,
+						serviceInfo,
+						serviceJSON;
 
 					ko.utils.arrayForEach(item.servLayers, function(subitem) {
 						subitem.isUse(!checked);
 						subitem.isChecked(!checked);
+
+						// If feature layer and a point layer. set item.usecluster
+						if (subitem.type === 5) {
+							getRestInfo = gisServInfo.getRestServiceInformation(subitem.url);
+							serviceInfo = getRestInfo.responseText;
+							serviceJSON = $aut.parseJSON(serviceInfo);
+							if (serviceJSON.geometryType === 'esriGeometryPoint') {
+								subitem.usecluster(true);
+							}
+						}
 						checkSublayers(subitem, 1);
 					});
 				};
@@ -474,7 +520,7 @@
 
 					return false;
 				};
-				
+
 				// when one item in the autocomple is selected, update the input text
 				_self.setLayerURL = function(event, ui) {
 					_self.layerURL(ui.item.value);
@@ -494,6 +540,7 @@
 						layerType = _self.selectBaseLayerType().id;
 					} else {
 						_self.isLayer(true);
+						_self.layersAreChecked(false);
 						url = _self.layerURL();
 						layerType = _self.selectLayerType().id;
 					}
@@ -524,7 +571,6 @@
 
 					// set the selected type (use to show or hide checkbox)
 					_self.selectedType(type);
-
 					if (sender.hasOwnProperty('error')) {
 						category === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr);
 					} else {
@@ -613,10 +659,11 @@
 									'},' +
 									'"lods": {' +
 										'"enable": ' + _self.isLods() +
+										'"disable": ' + _self.isNotLods() +
 										',"values": ' + JSON.stringify(ko.toJS(_self.lods())).replace(/isChecked/g, 'check') +
 									'},' +
 									'"link": ' + _self.isLink() +
-									',"zoombar": {' + 
+									',"zoombar": {' +
 										'"bar": ' + _self.isZoomBar() +
 										',"zoom": ' + _self.isZoom() +
 									'},' +

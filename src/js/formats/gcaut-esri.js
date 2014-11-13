@@ -41,6 +41,7 @@
 				layer.isChecked = ko.observable(false);
 				layer.isUse = ko.observable(false);
 				layer.beforebase = ko.observable(false);
+				layer.usecluster = ko.observable(false);
 				layer.cluster = { enable: ko.observable(false),
 								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),
 								label: ko.observable(false),
@@ -122,6 +123,7 @@
 					sublayer.id = childId;
 					sublayer.beforebase = ko.observable(false);
 					sublayer.scale = { min: child.minScale, max: child.maxScale};
+					sublayer.usecluster = ko.observable(false);
 					sublayer.cluster = { enable: ko.observable(false),
 								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),
 								label: ko.observable(false),

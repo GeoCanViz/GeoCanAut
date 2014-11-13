@@ -14,3 +14,7 @@
 .gcaut-type-1, .gcaut-type-2, .gcaut-type-3, .gcaut-type-4 {
 	color: #AA253A !important;
 }
+
+.gcaut-legend-createemptygroup {
+  @include sprite($img-spritebtn, -1228, -2);
+}

@@ -5,7 +5,6 @@
  *
  * Data view model widget
  */
-/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -21,14 +20,10 @@
 			// data model
 			var drawViewModel = function(elem, map) {
 				var _self = this,
-					data = map.data,
-					pathCSV = locationPath + 'gcaut/images/dataCSV.png';
-
-				// images path
-				_self.imgCSV = pathCSV;
+					data = map.data;
 
 				// label
-				_self.lblEnable = i18n.getDict('%draw-enable');
+				_self.lblEnable = i18n.getDict('%data-enable');
 				_self.lblExpand = i18n.getDict('%expand');
 				_self.lblCSV = i18n.getDict('%data-csv');
 

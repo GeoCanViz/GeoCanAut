@@ -5,7 +5,6 @@
  *
  * Header view model widget
  */
-/* global locationPath: false */
 (function() {
 	'use strict';
 	define(['jquery-private',
@@ -31,19 +30,7 @@
 					sideType = gcautFunc.getListCB(i18n.getDict('%header-sidelist')),
 					toolsType = gcautFunc.getListCB(i18n.getDict('%header-toolsexpandlist')),
 					aboutType = gcautFunc.getListCB(i18n.getDict('%header-abouttypelist')),
-					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist')),
-					pathTools = locationPath + 'gcaut/images/headTools.png',
-					pathAbout = locationPath + 'gcaut/images/headAbout.png',
-					pathPrint = locationPath + 'gcaut/images/headPrint.png',
-					pathInset = locationPath + 'gcaut/images/headShowInset.png',
-					pathFullscreen = locationPath + 'gcaut/images/headFullscreen.png';
-
-				// images path
-				_self.imgTools = pathTools;
-				_self.imgAbout = pathAbout;
-				_self.imgPrint = pathPrint;
-				_self.imgInset = pathInset;
-				_self.imgFullscreen = pathFullscreen;
+					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist'));
 
 				// label
 				_self.lblMapTitle = i18n.getDict('%header-mapname');
@@ -60,6 +47,7 @@
 				_self.lblInset = i18n.getDict('%header-inset');
 				_self.lblFulscreen = i18n.getDict('%header-fullscreen');
 				_self.lblTitleChar = i18n.getDict('%header-msgtitle');
+				_self.lblMenu = i18n.getDict('%header-menu');
 
 				// header side
 				_self.sideType = sideType;
@@ -129,7 +117,7 @@
 									'"value": "' + _self.mapTitleValue() +'",' +
 									'"alttext": "' + _self.mapAltValue() + '"' +
 								'},' +
-								'"tools": {' + 
+								'"tools": {' +
 									'"enable": ' + _self.isTools() +
 									',"expand": ' + _self.selectAbout().id +
 								'},' +

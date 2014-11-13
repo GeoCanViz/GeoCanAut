@@ -5,7 +5,6 @@
  *
  * Draw view model widget
  */
-/* global locationPath: false */
 (function() {
     'use strict';
     define(['jquery-private',
@@ -27,19 +26,7 @@
 					measureline = map.measureline,
 					measurearea = map.measurearea,
 					file = map.importexport,
-					measureUnit = gcautFunc.getListCB(i18n.getDict('%draw-measureunitlist')),
-					pathLine = locationPath + 'gcaut/images/drawDraw.png',
-					pathText = locationPath + 'gcaut/images/drawText.png',
-					pathMeasureL = locationPath + 'gcaut/images/drawMeasureL.png',
-					pathMeasureA = locationPath + 'gcaut/images/drawMeasureA.png',
-					pathImportExport = locationPath + 'gcaut/images/drawImport.png;' +locationPath + 'gcaut/images/drawExport.png';
-
-				// images path
-				_self.imgLine = pathLine;
-				_self.imgText = pathText;
-				_self.imgMeasureL = pathMeasureL;
-				_self.imgMeasureA = pathMeasureA;
-				_self.imgImportExport = pathImportExport;
+					measureUnit = gcautFunc.getListCB(i18n.getDict('%draw-measureunitlist'));
 
 				// label
 				_self.lblEnable = i18n.getDict('%draw-enable');
