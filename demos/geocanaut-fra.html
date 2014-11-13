@@ -166,7 +166,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<div style="clear: both"></div>
                         <h5 data-bind="text: lblMapServicesParams"></h5>
 						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500">
-							<h3 class="ui-accordion-header" data-bind="text: lblBasemap, tooltip:  { content: $root.tpOpenClose }"></h3>
+							<h3 class="ui-accordion-header" data-bind="text: lblBasemap, tooltip: { content: $root.tpOpenClose }"></h3>
 							<div>
 								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
 									<div class="gcaut-mapinfo">
@@ -202,7 +202,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 														</div>
 														<div class="span9" data-bind="visible: isLods">
 															<div id="gcaut-lods" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }">
-															<h3 class="ui-accordion-header" data-bind="text: lblResol, tooltip:  { content: $root.tpOpenClose }"></h3>
+															<h3 class="ui-accordion-header" data-bind="text: lblResol, tooltip: { content: $root.tpOpenClose }"></h3>
 															<div>
 																<div data-bind="template: { name: 'selectLods' }"></div>
 																<ul class="gcaut-layers" data-bind="template: { name: 'showLods', foreach: $data.lods }"></ul>
@@ -280,7 +280,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 									</div>
 								</div>
 							</div>
-							<h3 class="ui-accordion-header" data-bind="text: lblAddLayer, visible: bases().length > 0, tooltip:  { content: $root.tpOpenClose }"></h3>
+							<h3 class="ui-accordion-header" data-bind="text: lblAddLayer, visible: bases().length > 0, tooltip: { content: $root.tpOpenClose }"></h3>
 							<div>
 								<div class="gcaut-mapinfo">
 									<div style="clear: both"></div>
@@ -351,7 +351,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<ul id="basessoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabbases-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapBasesOption', foreach: bases }"></ul>
 							<script type="text/html" id="mapBasesOption">
 								<li>
-									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip:  { content: $root.tpOpenClose }"></h3>
+									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip: { content: $root.tpOpenClose }"></h3>
 									<div>
 										<div class="row">
     										<span data-bind="text: $root.lblScale"></span>
@@ -371,7 +371,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<ul id="layersoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tablayers-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapLayersOption', foreach: layers }"></ul>
 							<script type="text/html" id="mapLayersOption">
 								<li>
-									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip:  { content: $root.tpOpenCloseClickDrag }"></h3>
+									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip: { content: $root.tpOpenCloseClickDrag }"></h3>
 									<div>
 										<input type="checkbox" id="cb_befBase" data-bind="checked: $data.beforebase">
 										<label for="cb_befBase" class="form-checkbox" data-bind="text: $root.lblBefBasemap"></label>
@@ -384,8 +384,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 											<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
 											<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
 										</div>
-										<div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tablayers-options' }, visible: $data.type === 5">
-											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster, tooltip:  { content: $root.tpOpenClose }"></h3>
+                                        <div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tablayers-options' }, visible: $data.usecluster === true, tooltip: { content: $root.tpOpenClose }">
+											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster, tooltip: { content: $root.tpOpenClose }"></h3>
 											<div>
 												<input type="checkbox" id="cb_cluster" data-bind="click: $root.updateType, checked: $data.cluster.enable">
 												<label for="cb_cluster" class="form-checkbox" data-bind="text: $root.lblClusterEnable"></label>
@@ -493,7 +493,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<ul class="legendSortBases" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortBases' } }, template: { name: 'legendBases', foreach: $data.legendBases }"></ul>
 							<script type="text/html" id="legendBases">
 								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
-									<h3 data-bind="tooltip:  { content: $root.tpOpenClose }">
+									<h3 data-bind="tooltip: { content: $root.tpOpenClose }">
 										<span data-bind="attr: { id: $data.label.value() }, text: $data.label.value()"></span>
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></img></button>
 									</h3>
@@ -553,7 +553,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
 							<script type="text/html" id="legendLayers">
 								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
-									<h3 data-bind="tooltip:  { content: $root.tpOpenCloseClickDrag }">
+									<h3 data-bind="tooltip: { content: $root.tpOpenCloseClickDrag }">
 										<span data-bind="attr: { id: $data.graphid(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#2e6e9e' }, text: $data.label.value()"></span>
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></img></button>
 									</h3>
