@@ -1,5 +1,9 @@
 @import "gcaut-mixin";
 
+.gcaut-head-performcheck {
+  @include sprite($img-spritebtn, -1408, -2);
+}
+
 .gcaut-layers {
 	line-height: (1.75 * $rembase) + rem;
 	margin-bottom: (2.25 * $rembase) + rem;

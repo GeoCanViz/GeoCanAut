@@ -136,6 +136,10 @@
 			"enable": false,
 			"outwkid": 4326
 		},
+        "scalebar": {
+            "enable": true,
+            "unit": 1
+        },
 		"datagrid": {
 			"enable": false
 		}

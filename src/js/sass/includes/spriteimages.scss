@@ -1,0 +1,81 @@
+@import "gcaut-mixin";
+
+.gcaut-head-newmap {
+  @include sprite($img-spritebtn, -1265, -2);
+}
+
+.gcaut-head-searchmap {
+  @include sprite($img-spritebtn, -1373, -2);
+}
+
+.gcaut-head-deletemap {
+  @include sprite($img-spritebtn, -1157, -2);
+}
+
+.gcaut-head-redomap {
+  @include sprite($img-spritebtn, -866, -2);
+}
+
+.gcaut-head-savemap {
+  @include sprite($img-spritebtn, -1300, -2);
+}
+
+.gcaut-header-print {
+  @include spritenostates($img-spritebtn, -1, -2);
+}
+
+.gcaut-map-link {
+  @include spritenostates($img-spritebtn, -73, -2);
+}
+
+.gcaut-header-about {
+  @include spritenostates($img-spritebtn, -145, -2);
+}
+
+.gcaut-header-fullscreen {
+  @include spritenostates($img-spritebtn, -216, -2);
+}
+
+.gcaut-draw-line {
+  @include spritenostates($img-spritebtn, -541, -2);
+}
+
+.gcaut-draw-text {
+  @include spritenostates($img-spritebtn, -577, -2);
+}
+
+.gcaut-draw-measureL {
+  @include spritenostates($img-spritebtn, -612, -2);
+}
+
+.gcaut-draw-measureA {
+  @include spritenostates($img-spritebtn, -649, -2);
+}
+
+.gcaut-draw-import {
+  @include spritenostates($img-spritebtn, -937, -2);
+}
+
+.gcaut-draw-export {
+  @include spritenostates($img-spritebtn, -974, -2);
+}
+
+.gcaut-nav-fullextent {
+  @include spritenostates($img-spritebtn, -1010, -2);
+}
+
+.gcaut-nav-fullextent-states {
+  @include sprite($img-spritebtn, -1011, -2);
+}
+
+.gcaut-nav-position {
+  @include spritenostates($img-spritebtn, -1047, -2);
+}
+
+.gcaut-data-csv {
+  @include spritenostates($img-spritebtn, -937, -2);
+}
+
+.gcaut-footer-arrow {
+  @include spritenostates($img-spritebtn, -1120, -2);
+}

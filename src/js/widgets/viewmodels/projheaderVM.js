@@ -32,19 +32,7 @@
 			// data model
 			var projheaderViewModel = function(config) {
 				var _self = this,
-					pathNew = locationPath + 'gcaut/images/projNew.png',
-					pathOpen = locationPath + 'gcaut/images/projOpen.png',
-					pathDelete = locationPath + 'gcaut/images/projDelete.gif',
-					pathRestore = locationPath + 'gcaut/images/projRestore.gif',
-					pathSave = locationPath + 'gcaut/images/projSave.png',
 					pathTemplate = locationPath + 'gcaut/config/gcviz-default.json';
-
-				// images path
-				_self.imgNew = pathNew;
-				_self.imgOpen = pathOpen;
-				_self.imgDelete = pathDelete;
-				_self.imgRestore = pathRestore;
-				_self.imgSave = pathSave;
 
 				// set label
 				_self.headerLabel = i18n.getDict('%projheader-title');
@@ -58,6 +46,17 @@
 				_self.txtMaps = i18n.getDict('%map') + '(s)';
 				_self.txtConfig = i18n.getDict('%msg-configread') + ': ';
 				_self.txtConfigErr = i18n.getDict('%msg-configerr');
+
+				// tabs
+				_self.tabMap = i18n.getDict('%projheader-map');
+				_self.tabHeader = i18n.getDict('%projheader-header');
+				_self.tabTools = i18n.getDict('%projheader-tools');
+				_self.tabFooter = i18n.getDict('%projheader-footer');
+				_self.tabLegend = i18n.getDict('%projheader-legend');
+				_self.tabDraw = i18n.getDict('%projheader-draw');
+				_self.tabNavigation = i18n.getDict('%projheader-navigation');
+				_self.tabDatatable = i18n.getDict('%projheader-datatable');
+				_self.tabData = i18n.getDict('%projheader-data');
 
 				// tooltip
 				_self.tpNew = i18n.getDict('%projheader-tpnewmap');

@@ -184,6 +184,36 @@ label {
 	overflow: auto;
 }
 
+.gcaut-tabs-level1 {
+  padding: 5px 5px!important;
+}
+
+.gcaut-tabs-level2 {
+  padding: 5px 5px!important;
+}
+
+.gcaut-tabs-level3 {
+  padding: 5px 5px!important;
+}
+
+.gcaut-rotate90 {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
+}
+
+.gcaut-padding-left {
+  padding-left: 35px;
+}
+
+.gcaut-padding-left30 {
+  padding-left: 30px;
+}
+
+.gcaut-margin-left0 {
+  margin-left: 0px;
+}
+
 .form-textarea {
 	vertical-align: top;
 }
