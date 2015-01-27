@@ -659,7 +659,6 @@
 									'},' +
 									'"lods": {' +
 										'"enable": ' + _self.isLods() +
-										'"disable": ' + _self.isNotLods() +
 										',"values": ' + JSON.stringify(ko.toJS(_self.lods())).replace(/isChecked/g, 'check') +
 									'},' +
 									'"link": ' + _self.isLink() +

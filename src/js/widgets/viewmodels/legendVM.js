@@ -76,6 +76,9 @@
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
 
+				// toolbar position
+				_self.pos = ko.observable(map.pos);
+
 				// visibility
 				_self.visibilityType = visibilityType;
 
@@ -680,6 +683,7 @@
 					value = '"toolbarlegend": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
+								',"pos": ' + _self.pos() +
 								',"basemaps": ' + basesItems +
 								',"items": ' + layersItems +
 							'}';

@@ -10,36 +10,43 @@
 (function() {
 	'use strict';
 	// get the language
-	var metas, len,
-		url = window.location.toString(),
-		locationPath,
-		language = 'en-min';
+	var url = window.location.toString(),
+		locationPath, redirectPath,
+		language = 'en-min',
+		metas,
+		i;
 
 	if ((url.search(/_f\.htm/) > -1) || (url.search(/-fra\./) > -1) || (url.search(/-fr\./) > -1) || (url.search(/lang=fra/) > -1) || (url.search(/lang=fr/) > -1)) {
 		language = 'fr-min';
+		window.langext = 'fra';
 	} else if ((url.search(/_e\.htm/) > -1) || (url.search(/-eng\./) > -1) || (url.search(/-en\./) > -1) || (url.search(/lang=eng/) > -1) || (url.search(/lang=en/) > -1)) {
 		language = 'en-min';
+		window.langext = 'eng';
 	} else {
+		window.langext = 'eng';
 		console.log('language not set, English by default');
 	}
 
-	// get code location from meta tag
+	// get code location and redirect page from meta tag
 	metas = document.getElementsByTagName('meta'),
-	len = metas.length;
+	i = metas.length;
 
-	while(len--) {
-		if (metas[len].getAttribute('property') === 'location') {
-			locationPath = metas[len].getAttribute('content');
+	while(i--) {
+		if (metas[i].getAttribute('name') === 'gcaut-location') {
+			locationPath = metas[i].getAttribute('content');
+		}
+		if (metas[i].getAttribute('name') === 'gcaut-redirect') {
+			redirectPath = metas[i].getAttribute('content');
 		}
 	}
 
-	// if location path is not set in html set by default at GeoCanAut
+	// if location path is not set in html set by default at GeoCanViz
 	if (typeof locationPath === 'undefined') {
 		var starGeo = url.search('GeoCanAut');
 		if (starGeo !== -1) {
 			locationPath = url.substring(0, url.search('GeoCanAut')) + 'GeoCanAut/';
 		} else {
-			if  (language === 'fr-min') {
+			if (language === 'fr-min') {
 				console.log('Définir le meta paramètre "location" ou mettre le site web dans un répertoire nommé "GeoCanAut"');
 			} else {
 				console.log('Define "location" meta paramter or put web site in a folder called "GeoCanAut"');
@@ -83,50 +90,67 @@
 		}
 	},
 	dataBrowser: [
-		{
+		{ // for mobile device (phone and tablet)
+			string: navigator.userAgent,
+			subString: 'Mobile',
+			identity: 'Mobile',
+			versionSearch: ''
+		}, { // for IE mobile device
+			string: navigator.userAgent,
+			subString: 'IEMobile',
+			identity: 'Mobile',
+			versionSearch: ''
+		}, { // for Kindle mobile device
+			string: navigator.userAgent,
+			subString: 'Silk',
+			identity: 'Mobile',
+			versionSearch: ''
+		}, { // for Blackberry Playbook
+			string: navigator.userAgent,
+			subString: 'Tablet',
+			identity: 'Mobile',
+			versionSearch: ''
+		}, {
 			string: navigator.userAgent,
 			subString: 'Chrome',
 			identity: 'Chrome'
-		},
-		{
+		}, {
 			string: navigator.vendor,
 			subString: 'Apple',
 			identity: 'Safari',
 			versionSearch: 'Version'
-		},
-		{
+		}, {
 			prop: window.opera,
 			identity: 'Opera',
 			versionSearch: 'Version'
-		},
-		{
+		}, {
 			string: navigator.userAgent,
 			subString: 'Firefox',
 			identity: 'Firefox'
-		},
-		{
+		}, {
 			string: navigator.vendor,
 			subString: 'Camino',
 			identity: 'Camino'
-		},
-		{	// for newer Netscapes (6+)
+		}, { // for newer Netscapes (6+)
 			string: navigator.userAgent,
 			subString: 'Netscape',
 			identity: 'Netscape'
-		},
-		{
+		}, {
 			string: navigator.userAgent,
 			subString: 'MSIE',
 			identity: 'Explorer',
 			versionSearch: 'MSIE'
-		},
-		{
+		}, { // for IE 11
+			string: navigator.userAgent,
+			subString: 'Windows NT',
+			identity: 'Explorer',
+			versionSearch: 'rv'
+		},{
 			string: navigator.userAgent,
 			subString: 'Gecko',
 			identity: 'Mozilla',
 			versionSearch: 'rv'
-		},
-		{	// for older Netscapes (4-)
+		}, { // for older Netscapes (4-)
 			string: navigator.userAgent,
 			subString: 'Mozilla',
 			identity: 'Netscape',
@@ -136,20 +160,22 @@
 	browserDetect.init();
 
 	// if browser not supported, redirect
-	if (window.browser !== 'Explorer' && window.browser !== 'Firefox' && window.browser !== 'Chrome' && window.browser !== 'Safari') {
+	if (window.browser !== 'Explorer' && window.browser !== 'Firefox' && window.browser !== 'Chrome' && window.browser !== 'Safari' && window.browser !== 'Mobile') {
 		if (language === 'en-min') {
-			alert('Browser not suported: needs to be Chrome, Firefox, Safari or Explorer. You will be redirected to Google home page');
+			alert('Browser not supported: needs to be Chrome, Firefox, Safari or Explorer. You will be redirected to project page.');
 		} else {
-			alert('Navigateur non supporté: le navigateur doit être Chrome, Firefox, Safari ou Explorer. Vous serez redirigé vers la page d\'acceuil de Google');
+			alert('Navigateur non pris en charge: doit être Chrome, Firefox, Safari ou Explorer. Vous serez redirigé vers la page de projet');
 		}
-		window.location = 'http://www.google.com/';
+
+		window.location = redirectPath;
 	} else if (window.browser === 'Explorer' && window.browserversion <= 8) {
 		if (language === 'en-min') {
-			alert('Browser not suported: Explorer needs to be version 9 and higher. Vous serez redirigé vers la page d\'acceuil de Google');
+			alert('Browser not supported: Explorer needs to be version 9 or higher. You will be redirected to project page.');
 		} else {
-			alert('Navigateur non supporté: Explorer doit être version 9 ou plus. Vous serez redirigé vers la page d\'acceuil de Google');
+			alert('Navigateur non pris en charge: Explorer doit être version 9 ou supérieur. Vous serez redirigé vers la page de projet.');
 		}
-		window.location = 'http://www.google.com/';
+
+		window.location = redirectPath;
 	}
 
 	// load the require libraries	
@@ -223,6 +249,10 @@
 				location: locationPath + 'src/js/widgets/viewmodels',
 				main: 'footerVM'
 			}, {
+				name: 'gcaut-vm-datagrid',
+				location: locationPath + 'src/js/widgets/viewmodels',
+				main: 'datagridVM'
+			}, {
 				name: 'gcaut-vm-legend',
 				location: locationPath + 'src/js/widgets/viewmodels',
 				main: 'legendVM'
@@ -238,6 +268,14 @@
 				name: 'gcaut-vm-data',
 				location: locationPath + 'src/js/widgets/viewmodels',
 				main: 'dataVM'
+			}, {
+				name: 'gcaut-vm-extract',
+				location: locationPath + 'src/js/widgets/viewmodels',
+				main: 'extractVM'
+			}, {
+				name: 'gcaut-vm-order',
+				location: locationPath + 'src/js/widgets/viewmodels',
+				main: 'toolsOrderVM'
 			}
 		]
 	});

@@ -119,7 +119,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 			<li><a href="#tab-map">Map</a></li>
 			<li><a href="#tab-head">Header</a></li>
 			<li><a href="#tab-tools">Menu</a></li>
-			<li><a href="#tabtool-datable">Datatable/Popups</a></li>
+			<li><a href="#tab-datagrid">Datatable/Popups</a></li>
 			<li><a href="#tab-foot">Footer</a></li>
 		</ul>
 		<div id="tab-map" class="gcaut-tabs gcaut-tabs-level1">
@@ -467,12 +467,22 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		<div id="tab-tools" class="gcaut-tabs gcaut-tabs-level1">
 			<div id="gcauttoolstabs">
 				<ul>
+					<li><a href="#tabtool-order">Order</a></li>
 					<li><a href="#tabtool-legend">Legend</a></li>
 					<li><a href="#tabtool-draw">Draw</a></li>
                     <li><a href="#tabtool-nav">Navigation</a></li>
 					<li><a href="#tabtool-data">Data</a></li>
+					<li><a href="#tabtool-extract">Extract</a></li>
 				</ul>
 				<section id="tools">
+					<div id="tabtool-order" class="gcaut-tabs gcaut-tabs-level2">
+						<section id="toolsOrder">
+							<ul id="toolsOrderList" class="gcaut-accordion toolbarsMenuOrder" data-bind="uiSortable: { placeholder: 'ui-state-highlight', connectWith: '.toolbarsMenuOrder', refresh: 'tab-tools', change: $root.update }, template: { name: 'toolbarsOrder', foreach: $data.tools }"></ul>
+							<script type="text/html" id="toolbarsOrder">
+								<li class="ui-state-default" data-bind="text: label"></li>
+							</script>
+						</section>
+					</div>
 					<div id="tabtool-legend" class="gcaut-tabs gcaut-tabs-level2">
 						<section id="legendMap">
 							<button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
@@ -706,12 +716,46 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                             <label for="csvData" data-bind="text: lblCSV"></label>
 						</section>
 					</div>
+					<div id="tabtool-extract" class="gcaut-tabs gcaut-tabs-level2">
+						<section id="extractMap">
+							<input type="checkbox" id="enableData" data-bind="checked: isEnable">
+							<label for="enableData" class="form-checkbox" data-bind="text: lblEnable"></label>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="expandData" data-bind="checked: isExpand">
+							<label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
+							<div style="clear: both"></div>
+			                <input type="checkbox" id="gridExtract" data-bind="checked: isGrid">
+			                <label for="gridExtract" class="form-checkbox" data-bind="text: lblGrid"></label>                           
+			                <div class="row">
+			                    <label for="gridIdExtract" class="gcaut-padding-left30" data-bind="text: lblGridSelect"></label>
+			                    <select id="gridIdExtract" data-bind="options: gridList, optionsText: 'val', value: selectGrid, enable: isGrid, event: { change: $root.setGridId }"></select>
+			                </div> 
+						</section>
+					</div>
 				</section>
 			</div>
 		</div>
-        <div id="tabtool-datable" class="gcaut-tabs gcaut-tabs-level2">
-            <section id="datableMap">
-                <span>TODO</span>
+        <div id="tab-datagrid" class="gcaut-tabs gcaut-tabs-level2">
+            <section id="datagridMap">
+				<input type="checkbox" id="enableDatagrid" data-bind="checked: isEnable">
+				<label for="enableDatagrid" class="form-checkbox" data-bind="text: lblEnable"></label>
+				<div class="row">
+					<label for="layersDatagrid" class="gcaut-padding-left30" data-bind="text: lblLayerSelect"></label>
+					<select id="layersDatagrid" data-bind="options: layerList, optionsText: 'val', value: selectLayer, enable: isEnable"></select>
+				</div>
+				<ul id="datagridlayers" class="dgLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLayers', refresh: 'tab-datagrid' } }, template: { name: 'dgLayers', foreach: $data.layers }"></ul>
+				<script type="text/html" id="dgLayers">
+					<li>
+						<h3 class="ui-accordion-header" data-bind="text: title, css: { 'layeroption-title': true }"></h3>
+						<div>
+							<input type="checkbox" id="enableLink" data-bind="checked: linktable.enable">
+							<label for="enableLink" class="form-checkbox" data-bind="text: $root.lblLink"></label>
+							<div style="clear: both"></div>
+							<input type="checkbox" id="enablePopup" data-bind="checked: popups.enable">
+							<label for="enablePopup" class="form-checkbox" data-bind="text: $root.lblPopup"></label>
+						</div>
+					</li>
+				</script>
             </section>
         </div>
 		<div id="tab-foot" class="gcaut-tabs gcaut-tabs-level1">

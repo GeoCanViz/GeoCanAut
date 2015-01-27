@@ -17,11 +17,14 @@
 			'gcaut-vm-map',
 			'gcaut-vm-header',
 			'gcaut-vm-footer',
+			'gcaut-vm-datagrid',
 			'gcaut-vm-legend',
 			'gcaut-vm-draw',
 			'gcaut-vm-nav',
-			'gcaut-vm-data'
-	], function($aut, ko, generateFile, i18n, binding, gcautFunc, mapVM, headerVM, footerVM, legendVM, drawVM, navVM, dataVM) {
+			'gcaut-vm-data',
+			'gcaut-vm-extract',
+			'gcaut-vm-order'
+	], function($aut, ko, generateFile, i18n, binding, gcautFunc, mapVM, headerVM, footerVM, datagridVM, legendVM, drawVM, navVM, dataVM, extractVM, toolsOrderVM) {
 		var initialize,
 			loadFile,
 			setFocus,
@@ -220,13 +223,14 @@
 					vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
 					vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header, [{ value: vm.map.mapWidthValue, func: 'updateTitle' }]);
 					vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ value: vm.map.selectMapSR, func: 'updateSR' }]);
+					vm.datagrid = datagridVM.initialize(document.getElementById('datagridMap'), gcviz.datagrid, [{ value: vm.map.layers, func: 'updateLayers' }]);
 					vm.legend = legendVM.initialize(document.getElementById('legendMap'), gcviz.toolbarlegend,
 													[{ value: vm.map.layers, func: 'updateLayers' },
 													{ value: vm.map.bases, func: 'updateBases' }]);
 					vm.draw = drawVM.initialize(document.getElementById('drawMap'), gcviz.toolbardraw);
 					vm.navigation = navVM.initialize(document.getElementById('navigationMap'), gcviz.toolbarnav);
 					vm.data = dataVM.initialize(document.getElementById('dataMap'), gcviz.toolbardata);
-
+					vm.extract = extractVM.initialize(document.getElementById('extractMap'), gcviz.toolbarextract, [{ value: vm.map.layers, func: 'updateGrid' }]);
 					setFocus(vm.map.focusMapHeight);
 
 					// push the vm to array, update the dropdown list and select the new item
@@ -238,6 +242,9 @@
 
 					// set vm object in custom function to be access by other view model
 					gcautFunc.setVM(vm);
+					
+					// setup the order toolbars tabs
+					toolsOrderVM.initialize(document.getElementById('toolsOrder'));
 				};
 
 				setFocus = function(elem) {

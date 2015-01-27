@@ -18,7 +18,7 @@
 		initialize = function(elem, map) {
 
 			// data model
-			var drawViewModel = function(elem, map) {
+			var dataViewModel = function(elem, map) {
 				var _self = this,
 					data = map.data;
 
@@ -30,6 +30,9 @@
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
+
+				// toolbar position
+				_self.pos = ko.observable(map.pos);
 
 				// csv
 				_self.isCSV = ko.observable(data.enable);
@@ -52,6 +55,7 @@
 					value = '"toolbardata": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
+								',"pos": ' + _self.pos() +
 								',"data": {' +
 									'"enable": ' + _self.isCSV() +
 								'}' +
@@ -63,7 +67,7 @@
 				_self.init();
 			};
 
-			vm = new drawViewModel(elem, map);
+			vm = new dataViewModel(elem, map);
 			ko.applyBindings(vm, elem); // This makes Knockout get to work
 			return vm;
 		};
