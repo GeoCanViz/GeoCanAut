@@ -74,6 +74,7 @@
 				_self.lblLink = i18n.getDict('%map-link');
 				_self.lblZoom = i18n.getDict('%map-zoom');
 				_self.lblZoombar = i18n.getDict('%map-zoombar');
+				_self.lblZoomSel = i18n.getDict('%map-zoomsel');
 				_self.lblResol = i18n.getDict('%map-resolution');
 				_self.lblLods = i18n.getDict('%map-lods');
 				_self.lblLevel = i18n.getDict('%map-level');
@@ -133,9 +134,10 @@
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: { precision: 0, validation: { min: 500, max: 2000, id: 'msg_width', msg: _self.msgWidth } } });
 				_self.isLink = ko.observable(map.link);
 
-				// zoom to full extent and zoombar
+				// zoom to full extent, zoom selection and zoombar
 				_self.isZoomBar = ko.observable(zoombar.bar);
-				_self.isZoom = ko.observable(zoombar.zoom);
+				_self.isZoomFull = ko.observable(zoombar.zoomfull);
+				_self.isZoomSel = ko.observable(zoombar.zoom);
 
 				// set extent variable (for the dialog box)
 				_self.setExtentMinX = ko.observable().extend({ numeric: { precision: 5 } });
@@ -664,7 +666,8 @@
 									'"link": ' + _self.isLink() +
 									',"zoombar": {' +
 										'"bar": ' + _self.isZoomBar() +
-										',"zoom": ' + _self.isZoom() +
+										',"zoom": ' + _self.isZoomSel() +
+										',"zoomfull": ' + _self.isZoomFull() +
 									'},' +
 									'"bases": ' + JSON.stringify(ko.toJS(_self.bases())) +
 									',"layers": '+ JSON.stringify(ko.toJS(_self.layers())) +

@@ -31,7 +31,8 @@
 			"link": false,
 			"zoombar": {
 				"bar": false,
-				"zoom": false
+				"zoom": false,
+				"zoomfull": false
 			},
 			"bases": [],
 			"layers": []
@@ -155,6 +156,7 @@
 	},
 	"datagrid": {
 		"enable": false,
+		"expand": false,
 		"layers": []
 	},
 	"customwidgets": []

@@ -139,8 +139,9 @@
             },
             "link":false,
             "zoombar":{  
-               "bar":false,
-               "zoom":false
+               "bar":true,
+               "zoom":true,
+               "zoomfull":true
             },
             "bases":[  
                {  
@@ -233,51 +234,90 @@
          "scalebar":{  
             "enable":false,
             "unit":1
+         },
+         "datagrid": {
+         	"enable": false
          }
       },
-      "datagrid":{  
-         "enable":false,
-         "layers":[{  
-            "layerinfo": {
-                    "id": "6f798c6b-dddd1-4e24-78dd-9bfa5a9bc59e",
-                    "type": 5,
-                    "index": 0
-                },
-                "title": "Link tables",
-                "fields": [{
-                    "title": "Comp. Name.",
-                    "width": "60px",
-                    "data": "MINING_COMP_NAME",
-                    "dataalias": "MINING_COMP_NAME"
-                }, {
-                    "title": "Project Status",
-                    "width": "60px",
-                    "data": "PROJ_STATUS_EN",
-                    "dataalias": "PROJ_STATUS_EN"
-                }],
-                "linktable": {
-                    "enable": true
-                 },
-                 "popups": {
-                    "enable": true,
-                    "layeralias": "Mining Project Status"
-                 },
-                 "hover": {
-                     "enable": false,
-                     "hoverfield": "Community Well-Being"
-                 }
-         }]
-      },
       "toolbarlegend":{  
-         "enable":false,
+         "enable":true,
          "expand":false,
-         "pos":-1,
+         "pos":0,
          "basemaps":[  
-
+ {
+                "expand": false,
+                "last": true,
+                "type": 2,
+                "id": "",
+                "graphid": "762eb7ed-cccc-242f-6fcf-af08f5605eb1",
+                "displayfields": false,
+                "label": {
+                    "value": "No Base",
+                    "alttext": "No Base"
+                },
+                "metadata": {
+                    "enable": false
+                },
+                "opacity": {
+                    "enable": false
+                },
+                "visibility": {
+                    "enable": true,
+                    "initstate": true,
+                    "type": 2,
+                    "radioid": 5
+                },
+                "displaychild": {
+                    "enable": false
+                },
+                "customimage": {
+                    "enable": false,
+                    "description": "nononono",
+                    "images": [{
+                    	"url": "mine",
+                    	"label": "this"
+                    }]
+                },
+                "items": []
+            }
          ],
-         "items":[  
-
-         ]
+        "items": [{
+                "expand":false,
+            	"last":false,
+            	"type":3,
+            	"id":"bbbb469d-zzz1-c8f5-175c-645200a6b6fe",
+            	"graphid":"e5511402-0028-5cbe-0d3c-f537c612b7df",
+            	"displayfields":false,
+            	"label":{
+            		"value":"NTS Grid",
+            		"alttext":"NTS Grid"
+            	},
+            	"metadata":
+            		{"enable":false
+				},
+            	"opacity":{
+            		"enable":true,
+            		"min":0,
+            		"max":1,
+            		"initstate":1
+            	},
+            	"visibility":{
+            		"enable":true,
+            		"initstate":false,
+            		"type":1,
+					"radioid":0
+            	},
+            	"displaychild":{
+            		"enable":false,
+            		"symbol":""
+            	},
+            	"customimage":{
+            		"enable":false,
+            		"description": "",
+            		"images":[]
+            	},
+            	"items":[]
+            }]
       },
       "toolbardraw":{  
          "enable":false,
@@ -302,9 +342,9 @@
          }
       },
       "toolbarnav":{  
-         "enable":false,
+         "enable":true,
          "expand":false,
-         "pos":-1,
+         "pos":2,
          "mapwkid":3978,
          "geolocation":{  
             "enable":false,
@@ -332,17 +372,187 @@
          }
       },
       "toolbarextract":{  
-         "enable":false,
+         "enable":true,
          "expand":false,
-         "pos":-1,
+         "pos":1,
          "grid":{  
-            "enable":false,
+            "enable":true,
             "id":"ae3a2a41-f48d-1cf4-d284-37eacfff9f4f"
          },
-         "items":[  
-
+         "items":[{
+            	"title": "Maps (raster): ",
+            	"subtitle": "Toporama, CanMatrix Print-ready and Georeferenced.",
+            	"scale": 0,
+            	"url": "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/-/OR/(urn:iso:series)toporama/(urn:iso:series)canmatrix-georeferenced",
+            	"query": [{
+            		"type": 1,
+            		"param": "?q=XXX",
+            		"label": "Get single NTS area"
+            		}, {
+            		"type": 2,
+            		"param": "?bbox=XXX&sort-field=spatial",
+            		"label": "Get all maps for area shown"
+            		}]
+            	}, {
+            	"title": "Data (vector): ",
+            	"subtitle": "CanVec+.",
+	            "scale": 0,
+	            "url": "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/-/(urn:iso:series)canvec-plus",
+	            "query": [{
+            		"type": 1,
+            		"param": "?q=XXX",
+            		"label": "Get single NTS area"
+            		}, {
+            		"type": 2,
+            		"param": "?bbox=XXX&sort-field=spatial",
+            		"label": "Get all data for area shown"
+            		}]
+	            }
          ]
       },
+      "datagrid": {
+            "enable": true,
+            "expand": true,
+            "layers": [{
+                "layerinfo": {
+                    "id": "6f798c6b-0001-4e24-78dd-9bfa5a9bc59e",
+                    "type": 4,
+                    "index": 0
+                },
+                "title": "GMRC",
+                "globalsearch": true,
+                "fields": [{
+                	"enable": true,
+                    "title": "Geo Id",
+                    "width": "160px",
+                    "data": "GEO_ID",
+                    "dataalias": "GEO_ID",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": true
+                }, {
+                	"enable": true,
+                    "title": "Geo Sym",
+                    "width": "250px",
+                    "data": "GEO_SYM",
+                    "dataalias": "GEO_SYM",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": false
+                }, {
+                	"enable": false,
+                    "title": "Geo EDESC",
+                    "width": "250px",
+                    "data": "GEO_EDESC",
+                    "dataalias": "GEO_EDESC",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": false
+                }, {
+                	"enable": true,
+                    "title": "Geo FDESC",
+                    "width": "250px",
+                    "data": "GEO_FDESC",
+                    "dataalias": "GEO_FDESC",
+                    "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": false
+                }],
+                "linktable": {
+                    "enable": false,
+                    "relationshipid": 0,
+                    "title": "",
+                    "subtitle": "",
+                    "fields": []
+                 },
+                 "popups": {
+                    "enable": true,
+                    "layeralias": "Geology - Major Rock Categories"
+                 },
+                 "hover": {
+                     "enable": false,
+                     "hoverfield": "Community Well-Being"
+                 }
+            }, {
+                "layerinfo": {
+                    "id": "6f798c6b-dddd1-4e24-78dd-9bfa5a9bc59e",
+                    "type": 5,
+                    "index": 0
+                },
+                "title": "Link tables",
+                "globalsearch": false,
+                "fields": [{
+                	"enable": true,
+                    "title": "Comp. Name.",
+                    "width": "250px",
+                    "data": "MINING_COMP_NAME",
+                    "dataalias": "MINING_COMP_NAME",
+				    "type": {
+				      "field": "field",
+				      "value": "string"
+				     },
+				    "searchable": true
+                }, {
+                	"enable": false,
+                    "title": "Project Status",
+                    "width": "250px",
+                    "data": "PROJ_STATUS_EN",
+                    "dataalias": "PROJ_STATUS_EN",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": true
+                }],
+                "linktable": {
+                    "enable": true,
+                    "relationshipid": 0,
+                    "title": "Mining link section",
+                    "subtitle": "Mining sub section",
+                    "fields": [{
+                    "enable": true,
+                    	"title": "Date Signed",
+                    	"data": "DATE_AGRMT_SIGNED"
+                    }, {
+                    "enable": true,
+                    	"title": "Type Entente",
+                    	"data": "AGRMNT_TYPE_EN"
+                    }, {
+                    "enable": true,
+                    	"title": "Note",
+                    	"data": "AGRMNT_NOTES"
+                    },{
+                    "enable": true,
+                    	"title": "Agreement Status",
+                    	"data": "AGREEMENTS_STATUS"
+                    }, {
+                    "enable": true,
+                    	"title": "Agreement Type Code",
+                    	"data": "AGRMNT_TYPE_CODE_EN"
+                    }, {
+                    "enable": true,
+                    	"title": "Agreement Type Code FR",
+                    	"data": "TYPE_ENTENTE_CODE_FR"
+                    }]
+                 },
+                 "popups": {
+                    "enable": true,
+                    "layeralias": "Mining Project Status"
+                 },
+                 "hover": {
+                     "enable": false,
+                     "hoverfield": "Community Well-Being"
+                 }
+            }]
+        },
       "insetframe":{  
          "enable":false
       },

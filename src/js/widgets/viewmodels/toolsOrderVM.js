@@ -82,34 +82,49 @@
 						}
 					});
 
-					_self.addItem = function(vm, label) {
+					// subscribe is done after read. We  need to loop VM and check
+					setTimeout(function() {
+						_self.read('legend', _self.lblLegend);
+						_self.read('draw', _self.lblDraw);
+						_self.read('navigation', _self.lblNav);
+						_self.read('data', _self.lblData);
+						_self.read('extract', _self.lblExtract);
+					}, 1000);
+					
+					return { controlsDescendantBindings: true };
+				};
+
+				_self.read = function(vm, label) {
+					if (gcautFunc.getElemValueVM(vm, 'isEnable')) {
+						_self.addItem(vm, label);
+					}
+				};
+
+				_self.addItem = function(vm, label) {
 						_self.tools.push({ label: label,
 								vm: vm
 							});
 						_self.update();
 					};
 
-					_self.removeItem = function(vm) {
-						_self.tools.remove(function(item) {
-							return item.vm === vm;
-						});
-						gcautFunc.setElemValueVM(vm, 'pos', -1);
-					};
+				_self.removeItem = function(vm) {
+					_self.tools.remove(function(item) {
+						return item.vm === vm;
+					});
+					gcautFunc.setElemValueVM(vm, 'pos', -1);
+				};
 
-					_self.update = function() {
-						// loop trough the array and update position
-						var vm,
-							arr = _self.tools().reverse(),
-							len = _self.tools().length;
+				_self.update = function() {
+					// loop trough the array and update position
+					var vm,
+						arr = _self.tools().reverse(),
+						len = _self.tools().length;
 
-						while (len--) {
-							// update position
-							vm = arr[len].vm;
-							gcautFunc.setElemValueVM(vm, 'pos', len);
-						}
-					};
-
-					return { controlsDescendantBindings: true };
+					while (len--) {
+						// update position
+						vm = arr[len].vm;
+						gcautFunc.setElemValueVM(vm, 'pos', len);
+					}
 				};
 
 				_self.bind = function() {

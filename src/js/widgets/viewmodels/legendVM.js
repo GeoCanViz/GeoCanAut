@@ -32,6 +32,9 @@
 				// error message
 				_self.msgOpacity = i18n.getDict('%legend-msgopacity');
 
+				// tooltip
+				_self.tpAddImage = i18n.getDict('%legend-tpaddimage');
+
 				// label
 				_self.lblReset = i18n.getDict('%reset');
 				_self.lblRemove = i18n.getDict('%remove');
@@ -54,6 +57,7 @@
 				_self.lblDisplayChildSymbol = i18n.getDict('%legend-displaychildsymbol');
 				_self.lblCreateEmptyGroup = i18n.getDict('%legend-createemptygroup');
 				_self.lblCustomImage = i18n.getDict('%legend-customimage');
+				_self.lblCustomImageDesc =  i18n.getDict('%legend-customimagedesc');
 				_self.lblCustomImageUrl = i18n.getDict('%legend-customimageurl');
 				_self.lblCustomImageText = i18n.getDict('%legend-customimagetext');
 				_self.lblSectBases = i18n.getDict('%legend-sectbases');
@@ -132,13 +136,17 @@
 				};
 
 				createItem = function(item) {
-					var label = item.label,
+					var img, imgObj,
+						i = 0,
+						label = item.label,
 						metadata = item.metadata,
 						opacity = item.opacity,
 						visibility = item.visibility,
 						displaychild = item.displaychild,
 						customimage = item.customimage,
-						opacityGlobal = opacity.enable;
+						opacityGlobal = opacity.enable,
+						images = customimage.images,
+						lenImg = customimage.images.length;
 
 					item.expand = ko.observable(item.expand);
 					item.last = ko.observable(item.last);
@@ -163,10 +171,20 @@
 					item.displaychild.enable = ko.observable(displaychild.enable);
 					item.displaychild.symbol = ko.observable(displaychild.symbol);
 					item.customimage.enable = ko.observable(customimage.enable);
-					item.customimage.url = ko.observable(customimage.url);
-					item.customimage.alttext = ko.observable(customimage.alttext);
+					item.customimage.desc = ko.observable(customimage.description);
+					item.customimage.images = ko.observableArray([]);
 					item.items = ko.observableArray(item.items);
 
+					// array of images
+					while (i < lenImg) {
+						imgObj = { };
+						img = images[i];
+						imgObj.url = ko.observable(img.url);
+						imgObj.label = ko.observable(img.label);
+						item.customimage.images.push(imgObj);
+						i++;
+					}
+					
 					// subscribe to change on visibility.enable because if it is false
 					// visibility.initstate should be true
 					item.visibility.enable.subscribe(function() {
@@ -424,13 +442,13 @@
 								},
 								customimage: {
 									enable: ko.observable(false),
-									url: ko.observable(),
-									alttext: ko.observable()
+									desc: ko.observable(),
+									images: ko.observableArray(),
 								},
 								items: ko.observableArray()
 							};
 
-					// add the initila opacity outside object because it reference observable inside it
+					// add the initial opacity outside object because it reference observable inside it
 					item.opacity.initstate = ko.observable(1).extend({ numeric: { precision: 2, validation: { min: item.opacity.min, max: item.opacity.max, id: 'msg_opacityInit' + item.graphid(), msg: _self.msgOpacity } } });
 
 					// set renderer
@@ -665,6 +683,13 @@
 				_self.dialogResetCancel = function() {
 					_self.hiddenReset('gcaut-hidden');
 					_self.isResetDialogOpen(false);
+				};
+
+				_self.addImage = function(data) {
+					var item = { };
+					item.url = ko.observable('');
+					item.alttext = ko.observable('');
+					data.customimage.images.push(item);
 				};
 
 				_self.write = function() {
