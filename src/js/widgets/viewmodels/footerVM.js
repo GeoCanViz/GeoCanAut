@@ -25,6 +25,7 @@
 					arrow = map.northarrow,
 					mouse = map.mousecoords,
 					scalebar = map.scalebar,
+					datagrid = map.datagrid,
 					scalebarType = gcautFunc.getListCB(i18n.getDict('%nav-scalebarlist')),
 					srType = gcautFunc.getSrType(i18n.getDict('%map-sr'));
 
@@ -49,6 +50,7 @@
 
 				// scalebar
 				_self.isScalebar = ko.observable(scalebar.enable);
+				_self.isDatagrid = ko.observable(datagrid.enable);
 				_self.scalebarType = scalebarType;
 				_self.selectScalebar = ko.observable(_self.scalebarType[scalebar.unit - 1]);
 
@@ -56,6 +58,13 @@
 				clean(ko, elem);
 
 				_self.init = function() {
+					// subscribe to datagrid to know if it is enable
+					setTimeout(function() {
+						gcautFunc.subscribeTo('datagrid', 'isEnable', function(val) {
+							_self.isDatagrid(val);
+						});
+					}, 1000);
+
 					return { controlsDescendantBindings: true };
 				};
 
@@ -85,11 +94,10 @@
 									',"unit": ' + _self.selectScalebar().id +
 								'},' +
 								'"datagrid": {' +
-									'"enable": ' + false +
+									'"enable": ' + _self.isDatagrid() +
 								'}' +
-							'},' +
-							'"datagrid": { "enable": false }';
-					// TODO get info from the widget when it will be created
+							'}';
+
 					return value;
 				};
 

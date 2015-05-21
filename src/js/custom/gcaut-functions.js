@@ -10,6 +10,7 @@
 	define([], function() {
 
 		var debounce,
+			subscribeTo,
 			getListCB,
 			getListCBCust,
 			getSrType,
@@ -18,6 +19,7 @@
 			checkFormatURL,
 			getObject,
 			getElemValueVM,
+			setElemValueVM,
 			setVM,
 			vmObject,
 			getUUID,
@@ -47,6 +49,10 @@
 
 				timeout = setTimeout(delayed, threshold || 100);
 			};
+		};
+
+		subscribeTo = function(vm, value, funct) {
+			vmObject[vm][value].subscribe(funct);
 		};
 
 		getListCB = function(val) {
@@ -155,6 +161,10 @@
 			return vmObject[name][element]();
 		};
 
+		setElemValueVM = function(name, element, val) {
+			return vmObject[name][element](val);
+		};
+
 		setVM = function(vm) {
 			vmObject = vm;
 		};
@@ -183,6 +193,7 @@
 
 		return {
 			debounce: debounce,
+			subscribeTo: subscribeTo,
 			getListCB: getListCB,
 			getListCBCust: getListCBCust,
 			getSrType: getSrType,
@@ -191,6 +202,7 @@
 			checkFormatURL: checkFormatURL,
 			getObject: getObject,
 			getElemValueVM: getElemValueVM,
+			setElemValueVM: setElemValueVM,
 			setVM: setVM,
 			getUUID: getUUID,
 			checkDuplicate: checkDuplicate

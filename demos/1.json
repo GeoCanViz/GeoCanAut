@@ -1,0 +1,563 @@
+{  
+   "gcviz":{  
+      "mapframe":{  
+         "size":{  
+            "height":400,
+            "width":900
+         },
+         "map":{  
+            "urlgeomserv":"http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
+            "urlproxy":"http://localhost:8888/php/proxy.php",
+            "urldownload":"http://localhost:8888/php/download.php",
+            "sr":{  
+               "wkid":3978
+            },
+            "extentmax":{  
+               "xmin":-4282638.0615,
+               "ymin":-5153821.09214,
+               "xmax":4852210.17557,
+               "ymax":4376714.4421
+            },
+            "extentinit":{  
+               "xmin":-3795624.50929,
+               "ymin":2140714.8088,
+               "xmax":3671990.42594,
+               "ymax":6568790.33162
+            },
+            "lods":{  
+               "enable":false,
+               "values":[  
+                  {  
+                     "level":0,
+                     "resolution":38364.660062653464,
+                     "scale":145000000,
+                     "check":true
+                  },
+                  {  
+                     "level":1,
+                     "resolution":22489.62831258996,
+                     "scale":85000000,
+                     "check":true
+                  },
+                  {  
+                     "level":2,
+                     "resolution":13229.193125052918,
+                     "scale":50000000,
+                     "check":true
+                  },
+                  {  
+                     "level":3,
+                     "resolution":7937.5158750317505,
+                     "scale":30000000,
+                     "check":true
+                  },
+                  {  
+                     "level":4,
+                     "resolution":4630.2175937685215,
+                     "scale":17500000,
+                     "check":true
+                  },
+                  {  
+                     "level":5,
+                     "resolution":2645.8386250105837,
+                     "scale":10000000,
+                     "check":true
+                  },
+                  {  
+                     "level":6,
+                     "resolution":1587.5031750063501,
+                     "scale":6000000,
+                     "check":true
+                  },
+                  {  
+                     "level":7,
+                     "resolution":926.0435187537042,
+                     "scale":3500000,
+                     "check":true
+                  },
+                  {  
+                     "level":8,
+                     "resolution":529.1677250021168,
+                     "scale":2000000,
+                     "check":true
+                  },
+                  {  
+                     "level":9,
+                     "resolution":317.50063500127004,
+                     "scale":1200000,
+                     "check":true
+                  },
+                  {  
+                     "level":10,
+                     "resolution":185.20870375074085,
+                     "scale":700000,
+                     "check":true
+                  },
+                  {  
+                     "level":11,
+                     "resolution":111.12522225044451,
+                     "scale":420000,
+                     "check":true
+                  },
+                  {  
+                     "level":12,
+                     "resolution":66.1459656252646,
+                     "scale":250000,
+                     "check":true
+                  },
+                  {  
+                     "level":13,
+                     "resolution":38.36466006265346,
+                     "scale":145000,
+                     "check":true
+                  },
+                  {  
+                     "level":14,
+                     "resolution":22.48962831258996,
+                     "scale":85000,
+                     "check":true
+                  },
+                  {  
+                     "level":15,
+                     "resolution":13.229193125052918,
+                     "scale":50000,
+                     "check":true
+                  },
+                  {  
+                     "level":16,
+                     "resolution":7.9375158750317505,
+                     "scale":30000,
+                     "check":true
+                  },
+                  {  
+                     "level":17,
+                     "resolution":4.6302175937685215,
+                     "scale":17500,
+                     "check":true
+                  }
+               ]
+            },
+            "link":false,
+            "zoombar":{  
+               "bar":true,
+               "zoom":true,
+               "zoomfull":true
+            },
+            "bases":[  
+               {  
+                  "label":"CBCT3978",
+                  "id":"157a28ed-cb31-8f19-baf6-d857d19afc67",
+                  "type":2,
+                  "url":"http://geoappext.nrcan.gc.ca/arcgis/rest/services/BaseMaps/CBCT3978/MapServer",
+                  "scale":{  
+                     "min":0,
+                     "max":0
+                  }
+               }
+            ],
+            "layers":[  
+               {  
+                  "label":"BiologicEcologic_LCC***CanVec***Vegetation***Vegetation - 100k-300k scale",
+                  "id":"f1badf7e-d6f7-f7b0-2aa2-1542d8c063cb",
+                  "type":5,
+                  "url":"http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer/3",
+                  "beforebase":false,
+                  "scale":{  
+                     "min":300100,
+                     "max":100101
+                  },
+                  "usecluster":false,
+                  "cluster":{  
+                     "enable":false,
+                     "distance":50,
+                     "label":false,
+                     "symbol":false,
+                     "maxsizeprop":50,
+                     "maxdataprop":1000
+                  }
+               },
+               {  
+                  "label":"BiologicEcologic_LCC***CanVec***Wetlands***Wetlands - 100-300k scale",
+                  "id":"ae3a2a41-f48d-1cf4-d284-37eacfff9f4f",
+                  "type":5,
+                  "url":"http://apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/BiologicEcologic_LCC/MapServer/6",
+                  "beforebase":false,
+                  "scale":{  
+                     "min":300000,
+                     "max":100101
+                  },
+                  "usecluster":false,
+                  "cluster":{  
+                     "enable":false,
+                     "distance":50,
+                     "label":false,
+                     "symbol":false,
+                     "maxsizeprop":50,
+                     "maxdataprop":1000
+                  }
+               }
+            ]
+         }
+      },
+      "header":{  
+         "side":1,
+         "title":{  
+            "value":"",
+            "alttext":""
+         },
+         "tools":{  
+            "enable":false,
+            "expand":1
+         },
+         "link":false,
+         "inset":false,
+         "about":{  
+            "enable":false,
+            "type":1,
+            "value":""
+         },
+         "print":{  
+            "enable":false,
+            "type":1
+         },
+         "fullscreen":false
+      },
+      "footer":{  
+         "northarrow":{  
+            "enable":false,
+            "inwkid":3978
+         },
+         "mousecoords":{  
+            "enable":false,
+            "outwkid":4326
+         },
+         "scalebar":{  
+            "enable":false,
+            "unit":1
+         },
+         "datagrid": {
+         	"enable": false
+         }
+      },
+      "toolbarlegend":{  
+         "enable":true,
+         "expand":false,
+         "pos":0,
+         "basemaps":[  
+ {
+                "expand": false,
+                "last": true,
+                "type": 2,
+                "id": "",
+                "graphid": "762eb7ed-cccc-242f-6fcf-af08f5605eb1",
+                "displayfields": false,
+                "label": {
+                    "value": "No Base",
+                    "alttext": "No Base"
+                },
+                "metadata": {
+                    "enable": false
+                },
+                "opacity": {
+                    "enable": false
+                },
+                "visibility": {
+                    "enable": true,
+                    "initstate": true,
+                    "type": 2,
+                    "radioid": 5
+                },
+                "displaychild": {
+                    "enable": false
+                },
+                "customimage": {
+                    "enable": false,
+                    "description": "nononono",
+                    "images": [{
+                    	"url": "mine",
+                    	"label": "this"
+                    }]
+                },
+                "items": []
+            }
+         ],
+        "items": [{
+                "expand":false,
+            	"last":false,
+            	"type":3,
+            	"id":"bbbb469d-zzz1-c8f5-175c-645200a6b6fe",
+            	"graphid":"e5511402-0028-5cbe-0d3c-f537c612b7df",
+            	"displayfields":false,
+            	"label":{
+            		"value":"NTS Grid",
+            		"alttext":"NTS Grid"
+            	},
+            	"metadata":
+            		{"enable":false
+				},
+            	"opacity":{
+            		"enable":true,
+            		"min":0,
+            		"max":1,
+            		"initstate":1
+            	},
+            	"visibility":{
+            		"enable":true,
+            		"initstate":false,
+            		"type":1,
+					"radioid":0
+            	},
+            	"displaychild":{
+            		"enable":false,
+            		"symbol":""
+            	},
+            	"customimage":{
+            		"enable":false,
+            		"description": "",
+            		"images":[]
+            	},
+            	"items":[]
+            }]
+      },
+      "toolbardraw":{  
+         "enable":false,
+         "expand":false,
+         "pos":-1,
+         "drawline":{  
+            "enable":false
+         },
+         "drawtext":{  
+            "enable":false
+         },
+         "measureline":{  
+            "enable":false,
+            "unit":1
+         },
+         "measurearea":{  
+            "enable":false,
+            "unit":1
+         },
+         "importexport":{  
+            "enable":false
+         }
+      },
+      "toolbarnav":{  
+         "enable":true,
+         "expand":false,
+         "pos":2,
+         "mapwkid":3978,
+         "geolocation":{  
+            "enable":false,
+            "type":-1
+         },
+         "scaledisplay":{  
+            "enable":false,
+            "format":1
+         },
+         "overview":{  
+            "enable":false,
+            "url":"",
+            "type":2
+         },
+         "position":{  
+            "enable":false
+         }
+      },
+      "toolbardata":{  
+         "enable":false,
+         "expand":false,
+         "pos":-1,
+         "data":{  
+            "enable":false
+         }
+      },
+      "toolbarextract":{  
+         "enable":true,
+         "expand":false,
+         "pos":1,
+         "grid":{  
+            "enable":true,
+            "id":"ae3a2a41-f48d-1cf4-d284-37eacfff9f4f"
+         },
+         "items":[{
+            	"title": "Maps (raster): ",
+            	"subtitle": "Toporama, CanMatrix Print-ready and Georeferenced.",
+            	"scale": 0,
+            	"url": "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/-/OR/(urn:iso:series)toporama/(urn:iso:series)canmatrix-georeferenced",
+            	"query": [{
+            		"type": 1,
+            		"param": "?q=XXX",
+            		"label": "Get single NTS area"
+            		}, {
+            		"type": 2,
+            		"param": "?bbox=XXX&sort-field=spatial",
+            		"label": "Get all maps for area shown"
+            		}]
+            	}, {
+            	"title": "Data (vector): ",
+            	"subtitle": "CanVec+.",
+	            "scale": 0,
+	            "url": "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/-/(urn:iso:series)canvec-plus",
+	            "query": [{
+            		"type": 1,
+            		"param": "?q=XXX",
+            		"label": "Get single NTS area"
+            		}, {
+            		"type": 2,
+            		"param": "?bbox=XXX&sort-field=spatial",
+            		"label": "Get all data for area shown"
+            		}]
+	            }
+         ]
+      },
+      "datagrid": {
+            "enable": true,
+            "expand": true,
+            "layers": [{
+                "layerinfo": {
+                    "id": "6f798c6b-0001-4e24-78dd-9bfa5a9bc59e",
+                    "type": 4,
+                    "index": 0
+                },
+                "title": "GMRC",
+                "globalsearch": true,
+                "fields": [{
+                	"enable": true,
+                    "title": "Geo Id",
+                    "width": "160px",
+                    "data": "GEO_ID",
+                    "dataalias": "GEO_ID",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": true
+                }, {
+                	"enable": true,
+                    "title": "Geo Sym",
+                    "width": "250px",
+                    "data": "GEO_SYM",
+                    "dataalias": "GEO_SYM",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": false
+                }, {
+                	"enable": false,
+                    "title": "Geo EDESC",
+                    "width": "250px",
+                    "data": "GEO_EDESC",
+                    "dataalias": "GEO_EDESC",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": false
+                }, {
+                	"enable": true,
+                    "title": "Geo FDESC",
+                    "width": "250px",
+                    "data": "GEO_FDESC",
+                    "dataalias": "GEO_FDESC",
+                    "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": false
+                }],
+                "linktable": {
+                    "enable": false,
+                    "relationshipid": 0,
+                    "title": "",
+                    "subtitle": "",
+                    "fields": []
+                 },
+                 "popups": {
+                    "enable": true,
+                    "layeralias": "Geology - Major Rock Categories"
+                 },
+                 "hover": {
+                     "enable": false,
+                     "hoverfield": "Community Well-Being"
+                 }
+            }, {
+                "layerinfo": {
+                    "id": "6f798c6b-dddd1-4e24-78dd-9bfa5a9bc59e",
+                    "type": 5,
+                    "index": 0
+                },
+                "title": "Link tables",
+                "globalsearch": false,
+                "fields": [{
+                	"enable": true,
+                    "title": "Comp. Name.",
+                    "width": "250px",
+                    "data": "MINING_COMP_NAME",
+                    "dataalias": "MINING_COMP_NAME",
+				    "type": {
+				      "field": "field",
+				      "value": "string"
+				     },
+				    "searchable": true
+                }, {
+                	"enable": false,
+                    "title": "Project Status",
+                    "width": "250px",
+                    "data": "PROJ_STATUS_EN",
+                    "dataalias": "PROJ_STATUS_EN",
+				     "type": {
+				      	"field": "field",
+				      	"value": "string"
+				     },
+				     "searchable": true
+                }],
+                "linktable": {
+                    "enable": true,
+                    "relationshipid": 0,
+                    "title": "Mining link section",
+                    "subtitle": "Mining sub section",
+                    "fields": [{
+                    "enable": true,
+                    	"title": "Date Signed",
+                    	"data": "DATE_AGRMT_SIGNED"
+                    }, {
+                    "enable": true,
+                    	"title": "Type Entente",
+                    	"data": "AGRMNT_TYPE_EN"
+                    }, {
+                    "enable": true,
+                    	"title": "Note",
+                    	"data": "AGRMNT_NOTES"
+                    },{
+                    "enable": true,
+                    	"title": "Agreement Status",
+                    	"data": "AGREEMENTS_STATUS"
+                    }, {
+                    "enable": true,
+                    	"title": "Agreement Type Code",
+                    	"data": "AGRMNT_TYPE_CODE_EN"
+                    }, {
+                    "enable": true,
+                    	"title": "Agreement Type Code FR",
+                    	"data": "TYPE_ENTENTE_CODE_FR"
+                    }]
+                 },
+                 "popups": {
+                    "enable": true,
+                    "layeralias": "Mining Project Status"
+                 },
+                 "hover": {
+                     "enable": false,
+                     "hoverfield": "Community Well-Being"
+                 }
+            }]
+        },
+      "insetframe":{  
+         "enable":false
+      },
+      "customwidgets":[  
+
+      ]
+   }
+}

@@ -28,7 +28,7 @@
 					about = map.about,
 					print = map.print,
 					sideType = gcautFunc.getListCB(i18n.getDict('%header-sidelist')),
-					toolsType = gcautFunc.getListCB(i18n.getDict('%header-toolsexpandlist')),
+					toolsType = gcautFunc.getListCB(i18n.getDict('%boollist')),
 					aboutType = gcautFunc.getListCB(i18n.getDict('%header-abouttypelist')),
 					printType = gcautFunc.getListCB(i18n.getDict('%header-printtypelist'));
 

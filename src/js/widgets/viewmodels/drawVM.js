@@ -42,6 +42,9 @@
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
 
+				// toolbar position
+				_self.pos = ko.observable(map.pos);
+
 				// line
 				_self.isLine = ko.observable(line.enable);
 
@@ -78,6 +81,7 @@
 					value = '"toolbardraw": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
+								',"pos": ' + _self.pos() +
 								',"drawline": {' +
 									'"enable": ' + _self.isLine() +
 								'},' +

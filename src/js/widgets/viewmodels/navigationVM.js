@@ -43,6 +43,9 @@
 				_self.isEnable = ko.observable(map.enable);
 				_self.isExpand = ko.observable(map.expand);
 
+				// toolbar position
+				_self.pos = ko.observable(map.pos);
+
 				// zoom to geolocation
 				_self.isGeoloc = ko.observable(geoloc.enable);
 
@@ -85,6 +88,7 @@
 					value = '"toolbarnav": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
+								',"pos": ' + _self.pos() +
 								',"mapwkid": ' + mapwkid.id +
 								',"geolocation": {' +
 									'"enable": ' + _self.isGeoloc() +
