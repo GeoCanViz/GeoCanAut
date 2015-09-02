@@ -45,6 +45,8 @@
 				_self.lblPrint = i18n.getDict('%header-print');
 				_self.lblPrintType = i18n.getDict('%header-printtype');
 				_self.lblInset = i18n.getDict('%header-inset');
+				_self.lblSaveurl = i18n.getDict('%header-saveurl');
+				_self.lblSaveimage = i18n.getDict('%header-saveimage');
 				_self.lblFulscreen = i18n.getDict('%header-fullscreen');
 				_self.lblTitleChar = i18n.getDict('%header-msgtitle');
 				_self.lblMenu = i18n.getDict('%header-menu');
@@ -69,6 +71,12 @@
 				// insets and link
 				_self.isInset = ko.observable(false);
 				_self.isLink = ko.observable(map.link);
+
+				// save image
+				_self.isSaveurl = ko.observable(map.saveimage.enable);
+
+				// save url
+				_self.isSaveimage = ko.observable(map.saveurl.enable);
 
 				// full screen
 				_self.isFullscreen = ko.observable(map.fullscreen);
@@ -131,6 +139,12 @@
 								'"print": {' +
 									'"enable": ' +  _self.isPrint() +
 									',"type": ' + _self.selectPrint().id +
+								'},' +
+								'"saveimage": {' +
+									'"enable": ' + _self.isSaveimage() +
+								'},' +
+								'"saveurl": {' +
+									'"enable": ' + _self.isSaveurl() +
 								'},' +
 								'"fullscreen": ' + _self.isFullscreen() +
 							'}';

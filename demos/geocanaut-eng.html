@@ -442,7 +442,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<div style="clear: both"></div>
 				<div class="row">
     				<input type="checkbox" id="cb_about" data-bind="checked: isAbout">
-                    <button id="btnAbout" class="gcaut-header-print" tabindex="-1" data-bind="attr: { title: lblAbout }"></button>
+                    <button id="btnAbout" class="gcaut-header-about" tabindex="-1" data-bind="attr: { title: lblAbout }"></button>
                     <label for="cb_about" data-bind="text: lblAbout"></label>
 					<label for="cb_abouttype" class="form-checkbox" data-bind="text: lblAboutType"></label>
 					<select id="cb_abouttype" data-bind="options: aboutType, optionsText: 'val', value: selectAbout, enable: isAbout"></select>
@@ -458,6 +458,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 					<label for="cb_printtype" class="form-checkbox" data-bind="text: lblPrintType"></label>
 					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: isPrint"></select>
 				</div>
+				<div style="clear: both"></div>
+				<input type="checkbox" id="cb_saveimage" data-bind="checked: isSaveimage">
+                <button id="btnFullScreen" class="gcaut-header-saveimage" tabindex="-1" data-bind="attr: { title: lblSaveimage }"></button>
+                <label for="cb_saveimage" data-bind="text: lblSaveimage"></label>
+                <div style="clear: both"></div>
+				<input type="checkbox" id="cb_saveurl" data-bind="checked: isSaveurl">
+                <button id="btnFullScreen" class="gcaut-header-saveurl" tabindex="-1" data-bind="attr: { title: lblSaveurl }"></button>
+                <label for="cb_saveurl" data-bind="text: lblSaveurl"></label>
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
                 <button id="btnFullScreen" class="gcaut-header-fullscreen" tabindex="-1" data-bind="attr: { title: lblFulscreen }"></button>

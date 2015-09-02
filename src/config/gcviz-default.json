@@ -63,6 +63,12 @@
 			"type": 1,
 			"urlprinttask": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
 		},
+		"saveurl": {
+         	"enable": false
+         },
+		"saveimage": {
+			"enable": false
+		},
 		"fullscreen": false
 	},
 	"toolbardraw": {
