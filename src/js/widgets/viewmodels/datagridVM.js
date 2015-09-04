@@ -24,7 +24,9 @@
 				var _self = this,
 					lenControls = controls.length,
 					grid = map.grid,
-					seachType = gcautFunc.getListCB(i18n.getDict('%boollist'));
+					seachType = gcautFunc.getListCB(i18n.getDict('%boollist')),
+					fieldType = gcautFunc.getListCB(i18n.getDict('%datagrid-fieldtypelist')),
+					valueType = gcautFunc.getListCB(i18n.getDict('%datagrid-fieldvaluelist'));
 
 				// tooltip
 				_self.tpAddLayer = i18n.getDict('%datagrid-tpaddlayer');
@@ -41,6 +43,8 @@
 				_self.lblFieldWidth = i18n.getDict('%datagrid-fieldwidth');
 				_self.lblFieldData = i18n.getDict('%datagrid-fielddata');
 				_self.lblFieldAlias = i18n.getDict('%datagrid-fieldalias');
+				_self.lblFieldType = i18n.getDict('%datagrid-fieldtype');
+				_self.lblFieldValue = i18n.getDict('%datagrid-fieldvalue');
 				_self.lblFieldSearch = i18n.getDict('%datagrid-fieldsearch');
 				_self.lblLink = i18n.getDict('%datagrid-link');
 				_self.lblLinkRel = i18n.getDict('%datagrid-linkrel');
@@ -59,6 +63,12 @@
 				// layers
 				_self.layers = ko.observableArray(map.layers);
 
+				// fields
+				_self.fieldType = fieldType;
+				_self.valueType = valueType;
+				_self.selectType = ko.observable(_self.fieldType[0]);
+				_self.selectValue = ko.observable(_self.valueType[0]);
+
 				// functions to create observable on layers
 				ko.utils.arrayForEach(_self.layers(), function(item) {
 					var field, link,
@@ -72,9 +82,12 @@
 						lenLinks = links.fields.length;
 
 					// layerinfo
-					item.layerinfo.id = ko.observable(layerInfo.id);
+					item.layerinfo.uniqueid = ko.observable(layerInfo.id);
 					item.layerinfo.type = ko.observable(layerInfo.type);
 					item.layerinfo.index = ko.observable(layerInfo.index).extend({ numeric: { precision: 0 } });
+
+					// remove the original id attribute. it is replaced by uniqueid
+					delete _self.layers()[0].layerinfo['id'];
 
 					// title
 					item.title = ko.observable(item.title);
@@ -92,6 +105,8 @@
 						field.data = ko.observable(field.data);
 						field.dataalias = ko.observable(field.dataalias);
 						field.searchable = ko.observable(field.searchable);
+						field.fieldtype.type = ko.observable(_self.fieldType[field.fieldtype.type - 1]);
+						field.fieldtype.value = ko.observable(_self.valueType[field.fieldtype.value - 1]);
 						item.fields.push(field);
 					}
 
@@ -158,7 +173,7 @@
 
 					// layerinfo
 					layerInfo = { };
-					layerInfo.id = ko.observable(id);
+					layerInfo.uniqueid = ko.observable(id);
 					layerInfo.type = ko.observable(type);
 					layerInfo.index = ko.observable(0).extend({ numeric: { precision: 0 } });
 					item.layerinfo = layerInfo;
@@ -182,6 +197,9 @@
 						field.data = ko.observable(fieldInfo.name);
 						field.dataalias = ko.observable(fieldInfo.alias);
 						field.searchable = ko.observable(false);
+						field.fieldtype = { };
+						field.fieldtype.type = ko.observable(_self.fieldType[0]);
+						field.fieldtype.value = ko.observable(_self.valueType[0]);
 						item.fields.push(field);
 					}
 
@@ -256,12 +274,24 @@
 				};
 
 				_self.write = function() {
-					var value;
+					var value, fields;
+
+					// remove value from the field type list
+					fields = JSON.stringify(ko.toJS(_self.layers())).replace(/{"id":/g, '').replace(/,"val":"String"}/g, '').replace(/,"val":"Number"}/g, '').replace(/,"val":"Date"}/g, '').replace(/,"val":"Select"}/g, '')
+																	.replace(/,"val":"Texte"}/g, '').replace(/,"val":"Nombre"}/g, '').replace(/,"val":"Sélection"}/g, '');
+
+					// remove value from value type list
+					fields = fields.replace(/{"id":/g, '').replace(/,"val":"Field"}/g, '').replace(/,"val":"Key URL"}/g, '').replace(/,"val":"URL"}/g, '').replace(/,"val":"Field URL"}/g, '').replace(/,"val":"Field Key URL"}/g, '')
+									.replace(/,"val":"Champ"}/g, '').replace(/,"val":"Clé URI"}/g, '').replace(/,"val":"URI"}/g, '').replace(/,"val":"Champ URI"}/g, '').replace(/,"val":"Champ clé URI"}/g, '');
+
+					// we renamed id to uniqueid in layer info to be not replace when we replace values for fieldtype. Put bac id
+					fields = fields.replace(/{"uniqueid":/g, '{"id":');
+					fields = fields.replace(/"uniqueid":/g, '"id":'); // if the file has been loaded
 
 					value = '"datagrid": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
-								',"layers": ' + JSON.stringify(ko.toJS(_self.layers)) +
+								',"layers": ' + fields +
 							'}';
 
 					return value;

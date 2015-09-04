@@ -149,11 +149,14 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                         <label for="cb_zoomNav" data-bind="text: lblZoom"></label>
 						<div style="clear: both"></div>
 						<input type="checkbox" id="cb_zoombar" data-bind="checked: isZoomBar">
-						<label for="cb_zoombar" data-bind="text: lblZoombar"></label>
+						<label for="cb_zoombar" class="form-checkbox" data-bind="text: lblZoombar"></label>
 						<div style="clear: both"></div>
 						<input type="checkbox" id="cb_zoomsel" data-bind="checked: isZoomSel">
 						<button class="gcaut-map-zoomsel" tabindex="-1" data-bind="attr: { title: lblZoomSel }"></button>
 						<label for="cb_zoomsel" data-bind="text: lblZoomSel"></label>
+						<div style="clear: both"></div>
+						<input type="checkbox" id="cb_zoomprevnext" data-bind="checked: isPrevNext">
+						<label for="cb_zoomprevnext" class="form-checkbox" data-bind="text: lblZoomPrevNext"></label>
 						<div style="clear: both"></div>
                         <h5 data-bind="text: lblHelperServicesParams"></h5>
 						<label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
@@ -456,7 +459,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                     <button id="btnPrint" class="gcaut-header-print" tabindex="-1" data-bind="attr: { title: lblPrint }"></button>
                     <label for="cb_print" data-bind="text: lblPrint"></label>
 					<label for="cb_printtype" class="form-checkbox" data-bind="text: lblPrintType"></label>
-					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: isPrint"></select>
+					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: false"></select>
 				</div>
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_saveimage" data-bind="checked: isSaveimage">
@@ -484,7 +487,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<section id="tools">
 					<div id="tabtool-order" class="gcaut-tabs gcaut-tabs-level2">
 						<section id="toolsOrder">
-							<ul id="toolsOrderList" class="gcaut-accordion toolbarsMenuOrder gcaut-list-none" data-bind="uiSortable: { placeholder: 'ui-state-highlight', connectWith: '.toolbarsMenuOrder', refresh: 'tab-tools', change: $root.update }, template: { name: 'toolbarsOrder', foreach: $data.tools }"></ul>
+							<ul id="toolsOrderList" class="gcaut-accordion toolbarsMenuOrder gcaut-list-none" data-bind="uiSortable: { placeholder: 'ui-state-highlight', connectWith: '.toolbarsMenuOrder', refresh: 'tab-tools', update: $root.update, delay: 250 }, template: { name: 'toolbarsOrder', foreach: $data.tools }"></ul>
 							<script type="text/html" id="toolbarsOrder">
 								<li class="ui-state-default" data-bind="text: label"></li>
 							</script>
@@ -674,13 +677,13 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                             <button id="btnMeasureLength" class="gcaut-draw-measureL" tabindex="-1" data-bind="attr: { title: lblMeasureL }"></button>
                             <label for="measureLength" data-bind="text: lblMeasureL"></label>
 							<label for="measureUnitDrawL" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
-							<select id="measureUnitDrawL" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitL, enable: isMeasureL"></select>
+							<select id="measureUnitDrawL" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitL, enable: false"></select>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="measureArea" data-bind="checked: isMeasureA">
                             <button id="btnPositionNav" class="gcaut-draw-measureA" tabindex="-1" data-bind="attr: { title: lblMeasureA }"></button>
                             <label for="measureArea" data-bind="text: lblMeasureA"></label>
 							<label for="measureUnitDrawA" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
-							<select id="measureUnitDrawA" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitA, enable: isMeasureA"></select>
+							<select id="measureUnitDrawA" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitA, enable: false"></select>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="fileDraw" data-bind="checked: isFile">
                             <button id="btnDrawImport" class="gcaut-draw-import" tabindex="-1" data-bind="attr: { title: lblFile }"></button>
@@ -729,9 +732,16 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input type="checkbox" id="expandData" data-bind="checked: isExpand">
 							<label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
 							<div style="clear: both"></div>
-							<input type="checkbox" id="csvData" data-bind="checked: isCSV">
-                            <button id="btnAddCSV" class="gcaut-data-csv" tabindex="-1" data-bind="attr: { title: lblCSV }"></button>
-                            <label for="csvData" data-bind="text: lblCSV"></label>
+							<input type="checkbox" id="fileData" data-bind="checked: isFile">
+                            <button id="btnAddFile" class="gcaut-data-csv" tabindex="-1" data-bind="attr: { title: lblFile }"></button>
+                            <label for="fileData" data-bind="text: lblFile"></label>
+                            <div style="clear: both"></div>
+							<input type="checkbox" id="urlData" data-bind="checked: isURL">
+                            <button id="btnAddURL" class="gcaut-data-csv" tabindex="-1" data-bind="attr: { title: lblURL }"></button>
+                            <label for="urlData" data-bind="text: lblURL"></label>
+                            <div style="clear: both"></div>
+							<input type="checkbox" id="queryData" data-bind="checked: isQuery">
+                            <label for="queryData" class="form-checkbox" data-bind="text: lblQuery"></label>
 						</section>
 					</div>
 					<div id="tabtool-extract" class="gcaut-tabs gcaut-tabs-level2">
@@ -868,6 +878,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<label for="txt_tblFieldAlias" data-bind="text: $root.lblFieldAlias"></label>
 							<input id="txt_tblFieldAlias"  class="gcaut-uri" data-bind="value: $data.dataalias, enable: false"></input>
 							<div style="clear: both"></div>
+							<label for="txt_tblFieldType" class="gcaut-padding-left30" data-bind="text: $root.lblFieldType"></label>
+							<select id="txt_tblFieldType" data-bind="options: $root.fieldType, optionsText: 'val', value: $data.fieldtype.type"></select>
+							<div style="clear: both"></div>
+							<label for="txt_tblFieldValue" class="gcaut-padding-left30" data-bind="text: $root.lblFieldValue"></label>
+							<select id="txt_tblFieldValue" data-bind="options: $root.valueType, optionsText: 'val', value: $data.fieldtype.value"></select>
+							<div style="clear: both"></div>
 							<input type="checkbox" id="tblFieldSearch" data-bind="checked: $data.searchable">
 							<label for="tblFieldSearch" data-bind="text: $root.lblFieldSearch"></label>
 						</div>
@@ -906,7 +922,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                 <label for="scalebarNav" class="form-checkbox" data-bind="text: lblScalebar"></label>                           
                 <div class="row">
                     <label for="scalebarTypeNav" class="gcaut-padding-left30" data-bind="text: lblScalebarUnit"></label>
-                    <select id="scalebarTypeNav" data-bind="options: scalebarType, optionsText: 'val', value: selectScalebar, enable: isScalebar"></select>
+                    <select id="scalebarTypeNav" data-bind="options: scalebarType, optionsText: 'val', value: selectScalebar, enable: false"></select>
                 </div>                          
 				<div style="clear: both"></div>
 				<input type="checkbox" id="cb_mouse" data-bind="checked: isMouse">

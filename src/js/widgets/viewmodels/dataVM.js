@@ -19,13 +19,14 @@
 
 			// data model
 			var dataViewModel = function(elem, map) {
-				var _self = this,
-					data = map.data;
+				var _self = this;
 
 				// label
 				_self.lblEnable = i18n.getDict('%data-enable');
 				_self.lblExpand = i18n.getDict('%expand');
-				_self.lblCSV = i18n.getDict('%data-csv');
+				_self.lblFile = i18n.getDict('%data-file');
+				_self.lblURL = i18n.getDict('%data-url');
+				_self.lblQuery = i18n.getDict('%data-query');
 
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
@@ -34,8 +35,14 @@
 				// toolbar position
 				_self.pos = ko.observable(map.pos);
 
-				// csv
-				_self.isCSV = ko.observable(data.enable);
+				// file layer
+				_self.isFile = ko.observable(map.datafile.enable);
+
+				// url layer
+				_self.isURL = ko.observable(map.dataurl.enable);
+
+				// query layers from url
+				_self.isQuery = ko.observable(map.dataquery.enable);
 
 				// clean the view model
 				clean(ko, elem);
@@ -56,8 +63,14 @@
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
 								',"pos": ' + _self.pos() +
-								',"data": {' +
-									'"enable": ' + _self.isCSV() +
+								',"datafile": {' +
+									'"enable": ' + _self.isFile() +
+								'}' +
+								',"dataurl": {' +
+									'"enable": ' + _self.isURL() +
+								'}' +
+								',"dataquery": {' +
+									'"enable": ' + _self.isQuery() +
 								'}' +
 							'}';
 

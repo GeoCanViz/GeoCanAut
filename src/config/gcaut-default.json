@@ -1,6 +1,6 @@
 {
-	"proxy": "http://localhost:8888/php/proxy.php",
-	"phpdownload": "http://localhost:8888/php/download.php",
+	"urlproxy": "http://geoappext.nrcan.gc.ca/php/proxy.ashx",
+  "urldownload": "http://geoappext.nrcan.gc.ca/php/download.php",
 	"services": {
 		"wms": "http://wms.ess-ws.nrcan.gc.ca/wms/toporama_en;http://wms.ess-ws.nrcan.gc.ca/wms/toporama_fr",
 		"wmts": "null",

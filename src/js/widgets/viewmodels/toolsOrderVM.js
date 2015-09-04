@@ -104,7 +104,9 @@
 						_self.tools.push({ label: label,
 								vm: vm
 							});
-						_self.update();
+						setTimeout(function() {
+							_self.update();
+						}, 1000);
 					};
 
 				_self.removeItem = function(vm) {
@@ -112,18 +114,33 @@
 						return item.vm === vm;
 					});
 					gcautFunc.setElemValueVM(vm, 'pos', -1);
+
+					setTimeout(function() {
+						_self.update();
+					}, 1000);
 				};
 
-				_self.update = function() {
-					// loop trough the array and update position
-					var vm,
-						arr = _self.tools().reverse(),
-						len = _self.tools().length;
-
-					while (len--) {
-						// update position
-						vm = arr[len].vm;
-						gcautFunc.setElemValueVM(vm, 'pos', len);
+				_self.update = function(event) {
+					if (typeof event !== 'undefined') {
+						// loop trough the array and update position
+						var i, vm, name, len,
+							toolbar = event.target.children,
+							lenTool = toolbar.length,
+							arr = _self.tools();
+	
+						while (lenTool--) {
+							len = _self.tools().length;
+							name = toolbar[lenTool].innerText;
+	
+							while (len--) {
+								// update position
+								if (name === arr[len].label) {
+									vm = arr[len].vm;
+									gcautFunc.setElemValueVM(vm, 'pos', lenTool);
+									console.log(vm + ' ' + lenTool);
+								}
+							}
+						}
 					}
 				};
 

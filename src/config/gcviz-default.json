@@ -7,8 +7,8 @@
 		},
 		"map": {
 			"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
-			"urlproxy": "http://localhost:8888/php/proxy.php",
-			"urldownload": "http://localhost:8888/php/download.php",
+			"urlproxy": "http://geoappext.nrcan.gc.ca/php/proxy.ashx",
+      "urldownload": "http://geoappext.nrcan.gc.ca/php/download.php",
 			"sr": {
 				"wkid": 4326
 			},
@@ -32,7 +32,8 @@
 			"zoombar": {
 				"bar": false,
 				"zoom": false,
-				"zoomfull": false
+				"zoomfull": false,
+				"previousnext": false
 			},
 			"bases": [],
 			"layers": []
@@ -60,7 +61,7 @@
 		},
 		"print": {
 			"enable": false,
-			"type": 1,
+			"type": 3,
 			"urlprinttask": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
 		},
 		"saveurl": {
@@ -101,7 +102,8 @@
 		"urlgeomserv": "",
 		"geolocation": {
 			"enable": false,
-			"type": 2
+			"graphic": true,
+			"info": true
 		},
 		"scaledisplay": {
 			"enable": false,
@@ -129,9 +131,15 @@
 		"enable": false,
 		"expand": false,
 		"pos": -1,
-		"data": {
-			"enable": false
-		}
+		"datafile": {
+      "enable": false
+    },
+    "dataurl": {
+      "enable": false
+    },
+    "dataquery": {
+      "enable": false
+    }
 	},
 	"toolbarextract": {
 		"enable": false,

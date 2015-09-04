@@ -173,7 +173,7 @@
 					$aut.generateFile({
 						filename	: id + '.json',
 						content		: content,
-						script		: config.phpdownload
+						script		: config.urldownload
 					});
 
 					setTimeout(function() { $aut('#gcaut-download').remove(); }, 3000, false);
