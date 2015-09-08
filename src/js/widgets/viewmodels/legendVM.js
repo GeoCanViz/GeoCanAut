@@ -329,7 +329,7 @@
 						len = layers.length;
 
 					// create the first holder
-					lastIndex = url.lastIndexOf('/');
+					lastIndex = url.lastIndexOf('/MapServer/');
 					url = url.substring(0, lastIndex);
 					firstIndex = url.lastIndexOf('/') + 1;
 					name = url.substring(firstIndex, lastIndex);

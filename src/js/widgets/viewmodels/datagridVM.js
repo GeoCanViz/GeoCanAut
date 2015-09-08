@@ -51,6 +51,7 @@
 				_self.lblLinkTitle = i18n.getDict('%datagrid-linktitle');
 				_self.lblLinkSubTitle = i18n.getDict('%datagrid-linksubtitle');
 				_self.lblPopup = i18n.getDict('%datagrid-popup');
+				_self.lblSetIndex = i18n.getDict('%datagrid-setindextitle');
 
 				// enable and expand
 				_self.isEnable = ko.observable(map.enable);
@@ -68,6 +69,10 @@
 				_self.valueType = valueType;
 				_self.selectType = ko.observable(_self.fieldType[0]);
 				_self.selectValue = ko.observable(_self.valueType[0]);
+
+				// popup for index
+				_self.isDynamicServOpen = ko.observable(false);
+				_self.indexValue = ko.observable(0).extend({ numeric: { precision: 0 } });
 
 				// functions to create observable on layers
 				ko.utils.arrayForEach(_self.layers(), function(item) {
@@ -147,13 +152,18 @@
 					ko.applyBindings(_self, elem);
 				};
 
-				_self.addLayer = function() {
-					var $accLayers, $accLayersF, $accLayersL,
-						url, type, layer,
-						jsonLayer,
-						layerInfo, linkTable, popUps, hoverInfo,
-						fieldInfo, field, fields, lenFields,
-						item = { },
+				_self.dialogIndexCancel = function() {
+					_self.isDynamicServOpen(false);
+					_self.indexValue(0);
+				};
+
+				_self.dialogIndexOk = function() {
+					_self.addLayer(_self.indexValue());
+					_self.dialogIndexCancel();
+				};
+
+				_self.checkLayer = function() {
+					var type, layer,
 						id = _self.selectLayer().id,
 						layers = gcautFunc.getElemValueVM('map', 'layers'),
 						len = layers.length;
@@ -163,8 +173,46 @@
 						layer = layers[len];
 
 						if (id === layer.id) {
-							url = layer.url;
 							type = layer.type;
+						}
+					}
+
+					// if layer is type 4 (dynamic service), ask forthe index
+					if (type === 4) {
+						_self.isDynamicServOpen(true);
+					} else {
+						_self.addLayer();
+					}
+				};
+
+				_self.addLayer = function(ind) {
+					var $accLayers, $accLayersF, $accLayersL,
+						url, type, layer, index,
+						jsonLayer,
+						layerInfo, linkTable, popUps, hoverInfo,
+						fieldInfo, field, fields, lenFields,
+						item = { },
+						id = _self.selectLayer().id,
+						layers = gcautFunc.getElemValueVM('map', 'layers'),
+						len = layers.length;
+
+					// set index
+					if (typeof ind !== 'undefined') {
+						index = ind;
+					} else {
+						index = 0;
+					}
+
+					// get url and type from array of layer
+					while (len--) {
+						layer = layers[len];
+
+						if (id === layer.id) {
+							type = layer.type;
+							url = layer.url;
+							if (type === 4) {
+								url = layer.url + '/' + index;
+							}
 						}
 					}
 
@@ -175,7 +223,7 @@
 					layerInfo = { };
 					layerInfo.uniqueid = ko.observable(id);
 					layerInfo.type = ko.observable(type);
-					layerInfo.index = ko.observable(0).extend({ numeric: { precision: 0 } });
+					layerInfo.index = ko.observable(index).extend({ numeric: { precision: 0 } });
 					item.layerinfo = layerInfo;
 
 					// title

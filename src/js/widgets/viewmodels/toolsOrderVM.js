@@ -137,7 +137,6 @@
 								if (name === arr[len].label) {
 									vm = arr[len].vm;
 									gcautFunc.setElemValueVM(vm, 'pos', lenTool);
-									console.log(vm + ' ' + lenTool);
 								}
 							}
 						}

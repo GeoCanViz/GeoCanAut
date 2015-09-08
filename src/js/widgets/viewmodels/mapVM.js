@@ -107,6 +107,7 @@
 				_self.lblClusterSize = i18n.getDict('%map-lblclustersize');
 				_self.lblClusterData = i18n.getDict('%map-lblclusterdata');
 				_self.lblVerifyAdd = i18n.getDict('%map-lblverifyadd');
+				_self.lblVisLayers = i18n.getDict('%map-lblvislayers');
 
 				// text
 				_self.txtLayerErr = i18n.getDict('%map-layererror');
@@ -228,6 +229,14 @@
 					scale.min = ko.observable(scale.min).extend({ numeric: { precision: 0 } });
 					scale.max = ko.observable(scale.max).extend({ numeric: { precision: 0 } });
 
+					// visible layers
+					if (typeof item.visiblelayers !== 'undefined') {
+						item.visiblelayers = ko.observable(item.visiblelayers);
+					} else {
+						item.visiblelayers = ko.observable('[]');
+					}
+					
+
 					// cluster
 					cluster.enable = ko.observable(cluster.enable);
 					cluster.distance = ko.observable(cluster.distance).extend({ numeric: { precision: 0 } });
@@ -288,7 +297,7 @@
 						lastIndex = layer.url.indexOf('MapServer') - 1;
 						url = layer.url.substring(0, lastIndex);
 						firstIndex = url.lastIndexOf('/') + 1;
-						url = url + '/MapServer';
+						url = url + '/MapServer/';
 						name = url.substring(firstIndex, lastIndex);
 
 						if (category === 'base') {
@@ -303,6 +312,7 @@
 											type: layer.type,
 											url: url,
 											beforebase: layer.beforebase,
+											visiblelayers: layer.visiblelayers,
 											scale: layer.scale,
 											usecluster: layer.usecluster(),
 											cluster: layer.cluster });
@@ -635,7 +645,21 @@
 				};
 
 				_self.write = function() {
-					var value;
+					var value, layer,
+						layers = _self.layers(),
+						len = layers.length;
+
+					// parse json for visible layer to have array not string
+					while (len--) {
+						layer = layers[len];
+
+						if (layer.type === 4) {
+							if (typeof layer.visiblelayers() === "string") {
+								layer.visiblelayers(JSON.parse(layer.visiblelayers()));
+							}
+						}
+					}
+					_self.layers(layers);
 
 					value = '"mapframe": {' +
 								'"size": {' +

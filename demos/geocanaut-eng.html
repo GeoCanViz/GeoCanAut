@@ -380,6 +380,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<input type="checkbox" id="cb_befBase" data-bind="checked: $data.beforebase">
 										<label for="cb_befBase" class="form-checkbox" data-bind="text: $root.lblBefBasemap"></label>
 										<div style="clear: both"></div>
+										<label for="txt_mapVisLayers" data-bind="text: $root.lblVisLayers, visible: $data.usecluster === false"></label>
+										<input id="txt_mapVisLayers" class="gcaut-uri" data-bind="value: $data.visiblelayers, visible: $data.usecluster === false"></input>
+										<div style="clear: both"></div>
 										<div class="row">
     										<span data-bind="text: $root.lblScale"></span>
                                             <span> - </span>
@@ -448,7 +451,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                     <button id="btnAbout" class="gcaut-header-about" tabindex="-1" data-bind="attr: { title: lblAbout }"></button>
                     <label for="cb_about" data-bind="text: lblAbout"></label>
 					<label for="cb_abouttype" class="form-checkbox" data-bind="text: lblAboutType"></label>
-					<select id="cb_abouttype" data-bind="options: aboutType, optionsText: 'val', value: selectAbout, enable: isAbout"></select>
+					<select id="cb_abouttype" data-bind="options: aboutType, optionsText: 'val', value: selectAbout, enable: false"></select>
 					<div style="clear: both"></div>
 					<label for="valueAboutHead" class="gcaut-padding-left30" data-bind="text: lblAboutValue"></label>
 					<input id="valueAboutHead" class="gcaut-uri" type="text" data-bind="value: aboutValue, enable: isAbout"></input>
@@ -807,6 +810,12 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 		</div>
         <div id="tab-datagrid" class="gcaut-tabs gcaut-tabs-level2">
             <section id="datagridMap">
+            	<div id="datagrid_index" data-bind="uiDialog: { title: $root.lblSetIndex, width: 400, ok: $root.dialogIndexOk, cancel: $root.dialogIndexCancel, openDialog: 'isDynamicServOpen' }">
+					<div>
+						<label for="txt_setIndex" data-bind="text: $root.lblIndex"></label>
+						<input id="txt_setIndex"  class="gcaut-uri" data-bind="value: $root.indexValue"></input>
+					</div>
+				</div>
 				<input type="checkbox" id="enableDatagrid" data-bind="checked: isEnable">
 				<label for="enableDatagrid" class="form-checkbox" data-bind="text: lblEnable"></label>
 				<div style="clear: both"></div>
@@ -814,8 +823,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 				<label for="expandDatagrid" class="form-checkbox" data-bind="text: lblExpand"></label>
 				<div class="row">
 					<label for="layersDatagrid" class="gcaut-padding-left30" data-bind="text: lblLayerSelect"></label>
-					<select id="layersDatagrid" data-bind="options: layerList, optionsText: 'val', value: selectLayer, enable: isEnable"></select>
-					<button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: $root.addLayer, tooltip: { content: $root.tpAddLayer }"></button>
+					<select id="layersDatagrid" data-bind="options: layerList, optionsText: 'val', value: selectLayer, enable: isEnable"></select>				
+					<button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: $root.checkLayer, tooltip: { content: $root.tpAddLayer }"></button>
 				</div>
 				<ul id="datagridlayers" class="dgLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLayers', refresh: 'tab-datagrid' } }, template: { name: 'dgLayers', foreach: $data.layers }"></ul>
 				<script type="text/html" id="dgLayers">
@@ -829,7 +838,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 							<input id="txt_tblTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
 							<div style="clear: both"></div>
 							<label for="txt_tblIndex" data-bind="text: $root.lblIndex"></label>
-							<input id="txt_tblIndex"  class="gcaut-uri" data-bind="value: $data.layerinfo.index"></input>
+							<input id="txt_tblIndex"  class="gcaut-uri" data-bind="value: $data.layerinfo.index, enable: false"></input>
 							<div style="clear: both"></div>
 							<input type="checkbox" id="searchall" data-bind="checked: globalsearch">
 							<label for="searchall" class="form-checkbox" data-bind="text: $root.lblSearchAll"></label>
