@@ -324,11 +324,11 @@
 				_self.write = function() {
 					var value, fields;
 
-					// remove value from the field type list
-					fields = JSON.stringify(ko.toJS(_self.layers())).replace(/{"id":/g, '').replace(/,"val":"String"}/g, '').replace(/,"val":"Number"}/g, '').replace(/,"val":"Date"}/g, '').replace(/,"val":"Select"}/g, '')
+					// remove value from the field value list
+					fields = JSON.stringify(ko.toJS(_self.layers())).replace(/{"id":/g, '').replace(/,"val":"String"}/g, '').replace(/,"val":"Number"}/g, '').replace(/,"val":"Date"}/g, ',"informat": 1,"outformat": 1').replace(/,"val":"Select"}/g, '')
 																	.replace(/,"val":"Texte"}/g, '').replace(/,"val":"Nombre"}/g, '').replace(/,"val":"Sélection"}/g, '');
 
-					// remove value from value type list
+					// remove value from field type list
 					fields = fields.replace(/{"id":/g, '').replace(/,"val":"Field"}/g, '').replace(/,"val":"Key URL"}/g, '').replace(/,"val":"URL"}/g, '').replace(/,"val":"Field URL"}/g, '').replace(/,"val":"Field Key URL"}/g, '')
 									.replace(/,"val":"Champ"}/g, '').replace(/,"val":"Clé URI"}/g, '').replace(/,"val":"URI"}/g, '').replace(/,"val":"Champ URI"}/g, '').replace(/,"val":"Champ clé URI"}/g, '');
 

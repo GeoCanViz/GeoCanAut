@@ -20,7 +20,8 @@
 
 			// data model
 			var toolsOrderViewModel = function(elem) {
-				var _self = this;
+				var _self = this,
+					position = 0;
 
 				// toolbars name
 				_self.lblData = i18n.getDict('%data-title');
@@ -101,23 +102,19 @@
 				};
 
 				_self.addItem = function(vm, label) {
-						_self.tools.push({ label: label,
-								vm: vm
-							});
-						setTimeout(function() {
-							_self.update();
-						}, 1000);
-					};
+					_self.tools.push({ label: label,
+						vm: vm
+					});
+					gcautFunc.setElemValueVM(vm, 'pos', position);
+					position++;
+				};
 
 				_self.removeItem = function(vm) {
 					_self.tools.remove(function(item) {
 						return item.vm === vm;
 					});
 					gcautFunc.setElemValueVM(vm, 'pos', -1);
-
-					setTimeout(function() {
-						_self.update();
-					}, 1000);
+					position--;
 				};
 
 				_self.update = function(event) {

@@ -23,7 +23,8 @@
 			setVM,
 			vmObject,
 			getUUID,
-			checkDuplicate;
+			checkDuplicate,
+			setUnique;
 
 		debounce = function(func, threshold, execAsap) {
 
@@ -191,6 +192,16 @@
 			return flag;
 		};
 
+		setUnique = function(list) {
+		    var result = [];
+
+		    $.each(list, function(i, e) {
+		        if ($.inArray(e, result) == -1) result.push(e);
+		    });
+
+		    return result;
+		};
+
 		return {
 			debounce: debounce,
 			subscribeTo: subscribeTo,
@@ -205,7 +216,8 @@
 			setElemValueVM: setElemValueVM,
 			setVM: setVM,
 			getUUID: getUUID,
-			checkDuplicate: checkDuplicate
+			checkDuplicate: checkDuplicate,
+			setUnique: setUnique
 		};
 	});
 }());

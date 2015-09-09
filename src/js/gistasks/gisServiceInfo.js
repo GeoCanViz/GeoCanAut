@@ -36,19 +36,22 @@
 							handleAs: 'xml'
 					};
 
+				// because of cross domain errors, call the callback functions
+				success(url, layerType, '');
+
 			} else if (layerType === 2 || layerType === 4 || layerType === 5) {
 				options = { url: url,
 							content: { f: 'json' },
 							handleAs: 'json',
 							callbackParamName: 'callback'
 					};
-			}
 
-			options.load = function(response) {
+				options.load = function(response) {
 								success(url, layerType, response);
-							};
-			options.error = error;
-			esriRequest(options);
+						};
+					options.error = error;
+					esriRequest(options);
+				}
 		};
 
 		getEsriRendererInfo = function(url, item) {
@@ -56,7 +59,7 @@
 				layer = url.substring(url.lastIndexOf('/') + 1, url.length);
 
 			// if it is a basemap, layer will not be a number
-			if (isNaN(layer)) {
+			if (layer === '') {
 				layer = 0;
 			}
 

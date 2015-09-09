@@ -170,6 +170,20 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 						<div style="clear: both"></div>
                         <h5 data-bind="text: lblMapServicesParams"></h5>
 						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500, tooltip: { content: $root.tpOpenClose }">
+						<div id="map_addwms" data-bind="uiDialog: { title: $root.lblDialogWMSTitle, width: 400, ok: $root.dialogAddWMSOk, cancel: $root.dialogAddWMSCancel, openDialog: 'isAddWMSOpen' }">
+							<div>
+								<label for="txt_setWMSName" data-bind="text: $root.lblWMSName"></label>
+								<input id="txt_setWMSName"  class="gcaut-uri" data-bind="value: $root.wmsName"></input>
+							</div>
+							<div>
+								<label for="txt_setWMSTitle" data-bind="text: $root.lblWMSTitle"></label>
+								<input id="txt_setWMSTitle"  class="gcaut-uri" data-bind="value: $root.wmsTitle"></input>
+							</div>
+							<div>
+								<label for="txt_setWMSVisLayers" data-bind="text: $root.lblWMSVisLayers"></label>
+								<input id="txt_setWMSVisLayers"  class="gcaut-uri" data-bind="value: $root.wmsVisLayers"></input>
+							</div>
+						</div>
 							<h3 class="ui-accordion-header" data-bind="text: lblBasemap, tooltip: { content: $root.tpOpenClose }"></h3>
 							<div>
 								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
@@ -380,8 +394,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 										<input type="checkbox" id="cb_befBase" data-bind="checked: $data.beforebase">
 										<label for="cb_befBase" class="form-checkbox" data-bind="text: $root.lblBefBasemap"></label>
 										<div style="clear: both"></div>
-										<label for="txt_mapVisLayers" data-bind="text: $root.lblVisLayers, visible: $data.usecluster === false"></label>
-										<input id="txt_mapVisLayers" class="gcaut-uri" data-bind="value: $data.visiblelayers, visible: $data.usecluster === false"></input>
+										<label for="txt_mapVisLayers" data-bind="text: $root.lblVisLayers, visible: $data.type === 4"></label>
+										<input id="txt_mapVisLayers" class="gcaut-uri" data-bind="value: $data.visiblelayers, visible: $data.type === 4"></input>
 										<div style="clear: both"></div>
 										<div class="row">
     										<span data-bind="text: $root.lblScale"></span>

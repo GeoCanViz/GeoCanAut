@@ -308,6 +308,8 @@
 							}
 						} else if (type === 4) {
 							gisServInfo.getEsriServRendererInfo(items, url, id, _self.esriDynamicServ);
+						} else if (type === 3) {
+							arr = _self.unique(items, split[0], id, true, url, type);
 						}
 
 						i++;
@@ -323,10 +325,31 @@
 				};
 
 				_self.esriDynamicServ = function(items, url, id, layers) {
-					var layer,
+					var layer, visLayers, layerInfo,
 						firstIndex, lastIndex, name,
 						i = 0,
-						len = layers.length;
+						len = layers.length,
+						layersInfo = gcautFunc.getElemValueVM('map', 'layers'),
+						lenInfo = layersInfo.length;
+
+					// get the visibility layers info to get only those info
+					while (lenInfo--) {
+						if (id === layersInfo[lenInfo].id) {
+							visLayers = layersInfo[lenInfo].visiblelayers().replace('[', '').replace(']', '').split(',');
+
+							// add group layers for visible layers
+							while (len--) {
+								layer = layers[len];
+								if (visLayers.indexOf(layer.id.toString()) > -1) {
+									if (layer.parentLayer !== null) {
+										visLayers.push(layer.parentLayer.id.toString());
+									}
+								}
+							}
+
+							visLayers = gcautFunc.setUnique(visLayers);
+						}
+					}
 
 					// create the first holder
 					lastIndex = url.lastIndexOf('/MapServer/');
@@ -338,16 +361,20 @@
 
 					// create children. Author cant see them because it is a service so it is not customizable
 					// but we need the info for gcviz.
+					len = layers.length;
 					while (i !== len) {
 						layer = layers[i];
-						i++;
 
-						if (layer.type === 'Feature Layer' && layer.parentLayer === null) {
-							items.push(addArray(layer.name, id, true, '', 4, layer.drawingInfo.renderer));
-						} else if (layer.type === 'Group Layer' && layer.parentLayer === null) {
-							items.push(addArray(layer.name, id, false, '', 4));
-							_self.esriDynamicSublayer(items()[items().length - 1].items, layer.subLayers, id, layers);
+						// if the layer is visible
+						if (visLayers.indexOf(i.toString()) > -1) {
+							if (layer.type === 'Feature Layer' && layer.parentLayer === null) {
+								items.push(addArray(layer.name, id, true, '', 4, layer.drawingInfo.renderer));
+							} else if (layer.type === 'Group Layer' && layer.parentLayer === null) {
+								items.push(addArray(layer.name, id, false, '', 4));
+								_self.esriDynamicSublayer(items()[items().length - 1].items, layer.subLayers, id, layers, visLayers);
+							}
 						}
+						i++;
 					}
 
 					// set visibility checkbox false for every child because there is one only on the first level
@@ -366,7 +393,7 @@
 					}
 				};
 
-				_self.esriDynamicSublayer = function(items, arrSublayers, id, layers) {
+				_self.esriDynamicSublayer = function(items, arrSublayers, id, layers, visLayers) {
 					var layer, foundLayer, name,
 						sublayers = arrSublayers.reverse(),
 						len = sublayers.length;
@@ -374,16 +401,19 @@
 					while (len--) {
 						layer = sublayers[len];
 
-						// find the element with the same id and remove it
-						// from the array of layers
-						foundLayer = layers[layer.id];
-						name = foundLayer.name;
+						// if the layer is visible
+						if (visLayers.indexOf(layer.id.toString()) > -1) {
+							// find the element with the same id and remove it
+							// from the array of layers
+							foundLayer = layers[layer.id];
+							name = foundLayer.name;
 
-						if (foundLayer.type === 'Feature Layer') {
-							items.push(addArray(name, id, true, '', 4, foundLayer.drawingInfo.renderer));
-						} else if (foundLayer.type === 'Group Layer') {
-							items.push(addArray(name, id, false, '', 4));
-							_self.esriDynamicSublayer(items()[items().length - 1].items, foundLayer.subLayers, id, layers);
+							if (foundLayer.type === 'Feature Layer') {
+								items.push(addArray(name, id, true, '', 4, foundLayer.drawingInfo.renderer));
+							} else if (foundLayer.type === 'Group Layer') {
+								items.push(addArray(name, id, false, '', 4));
+								_self.esriDynamicSublayer(items()[items().length - 1].items, foundLayer.subLayers, id, layers, visLayers);
+							}
 						}
 					}
 				};
