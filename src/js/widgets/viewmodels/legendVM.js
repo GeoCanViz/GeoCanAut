@@ -325,7 +325,7 @@
 				};
 
 				_self.esriDynamicServ = function(items, url, id, layers) {
-					var layer, visLayers, layerInfo,
+					var render, layer, visLayers, visLayersOri, layerInfo,
 						firstIndex, lastIndex, name,
 						i = 0,
 						len = layers.length,
@@ -335,20 +335,33 @@
 					// get the visibility layers info to get only those info
 					while (lenInfo--) {
 						if (id === layersInfo[lenInfo].id) {
-							visLayers = layersInfo[lenInfo].visiblelayers().replace('[', '').replace(']', '').split(',');
+							visLayersOri = JSON.parse(layersInfo[lenInfo].visiblelayers());
+							visLayers = JSON.parse(layersInfo[lenInfo].visiblelayers());
 
 							// add group layers for visible layers
 							while (len--) {
 								layer = layers[len];
-								if (visLayers.indexOf(layer.id.toString()) > -1) {
+								if (visLayers.indexOf(layer.id) > -1) {
 									if (layer.parentLayer !== null) {
-										visLayers.push(layer.parentLayer.id.toString());
+										visLayers.push(layer.parentLayer.id);
 									}
 								}
 							}
 
 							visLayers = gcautFunc.setUnique(visLayers);
 						}
+					}
+
+					// if there is only one item visible in the service we treat it as a feature layer
+					if (visLayersOri.length === 1) {
+						layer = layers[visLayersOri[0]];
+
+						// check if there is a renderer. The is no renderer on image serve as dynamic service
+						if (typeof layer.drawingInfo !== 'undefined') {
+							render = layer.drawingInfo.renderer;
+						}
+						items.push(addArray(layer.name, id, true, url, 5, render));
+						return 0;
 					}
 
 					// create the first holder
@@ -366,7 +379,7 @@
 						layer = layers[i];
 
 						// if the layer is visible
-						if (visLayers.indexOf(i.toString()) > -1) {
+						if (visLayers.indexOf(i) > -1) {
 							if (layer.type === 'Feature Layer' && layer.parentLayer === null) {
 								items.push(addArray(layer.name, id, true, '', 4, layer.drawingInfo.renderer));
 							} else if (layer.type === 'Group Layer' && layer.parentLayer === null) {
@@ -402,7 +415,7 @@
 						layer = sublayers[len];
 
 						// if the layer is visible
-						if (visLayers.indexOf(layer.id.toString()) > -1) {
+						if (visLayers.indexOf(layer.id) > -1) {
 							// find the element with the same id and remove it
 							// from the array of layers
 							foundLayer = layers[layer.id];
@@ -482,7 +495,7 @@
 					item.opacity.initstate = ko.observable(1).extend({ numeric: { precision: 2, validation: { min: item.opacity.min, max: item.opacity.max, id: 'msg_opacityInit' + item.graphid(), msg: _self.msgOpacity } } });
 
 					// set renderer
-					if (last && typeof renderer === 'undefined') {
+					if (last && typeof renderer === 'undefined' && type !== 3) {
 						gisServInfo.getEsriRendererInfo(url, item);
 					} else if (last && typeof renderer !== 'undefined') {
 						item.displaychild.symbol(JSON.stringify(renderer));

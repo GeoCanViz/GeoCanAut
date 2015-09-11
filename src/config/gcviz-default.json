@@ -9,6 +9,7 @@
 			"urlgeomserv": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/Geometry/GeometryServer",
 			"urlproxy": "http://geoappext.nrcan.gc.ca/php/proxy.ashx",
       "urldownload": "http://geoappext.nrcan.gc.ca/php/download.php",
+      "urlsaveimage": "http://geoappext.nrcan.gc.ca/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 			"sr": {
 				"wkid": 4326
 			},

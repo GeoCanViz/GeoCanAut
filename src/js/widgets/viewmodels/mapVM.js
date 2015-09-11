@@ -84,6 +84,7 @@
 				_self.lblUrlGeomServer = i18n.getDict('%map-urlgeomserver');
 				_self.lblUrlProxy = i18n.getDict('%map-urlproxy');
 				_self.lblUrlDownload = i18n.getDict('%map-urldownload');
+				_self.lblUrlExportMap = i18n.getDict('%map-urlexportmap');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
 				_self.lblExtentInit = i18n.getDict('%map-extentinit');
 				_self.lblExtentMinX = i18n.getDict('%map-extentminx');
@@ -140,6 +141,7 @@
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.urlProxy = ko.observable(map.urlproxy);
 				_self.urlDownload = ko.observable(map.urldownload);
+				_self.urlExportMap = ko.observable(map.urlsaveimage);
 
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
@@ -317,14 +319,14 @@
 
 					_self.updateLayers([layer], '', 3);
 					_self.dialogAddWMSCancel();
-				}
+				};
 
 				_self.dialogAddWMSCancel = function() {
 					_self.isAddWMSOpen(false);
 					_self.wmsName('');
 					_self.wmsTitle('');
 					_self.wmsVisLayers('');
-				}
+				};
 
 				// update layers array when they are selected from the dialog box
 				_self.updateLayers = function(elem, list, type) {
@@ -745,6 +747,7 @@
 									'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
 									'"urlproxy": "' + _self.urlProxy() + '",' +
 									'"urldownload": "' + _self.urlDownload() + '",' +
+									'"urlsaveimage": "' + _self.urlExportMap() + '",' +
 									'"sr": {' +
 										'"wkid": ' + _self.selectMapSR().id +
 									'},' +

@@ -78,7 +78,7 @@
 				ko.utils.arrayForEach(_self.layers(), function(item) {
 					var field, link,
 						layerInfo = item.layerinfo,
-						fields = item.fields,
+						fields = item.fields.reverse(),
 						links = item.linktable,
 						linksFields = links.fields,
 						popups = item.popups,
@@ -234,7 +234,7 @@
 
 					// fields
 					item.fields = ko.observableArray([]);
-					fields = jsonLayer.fields;
+					fields = jsonLayer.fields.reverse();
 					lenFields = fields.length;
 					while (lenFields--) {
 						fieldInfo = fields[lenFields];
@@ -286,6 +286,10 @@
 					$accLayersL.accordion('refresh');
 				};
 
+				_self.addPX = function(event, ui) {
+					event.width(parseInt(event.width(), 10) + 'px');
+				};
+
 				// when the remove layer icon is click, remove the layer from the array
 				_self.removeLayer = function(parent, item) {
 					_self.removeItem(parent, _self.layers, item);
@@ -321,8 +325,50 @@
 					_self.selectLayer(_self.layerList()[0]);
 				};
 
+				_self.updateOrder = function(event) {
+					// reorder fields array after sort
+					var layer, oriFields, field, lenFields, uiField,
+						layers = _self.layers(),
+						$elems = $aut(event.target),
+						id = $elems.attr('id').replace('fields', ''),
+						fields = $elems.find('li'),
+						len = fields.length,
+						lenLayers = layers.length,
+						tmpFields = [];
+
+					// find fields from the layer
+					while (lenLayers--) {
+						layer = layers[lenLayers];
+						if (layer.layerinfo.uniqueid() === id) {
+							oriFields = layer.fields();
+							break;
+						}
+					}
+
+					// order fields
+					while (len--) {
+						uiField = fields[len];
+
+						lenFields = fields.length;
+						while (lenFields--) {
+							field = oriFields[lenFields];
+							if (field.data() === $aut(uiField).find('#txt_tblFieldData')[0].value) {
+								tmpFields.push(field);
+							}
+						}
+					}
+
+					_self.layers()[lenLayers].fields(tmpFields.reverse());
+				};
+
 				_self.write = function() {
-					var value, fields;
+					var value, fields,
+						lenLayers = _self.layers().length;
+
+					// reorder fields before writting
+					while (lenLayers--) {
+						_self.layers()[lenLayers].fields(_self.layers()[lenLayers].fields().reverse());
+					}
 
 					// remove value from the field value list
 					fields = JSON.stringify(ko.toJS(_self.layers())).replace(/{"id":/g, '').replace(/,"val":"String"}/g, '').replace(/,"val":"Number"}/g, '').replace(/,"val":"Date"}/g, ',"informat": 1,"outformat": 1').replace(/,"val":"Select"}/g, '')

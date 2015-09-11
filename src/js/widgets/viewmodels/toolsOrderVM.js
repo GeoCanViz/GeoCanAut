@@ -29,6 +29,7 @@
 				_self.lblNav = i18n.getDict('%nav-title');
 				_self.lblLegend = i18n.getDict('%legend-title');
 				_self.lblExtract = i18n.getDict('%extract-title');
+				_self.lblInfo = i18n.getDict('%toolsorder-info');
 				
 				// array to hold the toolbars
 				_self.tools = ko.observableArray([]);
