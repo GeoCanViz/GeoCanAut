@@ -32,6 +32,14 @@
   @include spritenostates($img-spritebtn, -145, -2);
 }
 
+.gcaut-header-saveimage {
+  @include spritenostates($img-spritebtn, -1842, -2);
+}
+
+.gcaut-header-saveurl {
+  @include spritenostates($img-spritebtn, -1805, -2);
+}
+
 .gcaut-header-fullscreen {
   @include spritenostates($img-spritebtn, -216, -2);
 }

@@ -12,7 +12,8 @@
 	], function(ko, gcautFunc) {
 		var readInfo,
 			getSublayer,
-			getIndex;
+			getIndex,
+			visibleLayers = [];
 
 		readInfo = function(sender, _self, urlObject, type, category) {
 			var item, itemName, itemId,
@@ -51,6 +52,11 @@
 				layer.type = type;
 				layer.servLayers = getSublayer(item, sendLayers, [], url, layer.fullname, _self, type);
 
+				// no sublayer, add id to array os visiblelayers
+				if (type === 4 && item.subLayerIds === null) {
+						visibleLayers.push(item.id);
+				}
+
 				// knockout checkbox and label binding
 				layer.isChecked = ko.observable(false);
 				layer.isUse = ko.observable(false);
@@ -63,6 +69,12 @@
 				}
 
 				layers.push(layer);
+			}
+
+			// set visible layers
+			if (type === 4) {
+				layers[0].visiblelayers = ko.observable('[' + visibleLayers.sort(function(a,b) { return a - b; }).toString() + ']');
+				visibleLayers = [];
 			}
 
 			// update knockout array
@@ -115,6 +127,12 @@
 
 					// add the child info and push to array
 					child = sendLayers[subLayerIds[len]];
+
+					// no sublayer, add id to array os visiblelayers
+					if (child.subLayerIds === null) {
+						visibleLayers.push(child.id);
+					}
+
 					childName = child.name;
 					childId = child.id;
 					sublayer.name = childName;

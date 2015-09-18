@@ -75,6 +75,7 @@
 				_self.lblZoom = i18n.getDict('%map-zoom');
 				_self.lblZoombar = i18n.getDict('%map-zoombar');
 				_self.lblZoomSel = i18n.getDict('%map-zoomsel');
+				_self.lblZoomPrevNext = i18n.getDict('%map-previousnext');
 				_self.lblResol = i18n.getDict('%map-resolution');
 				_self.lblLods = i18n.getDict('%map-lods');
 				_self.lblLevel = i18n.getDict('%map-level');
@@ -83,6 +84,7 @@
 				_self.lblUrlGeomServer = i18n.getDict('%map-urlgeomserver');
 				_self.lblUrlProxy = i18n.getDict('%map-urlproxy');
 				_self.lblUrlDownload = i18n.getDict('%map-urldownload');
+				_self.lblUrlExportMap = i18n.getDict('%map-urlexportmap');
 				_self.lblExtentMax = i18n.getDict('%map-extentmax');
 				_self.lblExtentInit = i18n.getDict('%map-extentinit');
 				_self.lblExtentMinX = i18n.getDict('%map-extentminx');
@@ -106,6 +108,11 @@
 				_self.lblClusterSize = i18n.getDict('%map-lblclustersize');
 				_self.lblClusterData = i18n.getDict('%map-lblclusterdata');
 				_self.lblVerifyAdd = i18n.getDict('%map-lblverifyadd');
+				_self.lblVisLayers = i18n.getDict('%map-lblvislayers');
+				_self.lblDialogWMSTitle = i18n.getDict('%map-wmsinfotitle');
+				_self.lblWMSName = i18n.getDict('%map-lblwmsname');
+				_self.lblWMSTitle = i18n.getDict('%map-lblwmstitle');
+				_self.lblWMSVisLayers = i18n.getDict('%map-lblwmsvislayers');
 
 				// text
 				_self.txtLayerErr = i18n.getDict('%map-layererror');
@@ -118,6 +125,12 @@
 				_self.isExtentDialogOpen = ko.observable();
 				_self.extentType = ko.observable();
 
+				// wms dialog
+				_self.isAddWMSOpen = ko.observable();
+				_self.wmsName = ko.observable();
+				_self.wmsTitle = ko.observable();
+				_self.wmsVisLayers = ko.observable();
+
 				// services
 				_self.baseURL = ko.observable();
 				_self.layerURL = ko.observable();
@@ -128,16 +141,18 @@
 				_self.urlGeomServer = ko.observable(map.urlgeomserv);
 				_self.urlProxy = ko.observable(map.urlproxy);
 				_self.urlDownload = ko.observable(map.urldownload);
+				_self.urlExportMap = ko.observable(map.urlsaveimage);
 
 				// map input
 				_self.mapHeightValue = ko.observable(size.height).extend({ numeric: { precision: 0, validation: { min: 400, max: 2000, id: 'msg_height', msg: _self.msgHeight } } });
 				_self.mapWidthValue = ko.observable(size.width).extend({ numeric: { precision: 0, validation: { min: 500, max: 2000, id: 'msg_width', msg: _self.msgWidth } } });
 				_self.isLink = ko.observable(map.link);
 
-				// zoom to full extent, zoom selection and zoombar
+				// zoom to full extent, zoom selection zoombar, and previous next extent
 				_self.isZoomBar = ko.observable(zoombar.bar);
 				_self.isZoomFull = ko.observable(zoombar.zoomfull);
 				_self.isZoomSel = ko.observable(zoombar.zoom);
+				_self.isPrevNext = ko.observable(zoombar.previousnext);
 
 				// set extent variable (for the dialog box)
 				_self.setExtentMinX = ko.observable().extend({ numeric: { precision: 5 } });
@@ -226,6 +241,14 @@
 					scale.min = ko.observable(scale.min).extend({ numeric: { precision: 0 } });
 					scale.max = ko.observable(scale.max).extend({ numeric: { precision: 0 } });
 
+					// visible layers
+					if (typeof item.visiblelayers !== 'undefined') {
+						item.visiblelayers = ko.observable('[' + item.visiblelayers.toString() + ']');
+					} else {
+						item.visiblelayers = ko.observable('[]');
+					}
+					
+
 					// cluster
 					cluster.enable = ko.observable(cluster.enable);
 					cluster.distance = ko.observable(cluster.distance).extend({ numeric: { precision: 0 } });
@@ -271,6 +294,40 @@
 					_self.isLayerDialogOpen(false);
 				};
 
+				// add WWMS layer
+				_self.dialogAddWMSOk = function() {
+					var layer = {};
+
+					layer.name = _self.wmsName();
+					layer.url = _self.baseURL() === '' ? _self.layerURL() : _self.baseURL();
+					layer.type = 3;
+					layer.options = {};
+					layer.options.layerinfos = [{
+						name: _self.wmsName(),
+						title: _self.wmsTitle()
+					}];
+					layer.options.visiblelayers = [ _self.wmsVisLayers() ];
+					layer.scale = { min: 0,
+								max: 0 };
+					layer.beforebase= false;
+					layer.cluster = { enable: ko.observable(false),
+								distance: ko.observable(50).extend({ numeric: { precision: 0 } }),
+								label: ko.observable(false),
+								symbol: ko.observable(false),
+								maxsizeprop: ko.observable(50).extend({ numeric: { precision: 0 } }),
+								maxdataprop: ko.observable(1000).extend({ numeric: { precision: 0 } }) };
+
+					_self.updateLayers([layer], '', 3);
+					_self.dialogAddWMSCancel();
+				};
+
+				_self.dialogAddWMSCancel = function() {
+					_self.isAddWMSOpen(false);
+					_self.wmsName('');
+					_self.wmsTitle('');
+					_self.wmsVisLayers('');
+				};
+
 				// update layers array when they are selected from the dialog box
 				_self.updateLayers = function(elem, list, type) {
 					var layer,
@@ -286,7 +343,7 @@
 						lastIndex = layer.url.indexOf('MapServer') - 1;
 						url = layer.url.substring(0, lastIndex);
 						firstIndex = url.lastIndexOf('/') + 1;
-						url = url + '/MapServer';
+						url = url + '/MapServer/';
 						name = url.substring(firstIndex, lastIndex);
 
 						if (category === 'base') {
@@ -301,11 +358,33 @@
 											type: layer.type,
 											url: url,
 											beforebase: layer.beforebase,
+											visiblelayers: layer.visiblelayers,
 											scale: layer.scale,
 											usecluster: layer.usecluster(),
 											cluster: layer.cluster });
 						}
-
+					} else if (type === 3) {
+						layer = layers[0];
+						if (category === 'base') {
+							_self.bases.push({ label: layer.name,
+										id: gcautFunc.getUUID(),
+										type: layer.type,
+										url: layer.url,
+										options: layer.options,
+										scale: layer.scale 
+									});
+						} else {
+							_self.layers.push({ label: layer.name,
+										id: gcautFunc.getUUID(),
+										type: layer.type,
+										url: layer.url,
+										options: layer.options,
+										beforebase: layer.beforebase,
+										scale: layer.scale,
+										usecluster: false,
+										cluster: layer.cluster
+									});
+						}
 					} else if (type === 5) {
 						while (len--) {
 							layer = layers[len];
@@ -331,6 +410,10 @@
 							}
 						}
 					}
+
+					// clean url
+					_self.baseURL('');
+					_self.layerURL('');
 				};
 
 				// five next function are use to check/uncheck element in layer dialog box
@@ -562,6 +645,10 @@
 						gisServInfo.getResourceInfo(url, layerType, _self.readServInfo, function() { type === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr); });
 					} else {
 						type === 'base' ? _self.errortextbase(_self.txtLayerErr) : _self.errortextlayer(_self.txtLayerErr);
+
+						// clean url
+						_self.baseURL('');
+						_self.layerURL('');
 					}
 				};
 
@@ -578,6 +665,12 @@
 					} else {
 						if (type === 2 || type === 4 || type === 5) {
 							esriData.readInfo(sender, _self, url, type, category);
+
+							// show window to select layers
+							_self.isLayerDialogOpen(true);
+							_self.hiddenLayer('');
+						} else if (type === 3) {
+							_self.isAddWMSOpen(true);
 						}
 
 						// check duplicate in service array and copy to localstorage
@@ -602,10 +695,6 @@
 								localStorage.setItem('servnameDynamicREST', addUrl);
 							}
 						}
-
-						// show window to select layers
-						_self.isLayerDialogOpen(true);
-						_self.hiddenLayer('');
 					}
 				};
 
@@ -633,7 +722,21 @@
 				};
 
 				_self.write = function() {
-					var value;
+					var value, layer,
+						layers = _self.layers(),
+						len = layers.length;
+
+					// parse json for visible layer to have array not string
+					while (len--) {
+						layer = layers[len];
+
+						if (layer.type === 4) {
+							if (typeof layer.visiblelayers() === "string") {
+								layer.visiblelayers(JSON.parse(layer.visiblelayers()));
+							}
+						}
+					}
+					_self.layers(layers);
 
 					value = '"mapframe": {' +
 								'"size": {' +
@@ -644,6 +747,7 @@
 									'"urlgeomserv": "' + _self.urlGeomServer() + '",' +
 									'"urlproxy": "' + _self.urlProxy() + '",' +
 									'"urldownload": "' + _self.urlDownload() + '",' +
+									'"urlsaveimage": "' + _self.urlExportMap() + '",' +
 									'"sr": {' +
 										'"wkid": ' + _self.selectMapSR().id +
 									'},' +
@@ -668,11 +772,23 @@
 										'"bar": ' + _self.isZoomBar() +
 										',"zoom": ' + _self.isZoomSel() +
 										',"zoomfull": ' + _self.isZoomFull() +
+										',"previousnext": ' + _self.isPrevNext() +
 									'},' +
 									'"bases": ' + JSON.stringify(ko.toJS(_self.bases())) +
 									',"layers": '+ JSON.stringify(ko.toJS(_self.layers())) +
 								'}' +
 							'}';
+
+					// parse json for visible layer to have array not string
+					len = layers.length;
+					while (len--) {
+						layer = layers[len];
+
+						if (layer.type === 4) {
+							layer.visiblelayers('[' + layer.visiblelayers().toString() + ']');
+						}
+					}
+					_self.layers(layers);
 
 					return value;
 				};

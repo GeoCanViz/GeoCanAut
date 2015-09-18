@@ -20,7 +20,8 @@
 
 			// data model
 			var toolsOrderViewModel = function(elem) {
-				var _self = this;
+				var _self = this,
+					position = 0;
 
 				// toolbars name
 				_self.lblData = i18n.getDict('%data-title');
@@ -28,6 +29,7 @@
 				_self.lblNav = i18n.getDict('%nav-title');
 				_self.lblLegend = i18n.getDict('%legend-title');
 				_self.lblExtract = i18n.getDict('%extract-title');
+				_self.lblInfo = i18n.getDict('%toolsorder-info');
 				
 				// array to hold the toolbars
 				_self.tools = ko.observableArray([]);
@@ -101,29 +103,41 @@
 				};
 
 				_self.addItem = function(vm, label) {
-						_self.tools.push({ label: label,
-								vm: vm
-							});
-						_self.update();
-					};
+					_self.tools.push({ label: label,
+						vm: vm
+					});
+					gcautFunc.setElemValueVM(vm, 'pos', position);
+					position++;
+				};
 
 				_self.removeItem = function(vm) {
 					_self.tools.remove(function(item) {
 						return item.vm === vm;
 					});
 					gcautFunc.setElemValueVM(vm, 'pos', -1);
+					position--;
 				};
 
-				_self.update = function() {
-					// loop trough the array and update position
-					var vm,
-						arr = _self.tools().reverse(),
-						len = _self.tools().length;
-
-					while (len--) {
-						// update position
-						vm = arr[len].vm;
-						gcautFunc.setElemValueVM(vm, 'pos', len);
+				_self.update = function(event) {
+					if (typeof event !== 'undefined') {
+						// loop trough the array and update position
+						var i, vm, name, len,
+							toolbar = event.target.children,
+							lenTool = toolbar.length,
+							arr = _self.tools();
+	
+						while (lenTool--) {
+							len = _self.tools().length;
+							name = toolbar[lenTool].innerText;
+	
+							while (len--) {
+								// update position
+								if (name === arr[len].label) {
+									vm = arr[len].vm;
+									gcautFunc.setElemValueVM(vm, 'pos', lenTool);
+								}
+							}
+						}
 					}
 				};
 

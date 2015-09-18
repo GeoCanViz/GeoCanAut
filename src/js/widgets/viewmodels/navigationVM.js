@@ -92,7 +92,8 @@
 								',"mapwkid": ' + mapwkid.id +
 								',"geolocation": {' +
 									'"enable": ' + _self.isGeoloc() +
-									',"type": -1' +
+									',"graphic": true' +
+									',"info": true' +
 								'},' +
 								'"scaledisplay": {' +
 									'"enable": ' + _self.isScale() +

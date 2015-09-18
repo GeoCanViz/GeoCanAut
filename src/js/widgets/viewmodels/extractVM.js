@@ -190,18 +190,24 @@
 
 				_self.write = function() {
 					var value,
-						links;
+						links,
+						id = 0;
 
 					// remove value from the visibility type list
 					links = JSON.stringify(ko.toJS(_self.links())).replace(/{"id":/g, '').replace(/,"val":"Extent"}/g, '').replace(/,"val":"NTS"}/g, '').replace(/,"val":"SNRC"}/g, '').replace(/,"val":"Étendue"}/g, '');
-					
+
+					// check if we should set id
+					if (_self.isGrid()) {
+						id = _self.selectGrid().id;
+					}
+
 					value = '"toolbarextract": {' +
 								'"enable": ' + _self.isEnable() +
 								',"expand": ' + _self.isExpand() +
 								',"pos": ' + _self.pos() +
 								',"grid": {' +
 									'"enable": ' + _self.isGrid() +
-									',"id": "' + _self.selectGrid().id + '"' +
+									',"id": "' + id + '"' +
 								'},' +
 								'"items":' + links +
 							'}';
