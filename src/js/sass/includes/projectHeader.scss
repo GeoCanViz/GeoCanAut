@@ -1,8 +1,8 @@
 @import "gcaut-mixin";
 
 .gcaut-projheader {
-	@include app-head-foot;
-	height: (11.2 * $rembase) + rem;
+    @include app-head-foot;
+    height: (11.2 * $rembase) + rem;
 
   .gcaut-projheader-head {
     width: 100%;
@@ -11,22 +11,22 @@
     @include app-background-image;
   }
 
-	.gcaut-projheader-title {
-		display: inline-block;
-		height: (4 * $rembase) + rem;
+    .gcaut-projheader-title {
+        display: inline-block;
+        height: (4 * $rembase) + rem;
 
-	.gcaut-projheader-titlelabel {
-			margin-top: (0.5 * $rembase) + rem;
-			line-height: (3.5 * $rembase) + rem;
-			@include app-text(1.6, bold);
-		}
+    .gcaut-projheader-titlelabel {
+            margin-top: (0.5 * $rembase) + rem;
+            line-height: (3.5 * $rembase) + rem;
+            @include app-text(1.6, bold);
+        }
 
     .gcaut-projheader-newlabel {
       line-height: (3.5 * $rembase) + rem;
       @include app-text(1.2);
       vertical-align: text-bottom!important;
     }
-	}
+    }
 
   .gcaut-projhead-label {
     margin-top: (0.5 * $rembase) + rem;
@@ -36,24 +36,24 @@
     margin-left: 5px!important;
   }
 
-	.gcaut-projheader-new {
-		float: left;
-		clear: both;
-	}
+    .gcaut-projheader-new {
+        float: left;
+        clear: both;
+    }
 
-	.gcaut-projheader-select {
-		clear: both;
-		width: (37 * $rembase) + rem;
-		background-color: $app-strong; // old browsers
+    .gcaut-projheader-select {
+        clear: both;
+        width: (37 * $rembase) + rem;
+        background-color: $app-strong; // old browsers
     @include app-background-image;
-		@include content-border-radius;
+        @include content-border-radius;
     vertical-align: text-bottom!important;
     margin-bottom: 5px!important;
-	}
+    }
 }
 
 .gcaut-selectmaps {
-  vertical-align: text-bottom;
+  vertical-align: super;
 }
 
 .gcaut-tabs-main {
