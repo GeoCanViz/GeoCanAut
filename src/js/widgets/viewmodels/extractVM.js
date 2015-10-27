@@ -68,7 +68,7 @@
                 // functions to create observable on links
                 ko.utils.arrayForEach(_self.links(), function(item) {
                     var query,
-                        queries = item.query,
+                        queries = item.query.reverse(),
                         len = queries.length;
 
                     // title and subtitle

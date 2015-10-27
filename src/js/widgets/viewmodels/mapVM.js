@@ -113,6 +113,10 @@
                 _self.lblWMSName = i18n.getDict('%map-lblwmsname');
                 _self.lblWMSTitle = i18n.getDict('%map-lblwmstitle');
                 _self.lblWMSVisLayers = i18n.getDict('%map-lblwmsvislayers');
+                _self.lblExpandAll = i18n.getDict('%expandall');
+                _self.lblCollapseAll = i18n.getDict('%collapseall');
+                _self.lblExpandCollapseAll =  ko.observable(_self.lblExpandAll);
+                _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
 
                 // text
                 _self.txtLayerErr = i18n.getDict('%map-layererror');
@@ -719,6 +723,32 @@
                     // is not updated yet.
                     (item.cluster.enable()) ? item.type = 5 : item.type = 6;
                     return true;
+                };
+
+                _self.expandAllBases = function() {
+                    var action = _self.lblExpandCollapseAll() === _self.lblExpandAll ? 'show' : 'hide',
+                        items = $aut('#basessoptions');
+
+                    gcautFunc.expandAll(items, action);
+
+                    if (action === 'show') {
+                        _self.lblExpandCollapseAll(_self.lblCollapseAll);
+                    } else {
+                        _self.lblExpandCollapseAll(_self.lblExpandAll);
+                    }
+                };
+
+                _self.expandAllLayers = function() {
+                    var action = _self.lblExpandCollapseAll() === _self.lblExpandAll ? 'show' : 'hide',
+                        items = $aut('#layersoptions');
+
+                    gcautFunc.expandAll(items, action);
+
+                    if (action === 'show') {
+                        _self.lblExpandCollapseAll(_self.lblCollapseAll);
+                    } else {
+                        _self.lblExpandCollapseAll(_self.lblExpandAll);
+                    }
                 };
 
                 _self.write = function() {

@@ -52,6 +52,10 @@
                 _self.lblLinkSubTitle = i18n.getDict('%datagrid-linksubtitle');
                 _self.lblPopup = i18n.getDict('%datagrid-popup');
                 _self.lblSetIndex = i18n.getDict('%datagrid-setindextitle');
+                _self.lblExpandAll = i18n.getDict('%expandall');
+                _self.lblCollapseAll = i18n.getDict('%collapseall');
+                _self.lblExpandCollapseAll =  ko.observable(_self.lblExpandAll);
+                _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
 
                 // enable and expand
                 _self.isEnable = ko.observable(map.enable);
@@ -76,9 +80,9 @@
 
                 // functions to create observable on layers
                 ko.utils.arrayForEach(_self.layers(), function(item) {
-                    var field, link,
+                    var field, link, infoType,
                         layerInfo = item.layerinfo,
-                        fields = item.fields,
+                        fields = item.fields.reverse(),
                         links = item.linktable,
                         linksFields = links.fields,
                         popups = item.popups,
@@ -110,8 +114,10 @@
                         field.data = ko.observable(field.data);
                         field.dataalias = ko.observable(field.dataalias);
                         field.searchable = ko.observable(field.searchable);
-                        field.fieldtype.type = ko.observable(_self.fieldType[field.fieldtype.type - 1]);
-                        field.fieldtype.value = ko.observable(_self.valueType[field.fieldtype.value - 1]);
+                        infoType = field.fieldtype;
+                        field.fieldtype = {} // clean field type from attributes
+                        field.fieldtype.type = ko.observable(_self.fieldType[infoType.type - 1]);
+                        field.fieldtype.value = ko.observable(_self.valueType[infoType.value - 1]);
                         item.fields.push(field);
                     }
 
@@ -359,6 +365,19 @@
                     }
 
                     _self.layers()[lenLayers].fields(tmpFields.reverse());
+                };
+
+                _self.expandAll = function() {
+                    var action = _self.lblExpandCollapseAll() === _self.lblExpandAll ? 'show' : 'hide',
+                        items = $aut('.dgLayersFields');
+
+                    gcautFunc.expandAll(items, action);
+
+                    if (action === 'show') {
+                        _self.lblExpandCollapseAll(_self.lblCollapseAll);
+                    } else {
+                        _self.lblExpandCollapseAll(_self.lblExpandAll);
+                    }
                 };
 
                 _self.write = function() {

@@ -72,8 +72,8 @@
   @include spritenostates($img-spritebtn, -1010, -2);
 }
 
-.gcviz-map-zoomsel {
-	@include sprite($img-spritebtn, -1625, -2);
+.gcaut-map-zoomsel {
+    @include sprite($img-spritebtn, -1625, -2);
 }
 
 .gcaut-nav-fullextent-states {
