@@ -54,7 +54,8 @@
                 _self.lblSetIndex = i18n.getDict('%datagrid-setindextitle');
                 _self.lblExpandAll = i18n.getDict('%expandall');
                 _self.lblCollapseAll = i18n.getDict('%collapseall');
-                _self.lblExpandCollapseAll =  ko.observable(_self.lblExpandAll);
+                _self.lblExpandCollapseAllB =  ko.observable(_self.lblExpandAll);
+                _self.lblExpandCollapseAllL =  ko.observable(_self.lblExpandAll);
                 _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
 
                 // enable and expand

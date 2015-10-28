@@ -35,6 +35,7 @@
             // data model
             var projheaderViewModel = function(config) {
                 var _self = this,
+                    fileName = '',
                     pathTemplate = locationPath + 'gcaut/config/gcviz-default.json';
 
                 // set label
@@ -74,10 +75,16 @@
                 _self.mapsID = ko.observableArray([]);
                 _self.mapsIDValue = ko.observable();
 
-                // dialog window
+                // import dialog window
                 _self.lblImportTitle = i18n.getDict('%projheader-importfile');
                 _self.lblImportText =  ko.observable();
                 _self.isImportDialogOpen = ko.observable();
+
+                // save dialog window
+                _self.isSaveDialogOpen = ko.observable();
+                _self.saveName = ko.observable();
+                _self.lblSaveTitle = i18n.getDict('%projheader-savefiletitle');
+                _self.lblSaveText =  i18n.getDict('%projheader-savefile');
 
                 _self.dialogImportOk = function() {
                     _self.lblImportText('');
@@ -106,7 +113,7 @@
                         reader = new FileReader();
 
                         // closure to capture the file information and launch the process
-                        reader.onload = loadFile();
+                        reader.onload = loadFile(file.name.replace('.json', ''));
                         reader.readAsText(file);
                     }
 
@@ -114,22 +121,24 @@
                     document.getElementById('fileDialogOpen').value = '';
                 };
 
-                loadFile = function() {
+                loadFile = function(name) {
+                    fileName = name;
                     return function(e) {
-                        var config;
+                        var config,
+                            len;
 
                         try {
+                            len = vm.maps.length;
                             config = JSON.parse(e.target.result);
-                            _self.initMap(config);
+                            _self.initMap(config, fileName + ' - ' + _self.mapLabel + (_self.maps.length + 1));
                         } catch(error) {
                             _self.lblImportText(_self.txtConfigErr + ': ' + error);
                             _self.isImportDialogOpen(true);
                             console.log(_self.txtConfigErr + ': ' + error);
 
                             // reset index and focus
-                            if (vm.maps.length > 0) {
+                            if (vm.maps.length > 0 && len !== vm.maps.length) {
                                 vm.maps.pop();
-                                _self.newMap();
                                 _self.resetIndex();
                                 setFocus(vm.maps[vm.maps.length - 1].map.focusMapHeight);
                             }
@@ -144,7 +153,8 @@
 
                 _self.deleteMap = function() {
                     // removes map from dropdown and array and add item to restore array
-                    var id = parseInt(_self.mapsIDValue().split(' ')[1], 10) - 1,
+                    var items = _self.mapsIDValue(),
+                        id = parseInt(items[items.length - 1], 10) - 1,
                         item = _self.maps.splice(id, 1),
                         maps = vm.maps;
 
@@ -170,15 +180,26 @@
                 };
 
                 _self.saveMap = function() {
-                    // get the active map id
-                    var id = _self.mapsIDValue(),
-                        vm = _self.maps[parseInt(id.split(' ')[1], 10) - 1],
+                    _self.isSaveDialogOpen(true);
+                };
+
+                _self.dialogSaveCancel = function() {
+                    _self.isSaveDialogOpen(false);
+                };
+
+                _self.dialogSaveOk = function() {
+                     // get the active map id
+                    var items = _self.mapsIDValue().split(' '),
+                        id = parseInt(items[items.length - 1], 10) - 1,
+                        vm = _self.maps[id],
                         content = '{"gcviz": {';
 
                     // loop trought viewmodels and get info to write
                     Object.keys(vm).forEach(function(key) {
-                        content += vm[key].write();
-                        content += ',';
+                        if (key !== 'label') {
+                            content += vm[key].write();
+                            content += ',';
+                        }
                     });
 
                     // add inset frame (TODO: remove when insets will be enable)
@@ -191,23 +212,32 @@
                     // generate the iframe then call the php. Then remove the iframe
                     // http://tutorialzine.com/2011/05/generating-files-javascript-php/
                     $aut.generateFile({
-                        filename	: id + '.json',
-                        content		: content,
-                        script		: config.urldownload
+                        filename    : _self.saveName() + '.json',
+                        content        : content,
+                        script        : config.urldownload
                     });
+
+                    _self.saveName('');
+                    _self.isSaveDialogOpen(false);
 
                     setTimeout(function() { $aut('#gcaut-download').remove(); }, 3000, false);
                 };
 
                 _self.resetIndex = function() {
-                    var id,
+                    var i, id, labels, label,
                         len = _self.maps.length,
                         lenAll = _self.maps.length;
 
                     _self.mapsID([]);
-                    while (len--) {
-                        id = lenAll - len;
-                        _self.mapsID.push(_self.mapLabel + id);
+                    for (i = 0; i < len; i++) {
+                        id = i + 1;
+                        labels = _self.maps[i].label.split(' - ');
+                        if (labels.length === 1) {
+                            label = '';
+                        } else {
+                            label = labels[0] + ' - ' ;
+                        }
+                        _self.mapsID.push(label + _self.mapLabel + id);
                     }
                     _self.mapsIDValue(_self.mapLabel + lenAll);
                     _self.mapsLabel(' ' + _self.txtOf + ' ' + _self.mapsID().length + ' ' + _self.txtMaps);
@@ -225,7 +255,7 @@
                         dataType: 'json',
                         async: false,
                         success: function(config) {
-                            _self.initMap(config);
+                            _self.initMap(config, _self.mapLabel + (_self.maps.length + 1));
                         },
                         error: function() {
                             _self.lblImportText(_self.txtConfigErr + ': ' + url);
@@ -235,13 +265,13 @@
                     }); // end ajax
                 };
 
-                _self.initMap = function(config) {
+                _self.initMap = function(config, mapVal) {
                     var vm = {},
-                        id = _self.maps.length + 1,
-                        mapVal = _self.mapLabel + id,
                         gcviz = config.gcviz;
 
                     // create the master view model (launch every view model one after the other)
+                    try {
+                    vm.label = mapVal;
                     vm.map = mapVM.initialize(document.getElementById('map'), gcviz.mapframe);
                     vm.header = headerVM.initialize(document.getElementById('headerMap'), gcviz.header, [{ value: vm.map.mapWidthValue, func: 'updateTitle' }]);
                     vm.footer = footerVM.initialize(document.getElementById('footerMap'), gcviz.footer, [{ value: vm.map.selectMapSR, func: 'updateSR' }]);
@@ -267,6 +297,10 @@
 
                     // setup the order toolbars tabs
                     toolsOrderVM.initialize(document.getElementById('toolsOrder'));
+                    } catch(error) {
+                        _self.maps.push(vm);
+                        throw(error);
+                    }
                 };
 
                 setFocus = function(elem) {
@@ -291,14 +325,17 @@
                 _self.mapsIDValue.subscribe(function(item) {
 
                     if (typeof item !== 'undefined') {
-                        var id = parseInt(item.split(' ')[1], 10) - 1,
+                        var items = item.split(' '),
+                            id = parseInt(items[items.length - 1], 10) - 1,
                             vm = _self.maps[id],
                             $tabs = $aut('#gcauttabs');
 
                         // clean the bindings then reapply the view model values for each vm
                         if (typeof vm !== 'undefined') {
                             Object.keys(vm).forEach(function(key) {
-                                vm[key].bind();
+                                if (key !== 'label') {
+                                    vm[key].bind();
+                            }
                             });
                         }
 

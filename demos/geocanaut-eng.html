@@ -109,13 +109,19 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
         <div id="mapselect" class="gcaut-projheader-select">
                 <select id="mapsID" class="gcaut-selectmaps" data-bind="options: mapsID, value: mapsIDValue"></select>
                 <span class="gcaut-projheader-newlabel gcaut-selectmaps" data-bind="text: mapsLabel"></span>
-                <button class="gcaut-head-deletemap" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }, enable: mapsID().length > 1"></button>
-                <button class="gcaut-head-redomap" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }, enable: mapsID().length > 0"></button>
+                <button class="gcaut-head-deletemap" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }, enable: mapsID().length > 1, visible: false"></button>
+                <button class="gcaut-head-redomap" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }, enable: mapsID().length > 0, visible: false"></button>
                 <button class="gcaut-head-savemap" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }, enable: mapsID().length > 0"></button>
         </div>
-    <div id="import_map" data-bind="uiDialog: { title: $root.lblImportTitle, width: 400, ok: $root.dialogImportOk, openDialog: 'isImportDialogOpen' }">
+        <div id="import_map" data-bind="uiDialog: { title: $root.lblImportTitle, width: 400, modal: true, ok: $root.dialogImportOk, cancel: $root.dialogImportOk, close: $root.dialogImportOk, openDialog: 'isImportDialogOpen' }">
             <div>
                 <span data-bind="text: lblImportText"></span>
+            </div>
+        </div>
+        <div id="save_map" data-bind="uiDialog: { title: $root.lblSaveTitle, width: 400, modal: true, ok: $root.dialogSaveOk, cancel: $root.dialogSaveCancel, close: $root.dialogSaveCancel, openDialog: 'isSaveDialogOpen' }">
+            <div>
+                <label for="saveName" data-bind="text: lblSaveText"></label>
+                <input id="saveName" class="gcaut-uri" type="text" data-bind="value: saveName"></input>
             </div>
         </div>
     </section>
@@ -530,13 +536,13 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                             <label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
                             <div style="clear: both"></div>
                             <label class="gcaut-sect-title" data-bind="text: lblSectBases"></label>
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll('.legendSortBases') }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAllB"></button>
                             <ul class="legendSortBases" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortBases' } }, template: { name: 'legendBases', foreach: $data.legendBases }"></ul>
                             <script type="text/html" id="legendBases">
                                 <li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
                                     <h3 data-bind="tooltip: { content: $root.tpOpenClose }">
                                         <span data-bind="attr: { id: $data.label.value() }, text: $data.label.value()"></span>
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></button>
-                                        <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll($data, event) }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAll"></button>
                                     </h3>
                                     <div>
                                         <input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
@@ -604,13 +610,13 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                             </script>
                             <label class="gcaut-sect-title" data-bind="text: lblSectLayers"></label>
                             <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: createEmptyGrp, tooltip: { content: $root.lblCreateEmptyGroup }"></button>
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll('.legendSortLayers') }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAllL"></button>
                             <ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
                             <script type="text/html" id="legendLayers">
                                 <li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
                                     <h3 data-bind="tooltip: { content: $root.tpOpenCloseClickDrag }">
                                         <span data-bind="attr: { id: $data.graphid(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#383838' }, text: $data.label.value()"></span>
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></button>
-                                        <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll($data, event) }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAll"></button>
                                     </h3>
                                     <div>
                                         <input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">

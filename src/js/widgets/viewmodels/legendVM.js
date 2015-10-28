@@ -65,7 +65,8 @@
                 _self.lblEmptyGrp = i18n.getDict('%legend-emptygrp');
                 _self.lblExpandAll = i18n.getDict('%expandall');
                 _self.lblCollapseAll = i18n.getDict('%collapseall');
-                _self.lblExpandCollapseAll =  ko.observable(_self.lblExpandAll);
+                _self.lblExpandCollapseAllB =  ko.observable(_self.lblExpandAll);
+                _self.lblExpandCollapseAllL =  ko.observable(_self.lblExpandAll);
                 _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
 
                 // dialog window
@@ -246,7 +247,7 @@
                     // set timeout to have the object created before we assign
                     // events
                     setTimeout(function() {
-                        var	$accBases = $aut('.legendSortBases'),
+                        var    $accBases = $aut('.legendSortBases'),
                             $accLayers = $aut('.legendSortLayers');
 
                         $accBases.accordion('refresh');
@@ -653,37 +654,6 @@
                     return values;
                 };
 
-                _self.openCloseAll = function(data, event) {
-                    var id = $aut(event.target.parentElement.parentElement).attr('id'),
-                        $node = $aut(event.target.parentElement.parentElement.parentElement),
-                        $masterHead = $node.find('#' + id),
-                        $masterBody = $node.find('#' + id.replace('header', 'panel')),
-                        $head = $masterBody.find('li > h3'),
-                        $body = $masterBody.find('li > div');
-
-                    if ($masterHead.hasClass('ui-accordion-header-active')) {
-                        // close
-                        $masterHead.removeClass('ui-accordion-header-active ui-state-active ui-corner-top').addClass('ui-corner-all').attr({ 'aria-selected': 'false', 'tabindex': '-1' });
-                        $masterHead.find('.ui-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
-                        $masterBody.removeClass('ui-accordion-content-active').attr({ 'aria-expanded': 'false', 'aria-hidden': 'true' }).hide();
-                        $head.removeClass('ui-accordion-header-active ui-state-active ui-corner-top').addClass('ui-corner-all').attr({ 'aria-selected': 'false', 'tabindex': '-1' });
-                        $head.find('.ui-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
-                        $body.removeClass('ui-accordion-content-active').attr({ 'aria-expanded': 'false', 'aria-hidden': 'true' }).hide();
-                        _self.lblExpandCollapseAll(_self.lblExpandAll);
-                    } else {
-                        // open
-                        $masterHead.removeClass('ui-corner-all').addClass('ui-accordion-header-active ui-state-active ui-corner-top').attr({ 'aria-selected': 'true', 'tabindex': '0' });
-                        $masterHead.find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
-                        $masterBody.addClass('ui-accordion-content-active').attr({ 'aria-expanded': 'true', 'aria-hidden': 'false' }).show();
-                        $head.removeClass('ui-corner-all').addClass('ui-accordion-header-active ui-state-active ui-corner-top').attr({ 'aria-selected': 'true', 'tabindex': '0' });
-                        $head.find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
-                        $body.addClass('ui-accordion-content-active').attr({ 'aria-expanded': 'true', 'aria-hidden': 'false' }).show();
-                        _self.lblExpandCollapseAll(_self.lblCollapseAll);
-                    }
-
-                    event.preventDefault();
-                };
-
                 _self.createEmptyGrp = function() {
                     var item = addArray(_self.lblEmptyGrp, gcautFunc.getUUID(), false, '', 0);
                     _self.legendLayers.push(item);
@@ -739,6 +709,20 @@
                     item.url = ko.observable('');
                     item.alttext = ko.observable('');
                     data.customimage.images.push(item);
+                };
+
+                _self.openCloseAll = function(data, event) {
+                    var label = data === '.legendSortBases' ? _self.lblExpandCollapseAllB : _self.lblExpandCollapseAllL,
+                        action = label() === _self.lblExpandAll ? 'show' : 'hide',
+                        items = $aut(data);
+
+                    gcautFunc.expandAll(items, action);
+
+                    if (action === 'show') {
+                        label(_self.lblCollapseAll);
+                    } else {
+                        label(_self.lblExpandAll);
+                    }
                 };
 
                 _self.write = function() {

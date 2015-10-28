@@ -33,6 +33,8 @@ Language name (French)#%lang-fra#anglais#franç̤ais
 #%projheader-tpdeletemap#Delete selected map#Supprimer la carte sélectionnée
 #%projheader-tprestoremap#Restore map(s)#Restorer les cartes
 #%projheader-importfile#Import Existing Configuration File#Importer un fichier de configuration existant
+#%projheader-savefiletitle#Save Configuration File#Sauvegarder le fichier de configuration
+#%projheader-savefile#Enter file name#Entrez le nom du fichier
 #%map-checkuncheckall#Check/Uncheck All#Tous sélectionner/désélectionner
 #%map-general#General Parameters:#Paramètres généraux :
 #%map-helperservices#Helper Services Parameters:#Paramètres de services d'aide  :
