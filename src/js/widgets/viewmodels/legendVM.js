@@ -557,15 +557,16 @@
                     var tree,
                         lenOri, lenFlat,
                         values, data,
-                        flat = [];
+                        flat = [],
+                        layers = item.hasClass('legendSortBases') ? _self.legendBases : _self.legendLayers;
 
                     // get the tree from html accordion structure
                     tree = _self.getArrayHTML($aut(item));
 
                     // flattened versions of the items
-                    lenOri = _self.legendLayers().length;
+                    lenOri = layers().length;
                     while (lenOri--) {
-                        flat = _self.addFlatChildren(_self.legendLayers, flat);
+                        flat = _self.addFlatChildren(layers, flat);
                     }
 
                     // remove child items in flat array
@@ -576,15 +577,16 @@
 
                     // update the legendLayers or legendBases
                     values = _self.updateArrayRec(tree, flat, ko.observableArray([]));
-                    _self.legendLayers(values());
+                    layers(values());
 
                     // dirty refresh the array to notify the changes
-                    data = _self.legendLayers().slice(0);
-                    _self.legendLayers([]);
-                    _self.legendLayers(data);
+                    data = layers().slice(0);
+                    layers([]);
+                    layers(data);
 
                     // refresh ui
                     $aut('.legendSortLayers').accordion('refresh');
+                    $aut('.legendSortBases').accordion('refresh');
                 };
 
                 // to be called recursively to flatten the array
