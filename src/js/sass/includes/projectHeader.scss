@@ -43,7 +43,7 @@
 
     .gcaut-projheader-select {
         clear: both;
-        width: (37 * $rembase) + rem;
+        width: (80 * $rembase) + rem;
         background-color: $app-strong; // old browsers
     @include app-background-image;
         @include content-border-radius;

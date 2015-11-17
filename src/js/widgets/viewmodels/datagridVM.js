@@ -57,6 +57,7 @@
                 _self.lblExpandCollapseAllB =  ko.observable(_self.lblExpandAll);
                 _self.lblExpandCollapseAllL =  ko.observable(_self.lblExpandAll);
                 _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
+                _self.lblDescription = i18n.getDict('%datagrid-fielddesc');
 
                 // enable and expand
                 _self.isEnable = ko.observable(map.enable);
@@ -115,6 +116,11 @@
                         field.data = ko.observable(field.data);
                         field.dataalias = ko.observable(field.dataalias);
                         field.searchable = ko.observable(field.searchable);
+                        if (typeof field.description !== 'undefined') {
+                            field.description = ko.observable(field.description);
+                        } else {
+                            field.description = ko.observable('');
+                        }
                         infoType = field.fieldtype;
                         field.fieldtype = {} // clean field type from attributes
                         field.fieldtype.type = ko.observable(_self.fieldType[infoType.type - 1]);
@@ -252,6 +258,7 @@
                         field.data = ko.observable(fieldInfo.name);
                         field.dataalias = ko.observable(fieldInfo.alias);
                         field.searchable = ko.observable(false);
+                        field.description = ko.observable('');
                         field.fieldtype = { };
                         field.fieldtype.type = ko.observable(_self.fieldType[0]);
                         field.fieldtype.value = ko.observable(_self.valueType[0]);

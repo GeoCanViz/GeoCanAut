@@ -296,7 +296,7 @@
                     gcautFunc.setVM(vm);
 
                     // setup the order toolbars tabs
-                    toolsOrderVM.initialize(document.getElementById('toolsOrder'));
+                    vm.toolsOrder = toolsOrderVM.initialize(document.getElementById('toolsOrder'));
                     } catch(error) {
                         _self.maps.push(vm);
                         throw(error);

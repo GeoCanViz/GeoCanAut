@@ -837,7 +837,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                     </div>
                     <div id="tabtool-order" class="gcaut-tabs gcaut-tabs-level2">
                         <section id="toolsOrder">
-                            <span data-bind="text: lblInfo, visible: tools().length < 1"></span>
+                            <span data-bind="text: lblInfo, visible: tools().length < 2"></span>
                             <ul id="toolsOrderList" class="gcaut-accordion toolbarsMenuOrder gcaut-list-none" data-bind="uiSortable: { placeholder: 'ui-state-highlight', connectWith: '.toolbarsMenuOrder', refresh: 'tab-tools', update: $root.update, delay: 250 }, template: { name: 'toolbarsOrder', foreach: $data.tools }"></ul>
                             <script type="text/html" id="toolbarsOrder">
                                 <li class="ui-state-default" data-bind="text: label"></li>
@@ -919,6 +919,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                             <div style="clear: both"></div>
                             <label for="txt_tblFieldTitle" data-bind="text: $root.lblTitle"></label>
                             <input id="txt_tblFieldTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldDesc" data-bind="text: $root.lblDescription"></label>
+                            <input id="txt_tblFieldDesc"  class="gcaut-uri" data-bind="value: $data.description"></input>
                             <div style="clear: both"></div>
                             <label for="txt_tblFieldWidth" data-bind="text: $root.lblFieldWidth"></label>
                             <input id="txt_tblFieldWidth" data-bind="event: { change: $root.addPX }, value: $data.width, valueUpdate: 'afterkeydown'"></input>
