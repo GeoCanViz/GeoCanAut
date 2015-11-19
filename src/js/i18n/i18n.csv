@@ -120,7 +120,7 @@ Language name (French)#%lang-fra#anglais#franç̤ais
 #%datagrid-title#Title #Titre
 #%datagrid-index#Index #Index
 #%datagrid-searchall#Search entire table#Rechercher dans la toute la table
-#%datagrid-fieldenable#Enable Field #U/tiliser champs
+#%datagrid-fieldenable#Enable Field #Utiliser le champ
 #%datagrid-fielddesc#Description #Description
 #%datagrid-fieldwidth#Width #Largeur
 #%datagrid-fielddata#Field Name #Nom du champ
@@ -182,8 +182,8 @@ Language name (French)#%lang-fra#anglais#franç̤ais
 #%legend-title#Legend#Légende
 #%legend-createemptygroup#Create an empty group#Créer ungroupe vide
 #%legend-enable#Enable legend toolbar #Afficher la barre d'outil légende
-#%legend-expand#Open by default#Ouvrir par défault
-#%legend-emptygrp#Emty Group#Groupe vide
+#%legend-expand#Expand by default#Ouvrir par défault
+#%legend-emptygrp#Empty Group#Groupe vide
 #%legend-label#Label #Étiquette
 #%legend-metadata#Enable metadata #Activer les métadonnées
 #%legend-metaurl#URL #URI
@@ -207,3 +207,4 @@ Language name (French)#%lang-fra#anglais#franç̤ais
 #%legend-titlereset#Reset Legend#Réinitialiser la légende
 #%legend-txtreset#If you reset the legend, you will loose all your changes!#Si vous réinitialisez la légende, vous perdrez tout vos changement!
 #%legend-msgopacity#Must between minimum and maximum values#Doit être entre les valeurs minimum et maximum
+#%legend-addmissing#Add missing items#Ajoute les items manquant

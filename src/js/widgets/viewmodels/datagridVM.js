@@ -54,8 +54,7 @@
                 _self.lblSetIndex = i18n.getDict('%datagrid-setindextitle');
                 _self.lblExpandAll = i18n.getDict('%expandall');
                 _self.lblCollapseAll = i18n.getDict('%collapseall');
-                _self.lblExpandCollapseAllB =  ko.observable(_self.lblExpandAll);
-                _self.lblExpandCollapseAllL =  ko.observable(_self.lblExpandAll);
+                _self.lblExpandCollapseAll =  ko.observable(_self.lblExpandAll);
                 _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
                 _self.lblDescription = i18n.getDict('%datagrid-fielddesc');
 
@@ -252,7 +251,7 @@
                     while (lenFields--) {
                         fieldInfo = fields[lenFields];
                         field = { };
-                        field.enable = ko.observable(false);
+                        field.enable = ko.observable(true);
                         field.title = ko.observable(fieldInfo.alias);
                         field.width = ko.observable('');
                         field.data = ko.observable(fieldInfo.name);

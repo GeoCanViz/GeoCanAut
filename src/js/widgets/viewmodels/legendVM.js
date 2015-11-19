@@ -68,7 +68,7 @@
                 _self.lblExpandCollapseAllB =  ko.observable(_self.lblExpandAll);
                 _self.lblExpandCollapseAllL =  ko.observable(_self.lblExpandAll);
                 _self.tpExpandCollapse = i18n.getDict('%tpexpcollall');
-
+                _self.lblAddMissing = i18n.getDict('%legend-addmissing');
                 // dialog window
                 _self.lblResetTitle = i18n.getDict('%legend-titlereset');
                 _self.lblResetText = i18n.getDict('%legend-txtreset');
@@ -247,7 +247,7 @@
                     // set timeout to have the object created before we assign
                     // events
                     setTimeout(function() {
-                        var    $accBases = $aut('.legendSortBases'),
+                        var $accBases = $aut('.legendSortBases'),
                             $accLayers = $aut('.legendSortLayers');
 
                         $accBases.accordion('refresh');
@@ -273,11 +273,7 @@
                 };
 
                 _self.resetArray = function(list, section) {
-                    var arr, id, lensplit, url, value, last, type, items,
-                        values = (typeof list === 'undefined') ? [] : list,
-                        split = [],
-                        len = values.length - 1,
-                        i = 0, j = 0;
+                    var items;
 
                     // we need to set the array in function of the section
                     if (section === 'bases') {
@@ -290,31 +286,45 @@
                         items = _self.itemsLayers;
                     }
 
+                    _self.addArray(list, items, true);
+                };
+
+                _self.addArray = function(list, items, reset) {
+                    var arr, id, lensplit, url, value, last, type, items,
+                        values = (typeof list === 'undefined') ? [] : list,
+                        split = [],
+                        len = values.length - 1,
+                        i = 0, j = 0;
+
                     while (i <= len) {
                         value = values[i];
-                        id = value.id;
-                        url = value.url;
-                        type = value.type;
-                        split = value.label.split('***');
-                        lensplit = split.length - 1;
-                        j = 0;
 
-                        if (type === 5 || type === 2) {
-                            // check if the item already exist. If not create a new one and
-                            // if it exsit return the reference.
-                            last = (lensplit === 0) ? true : false;
-                            arr = _self.unique(items, split[0], id, last, url, type);
-                            j++;
+                        if (reset === true || value.legend !== 1) {
+                            value.legend = 1;
+                            id = value.id;
+                            url = value.url;
+                            type = value.type;
+                            split = value.label.split('***');
+                            lensplit = split.length - 1;
+                            j = 0;
 
-                            while (j <= lensplit) {
-                                last = (j === lensplit) ? true : false;
-                                arr = _self.unique(arr.items, split[j], id, last, url, type);
+                            if (type === 5 || type === 2) {
+                                // check if the item already exist. If not create a new one and
+                                // if it exsit return the reference.
+                                last = (lensplit === 0) ? true : false;
+                                arr = _self.unique(items, split[0], id, last, url, type);
                                 j++;
+
+                                while (j <= lensplit) {
+                                    last = (j === lensplit) ? true : false;
+                                    arr = _self.unique(arr.items, split[j], id, last, url, type);
+                                    j++;
+                                }
+                            } else if (type === 4) {
+                                gisServInfo.getEsriServRendererInfo(items, url, id, _self.esriDynamicServ);
+                            } else if (type === 3) {
+                                arr = _self.unique(items, split[0], id, true, url, type);
                             }
-                        } else if (type === 4) {
-                            gisServInfo.getEsriServRendererInfo(items, url, id, _self.esriDynamicServ);
-                        } else if (type === 3) {
-                            arr = _self.unique(items, split[0], id, true, url, type);
                         }
 
                         i++;
@@ -512,7 +522,7 @@
                         _self.updateInitState(item.visibility.enable(), item.visibility.initstate);
                     });
 
-                    // subscribe to change on displaychils because if it is true
+                    // subscribe to change on displaychild because if it is true
                     // customimage.enable should be false
                     item.displaychild.enable.subscribe(function() {
                         _self.updateCustom(item.displaychild.enable(), item.customimage.enable);
@@ -586,7 +596,9 @@
 
                     // refresh ui
                     $aut('.legendSortLayers').accordion('refresh');
+                    $aut('.legendSortLayers').accordion('option', 'active', false);
                     $aut('.legendSortBases').accordion('refresh');
+                    $aut('.legendSortBases').accordion('option', 'active', false);
                 };
 
                 // to be called recursively to flatten the array
@@ -704,6 +716,30 @@
                 _self.dialogResetCancel = function() {
                     _self.hiddenReset('gcaut-hidden');
                     _self.isResetDialogOpen(false);
+                };
+
+                _self.add = function() {
+                    var items;
+
+                    _self.itemsBases(_self.legendBases())
+                    items = _self.itemsBases;
+                    _self.addArray(_self.holderBases, items, false);
+
+                    _self.itemsLayers(_self.legendLayers())
+                    items = _self.itemsLayers;
+                    _self.addArray(_self.holderLayers, items, false);
+
+                    // we need a timeout because many function updates the array at the same time
+                    // and we dont know when they finish
+                    setTimeout(function() {
+                        // reset bases and layers
+                        _self.legendBases(_self.itemsBases());
+                        _self.legendLayers(_self.itemsLayers());
+
+                        // refresh ui
+                        $aut('.legendSortBases').accordion('refresh');
+                        $aut('.legendSortLayers').accordion('refresh');
+                    }, 1000);
                 };
 
                 _self.addImage = function(data) {

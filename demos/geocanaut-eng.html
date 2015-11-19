@@ -522,19 +522,21 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                 <section id="tools">
                     <div id="tabtool-legend" class="gcaut-tabs gcaut-tabs-level2">
                         <section id="legendMap">
-                            <button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
-                            <div id="legend_reset" data-bind="uiDialog: { title: $root.lblResetTitle, width: 400, ok: $root.dialogResetOk, cancel: $root.dialogResetCancel, openDialog: 'isResetDialogOpen' }, css: hiddenReset">
-                                <div>
-                                    <span data-bind="text: lblResetText"></span>
-                                </div>
-                            </div>
-                            <div style="clear: both"></div>
                             <input type="checkbox" id="enableLegend" data-bind="checked: isEnable">
                             <label for="enableLegend" class="form-checkbox" data-bind="text: lblEnable"></label>
                             <div style="clear: both"></div>
                             <input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
                             <label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
                             <div style="clear: both"></div>
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
+                        <div id="legend_reset" data-bind="uiDialog: { title: $root.lblResetTitle, width: 400, ok: $root.dialogResetOk, cancel: $root.dialogResetCancel, openDialog: 'isResetDialogOpen' }, css: hiddenReset">
+                            <div>
+                                <span data-bind="text: lblResetText"></span>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                        <button class="gcaut-button-text" tabindex="0" data-bind="click: add, text: lblAddMissing"></img></button>
+                    <div style="clear: both"></div>
                             <label class="gcaut-sect-title" data-bind="text: lblSectBases"></label>
                             <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll('.legendSortBases') }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAllB"></button>
                             <ul class="legendSortBases" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortBases' } }, template: { name: 'legendBases', foreach: $data.legendBases }"></ul>
@@ -545,8 +547,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></button>
                                     </h3>
                                     <div>
-                                        <input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
-                                        <label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
+                                        <input type="checkbox" id="leg_expandB" data-bind="checked: $data.expand">
+                                        <label for="leg_expandB" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
                                         <div style="clear: both"></div>
                                         <label for="item_title" data-bind="text: $root.lblLabel"></label>
                                         <input id="item_title" class="gcaut-uri" type="text" data-bind="value: $data.label.value"></input>
@@ -619,8 +621,8 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></button>
                                     </h3>
                                     <div>
-                                        <input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
-                                        <label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
+                                        <input type="checkbox" id="leg_expandL" data-bind="checked: $data.expand">
+                                        <label for="leg_expandL" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
                                         <div style="clear: both"></div>
                                         <label for="item_title" data-bind="text: $root.lblLabel"></label>
                                         <input id="item_title" type="text" data-bind="value: $data.label.value"></input>
@@ -782,7 +784,7 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
                             <input type="checkbox" id="enableData" data-bind="checked: isEnable">
                             <label for="enableData" class="form-checkbox" data-bind="text: lblEnable"></label>
                             <div style="clear: both"></div>
-                            <input type="checkbox" id="expandData" data-bind="checked: isExpand">
+                            <input type="checkbox" id="expandExtract" data-bind="checked: isExpand">
                             <label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
                             <div style="clear: both"></div>
                             <input type="checkbox" id="gridExtract" data-bind="checked: isGrid">

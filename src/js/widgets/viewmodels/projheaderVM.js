@@ -197,8 +197,10 @@
                     // loop trought viewmodels and get info to write
                     Object.keys(vm).forEach(function(key) {
                         if (key !== 'label') {
-                            content += vm[key].write();
-                            content += ',';
+                            if (key !== 'toolsOrder') {
+                                content += vm[key].write();
+                                content += ',';
+                            }
                         }
                     });
 

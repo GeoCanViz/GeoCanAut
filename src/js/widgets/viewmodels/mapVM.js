@@ -176,6 +176,11 @@
                 setTimeout(function() {
                     _self.bases(map.bases);
                     _self.selectBaseLayerType(baseType[1]);
+
+                    ko.utils.arrayForEach(_self.bases(), function(item) {
+                        // come from config file so we assume legend is set
+                        item.legend = 1;
+                    });
                 }, 750);
 
                 // continue base layer input
@@ -237,6 +242,9 @@
                     var beforebase = item.beforebase,
                         scale = item.scale,
                         cluster= item.cluster;
+
+                    // come from config file so we assume legend is set
+                    item.legend = 1;
 
                     // show before basemap
                     beforebase = ko.observable(beforebase);
