@@ -94,878 +94,903 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 <div id="wb-main" role="main"><div id="wb-main-in">
 <!-- MainContentStart -->
 <div id="header" class="gcviz-head" style="min-width: 961px;">
-	<img class="gcviz-head-logo" src="images/geocanaut.png"></img>
-	<h1 class="gcviz-head-h1">Working Examples</h1>
+    <img class="gcviz-head-logo" src="images/geocanaut.png"></img>
+    <h1 class="gcviz-head-h1">Working Examples</h1>
 
-	<section id="projectHeader" class="gcaut-projheader">
-		<div class="gcaut-projheader-title gcaut-projheader-head"><span class="gcaut-projheader-titlelabel" data-bind="text: headerLabel"></span></div>
-		<div style="clear: both"></div>
-		<div id="mapnew" class="gcaut-projheader-new">
-			<span class="gcaut-projhead-newlabel" data-bind="text: newLabel"></span>
+    <section id="projectHeader" class="gcaut-projheader">
+        <div class="gcaut-projheader-title gcaut-projheader-head"><span class="gcaut-projheader-titlelabel" data-bind="text: headerLabel"></span></div>
+        <div style="clear: both"></div>
+        <div id="mapnew" class="gcaut-projheader-new">
+            <span class="gcaut-projhead-newlabel" data-bind="text: newLabel"></span>
             <button class="gcaut-head-newmap" tabindex="0" data-bind="click: newMap, tooltip: { content: tpNew }"></button>
-			<input id="fileDialogOpen" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
+            <input id="fileDialogOpen" type="file" accept="application/json" data-bind="event: { change: openMap }"></input>
             <button id="openFileDialog" class="gcaut-head-searchmap" tabindex="0" data-bind="click: launchDialog, tooltip: { content: tpOpen }"></button>
-		</div>
-		<div id="mapselect" class="gcaut-projheader-select">
-				<select id="mapsID" class="gcaut-selectmaps" data-bind="options: mapsID, value: mapsIDValue"></select>
-				<span class="gcaut-projheader-newlabel gcaut-selectmaps" data-bind="text: mapsLabel"></span>
-                <button class="gcaut-head-deletemap" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }, enable: mapsID().length > 1"></button>
-                <button class="gcaut-head-redomap" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }, enable: mapsID().length > 0"></button>
+        </div>
+        <div id="mapselect" class="gcaut-projheader-select">
+                <select id="mapsID" class="gcaut-selectmaps" data-bind="options: mapsID, value: mapsIDValue"></select>
+                <span class="gcaut-projheader-newlabel gcaut-selectmaps" data-bind="text: mapsLabel"></span>
+                <button class="gcaut-head-deletemap" tabindex="0" data-bind="click: deleteMap, tooltip: { content: tpDelete }, enable: mapsID().length > 1, visible: false"></button>
+                <button class="gcaut-head-redomap" tabindex="0" data-bind="click: restoreMap, tooltip: { content: tpRestore }, enable: mapsID().length > 0, visible: false"></button>
                 <button class="gcaut-head-savemap" tabindex="0" data-bind="click: saveMap, tooltip: { content: tpSave }, enable: mapsID().length > 0"></button>
-		</div>
-	</section>
-	<div id="gcauttabs" class="gcaut-tabs-main" style="display: none;">
-		<ul>
-			<li><a href="#tab-map">Map</a></li>
-			<li><a href="#tab-head">Header</a></li>
-			<li><a href="#tab-tools">Menu</a></li>
-			<li><a href="#tab-datagrid">Datatable/Popups</a></li>
-			<li><a href="#tab-foot">Footer</a></li>
-		</ul>
-		<div id="tab-map" class="gcaut-tabs gcaut-tabs-level1">
-			<div id="gcautmaptabs">
-				<ul>
-					<li><a href="#tabmap-gen">General</a></li>
-					<li><a href="#tabbases-options">Bases Options</a></li>
-					<li><a href="#tablayers-options">Layers Options</a></li>
-				</ul>
-				<section id="map">
-					<div id="tabmap-gen" class="gcaut-tabs gcaut-tabs-level2">
-					    <h5 data-bind="text: lblGeneralParams"></h5>
-						<span data-bind="text: lblMapSize"></span>
-						<label for="txt_mapHeight" data-bind="text: lblMapHeight"></label>
-						<input id="txt_mapHeight" data-bind="value: mapHeightValue, valueUpdate: 'input', hasFocus: focusMapHeight"></input>
-						<span id="msg_height" class="gcaut-message-error"></span>
-						<label for="txt_mapWidth" data-bind="text: lblMapWidth"></label>
-						<input id="txt_mapWidth" data-bind="value: mapWidthValue, valueUpdate: 'afterkeydown'"></input>
-						<span id="msg_width" class="gcaut-message-error"></span>
-						<div style="clear: both"></div>
-						<input type="checkbox" id="cb_link" data-bind="checked: isLink">
+        </div>
+        <div id="import_map" data-bind="uiDialog: { title: $root.lblImportTitle, width: 400, modal: true, ok: $root.dialogImportOk, cancel: $root.dialogImportOk, close: $root.dialogImportOk, openDialog: 'isImportDialogOpen' }">
+            <div>
+                <span data-bind="text: lblImportText"></span>
+            </div>
+        </div>
+        <div id="save_map" data-bind="uiDialog: { title: $root.lblSaveTitle, width: 400, modal: true, ok: $root.dialogSaveOk, cancel: $root.dialogSaveCancel, close: $root.dialogSaveCancel, openDialog: 'isSaveDialogOpen' }">
+            <div>
+                <label for="saveName" data-bind="text: lblSaveText"></label>
+                <input id="saveName" class="gcaut-uri" type="text" data-bind="value: saveName"></input>
+            </div>
+        </div>
+    </section>
+    <div id="gcauttabs" class="gcaut-tabs-main" style="display: none;">
+        <ul>
+            <li><a href="#tab-map">Map</a></li>
+            <li><a href="#tab-head">Header</a></li>
+            <li><a href="#tab-tools">Menu</a></li>
+            <li><a href="#tab-datagrid">Datatable/Popups</a></li>
+            <li><a href="#tab-foot">Footer</a></li>
+        </ul>
+        <div id="tab-map" class="gcaut-tabs gcaut-tabs-level1">
+            <div id="gcautmaptabs">
+                <ul>
+                    <li><a href="#tabmap-gen">General</a></li>
+                    <li><a href="#tabbases-options">Bases Options</a></li>
+                    <li><a href="#tablayers-options">Layers Options</a></li>
+                </ul>
+                <section id="map">
+                    <div id="tabmap-gen" class="gcaut-tabs gcaut-tabs-level2">
+                        <h5 data-bind="text: lblGeneralParams"></h5>
+                        <span data-bind="text: lblMapSize"></span>
+                        <label for="txt_mapHeight" data-bind="text: lblMapHeight"></label>
+                        <input id="txt_mapHeight" data-bind="value: mapHeightValue, valueUpdate: 'input', hasFocus: focusMapHeight"></input>
+                        <span id="msg_height" class="gcaut-message-error"></span>
+                        <label for="txt_mapWidth" data-bind="text: lblMapWidth"></label>
+                        <input id="txt_mapWidth" data-bind="value: mapWidthValue, valueUpdate: 'afterkeydown'"></input>
+                        <span id="msg_width" class="gcaut-message-error"></span>
+                        <div style="clear: both"></div>
+                        <input type="checkbox" id="cb_link" data-bind="checked: isLink">
                         <button class="gcaut-map-link" tabindex="-1" data-bind="attr: { title: lblLink }"></button>
                         <label for="cb_Link" data-bind="text: lblLink"></label>
-						<div style="clear: both"></div>
-						<input type="checkbox" id="cb_zoomNav" data-bind="checked: isZoomFull">
+                        <div style="clear: both"></div>
+                        <input type="checkbox" id="cb_zoomNav" data-bind="checked: isZoomFull">
                         <button class="gcaut-map-zoomfull" tabindex="-1" data-bind="attr: { title: lblZoom }"></button>
                         <label for="cb_zoomNav" data-bind="text: lblZoom"></label>
-						<div style="clear: both"></div>
-						<input type="checkbox" id="cb_zoombar" data-bind="checked: isZoomBar">
-						<label for="cb_zoombar" class="form-checkbox" data-bind="text: lblZoombar"></label>
-						<div style="clear: both"></div>
-						<input type="checkbox" id="cb_zoomsel" data-bind="checked: isZoomSel">
-						<button class="gcaut-map-zoomsel" tabindex="-1" data-bind="attr: { title: lblZoomSel }"></button>
-						<label for="cb_zoomsel" data-bind="text: lblZoomSel"></label>
-						<div style="clear: both"></div>
-						<input type="checkbox" id="cb_zoomprevnext" data-bind="checked: isPrevNext">
-						<label for="cb_zoomprevnext" class="form-checkbox" data-bind="text: lblZoomPrevNext"></label>
-						<div style="clear: both"></div>
+                        <div style="clear: both"></div>
+                        <input type="checkbox" id="cb_zoombar" data-bind="checked: isZoomBar">
+                        <label for="cb_zoombar" class="form-checkbox" data-bind="text: lblZoombar"></label>
+                        <div style="clear: both"></div>
+                        <input type="checkbox" id="cb_zoomsel" data-bind="checked: isZoomSel">
+                        <button class="gcaut-map-zoomsel" tabindex="-1" data-bind="attr: { title: lblZoomSel }"></button>
+                        <label for="cb_zoomsel" data-bind="text: lblZoomSel"></label>
+                        <div style="clear: both"></div>
+                        <input type="checkbox" id="cb_zoomprevnext" data-bind="checked: isPrevNext">
+                        <label for="cb_zoomprevnext" class="form-checkbox" data-bind="text: lblZoomPrevNext"></label>
+                        <div style="clear: both"></div>
                         <h5 data-bind="text: lblHelperServicesParams"></h5>
-						<label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
-						<input id="urlGeomServer" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
-						<div style="clear: both"></div>
-						<label for="urlProxy" data-bind="text: lblUrlProxy"></label>
-						<input id="urlProxy" class="gcaut-uri" type="text" data-bind="value: urlProxy"></input>
-						<div style="clear: both"></div>
-						<label for="urlDownload" data-bind="text: lblUrlDownload"></label>
-						<input id="urlDownload" class="gcaut-uri" type="text" data-bind="value: urlDownload"></input>
-						<div style="clear: both"></div>
-						<label for="urlExportMap" data-bind="text: lblUrlExportMap"></label>
-						<input id="urlExportMap" class="gcaut-uri" type="text" data-bind="value: urlExportMap"></input>
-						<div style="clear: both"></div>
+                        <label for="urlGeomServer" data-bind="text: lblUrlGeomServer"></label>
+                        <input id="urlGeomServer" class="gcaut-uri" type="text" data-bind="value: urlGeomServer"></input>
+                        <div style="clear: both"></div>
+                        <label for="urlProxy" data-bind="text: lblUrlProxy"></label>
+                        <input id="urlProxy" class="gcaut-uri" type="text" data-bind="value: urlProxy"></input>
+                        <div style="clear: both"></div>
+                        <label for="urlDownload" data-bind="text: lblUrlDownload"></label>
+                        <input id="urlDownload" class="gcaut-uri" type="text" data-bind="value: urlDownload"></input>
+                        <div style="clear: both"></div>
+                        <label for="urlExportMap" data-bind="text: lblUrlExportMap"></label>
+                        <input id="urlExportMap" class="gcaut-uri" type="text" data-bind="value: urlExportMap"></input>
+                        <div style="clear: both"></div>
                         <h5 data-bind="text: lblMapServicesParams"></h5>
-						<div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500, tooltip: { content: $root.tpOpenClose }">
-						<div id="map_addwms" data-bind="uiDialog: { title: $root.lblDialogWMSTitle, width: 400, ok: $root.dialogAddWMSOk, cancel: $root.dialogAddWMSCancel, openDialog: 'isAddWMSOpen' }">
-							<div>
-								<label for="txt_setWMSName" data-bind="text: $root.lblWMSName"></label>
-								<input id="txt_setWMSName"  class="gcaut-uri" data-bind="value: $root.wmsName"></input>
-							</div>
-							<div>
-								<label for="txt_setWMSTitle" data-bind="text: $root.lblWMSTitle"></label>
-								<input id="txt_setWMSTitle"  class="gcaut-uri" data-bind="value: $root.wmsTitle"></input>
-							</div>
-							<div>
-								<label for="txt_setWMSVisLayers" data-bind="text: $root.lblWMSVisLayers"></label>
-								<input id="txt_setWMSVisLayers"  class="gcaut-uri" data-bind="value: $root.wmsVisLayers"></input>
-							</div>
-						</div>
-							<h3 class="ui-accordion-header" data-bind="text: lblBasemap, tooltip: { content: $root.tpOpenClose }"></h3>
-							<div>
-								<div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
-									<div class="gcaut-mapinfo">
-										<div style="clear: both"></div>
-										<label for="cb_basetype" data-bind="text: lblLayerType"></label>
-										<select id="cb_basetype" data-bind="options: baseType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem"></select>
-										<div style="clear: both"></div>
-										<label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
-										<input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServBase(), select: setBaseURL }, visible: $root.selectBaseLayerType"></input>
+                        <div id="map_layers" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }, visible: mapHeightValue() >= 400 && mapWidthValue() >= 500, tooltip: { content: $root.tpOpenClose }">
+                        <div id="map_addwms" data-bind="uiDialog: { title: $root.lblDialogWMSTitle, width: 400, ok: $root.dialogAddWMSOk, cancel: $root.dialogAddWMSCancel, openDialog: 'isAddWMSOpen' }">
+                            <div>
+                                <label for="txt_setWMSName" data-bind="text: $root.lblWMSName"></label>
+                                <input id="txt_setWMSName"  class="gcaut-uri" data-bind="value: $root.wmsName"></input>
+                            </div>
+                            <div>
+                                <label for="txt_setWMSTitle" data-bind="text: $root.lblWMSTitle"></label>
+                                <input id="txt_setWMSTitle"  class="gcaut-uri" data-bind="value: $root.wmsTitle"></input>
+                            </div>
+                            <div>
+                                <label for="txt_setWMSVisLayers" data-bind="text: $root.lblWMSVisLayers"></label>
+                                <input id="txt_setWMSVisLayers"  class="gcaut-uri" data-bind="value: $root.wmsVisLayers"></input>
+                            </div>
+                        </div>
+                            <h3 class="ui-accordion-header" data-bind="text: lblBasemap, tooltip: { content: $root.tpOpenClose }"></h3>
+                            <div>
+                                <div data-bind="visible: mapHeightValue() > 0 && mapWidthValue() > 0">
+                                    <div class="gcaut-mapinfo">
+                                        <div style="clear: both"></div>
+                                        <label for="cb_basetype" data-bind="text: lblLayerType"></label>
+                                        <select id="cb_basetype" data-bind="options: baseType, optionsText: 'val', value: selectBaseLayerType, optionsCaption: lblSelectItem"></select>
+                                        <div style="clear: both"></div>
+                                        <label for="txt_baseURL" data-bind="text: lblLayerURL, visible: $root.selectBaseLayerType"></label>
+                                        <input id="txt_baseURL" class="gcaut-uri" data-bind="value: baseURL, uiAutocomplete: { source: $root.availServBase(), select: setBaseURL }, visible: $root.selectBaseLayerType"></input>
                                         <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'base'), text: $root.lblVerifyAdd, tooltip: { content: tpVerifyURL }, visible: $root.selectBaseLayerType"></button>
-										<div style="clear: both"></div>
-										<span id="baseMessage" data-bind="text: errortextbase, css: errormsg"></span>
-										<div style="clear: both"></div>
-										<div data-bind="visible: bases().length > 0">
-											<div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
-											<script type="text/html" id="mapBaseLayers">
-												<div>
-													<button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'base'), text: $root.lblRemove"></button>
-													<span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
-													<span class="gcaut-baseurl" data-bind="text: ' | url: ' + url"></span>
-						        				</div>
-											</script>
-											<div class="row">
-												<label for="cb_mapsr" data-bind="text: lblMapSR"></label>
-												<select id="cb_mapsr" data-bind="options: srType, optionsText: 'val', value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
-											</div>
-											<div class="row">
-												<div class="span12">
-													<div class="row">
-														<div class="span3" data-bind="visible: $root.lods().length > 0">
-															<input type="checkbox" id="cb_lods" data-bind="checked: isLods">
-															<label for="cb_lods" class="form-checkbox" data-bind="text: lblLods"></label>
-														</div>
-														<div class="span9" data-bind="visible: isLods">
-															<div id="gcaut-lods" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }">
-															<h3 class="ui-accordion-header" data-bind="text: lblResol, tooltip: { content: $root.tpOpenClose }"></h3>
-															<div>
-																<div data-bind="template: { name: 'selectLods' }"></div>
-																<ul class="gcaut-layers" data-bind="template: { name: 'showLods', foreach: $data.lods }"></ul>
-																<script id="selectLods" type="text/html">
+                                        <div style="clear: both"></div>
+                                        <span id="baseMessage" data-bind="text: errortextbase, css: errormsg"></span>
+                                        <div style="clear: both"></div>
+                                        <div data-bind="visible: bases().length > 0">
+                                            <div id="baselayers" class="gcaut-bases" data-bind="template: { name: 'mapBaseLayers', foreach: bases }"></div>
+                                            <script type="text/html" id="mapBaseLayers">
+                                                <div>
+                                                    <button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'base'), text: $root.lblRemove"></button>
+                                                    <span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
+                                                    <span class="gcaut-baseurl" data-bind="text: ' | url: ' + url"></span>
+                                                </div>
+                                            </script>
+                                            <div class="row">
+                                                <label for="cb_mapsr" data-bind="text: lblMapSR"></label>
+                                                <select id="cb_mapsr" data-bind="options: srType, optionsText: 'val', value: selectMapSR, optionsCaption: lblSelectItem, enable: false"></select>
+                                            </div>
+                                            <div class="row">
+                                                <div class="span12">
+                                                    <div class="row">
+                                                        <div class="span3" data-bind="visible: $root.lods().length > 0">
+                                                            <input type="checkbox" id="cb_lods" data-bind="checked: isLods">
+                                                            <label for="cb_lods" class="form-checkbox" data-bind="text: lblLods"></label>
+                                                        </div>
+                                                        <div class="span9" data-bind="visible: isLods">
+                                                            <div id="gcaut-lods" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'txt_mapHeight' }">
+                                                            <h3 class="ui-accordion-header" data-bind="text: lblResol, tooltip: { content: $root.tpOpenClose }"></h3>
+                                                            <div>
+                                                                <div data-bind="template: { name: 'selectLods' }"></div>
+                                                                <ul class="gcaut-layers" data-bind="template: { name: 'showLods', foreach: $data.lods }"></ul>
+                                                                <script id="selectLods" type="text/html">
                                                                     <input id="cb_resolution" type="checkbox" data-bind="click: $root.lodsCheckUncheck, checked: $root.lodsAreChecked">
                                                                     <label class="form-checkbox" for="cb_resolution" data-bind="text: $root.lblCheckUncheckAll"></label>
-																</script>
-																<script type="text/html" id="showLods">
-																	<li style="white-space: nowrap;">
-																		<input type="checkbox" data-bind="attr: { id: 'cb_level' + $data.level }, checked: isChecked">
-																		<label class="form-checkbox" data-bind="attr: { for: 'cb_level' + $data.level }, text: $root.lblLevel + $data.level + ': ' + $root.lblScale + ' = ' + $data.scale + ', ' + $root.lblResol + ' = ' + $data.resolution"></label>
-																	</li>
-																</script>
-															</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="span8">
-													<div class="row">
-														<div class="span4">
-															<span data-bind="text: lblExtentMax"></span>
+                                                                </script>
+                                                                <script type="text/html" id="showLods">
+                                                                    <li style="white-space: nowrap;">
+                                                                        <input type="checkbox" data-bind="attr: { id: 'cb_level' + $data.level }, checked: isChecked">
+                                                                        <label class="form-checkbox" data-bind="attr: { for: 'cb_level' + $data.level }, text: $root.lblLevel + $data.level + ': ' + $root.lblScale + ' = ' + $data.scale + ', ' + $root.lblResol + ' = ' + $data.resolution"></label>
+                                                                    </li>
+                                                                </script>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="span8">
+                                                    <div class="row">
+                                                        <div class="span4">
+                                                            <span data-bind="text: lblExtentMax"></span>
                                                             <button class="gcaut-nav-fullextent-states" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'max'), tooltip: { content: tpSetMaxExtent }"></button>
-														</div>
-														<div class="span4">
-															<span data-bind="text: lblExtentInit"></span>
+                                                        </div>
+                                                        <div class="span4">
+                                                            <span data-bind="text: lblExtentInit"></span>
                                                             <button class="gcaut-nav-fullextent-states" tabindex="0" data-bind="click: $root.setExtent.bind($data, 'init'), tooltip: { content: tpSetInitExtent }"></button>
-														</div>
-													</div>
-													<div class="row">
-														<div class="span4">
-															<label for="txt_mextentMinX" data-bind="text: lblExtentMinX"></label>
-															<input id="txt_mextentMinX" data-bind="value: maxExtentMinX, enable: false"></input>
-														</div>
-														<div class="span4">
-															<label for="txt_iextentMinX" data-bind="text: lblExtentMinX"></label>
-															<input id="txt_iextentMinX" data-bind="value: initExtentMinX, enable: false"></input>
-														</div>
-													</div>
-													<div class="row">
-														<div class="span4">
-															<label for="txt_mextentMinY" data-bind="text: lblExtentMinY"></label>
-															<input id="txt_mextentMinY" data-bind="value: maxExtentMinY, enable: false"></input>
-														</div>
-														<div class="span4">
-															<label for="txt_iextentMinY" data-bind="text: lblExtentMinY"></label>
-															<input id="txt_iextentMinY" data-bind="value: initExtentMinY, enable: false"></input>
-														</div>
-													</div>
-													<div class="row">
-														<div class="span4">
-															<label for="txt_mextentMaxX" data-bind="text: lblExtentMaxX"></label>
-															<input id="txt_mextentMaxX" data-bind="value: maxExtentMaxX, enable: false"></input>
-														</div>
-														<div class="span4">
-															<label for="txt_iextentMaxX" data-bind="text: lblExtentMaxX"></label>
-															<input id="txt_iextentMaxX" data-bind="value: initExtentMaxX, enable: false"></input>
-														</div>
-													</div>
-													<div class="row">
-														<div class="span4">
-															<label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
-															<input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
-														</div>
-														<div class="span4">
-															<label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
-															<input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<h3 class="ui-accordion-header" data-bind="text: lblAddLayer, visible: bases().length > 0, tooltip: { content: $root.tpOpenClose }"></h3>
-							<div>
-								<div class="gcaut-mapinfo">
-									<div style="clear: both"></div>
-									<label for="cb_layertype" data-bind="text: lblLayerType"></label>
-									<select id="cb_layertype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
-									<div style="clear: both"></div>
-									<label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
-									<input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServLayer(), select: setLayerURL }, visible: $root.selectLayerType"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="span4">
+                                                            <label for="txt_mextentMinX" data-bind="text: lblExtentMinX"></label>
+                                                            <input id="txt_mextentMinX" data-bind="value: maxExtentMinX, enable: false"></input>
+                                                        </div>
+                                                        <div class="span4">
+                                                            <label for="txt_iextentMinX" data-bind="text: lblExtentMinX"></label>
+                                                            <input id="txt_iextentMinX" data-bind="value: initExtentMinX, enable: false"></input>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="span4">
+                                                            <label for="txt_mextentMinY" data-bind="text: lblExtentMinY"></label>
+                                                            <input id="txt_mextentMinY" data-bind="value: maxExtentMinY, enable: false"></input>
+                                                        </div>
+                                                        <div class="span4">
+                                                            <label for="txt_iextentMinY" data-bind="text: lblExtentMinY"></label>
+                                                            <input id="txt_iextentMinY" data-bind="value: initExtentMinY, enable: false"></input>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="span4">
+                                                            <label for="txt_mextentMaxX" data-bind="text: lblExtentMaxX"></label>
+                                                            <input id="txt_mextentMaxX" data-bind="value: maxExtentMaxX, enable: false"></input>
+                                                        </div>
+                                                        <div class="span4">
+                                                            <label for="txt_iextentMaxX" data-bind="text: lblExtentMaxX"></label>
+                                                            <input id="txt_iextentMaxX" data-bind="value: initExtentMaxX, enable: false"></input>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="span4">
+                                                            <label for="txt_mextentMaxY" data-bind="text: lblExtentMaxY"></label>
+                                                            <input id="txt_mextentMaxY" data-bind="value: maxExtentMaxY, enable: false"></input>
+                                                        </div>
+                                                        <div class="span4">
+                                                            <label for="txt_iextentMaxY" data-bind="text: lblExtentMaxY"></label>
+                                                            <input id="txt_iextentMaxY" data-bind="value: initExtentMaxY, enable: false"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="ui-accordion-header" data-bind="text: lblAddLayer, visible: bases().length > 0, tooltip: { content: $root.tpOpenClose }"></h3>
+                            <div>
+                                <div class="gcaut-mapinfo">
+                                    <div style="clear: both"></div>
+                                    <label for="cb_layertype" data-bind="text: lblLayerType"></label>
+                                    <select id="cb_layertype" data-bind="options: layerType, optionsText: 'val', value: selectLayerType, optionsCaption: lblSelectItem"></select>
+                                    <div style="clear: both"></div>
+                                    <label for="txt_layerURL" data-bind="text: lblLayerURL, visible: $root.selectLayerType"></label>
+                                    <input id="txt_layerURL" class="gcaut-uri" type="text" data-bind="value: layerURL, uiAutocomplete: { source: $root.availServLayer(), select: setLayerURL }, visible: $root.selectLayerType"/>
                                     <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.validateURL.bind($data, 'layer'), text: $root.lblVerifyAdd, tooltip: { content: tpVerifyURL }, visible: $root.selectLayerType"></button>
-									<div style="clear: both"></div>
-									<span id="layerMessage" data-bind="text: errortextlayer, css: errormsg"></span>
-									<div style="clear: both"></div>
-									<span id="layerMessage"></span>
-									<div style="clear: both"></div>
-									<div data-bind="visible: layers().length > 0">
-										<ul id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></ul>
-										<script type="text/html" id="mapLayers">
-											<li style="white-space: nowrap;">
-												<button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer'), text: $root.lblRemove"></img></button>
-												<span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
-												<span class="gcaut-baseurl" data-bind="text: ' | url: ' + url"></span>
-					        				</li>
-										</script>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel, openDialog: 'isLayerDialogOpen' }, css: hiddenLayer">
-							<div class="gcaut-layers">
-								<div data-bind="template: { name: 'selectLayers' }"></div>
-								<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
-							</div>
+                                    <div style="clear: both"></div>
+                                    <span id="layerMessage" data-bind="text: errortextlayer, css: errormsg"></span>
+                                    <div style="clear: both"></div>
+                                    <span id="layerMessage"></span>
+                                    <div style="clear: both"></div>
+                                    <div data-bind="visible: layers().length > 0">
+                                        <ul id="layers" class="gcaut-layers" data-bind="template: { name: 'mapLayers', foreach: layers }"></ul>
+                                        <script type="text/html" id="mapLayers">
+                                            <li style="white-space: nowrap;">
+                                                <button class="gcaut-button-text" tabindex="0" data-bind="click: $parent.removeLayer.bind($data, 'layer'), text: $root.lblRemove"></img></button>
+                                                <span data-bind="text: label + ' - type: ' + $root.getLayerType($data)"></span>
+                                                <span class="gcaut-baseurl" data-bind="text: ' | url: ' + url"></span>
+                                            </li>
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="map_addlayer" data-bind="uiDialog: { title: $root.lblAddLayer, width: 600, ok: $root.dialogLayerOk, cancel: $root.dialogLayerCancel, openDialog: 'isLayerDialogOpen' }, css: hiddenLayer">
+                            <div class="gcaut-layers">
+                                <div style="padding-left: 10px" data-bind="template: { name: 'selectLayers' }"></div>
+                                <ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
+                            </div>
                             <script id="selectLayers" type="text/html">
                                 <input id="cb_selectLayers" type="checkbox" data-bind="click: $root.checkUncheckAllLayers.bind($root, $data.servLayers()), checked: $root.layersAreChecked">
                                 <label class="form-checkbox" for="cb_selectLayers" data-bind="text: $root.lblCheckUncheckAll"></label>
                             </script>
-							<script id="serviceLayers" type="text/html">
-								<li>
-									<input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.selectedType() === 5, checked: isChecked, attr: { id: $data.name }"></input>
-									<label data-bind="text: name, attr: { for: $data.name }, style: { 'font-weight': isUse() ? 'bold' : 'normal' }"></label>
-									<ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
-								</li>
-							</script>
-						</div>
-						<div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 1000, height: 700, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel, openDialog: 'isExtentDialogOpen' }, css: hiddenMap">
-							<div class="row">
-								<div class="span2">
-									<span data-bind="text: lblExtentMinX"></span>
-									<span data-bind="text: setExtentMinX"></span>
-								</div>
-								<div class="span2">
-									<span data-bind="text: lblExtentMinY"></span>
-									<span data-bind="text: setExtentMinY"></span>
-								</div>
-								<div class="span2">
-									<span data-bind="text: lblExtentMaxX"></span>
-									<span data-bind="text: setExtentMaxX"></span>
-								</div>
-								<div class="span2">
-									<span data-bind="text: lblExtentMaxY"></span>
-									<span data-bind="text: setExtentMaxY"></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="tabbases-options" class="gcaut-tabs gcaut-tabs-level2">
-						<div data-bind="visible: bases().length > 0" tabindex="0">
-							<ul id="basessoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabbases-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapBasesOption', foreach: bases }"></ul>
-							<script type="text/html" id="mapBasesOption">
-								<li>
-									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip: { content: $root.tpOpenClose }"></h3>
-									<div>
-										<div class="row">
-    										<span data-bind="text: $root.lblScale"></span>
-    										<span> - </span>
-											<label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
-											<input id="txt_scaleMin" data-bind="value: $data.scale.min"></input>
-											<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
-											<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
-										</div>
-									</div>
-								</li>
-							</script>
-						</div>
-					</div>
-					<div id="tablayers-options" class="gcaut-tabs gcaut-tabs-level2">
-						<div data-bind="visible: layers().length > 0" tabindex="0">
-							<ul id="layersoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tablayers-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapLayersOption', foreach: layers }"></ul>
-							<script type="text/html" id="mapLayersOption">
-								<li>
-									<h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip: { content: $root.tpOpenCloseClickDrag }"></h3>
-									<div>
-										<input type="checkbox" id="cb_befBase" data-bind="checked: $data.beforebase">
-										<label for="cb_befBase" class="form-checkbox" data-bind="text: $root.lblBefBasemap"></label>
-										<div style="clear: both"></div>
-										<label for="txt_mapVisLayers" data-bind="text: $root.lblVisLayers, visible: $data.type === 4"></label>
-										<input id="txt_mapVisLayers" data-bind="value: $data.visiblelayers, visible: $data.type === 4"></input>
-										<div style="clear: both"></div>
-										<div class="row">
-    										<span data-bind="text: $root.lblScale"></span>
+                            <script id="serviceLayers" type="text/html">
+                                <li>
+                                    <input type="checkbox" data-bind="click: $root.cascadeCheck.bind($root, $parents), visible: $root.selectedType() === 5, checked: isChecked, attr: { id: $data.name }"></input>
+                                    <label data-bind="text: name, attr: { for: $data.name }, style: { 'font-weight': isUse() ? 'bold' : 'normal' }"></label>
+                                    <ul data-bind="template: { name: 'serviceLayers', foreach: $data.servLayers }"></ul>
+                                </li>
+                            </script>
+                        </div>
+                        <div id="map_extent" data-bind="uiDialog: { title: $root.lblSetExtent, width: 1000, height: 700, ok: $root.dialogExtentOk, cancel: $root.dialogExtentCancel, openDialog: 'isExtentDialogOpen' }, css: hiddenMap">
+                            <div class="row">
+                                <div class="span2">
+                                    <span data-bind="text: lblExtentMinX"></span>
+                                    <span data-bind="text: setExtentMinX"></span>
+                                </div>
+                                <div class="span2">
+                                    <span data-bind="text: lblExtentMinY"></span>
+                                    <span data-bind="text: setExtentMinY"></span>
+                                </div>
+                                <div class="span2">
+                                    <span data-bind="text: lblExtentMaxX"></span>
+                                    <span data-bind="text: setExtentMaxX"></span>
+                                </div>
+                                <div class="span2">
+                                    <span data-bind="text: lblExtentMaxY"></span>
+                                    <span data-bind="text: setExtentMaxY"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tabbases-options" class="gcaut-tabs gcaut-tabs-level2">
+                        <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.expandAllBases, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAll"></button>
+                        <div data-bind="visible: bases().length > 0" tabindex="0">
+                            <ul id="basessoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabbases-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapBasesOption', foreach: bases }"></ul>
+                            <script type="text/html" id="mapBasesOption">
+                                <li>
+                                    <h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip: { content: $root.tpOpenClose }"></h3>
+                                    <div>
+                                        <div class="row">
+                                            <span data-bind="text: $root.lblScale"></span>
                                             <span> - </span>
-											<label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
-											<input id="txt_scaleMin" data-bind="value: $data.scale.min"></input>
-											<label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
-											<input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
-										</div>
+                                            <label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
+                                            <input id="txt_scaleMin" data-bind="value: $data.scale.min"></input>
+                                            <label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
+                                            <input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
+                                        </div>
+                                    </div>
+                                </li>
+                            </script>
+                        </div>
+                    </div>
+                    <div id="tablayers-options" class="gcaut-tabs gcaut-tabs-level2">
+                        <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.expandAllLayers, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAll"></button>
+                        <div data-bind="visible: layers().length > 0" tabindex="0">
+                            <ul id="layersoptions" class="orderLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tablayers-options', sortable: { placeholder: 'ui-state-highlight', connectWith: '.orderLayers', refresh: 'tabmap-order', update: $root.updateOrder } }, template: { name: 'mapLayersOption', foreach: layers }"></ul>
+                            <script type="text/html" id="mapLayersOption">
+                                <li>
+                                    <h3 class="ui-accordion-header" data-bind="text: label, attr: { 'id': $data.id }, css: { 'layeroption-title': true }, tooltip: { content: $root.tpOpenCloseClickDrag }"></h3>
+                                    <div>
+                                        <input type="checkbox" id="cb_befBase" data-bind="checked: $data.beforebase">
+                                        <label for="cb_befBase" class="form-checkbox" data-bind="text: $root.lblBefBasemap"></label>
+                                        <div style="clear: both"></div>
+                                        <label for="txt_mapVisLayers" data-bind="text: $root.lblVisLayers, visible: $data.type === 4"></label>
+                                        <input id="txt_mapVisLayers" data-bind="value: $data.visiblelayers, visible: $data.type === 4"></input>
+                                        <div style="clear: both"></div>
+                                        <div class="row">
+                                            <span data-bind="text: $root.lblScale"></span>
+                                            <span> - </span>
+                                            <label for="txt_scaleMin" data-bind="text: $root.lblScaleMin"></label>
+                                            <input id="txt_scaleMin" data-bind="value: $data.scale.min"></input>
+                                            <label for="txt_scaleMax" data-bind="text: $root.lblScaleMax"></label>
+                                            <input id="txt_scaleMax" data-bind="value: $data.scale.max"></input>
+                                        </div>
                                         <div id="clusteroptions" class="gcaut-accordion" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, refresh: 'tablayers-options' }, visible: $data.usecluster === true, tooltip: { content: $root.tpOpenClose }">
-											<h3 class="ui-accordion-header" data-bind="text: $root.lblCluster, tooltip: { content: $root.tpOpenClose }"></h3>
-											<div>
-												<input type="checkbox" id="cb_cluster" data-bind="click: $root.updateType, checked: $data.cluster.enable">
-												<label for="cb_cluster" class="form-checkbox" data-bind="text: $root.lblClusterEnable"></label>
-												<div data-bind="visible: $data.cluster.enable">
-													<label for="cb_clusterdist" data-bind="text: $root.lblClusterDist"></label>
-													<input id="cb_clusterdist" type="text" data-bind="value: $data.cluster.distance"></input>
-													<div style="clear: both"></div>
-													<input type="checkbox" id="cb_clusterlabel" data-bind="checked: $data.cluster.label">
-													<label for="cb_clusterlabel" class="form-checkbox" data-bind="text: $root.lblClusterLabel"></label>
-													<div style="clear: both"></div>
-													<input type="checkbox" id="cb_clustersymb" data-bind="checked: $data.cluster.symbol">
-													<label for="cb_clustersymb" class="form-checkbox" data-bind="text: $root.lblClusterSymbol"></label>
-													<div data-bind="visible: $data.cluster.symbol">
-														<label for="cb_clustersize" data-bind="text: $root.lblClusterSize"></label>
-														<input id="cb_clustersize" type="text" data-bind="value: $data.cluster.maxsizeprop"></input>
-														<div style="clear: both"></div>
-														<label for="cb_clusterdata" data-bind="text: $root.lblClusterData"></label>
-														<input id="cb_clusterdata" type="text" data-bind="value: $data.cluster.maxdataprop"></input>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-							</script>
-						</div>
-					</div>
-				</section>
-			</div>
-		</div>
-		<div id="tab-head" class="gcaut-tabs gcaut-tabs-level1">
-			<section id="headerMap">
-				<label for="headerMapTitle" data-bind="text: lblMapTitle"></label>
-				<input id="headerMapTitle" type="text" class="gcaut-titlew" data-bind="value: mapTitleValue, valueUpdate: 'afterkeydown', limitCharacters: mapTitleWidth()"></input>
-				<span id="msg_title" data-bind="text: mapTitleCount"></span>
-				<div style="clear: both"></div>
-				<label for="headerMapAlt" class="form-textarea" data-bind="text: lblMapTitleAlt"></label>
-				<textarea id="headerMapAlt" type="text" class="gcaut-titlew" data-bind="value: mapAltValue"></textarea>
-				<div style="clear: both"></div>
-				<div class="row">
-					<label for="headerSide" data-bind="text: lblHeaderSide"></label>
-					<select id="headerSide" data-bind="options: sideType, optionsText: 'val', value: selectHeaderSide"></select>
-				</div>	
-				<div style="clear: both"></div>
-				<h4><label data-bind="text: lblEnbTools"></label></h4>
-				<div style="clear: both"></div>
-				<div class="row">
-    				<input type="checkbox" id="cb_tools" data-bind="checked: isTools">
-    				<label for="cb_tools" class="form-checkbox" data-bind="text: lblMenu"></label>
-					<label for="cb_toolexpand" class="form-checkbox" data-bind="text: lblToolsExpand"></label>
-					<select id="cb_toolexpand" data-bind="options: toolsExpand, optionsText: 'val', value: selectTools, enable: isTools"></select>
-				</div>
-				<div style="clear: both"></div>
-				<div class="row">
-    				<input type="checkbox" id="cb_about" data-bind="checked: isAbout">
+                                            <h3 class="ui-accordion-header" data-bind="text: $root.lblCluster, tooltip: { content: $root.tpOpenClose }"></h3>
+                                            <div>
+                                                <input type="checkbox" id="cb_cluster" data-bind="click: $root.updateType, checked: $data.cluster.enable">
+                                                <label for="cb_cluster" class="form-checkbox" data-bind="text: $root.lblClusterEnable"></label>
+                                                <div data-bind="visible: $data.cluster.enable">
+                                                    <label for="cb_clusterdist" data-bind="text: $root.lblClusterDist"></label>
+                                                    <input id="cb_clusterdist" type="text" data-bind="value: $data.cluster.distance"></input>
+                                                    <div style="clear: both"></div>
+                                                    <input type="checkbox" id="cb_clusterlabel" data-bind="checked: $data.cluster.label">
+                                                    <label for="cb_clusterlabel" class="form-checkbox" data-bind="text: $root.lblClusterLabel"></label>
+                                                    <div style="clear: both"></div>
+                                                    <input type="checkbox" id="cb_clustersymb" data-bind="checked: $data.cluster.symbol">
+                                                    <label for="cb_clustersymb" class="form-checkbox" data-bind="text: $root.lblClusterSymbol"></label>
+                                                    <div data-bind="visible: $data.cluster.symbol">
+                                                        <label for="cb_clustersize" data-bind="text: $root.lblClusterSize"></label>
+                                                        <input id="cb_clustersize" type="text" data-bind="value: $data.cluster.maxsizeprop"></input>
+                                                        <div style="clear: both"></div>
+                                                        <label for="cb_clusterdata" data-bind="text: $root.lblClusterData"></label>
+                                                        <input id="cb_clusterdata" type="text" data-bind="value: $data.cluster.maxdataprop"></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </script>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div id="tab-head" class="gcaut-tabs gcaut-tabs-level1">
+            <section id="headerMap">
+                <label for="headerMapTitle" data-bind="text: lblMapTitle"></label>
+                <input id="headerMapTitle" type="text" class="gcaut-titlew" data-bind="value: mapTitleValue, valueUpdate: 'afterkeydown', limitCharacters: mapTitleWidth()"></input>
+                <span id="msg_title" data-bind="text: mapTitleCount"></span>
+                <div style="clear: both"></div>
+                <label for="headerMapAlt" class="form-textarea" data-bind="text: lblMapTitleAlt"></label>
+                <textarea id="headerMapAlt" type="text" class="gcaut-titlew" data-bind="value: mapAltValue"></textarea>
+                <div style="clear: both"></div>
+                <div class="row">
+                    <label for="headerSide" data-bind="text: lblHeaderSide"></label>
+                    <select id="headerSide" data-bind="options: sideType, optionsText: 'val', value: selectHeaderSide"></select>
+                </div>
+                <div style="clear: both"></div>
+                <h4><label data-bind="text: lblEnbTools"></label></h4>
+                <div style="clear: both"></div>
+                <div class="row">
+                    <input type="checkbox" id="cb_tools" data-bind="checked: isTools">
+                    <label for="cb_tools" class="form-checkbox" data-bind="text: lblMenu"></label>
+                    <label for="cb_toolexpand" class="form-checkbox" data-bind="text: lblToolsExpand"></label>
+                    <select id="cb_toolexpand" data-bind="options: toolsExpand, optionsText: 'val', value: selectTools, enable: isTools"></select>
+                </div>
+                <div style="clear: both"></div>
+                <div class="row">
+                    <input type="checkbox" id="cb_about" data-bind="checked: isAbout">
                     <button id="btnAbout" class="gcaut-header-about" tabindex="-1" data-bind="attr: { title: lblAbout }"></button>
                     <label for="cb_about" data-bind="text: lblAbout"></label>
-					<label for="cb_abouttype" class="form-checkbox" data-bind="text: lblAboutType"></label>
-					<select id="cb_abouttype" data-bind="options: aboutType, optionsText: 'val', value: selectAbout, enable: false"></select>
-					<div style="clear: both"></div>
-					<label for="valueAboutHead" class="gcaut-padding-left30" data-bind="text: lblAboutValue"></label>
-					<input id="valueAboutHead" class="gcaut-uri" type="text" data-bind="value: aboutValue, enable: isAbout"></input>
-				</div>
-				<div style="clear: both"></div>
-				<div class="row">
-    				<input type="checkbox" id="cb_print" data-bind="checked: isPrint">
+                    <label for="cb_abouttype" class="form-checkbox" data-bind="text: lblAboutType"></label>
+                    <select id="cb_abouttype" data-bind="options: aboutType, optionsText: 'val', value: selectAbout, enable: false"></select>
+                    <div style="clear: both"></div>
+                    <label for="valueAboutHead" class="gcaut-padding-left30" data-bind="text: lblAboutValue"></label>
+                    <div class="row">
+                        <textarea id="valueAboutHead" row="10" col="50" class="gcaut-textbox" data-bind="value: aboutValue, enable: isAbout"></textarea>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="row">
+                    <input type="checkbox" id="cb_print" data-bind="checked: isPrint">
                     <button id="btnPrint" class="gcaut-header-print" tabindex="-1" data-bind="attr: { title: lblPrint }"></button>
                     <label for="cb_print" data-bind="text: lblPrint"></label>
-					<label for="cb_printtype" class="form-checkbox" data-bind="text: lblPrintType"></label>
-					<select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: false"></select>
-				</div>
-				<div style="clear: both"></div>
-				<input type="checkbox" id="cb_saveimage" data-bind="checked: isSaveimage">
-                <button id="btnFullScreen" class="gcaut-header-saveimage" tabindex="-1" data-bind="attr: { title: lblSaveimage }"></button>
-                <label for="cb_saveimage" data-bind="text: lblSaveimage"></label>
+                    <!--<label for="cb_printtype" class="form-checkbox" data-bind="text: lblPrintType"></label>
+                    <select id="cb_printtype" data-bind="options: printType, optionsText: 'val', value: selectPrint, enable: false"></select>-->
+                </div>
                 <div style="clear: both"></div>
-				<input type="checkbox" id="cb_saveurl" data-bind="checked: isSaveurl">
+                <input type="checkbox" id="cb_saveimage" data-bind="checked: isSaveimage">
+                <button id="btnSaveImage" class="gcaut-header-saveimage" tabindex="-1" data-bind="attr: { title: lblSaveimage }"></button>
+            <label for="cb_saveimage" data-bind="text: lblSaveimage"></label>
+                <div style="clear: both"></div>
+                <input type="checkbox" id="cb_saveurl" data-bind="checked: isSaveurl">
                 <button id="btnFullScreen" class="gcaut-header-saveurl" tabindex="-1" data-bind="attr: { title: lblSaveurl }"></button>
                 <label for="cb_saveurl" data-bind="text: lblSaveurl"></label>
-				<div style="clear: both"></div>
-				<input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
+                <div style="clear: both"></div>
+                <input type="checkbox" id="cb_fullscreen" data-bind="checked: isFullscreen">
                 <button id="btnFullScreen" class="gcaut-header-fullscreen" tabindex="-1" data-bind="attr: { title: lblFulscreen }"></button>
                 <label for="cb_fullscreen" data-bind="text: lblFulscreen"></label>
-		</div>
-		<div id="tab-tools" class="gcaut-tabs gcaut-tabs-level1">
-			<div id="gcauttoolstabs">
-				<ul>
-					<li><a href="#tabtool-order">Order</a></li>
-					<li><a href="#tabtool-legend">Legend</a></li>
-					<li><a href="#tabtool-draw">Draw</a></li>
+        </div>
+        <div id="tab-tools" class="gcaut-tabs gcaut-tabs-level1">
+            <div id="gcauttoolstabs">
+                <ul>
+                    <li><a href="#tabtool-legend">Legend</a></li>
+                    <li><a href="#tabtool-draw">Draw</a></li>
                     <li><a href="#tabtool-nav">Navigation</a></li>
-					<li><a href="#tabtool-data">Data</a></li>
-					<li><a href="#tabtool-extract">Extract</a></li>
-				</ul>
-				<section id="tools">
-					<div id="tabtool-order" class="gcaut-tabs gcaut-tabs-level2">
-						<section id="toolsOrder">
-							<span data-bind="text: lblInfo, visible: tools().length < 1"></span>
-							<ul id="toolsOrderList" class="gcaut-accordion toolbarsMenuOrder gcaut-list-none" data-bind="uiSortable: { placeholder: 'ui-state-highlight', connectWith: '.toolbarsMenuOrder', refresh: 'tab-tools', update: $root.update, delay: 250 }, template: { name: 'toolbarsOrder', foreach: $data.tools }"></ul>
-							<script type="text/html" id="toolbarsOrder">
-								<li class="ui-state-default" data-bind="text: label"></li>
-							</script>
-						</section>
-					</div>
-					<div id="tabtool-legend" class="gcaut-tabs gcaut-tabs-level2">
-						<section id="legendMap">
-							<button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
-							<div id="legend_reset" data-bind="uiDialog: { title: $root.lblResetTitle, width: 400, ok: $root.dialogResetOk, cancel: $root.dialogResetCancel, openDialog: 'isResetDialogOpen' }, css: hiddenReset">
-								<div>
-									<span data-bind="text: lblResetText"></span>
-								</div>
-							</div>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="enableLegend" data-bind="checked: isEnable">
-							<label for="enableLegend" class="form-checkbox" data-bind="text: lblEnable"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
-							<label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
-							<div style="clear: both"></div>
-							<label class="gcaut-sect-title" data-bind="text: lblSectBases"></label>
-							<ul class="legendSortBases" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortBases' } }, template: { name: 'legendBases', foreach: $data.legendBases }"></ul>
-							<script type="text/html" id="legendBases">
-								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
-									<h3 data-bind="tooltip: { content: $root.tpOpenClose }">
-										<span data-bind="attr: { id: $data.label.value() }, text: $data.label.value()"></span>
-										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></button>
-									</h3>
-									<div>
-										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
-										<label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
-										<div style="clear: both"></div>
-										<label for="item_title" data-bind="text: $root.lblLabel"></label>
-										<input id="item_title" class="gcaut-uri" type="text" data-bind="value: $data.label.value"></input>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="metaLeg" data-bind="checked: $data.metadata.enable">
-										<label for="metaLeg" class="form-checkbox" data-bind="text: $root.lblMeta"></label>							
-										<div class="row" data-bind="visible: $data.metadata.enable">
-											<label for="leg_metaurl" class="form-checkbox" data-bind="text: $root.lblMetaUrl"></label>
-											<input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
-											<label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
-											<input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
-										</div>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
-										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
-										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
-											<label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
-											<input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
-											<span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
-										</div>	
-										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
-											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
-											<div class="row">
-												<span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
-												<span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>
-											</div>
-										</div>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="visLeg" data-bind="checked: $data.visibility.enable">
-										<label for="visLeg" class="form-checkbox" data-bind="text: $root.lblVisibility"></label>			
-										<div class="row gcaut-subinfo" data-bind="visible: $data.visibility.enable">
-											<input type="checkbox" id="visInitLeg" data-bind="checked: $data.visibility.initstate">
-											<label for="visInitLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityState"></label>
-											<label for="vistypeLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityType"></label>
-											<select id="vistypeLeg" data-bind="options: $root.visibilityType, optionsText: 'val', value: $data.visibility.type, enable: $data.visibility.enable"></select>
-											<label for="visRadioLeg" data-bind="text: $root.lblVisibilityRadio, visible: $data.visibility.type().val === 'radio'"></label>
-											<input id="visRadioLeg" data-bind="value: $data.visibility.radioid, visible: $data.visibility.type().val === 'radio'"></input>
-										</div>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
-										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>			
-										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
-											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
-											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
-											<button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: function() { $root.addImage($data) }, tooltip: { content: $root.tpAddImage }"></button>
-											<div style="clear: both"></div>
-											<label for="customLegDesc" class="form-checkbox" data-bind="text: $root.lblCustomImageDesc, visible: $data.customimage.enable"></label>
-											<input id="customLegDesc" class="gcaut-uri" data-bind="value: $data.customimage.description, visible: $data.customimage.enable"></input>
-											<ul id="addLegendImages" data-bind="template: { name: 'addLegBaseImg', foreach: $data.customimage.images }, visible: $data.customimage.enable"></ul>
-										</div>
-									</div>
-								</li>
-							</script>
-							<script type="text/html" id="addLegBaseImg">
-								<div>
-									<label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl"></label>
-									<input id="customUrlLeg" class="gcaut-uri" data-bind="value: $data.url"></input>
-									<label for="customTextLeg" data-bind="text: $root.lblCustomImageText"></label>
-									<input id="customTextLeg" class="gcaut-uri" data-bind="value: $data.label"></input>
-								</div>
-							</script>
-							<label class="gcaut-sect-title" data-bind="text: lblSectLayers"></label>
+                    <li><a href="#tabtool-data">Data</a></li>
+                    <li><a href="#tabtool-extract">Extract</a></li>
+                    <li><a href="#tabtool-order">Order</a></li>
+                </ul>
+                <section id="tools">
+                    <div id="tabtool-legend" class="gcaut-tabs gcaut-tabs-level2">
+                        <section id="legendMap">
+                            <input type="checkbox" id="enableLegend" data-bind="checked: isEnable">
+                            <label for="enableLegend" class="form-checkbox" data-bind="text: lblEnable"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="expandLegend" data-bind="checked: isExpand">
+                            <label for="expandLegend" class="form-checkbox" data-bind="text: lblExpand"></label>
+                            <div style="clear: both"></div>
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: reset, text: lblReset"></img></button>
+                        <div id="legend_reset" data-bind="uiDialog: { title: $root.lblResetTitle, width: 400, ok: $root.dialogResetOk, cancel: $root.dialogResetCancel, openDialog: 'isResetDialogOpen' }, css: hiddenReset">
+                            <div>
+                                <span data-bind="text: lblResetText"></span>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                        <button class="gcaut-button-text" tabindex="0" data-bind="click: add, text: lblAddMissing"></img></button>
+                    <div style="clear: both"></div>
+                            <label class="gcaut-sect-title" data-bind="text: lblSectBases"></label>
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll('.legendSortBases') }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAllB"></button>
+                            <ul class="legendSortBases" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortBases' } }, template: { name: 'legendBases', foreach: $data.legendBases }"></ul>
+                            <script type="text/html" id="legendBases">
+                                <li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
+                                    <h3 data-bind="tooltip: { content: $root.tpOpenClose }">
+                                        <span data-bind="attr: { id: $data.graphid() }, text: $data.label.value()"></span>
+                                        <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeBase.bind($root, $parents, $data), text: $root.lblRemove"></button>
+                                    </h3>
+                                    <div>
+                                        <input type="checkbox" id="leg_expandB" data-bind="checked: $data.expand">
+                                        <label for="leg_expandB" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
+                                        <div style="clear: both"></div>
+                                        <label for="item_title" data-bind="text: $root.lblLabel"></label>
+                                        <input id="item_title" class="gcaut-uri" type="text" data-bind="value: $data.label.value"></input>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="metaLeg" data-bind="checked: $data.metadata.enable">
+                                        <label for="metaLeg" class="form-checkbox" data-bind="text: $root.lblMeta"></label>
+                                        <div class="row" data-bind="visible: $data.metadata.enable">
+                                            <label for="leg_metaurl" class="form-checkbox" data-bind="text: $root.lblMetaUrl"></label>
+                                            <input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
+                                            <label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
+                                            <input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
+                                        <label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
+                                        <div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+                                            <label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
+                                            <input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
+                                            <span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
+                                        </div>
+                                        <div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+                                            <div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
+                                            <div class="row">
+                                                <span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
+                                                <span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>
+                                            </div>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="visLeg" data-bind="checked: $data.visibility.enable">
+                                        <label for="visLeg" class="form-checkbox" data-bind="text: $root.lblVisibility"></label>
+                                        <div class="row gcaut-subinfo" data-bind="visible: $data.visibility.enable">
+                                            <input type="checkbox" id="visInitLeg" data-bind="checked: $data.visibility.initstate">
+                                            <label for="visInitLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityState"></label>
+                                            <label for="vistypeLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityType"></label>
+                                            <select id="vistypeLeg" data-bind="options: $root.visibilityType, optionsText: 'val', value: $data.visibility.type, enable: $data.visibility.enable"></select>
+                                            <label for="visRadioLeg" data-bind="text: $root.lblVisibilityRadio, visible: $data.visibility.type().val === 'radio'"></label>
+                                            <input id="visRadioLeg" data-bind="value: $data.visibility.radioid, visible: $data.visibility.type().val === 'radio'"></input>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
+                                        <label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>
+                                        <div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
+                                            <input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
+                                            <label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
+                                            <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: function() { $root.addImage($data) }, tooltip: { content: $root.tpAddImage }"></button>
+                                            <div style="clear: both"></div>
+                                            <label for="customLegDesc" class="form-checkbox" data-bind="text: $root.lblCustomImageDesc, visible: $data.customimage.enable"></label>
+                                            <input id="customLegDesc" class="gcaut-uri" data-bind="value: $data.customimage.description, visible: $data.customimage.enable"></input>
+                                            <ul id="addLegendImages" data-bind="template: { name: 'addLegBaseImg', foreach: $data.customimage.images }, visible: $data.customimage.enable"></ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </script>
+                            <script type="text/html" id="addLegBaseImg">
+                                <div>
+                                    <label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl"></label>
+                                    <input id="customUrlLeg" class="gcaut-uri" data-bind="value: $data.url"></input>
+                                    <label for="customTextLeg" data-bind="text: $root.lblCustomImageText"></label>
+                                    <input id="customTextLeg" class="gcaut-uri" data-bind="value: $data.label"></input>
+                                </div>
+                            </script>
+                            <label class="gcaut-sect-title" data-bind="text: lblSectLayers"></label>
                             <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: createEmptyGrp, tooltip: { content: $root.lblCreateEmptyGroup }"></button>
-							<ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
-							<script type="text/html" id="legendLayers">
-								<li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
-									<h3 data-bind="tooltip: { content: $root.tpOpenCloseClickDrag }">
-										<span data-bind="attr: { id: $data.graphid(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#383838' }, text: $data.label.value()"></span>
-										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></button>
-									</h3>
-									<div>
-										<input type="checkbox" id="leg_expand" data-bind="checked: $data.isExpand">
-										<label for="leg_expand" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
-										<div style="clear: both"></div>
-										<label for="item_title" data-bind="text: $root.lblLabel"></label>
-										<input id="item_title" type="text" data-bind="value: $data.label.value"></input>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="metaLeg" data-bind="checked: $data.metadata.enable">
-										<label for="metaLeg" class="form-checkbox" data-bind="text: $root.lblMeta"></label>			
-										<div class="row" data-bind="visible: $data.metadata.enable">
-											<label for="leg_metaurl" class="form-checkbox" data-bind="text: $root.lblMetaUrl"></label>
-											<input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
-											<label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
-											<input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
-										</div>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
-										<label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
-										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
-											<label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
-											<input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
-											<span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
-										</div>
-										<div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
-											<div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
-											<div class="row">
-												<span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
-												<span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>
-											</div>
-										</div>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="visLeg" data-bind="checked: $data.visibility.enable">
-										<label for="visLeg" class="form-checkbox" data-bind="text: $root.lblVisibility"></label>			
-										<div class="row gcaut-subinfo" data-bind="visible: $data.visibility.enable">
-											<input type="checkbox" id="visInitLeg" data-bind="checked: $data.visibility.initstate">
-											<label for="visInitLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityState"></label>
-											<label for="vistypeLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityType"></label>
-											<select id="vistypeLeg" data-bind="options: $root.visibilityType, optionsText: 'val', value: $data.visibility.type, enable: $data.visibility.enable"></select>
-											<label for="visRadioLeg" data-bind="text: $root.lblVisibilityRadio, visible: $data.visibility.type().val === 'radio'"></label>
-											<input id="visRadioLeg" data-bind="value: $data.visibility.radioid, visible: $data.visibility.type().val === 'radio'"></input>
-										</div>
-										<div style="clear: both"></div>
-										<input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
-										<label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>
-										<div style="clear: both"></div>
-										<label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></label>
-										<textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></textarea>			
-										<div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
-											<input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
-											<label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
-											<button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: function() { $root.addImage($data) }, tooltip: { content: $root.tpAddImage }"></button>
-											<div style="clear: both"></div>
-											<label for="customLegDesc" class="form-checkbox" data-bind="text: $root.lblCustomImageDesc, visible: $data.customimage.enable"></label>
-											<input id="customLegDesc" data-bind="value: $data.customimage.description, visible: $data.customimage.enable"></input>
-											<ul id="addLegendImages" data-bind="template: { name: 'addLegLayerImg', foreach: $data.customimage.images }, visible: $data.customimage.enable"></ul>
-										</div>
-										<div class="inner-layer-list" data-bind="visible: $data.type() === 5 || $data.type() === 0">
-											<ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>
-										</div>				
-									</div>
-								</li>
-							</script>
-							<script type="text/html" id="addLegLayerImg">
-								<div>
-									<label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl"></label>
-									<input id="customUrlLeg" data-bind="value: $data.url"></input>
-									<label for="customTextLeg" data-bind="text: $root.lblCustomImageText"></label>
-									<input id="customTextLeg" data-bind="value: $data.label"></input>
-								</div>
-							</script>
-						</section>
-					</div>
-					<div id="tabtool-draw" class="gcaut-tabs gcaut-tabs-level2">
-						<section id="drawMap">
-							<input type="checkbox" id="enableDraw" data-bind="checked: isEnable">
-							<label for="enableDraw" class="form-checkbox" data-bind="text: lblEnable"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="expandDraw" data-bind="checked: isExpand">
-							<label for="expandDraw" class="form-checkbox" data-bind="text: lblExpand"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="lineDraw" data-bind="checked: isLine">
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: function() { $root.openCloseAll('.legendSortLayers') }, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAllL"></button>
+                            <ul class="legendSortLayers legendSortLayers-lvl1" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.legendLayers }"></ul>
+                            <script type="text/html" id="legendLayers">
+                                <li data-bind="attr: { 'class': 'gcaut-type-' + $data.type() }">
+                                    <h3 data-bind="tooltip: { content: $root.tpOpenCloseClickDrag }">
+                                        <span data-bind="attr: { id: $data.graphid(), 'class': 'gcaut-type-' + $data.type() }, style: { color: $data.items().length === 0 && ($data.type() === 5 || $data.type() === 0)  ? '#919E2E' : '#383838' }, text: $data.label.value()"></span>
+                                        <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.tpRefresh }"></button>
+                                    </h3>
+                                    <div>
+                                        <input type="checkbox" id="leg_expandL" data-bind="checked: $data.expand">
+                                        <label for="leg_expandL" class="form-checkbox" data-bind="text: $root.lblItemExpand"></label>
+                                        <div style="clear: both"></div>
+                                        <label for="item_title" data-bind="text: $root.lblLabel"></label>
+                                        <input id="item_title" type="text" data-bind="value: $data.label.value"></input>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="metaLeg" data-bind="checked: $data.metadata.enable">
+                                        <label for="metaLeg" class="form-checkbox" data-bind="text: $root.lblMeta"></label>
+                                        <div class="row" data-bind="visible: $data.metadata.enable">
+                                            <label for="leg_metaurl" class="form-checkbox" data-bind="text: $root.lblMetaUrl"></label>
+                                            <input id="leg_metaurl" type="text" data-bind="value: $data.metadata.value"></input>
+                                            <label for="leg_metaalt" class="form-checkbox" data-bind="text: $root.lblMetaText"></label>
+                                            <input id="leg_metaalt" type="text" data-bind="value: $data.metadata.alttext"></input>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="opacityLeg" data-bind="checked: $data.opacity.enable, enable: $data.opacity.canenable">
+                                        <label for="opacityLeg" class="form-checkbox" data-bind="text: $root.lblOpacity"></label>
+                                        <div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+                                            <label for="opacityInit" class="form-checkbox" data-bind="text: $root.lblOpacityInit"></label>
+                                            <input id="opacityInit" data-bind="value: $data.opacity.initstate, valueUpdate: 'afterkeydown'"></input>
+                                            <span class="gcaut-message-error" data-bind="attr: { id: 'msg_opacityInit' + $data.graphid() }"></span>
+                                        </div>
+                                        <div class="row gcaut-subinfo" data-bind="visible: $data.opacity.enable">
+                                            <div class="gcaut-slider" data-bind="uiSlider: [$data.opacity.min, $data.opacity.max], sliderOptions: { min: 0.0, max: 1.0, range: true, values: [$data.opacity.min(), $data.opacity.max()], step: 0.01 }"></div>
+                                            <div class="row">
+                                                <span data-bind="text: $root.lblOpacityMin + ' ' + $data.opacity.min()"></span>
+                                                <span style="float: right;" data-bind="text: $root.lblOpacityMax + ' ' + $data.opacity.max()"></span>
+                                            </div>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="visLeg" data-bind="checked: $data.visibility.enable">
+                                        <label for="visLeg" class="form-checkbox" data-bind="text: $root.lblVisibility"></label>
+                                        <div class="row gcaut-subinfo" data-bind="visible: $data.visibility.enable">
+                                            <input type="checkbox" id="visInitLeg" data-bind="checked: $data.visibility.initstate">
+                                            <label for="visInitLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityState"></label>
+                                            <label for="vistypeLeg" class="form-checkbox" data-bind="text: $root.lblVisibilityType"></label>
+                                            <select id="vistypeLeg" data-bind="options: $root.visibilityType, optionsText: 'val', value: $data.visibility.type, enable: $data.visibility.enable"></select>
+                                            <label for="visRadioLeg" data-bind="text: $root.lblVisibilityRadio, visible: $data.visibility.type().val === 'radio'"></label>
+                                            <input id="visRadioLeg" data-bind="value: $data.visibility.radioid, visible: $data.visibility.type().val === 'radio'"></input>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                        <input type="checkbox" id="dispChildLeg" data-bind="checked: $data.displaychild.enable">
+                                        <label for="dispChildLeg" class="form-checkbox" data-bind="text: $root.lblDisplayChild"></label>
+                                        <div style="clear: both"></div>
+                                        <label for="dispChildSymb" class="form-textarea" data-bind="text: $root.lblDisplayChildSymbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></label>
+                                        <textarea id="dispChildSymb" class="gcaut-symbol" data-bind="value: $data.displaychild.symbol, visible: $data.last() && $data.displaychild.enable() && $data.type() === 5"></textarea>
+                                        <div class="row gcaut-subinfo" data-bind="visible: !$data.displaychild.enable()">
+                                            <input type="checkbox" id="customLeg" data-bind="checked: $data.customimage.enable">
+                                            <label for="customLeg" class="form-checkbox" data-bind="text: $root.lblCustomImage"></label>
+                                            <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: function() { $root.addImage($data) }, tooltip: { content: $root.tpAddImage }"></button>
+                                            <div style="clear: both"></div>
+                                            <label for="customLegDesc" class="form-checkbox" data-bind="text: $root.lblCustomImageDesc, visible: $data.customimage.enable"></label>
+                                            <input id="customLegDesc" data-bind="value: $data.customimage.description, visible: $data.customimage.enable"></input>
+                                            <ul id="addLegendImages" data-bind="template: { name: 'addLegLayerImg', foreach: $data.customimage.images }, visible: $data.customimage.enable"></ul>
+                                        </div>
+                                        <div class="inner-layer-list" data-bind="visible: $data.type() === 5 || $data.type() === 0">
+                                            <ul class="legendSortLayers" style="height: 25px" data-bind="visible: $data.displaychild, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-tools', sortable: { placeholder: 'ui-state-highlight', connectWith: '.legendSortLayers' } }, template: { name: 'legendLayers', foreach: $data.items }"></ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </script>
+                            <script type="text/html" id="addLegLayerImg">
+                                <div>
+                                    <label for="customUrlLeg" class="form-checkbox" data-bind="text: $root.lblCustomImageUrl"></label>
+                                    <input id="customUrlLeg" data-bind="value: $data.url"></input>
+                                    <label for="customTextLeg" data-bind="text: $root.lblCustomImageText"></label>
+                                    <input id="customTextLeg" data-bind="value: $data.label"></input>
+                                </div>
+                            </script>
+                        </section>
+                    </div>
+                    <div id="tabtool-draw" class="gcaut-tabs gcaut-tabs-level2">
+                        <section id="drawMap">
+                            <input type="checkbox" id="enableDraw" data-bind="checked: isEnable">
+                            <label for="enableDraw" class="form-checkbox" data-bind="text: lblEnable"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="expandDraw" data-bind="checked: isExpand">
+                            <label for="expandDraw" class="form-checkbox" data-bind="text: lblExpand"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="lineDraw" data-bind="checked: isLine">
                             <button id="btnDrawLine" class="gcaut-draw-line" tabindex="-1" data-bind="attr: { title: lblLine }"></button>
                             <label for="lineDraw" data-bind="text: lblLine"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="textDraw" data-bind="checked: isText">
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="textDraw" data-bind="checked: isText">
                             <button id="btnDrawText" class="gcaut-draw-text" tabindex="-1" data-bind="attr: { title: lblText }"></button>
                             <label for="textDraw" data-bind="text: lblText"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="measureLength" data-bind="checked: isMeasureL">
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="measureLength" data-bind="checked: isMeasureL">
                             <button id="btnMeasureLength" class="gcaut-draw-measureL" tabindex="-1" data-bind="attr: { title: lblMeasureL }"></button>
                             <label for="measureLength" data-bind="text: lblMeasureL"></label>
-							<label for="measureUnitDrawL" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
-							<select id="measureUnitDrawL" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitL, enable: false"></select>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="measureArea" data-bind="checked: isMeasureA">
+                            <label for="measureUnitDrawL" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+                            <select id="measureUnitDrawL" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitL, enable: false"></select>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="measureArea" data-bind="checked: isMeasureA">
                             <button id="btnPositionNav" class="gcaut-draw-measureA" tabindex="-1" data-bind="attr: { title: lblMeasureA }"></button>
                             <label for="measureArea" data-bind="text: lblMeasureA"></label>
-							<label for="measureUnitDrawA" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
-							<select id="measureUnitDrawA" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitA, enable: false"></select>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="fileDraw" data-bind="checked: isFile">
+                            <label for="measureUnitDrawA" class="form-checkbox" data-bind="text: lblMeasureUnit"></label>
+                            <select id="measureUnitDrawA" data-bind="options: measureUnit, optionsText: 'val', value: selectMeasureUnitA, enable: false"></select>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="fileDraw" data-bind="checked: isFile">
                             <button id="btnDrawImport" class="gcaut-draw-import" tabindex="-1" data-bind="attr: { title: lblFile }"></button>
                             <button id="btnDrawExport" class="gcaut-draw-export" tabindex="-1" data-bind="attr: { title: lblFile }"></button>
                             <label for="fileDraw" data-bind="text: lblFile"></label>
-						</section>
-					</div>
-					<div id="tabtool-nav" class="gcaut-tabs gcaut-tabs-level2">
-						<section id="navigationMap">
-							<input type="checkbox" id="enableNav" data-bind="checked: isEnable">
-							<label for="enableNav" class="form-checkbox" data-bind="text: lblEnable"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="expandNav" data-bind="checked: isExpand">
-							<label for="expandNav" class="form-checkbox" data-bind="text: lblExpand"></label>							
-							<div style="clear: both"></div>
-							<input type="checkbox" id="geolocNav" data-bind="checked: isGeoloc">
-							<label for="geolocNav" class="form-checkbox" data-bind="text: lblGeoloc"></label>							
-							<div style="clear: both"></div>
-							<div class="row">
-    							<input type="checkbox" id="scaleNav" data-bind="checked: isScale">
-    							<label for="scaleNav" class="form-checkbox" data-bind="text: lblScale"></label>
-    							<span> - </span>
-								<label for="scaleFormat" data-bind="text: lblScaleFormat"></label>
-								<select id="scaleFormat" data-bind="options: scaleType, optionsText: 'val', value: selectScale, enable: isScale"></select>
-							</div>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="overNav" data-bind="checked: isOver">
-							<label for="overNav" class="form-checkbox" data-bind="text: lblOver"></label>							
-							<div class="row">
-								<label for="overType" class="form-checkbox" data-bind="text: lblOverType, visible: isOver"></label>
-								<select id="overType" data-bind="options: overType, optionsText: 'val', value: selectOver, visible: isOver"></select>
-								<label for="urlOverNav" data-bind="text: lblOverUrl, visible: isOver"></label>
-								<input id="urlOverNav" class="gcaut-uri" type="text" data-bind="value: urlOver, visible: isOver"></input>
-							</div>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="positionNav" data-bind="checked: isPosition">
+                        </section>
+                    </div>
+                    <div id="tabtool-nav" class="gcaut-tabs gcaut-tabs-level2">
+                        <section id="navigationMap">
+                            <input type="checkbox" id="enableNav" data-bind="checked: isEnable">
+                            <label for="enableNav" class="form-checkbox" data-bind="text: lblEnable"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="expandNav" data-bind="checked: isExpand">
+                            <label for="expandNav" class="form-checkbox" data-bind="text: lblExpand"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="geolocNav" data-bind="checked: isGeoloc">
+                            <label for="geolocNav" class="form-checkbox" data-bind="text: lblGeoloc"></label>
+                            <div style="clear: both"></div>
+                            <div class="row">
+                                <input type="checkbox" id="scaleNav" data-bind="checked: isScale">
+                                <label for="scaleNav" class="form-checkbox" data-bind="text: lblScale"></label>
+                                <span> - </span>
+                                <label for="scaleFormat" data-bind="text: lblScaleFormat"></label>
+                                <select id="scaleFormat" data-bind="options: scaleType, optionsText: 'val', value: selectScale, enable: isScale"></select>
+                            </div>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="overNav" data-bind="checked: isOver">
+                            <label for="overNav" class="form-checkbox" data-bind="text: lblOver"></label>
+                            <div class="row">
+                                <label for="overType" class="form-checkbox" data-bind="text: lblOverType, visible: isOver"></label>
+                                <select id="overType" data-bind="options: overType, optionsText: 'val', value: selectOver, visible: isOver"></select>
+                                <label for="urlOverNav" data-bind="text: lblOverUrl, visible: isOver"></label>
+                                <input id="urlOverNav" class="gcaut-uri" type="text" data-bind="value: urlOver, visible: isOver"></input>
+                            </div>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="positionNav" data-bind="checked: isPosition">
                             <button id="btnPositionNav" class="gcaut-nav-position" tabindex="-1" data-bind="attr: { title: lblPosition }"></button>
                             <label for="positionNav" data-bind="text: lblPosition"></label>
-						</section>
-					</div>
-					<div id="tabtool-data" class="gcaut-tabs gcaut-tabs-level2">
-						<section id="dataMap">
-							<input type="checkbox" id="enableData" data-bind="checked: isEnable">
-							<label for="enableData" class="form-checkbox" data-bind="text: lblEnable"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="expandData" data-bind="checked: isExpand">
-							<label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="fileData" data-bind="checked: isFile">
+                        </section>
+                    </div>
+                    <div id="tabtool-data" class="gcaut-tabs gcaut-tabs-level2">
+                        <section id="dataMap">
+                            <input type="checkbox" id="enableData" data-bind="checked: isEnable">
+                            <label for="enableData" class="form-checkbox" data-bind="text: lblEnable"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="expandData" data-bind="checked: isExpand">
+                            <label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="fileData" data-bind="checked: isFile">
                             <button id="btnAddFile" class="gcaut-data-csv" tabindex="-1" data-bind="attr: { title: lblFile }"></button>
                             <label for="fileData" data-bind="text: lblFile"></label>
                             <div style="clear: both"></div>
-							<input type="checkbox" id="urlData" data-bind="checked: isURL">
+                            <input type="checkbox" id="urlData" data-bind="checked: isURL">
                             <button id="btnAddURL" class="gcaut-data-csv" tabindex="-1" data-bind="attr: { title: lblURL }"></button>
                             <label for="urlData" data-bind="text: lblURL"></label>
                             <div style="clear: both"></div>
-							<input type="checkbox" id="queryData" data-bind="checked: isQuery">
+                            <input type="checkbox" id="queryData" data-bind="checked: isQuery">
                             <label for="queryData" class="form-checkbox" data-bind="text: lblQuery"></label>
-						</section>
-					</div>
-					<div id="tabtool-extract" class="gcaut-tabs gcaut-tabs-level2">
-						<section id="extractMap">
-							<input type="checkbox" id="enableData" data-bind="checked: isEnable">
-							<label for="enableData" class="form-checkbox" data-bind="text: lblEnable"></label>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="expandData" data-bind="checked: isExpand">
-							<label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
-							<div style="clear: both"></div>
-			                <input type="checkbox" id="gridExtract" data-bind="checked: isGrid">
-			                <label for="gridExtract" class="form-checkbox" data-bind="text: lblGrid"></label>                           
-			                <div class="row">
-			                    <label for="gridIdExtract" class="gcaut-padding-left30" data-bind="text: lblGridSelect"></label>
-			                    <select id="gridIdExtract" data-bind="options: gridList, optionsText: 'val', value: selectGrid, enable: isGrid, event: { change: $root.setGridId }"></select>
-			                </div>
-			                <div style="clear: both"></div>
-			                <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: $root.addLink, tooltip: { content: $root.tpAddLink }"></button>
-			                <div style="clear: both"></div>		
-			                <ul id="extractLinks" class="gccaut-links" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabtool-extract' }, template: { name: 'extractInfo', foreach: links }"></ul>
-							<script type="text/html" id="extractInfo">
-								<li>
-									<h3 class="ui-accordion-header" data-bind="tooltip: { content: $root.tpOpenClose }">
-										<span data-bind="text: title"></span>
-										<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLink.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.lblRemove }"></img></button>
-									</h3>
-									<div>
-										<label for="txt_extTitle" data-bind="text: $root.lblTitle"></label>
-										<input id="txt_extTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
-										<div style="clear: both"></div>
-										<label for="txt_extSubtitle" data-bind="text: $root.lblSubtitle"></label>
-										<input id="txt_extSubtitle" class="gcaut-uri" data-bind="value: $data.subtitle"></input>
-										<div style="clear: both"></div>
-										<label for="txt_extScale" data-bind="text: $root.lblScale"></label>
-										<input id="txt_extScale" data-bind="value: $data.scale, valueUpdate: 'input'"></input>
-										<div style="clear: both"></div>
-										<label for="txt_extUrl" data-bind="text: $root.lblURL"></label>
-										<input id="txt_extUrl" class="gcaut-uri" data-bind="value: $data.url"></input>
-										<div style="clear: both"></div>
-										<button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: function() { $root.addQuery($data) }, tooltip: { content: $root.tpAddQuery }"></button>
-										<div style="clear: both"></div>
-										<ul id="extractQueries" data-bind="template: { name: 'extractQuery', foreach: $data.query }"></ul>
-									</div>
-								</li>
-							</script>
-							<script type="text/html" id="extractQuery">
-								<div>
-									<div class="row">
-										<label for="queryType" class="gcaut-padding-left30" data-bind="text: $root.lblType"></label>
-									    <select id="queryType" data-bind="options:$root.queryType, optionsText: 'val', value: $data.type"></select>
-									</div> 
-										<label for="txt_extParam" data-bind="text: $root.lblParam"></label>
-										<input id="txt_extParam"  class="gcaut-uri" data-bind="value: $data.param"></input>
-										<div style="clear: both"></div>
-										<label for="txt_extLabel" data-bind="text: $root.lblLabel"></label>
-										<input id="txt_extLabel" class="gcaut-uri" data-bind="value: $data.label"></input>
-									</div>
-							</script>
-						</section>
-					</div>
-				</section>
-			</div>
-		</div>
+                        </section>
+                    </div>
+                    <div id="tabtool-extract" class="gcaut-tabs gcaut-tabs-level2">
+                        <section id="extractMap">
+                            <input type="checkbox" id="enableData" data-bind="checked: isEnable">
+                            <label for="enableData" class="form-checkbox" data-bind="text: lblEnable"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="expandExtract" data-bind="checked: isExpand">
+                            <label for="expandData" class="form-checkbox" data-bind="text: lblExpand"></label>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="gridExtract" data-bind="checked: isGrid">
+                            <label for="gridExtract" class="form-checkbox" data-bind="text: lblGrid"></label>
+                            <div class="row">
+                                <label for="gridIdExtract" class="gcaut-padding-left30" data-bind="text: lblGridSelect"></label>
+                                <select id="gridIdExtract" data-bind="options: gridList, optionsText: 'val', value: selectGrid, enable: isGrid, event: { change: $root.setGridId }"></select>
+                            </div>
+                            <div style="clear: both"></div>
+                            <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: $root.addLink, tooltip: { content: $root.tpAddLink }"></button>
+                            <div style="clear: both"></div>
+                            <ul id="extractLinks" class="gccaut-links" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tabtool-extract' }, template: { name: 'extractInfo', foreach: links }"></ul>
+                            <script type="text/html" id="extractInfo">
+                                <li>
+                                    <h3 class="ui-accordion-header" data-bind="tooltip: { content: $root.tpOpenClose }">
+                                        <span data-bind="text: title"></span>
+                                        <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLink.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.lblRemove }"></img></button>
+                                    </h3>
+                                    <div>
+                                        <label for="txt_extTitle" data-bind="text: $root.lblTitle"></label>
+                                        <input id="txt_extTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
+                                        <div style="clear: both"></div>
+                                        <label for="txt_extSubtitle" data-bind="text: $root.lblSubtitle"></label>
+                                        <input id="txt_extSubtitle" class="gcaut-uri" data-bind="value: $data.subtitle"></input>
+                                        <div style="clear: both"></div>
+                                        <label for="txt_extScale" data-bind="text: $root.lblScale"></label>
+                                        <input id="txt_extScale" data-bind="value: $data.scale, valueUpdate: 'input'"></input>
+                                        <div style="clear: both"></div>
+                                        <label for="txt_extUrl" data-bind="text: $root.lblURL"></label>
+                                        <input id="txt_extUrl" class="gcaut-uri" data-bind="value: $data.url"></input>
+                                        <div style="clear: both"></div>
+                                        <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: function() { $root.addQuery($data) }, tooltip: { content: $root.tpAddQuery }"></button>
+                                        <div style="clear: both"></div>
+                                        <ul id="extractQueries" data-bind="template: { name: 'extractQuery', foreach: $data.query }"></ul>
+                                    </div>
+                                </li>
+                            </script>
+                            <script type="text/html" id="extractQuery">
+                                <div>
+                                    <div class="row">
+                                        <label for="queryType" class="gcaut-padding-left30" data-bind="text: $root.lblType"></label>
+                                        <select id="queryType" data-bind="options:$root.queryType, optionsText: 'val', value: $data.type"></select>
+                                    </div>
+                                        <label for="txt_extParam" data-bind="text: $root.lblParam"></label>
+                                        <input id="txt_extParam"  class="gcaut-uri" data-bind="value: $data.param"></input>
+                                        <div style="clear: both"></div>
+                                        <label for="txt_extLabel" data-bind="text: $root.lblLabel"></label>
+                                        <input id="txt_extLabel" class="gcaut-uri" data-bind="value: $data.label"></input>
+                                    </div>
+                            </script>
+                        </section>
+                    </div>
+                    <div id="tabtool-order" class="gcaut-tabs gcaut-tabs-level2">
+                        <section id="toolsOrder">
+                            <span data-bind="text: lblInfo, visible: tools().length < 2"></span>
+                            <ul id="toolsOrderList" class="gcaut-accordion toolbarsMenuOrder gcaut-list-none" data-bind="uiSortable: { placeholder: 'ui-state-highlight', connectWith: '.toolbarsMenuOrder', refresh: 'tab-tools', update: $root.update, delay: 250 }, template: { name: 'toolbarsOrder', foreach: $data.tools }"></ul>
+                            <script type="text/html" id="toolbarsOrder">
+                                <li class="ui-state-default" data-bind="text: label"></li>
+                            </script>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
         <div id="tab-datagrid" class="gcaut-tabs gcaut-tabs-level2">
             <section id="datagridMap">
-            	<div id="datagrid_index" data-bind="uiDialog: { title: $root.lblSetIndex, width: 400, ok: $root.dialogIndexOk, cancel: $root.dialogIndexCancel, openDialog: 'isDynamicServOpen' }">
-					<div>
-						<label for="txt_setIndex" data-bind="text: $root.lblIndex"></label>
-						<input id="txt_setIndex"  class="gcaut-uri" data-bind="value: $root.indexValue"></input>
-					</div>
-				</div>
-				<input type="checkbox" id="enableDatagrid" data-bind="checked: isEnable">
-				<label for="enableDatagrid" class="form-checkbox" data-bind="text: lblEnable"></label>
-				<div style="clear: both"></div>
-				<input type="checkbox" id="expandDatagrid" data-bind="checked: isExpand">
-				<label for="expandDatagrid" class="form-checkbox" data-bind="text: lblExpand"></label>
-				<div class="row">
-					<label for="layersDatagrid" class="gcaut-padding-left30" data-bind="text: lblLayerSelect"></label>
-					<select id="layersDatagrid" data-bind="options: layerList, optionsText: 'val', value: selectLayer, enable: isEnable"></select>				
-					<button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: $root.checkLayer, tooltip: { content: $root.tpAddLayer }"></button>
-				</div>
-				<ul id="datagridlayers" class="dgLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLayers', refresh: 'tab-datagrid' } }, template: { name: 'dgLayers', foreach: $data.layers }"></ul>
-				<script type="text/html" id="dgLayers">
-					<li>
-						<h3 class="ui-accordion-header">
-							<span data-bind="text: $data.title"></span>
-							<button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.lblRemove }"></img></button>
-						</h3>
-						<div>
-							<label for="txt_tblTitle" data-bind="text: $root.lblTitle"></label>
-							<input id="txt_tblTitle" class="gcaut-uri" data-bind="value: $data.title"></input>
-							<div style="clear: both"></div>
-							<label for="txt_tblIndex" data-bind="text: $root.lblIndex"></label>
-							<input id="txt_tblIndex" data-bind="value: $data.layerinfo.index, enable: false"></input>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="searchall" data-bind="checked: globalsearch">
-							<label for="searchall" class="form-checkbox" data-bind="text: $root.lblSearchAll"></label>
-							<div style="clear: both"></div>
-							<ul id="datagridlayersFields" class="dgLayersFields" data-bind="attr: {'id': 'fields' + $data.layerinfo.uniqueid() }, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLayersFields', refresh: 'tab-datagrid', update: $root.updateOrder, delay: 250 } }, template: { name: 'dgLayersFields', foreach: $data.fields }"></ul>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="enableLink" data-bind="checked: linktable.enable">
-							<label for="enableLink" class="form-checkbox" data-bind="text: $root.lblLink"></label>
-							<div style="clear: both"></div>
-							<div data-bind="visible: linktable.enable()">
-								<label for="txt_tblLinkRel" data-bind="text: $root.lblLinkRel"></label>
-								<input id="txt_tblLinkRel"  class="gcaut-uri" data-bind="value: $data.linktable.relationshipid"></input>
-								<div style="clear: both"></div>
-								<label for="txt_tblLinkTitle" data-bind="text: $root.lblLinkTitle"></label>
-								<input id="txt_tblLinkTitle"  class="gcaut-uri" data-bind="value: $data.linktable.title"></input>
-								<div style="clear: both"></div>
-								<label for="txt_tblLinkSubTitle" data-bind="text: $root.lblLinkSubTitle"></label>
-								<input id="txt_tblLinkSubTitle"  class="gcaut-uri" data-bind="value: $data.linktable.subtitle"></input>
-								<div style="clear: both"></div>
-								<ul id="datagridlinkFields" class="dgLinksFields" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLinksFields', refresh: 'tab-datagrid' } }, template: { name: 'dgLinksFields', foreach: $data.linktable.fields }"></ul>
-							</div>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="enablePopup" data-bind="checked: popups.enable">
-							<label for="enablePopup" class="form-checkbox" data-bind="text: $root.lblPopup"></label>
-						</div>
-					</li>
-				</script>
-				<script type="text/html" id="dgLayersFields">
-					<li>
-						<h3 class="ui-accordion-header">
-							<span data-bind="text: $data.title() + ' - ' + $root.lblFieldEnable + ': ' + $data.enable()"></span>
-						</h3>
-						<div>
-							<input type="checkbox" id="enableField" data-bind="checked: $data.enable">
-							<label for="enableField" class="form-checkbox" data-bind="text: $root.lblFieldEnable"></label>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldTitle" data-bind="text: $root.lblTitle"></label>
-							<input id="txt_tblFieldTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldWidth" data-bind="text: $root.lblFieldWidth"></label>
-							<input id="txt_tblFieldWidth" data-bind="event: { change: $root.addPX }, value: $data.width, valueUpdate: 'afterkeydown'"></input>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldData" data-bind="text: $root.lblFieldData"></label>
-							<input id="txt_tblFieldData"  class="gcaut-uri" data-bind="value: $data.data, enable: false"></input>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldAlias" data-bind="text: $root.lblFieldAlias"></label>
-							<input id="txt_tblFieldAlias"  class="gcaut-uri" data-bind="value: $data.dataalias, enable: false"></input>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldType" class="gcaut-padding-left30" data-bind="text: $root.lblFieldType"></label>
-							<select id="txt_tblFieldType" data-bind="options: $root.fieldType, optionsText: 'val', value: $data.fieldtype.type"></select>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldValue" class="gcaut-padding-left30" data-bind="text: $root.lblFieldValue"></label>
-							<select id="txt_tblFieldValue" data-bind="options: $root.valueType, optionsText: 'val', value: $data.fieldtype.value"></select>
-							<div style="clear: both"></div>
-							<input type="checkbox" id="tblFieldSearch" data-bind="checked: $data.searchable">
-							<label for="tblFieldSearch" data-bind="text: $root.lblFieldSearch"></label>
-						</div>
-					</li>
-				</script>
-				<script type="text/html" id="dgLinksFields">
-					<li>
-						<h3 class="ui-accordion-header">
-							<span data-bind="text: $data.title() + ' - ' + $root.lblFieldEnable + ': ' + $data.enable()"></span>
-						</h3>
-						<div>
-							<input type="checkbox" id="enableField" data-bind="checked: $data.enable">
-							<label for="enableField" class="form-checkbox" data-bind="text: $root.lblFieldEnable"></label>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldTitle" data-bind="text: $root.lblTitle"></label>
-							<input id="txt_tblFieldTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
-							<div style="clear: both"></div>
-							<label for="txt_tblFieldData" data-bind="text: $root.lblFieldData"></label>
-							<input id="txt_tblFieldData"  class="gcaut-uri" data-bind="value: $data.data, enable: false"></input>
-						</div>
-					</li>
-				</script>
+                <div id="datagrid_index" data-bind="uiDialog: { title: $root.lblSetIndex, width: 400, ok: $root.dialogIndexOk, cancel: $root.dialogIndexCancel, openDialog: 'isDynamicServOpen' }">
+                    <div>
+                        <label for="txt_setIndex" data-bind="text: $root.lblIndex"></label>
+                        <input id="txt_setIndex"  class="gcaut-uri" data-bind="value: $root.indexValue"></input>
+                    </div>
+                </div>
+                <input type="checkbox" id="enableDatagrid" data-bind="checked: isEnable">
+                <label for="enableDatagrid" class="form-checkbox" data-bind="text: lblEnable"></label>
+                <div style="clear: both"></div>
+                <input type="checkbox" id="expandDatagrid" data-bind="checked: isExpand">
+                <label for="expandDatagrid" class="form-checkbox" data-bind="text: lblExpand"></label>
+                <div class="row">
+                    <label for="layersDatagrid" class="gcaut-padding-left30" data-bind="text: lblLayerSelect"></label>
+                    <select id="layersDatagrid" data-bind="options: layerList, optionsText: 'val', value: selectLayer, enable: isEnable"></select>
+                    <button class="gcaut-legend-createemptygroup" tabindex="0" data-bind="click: $root.checkLayer, tooltip: { content: $root.tpAddLayer }, enable: isEnable"></button>
+                </div>
+                <ul id="datagridlayers" class="dgLayers" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLayers', refresh: 'tab-datagrid' } }, template: { name: 'dgLayers', foreach: $data.layers }"></ul>
+                <script type="text/html" id="dgLayers">
+                    <li>
+                        <h3 class="ui-accordion-header">
+                            <span data-bind="text: $data.title"></span>
+                            <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.removeLayer.bind($root, $parents, $data), text: $root.lblRemove, tooltip: { content: $root.lblRemove }"></img></button>
+                        </h3>
+                        <div>
+                            <div class="row">
+                                <button class="gcaut-button-text" tabindex="0" data-bind="click: $root.expandAll, tooltip: { content: $root.tpExpandCollapse }, text: $root.lblExpandCollapseAll"></button>
+                            </div>
+                            <label for="txt_tblTitle" data-bind="text: $root.lblTitle"></label>
+                            <input id="txt_tblTitle" class="gcaut-uri" data-bind="value: $data.title"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblIndex" data-bind="text: $root.lblIndex"></label>
+                            <input id="txt_tblIndex" data-bind="value: $data.layerinfo.index, enable: false"></input>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="searchall" data-bind="checked: globalsearch">
+                            <label for="searchall" class="form-checkbox" data-bind="text: $root.lblSearchAll"></label>
+                            <div style="clear: both"></div>
+                            <ul id="datagridlayersFields" class="dgLayersFields" data-bind="attr: {'id': 'fields' + $data.layerinfo.uniqueid() }, uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLayersFields', refresh: 'tab-datagrid', update: $root.updateOrder, delay: 250 } }, template: { name: 'dgLayersFields', foreach: $data.fields }"></ul>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="enableLink" data-bind="checked: linktable.enable">
+                            <label for="enableLink" class="form-checkbox" data-bind="text: $root.lblLink"></label>
+                            <div style="clear: both"></div>
+                            <div data-bind="visible: linktable.enable()">
+                                <label for="txt_tblLinkRel" data-bind="text: $root.lblLinkRel"></label>
+                                <input id="txt_tblLinkRel"  class="gcaut-uri" data-bind="value: $data.linktable.relationshipid"></input>
+                                <div style="clear: both"></div>
+                                <label for="txt_tblLinkTitle" data-bind="text: $root.lblLinkTitle"></label>
+                                <input id="txt_tblLinkTitle"  class="gcaut-uri" data-bind="value: $data.linktable.title"></input>
+                                <div style="clear: both"></div>
+                                <label for="txt_tblLinkSubTitle" data-bind="text: $root.lblLinkSubTitle"></label>
+                                <input id="txt_tblLinkSubTitle"  class="gcaut-uri" data-bind="value: $data.linktable.subtitle"></input>
+                                <div style="clear: both"></div>
+                                <ul id="datagridlinkFields" class="dgLinksFields" data-bind="uiAccordion: { heightStyle: 'content', collapsible: true, active: false, refresh: 'tab-datagrid', sortable: { placeholder: 'ui-state-highlight', connectWith: '.dgLinksFields', refresh: 'tab-datagrid' } }, template: { name: 'dgLinksFields', foreach: $data.linktable.fields }"></ul>
+                            </div>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="enablePopup" data-bind="checked: popups.enable">
+                            <label for="enablePopup" class="form-checkbox" data-bind="text: $root.lblPopup"></label>
+                        </div>
+                    </li>
+                </script>
+                <script type="text/html" id="dgLayersFields">
+                    <li>
+                        <h3 class="ui-accordion-header">
+                            <span data-bind="text: $data.title() + ' - ' + $root.lblFieldEnable + ': ' + $data.enable()"></span>
+                        </h3>
+                        <div>
+                            <input type="checkbox" id="enableField" data-bind="checked: $data.enable">
+                            <label for="enableField" class="form-checkbox" data-bind="text: $root.lblFieldEnable"></label>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldTitle" data-bind="text: $root.lblTitle"></label>
+                            <input id="txt_tblFieldTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldDesc" data-bind="text: $root.lblDescription"></label>
+                            <input id="txt_tblFieldDesc"  class="gcaut-uri" data-bind="value: $data.description"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldWidth" data-bind="text: $root.lblFieldWidth"></label>
+                            <input id="txt_tblFieldWidth" data-bind="event: { change: $root.addPX }, value: $data.width, valueUpdate: 'afterkeydown'"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldData" data-bind="text: $root.lblFieldData"></label>
+                            <input id="txt_tblFieldData"  class="gcaut-uri" data-bind="value: $data.data, enable: false"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldAlias" data-bind="text: $root.lblFieldAlias"></label>
+                            <input id="txt_tblFieldAlias"  class="gcaut-uri" data-bind="value: $data.dataalias, enable: false"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldType" class="gcaut-padding-left30" data-bind="text: $root.lblFieldType"></label>
+                            <select id="txt_tblFieldType" data-bind="options: $root.fieldType, optionsText: 'val', value: $data.fieldtype.type"></select>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldValue" class="gcaut-padding-left30" data-bind="text: $root.lblFieldValue"></label>
+                            <select id="txt_tblFieldValue" data-bind="options: $root.valueType, optionsText: 'val', value: $data.fieldtype.value"></select>
+                            <div style="clear: both"></div>
+                            <input type="checkbox" id="tblFieldSearch" data-bind="checked: $data.searchable">
+                            <label for="tblFieldSearch" data-bind="text: $root.lblFieldSearch"></label>
+                        </div>
+                    </li>
+                </script>
+                <script type="text/html" id="dgLinksFields">
+                    <li>
+                        <h3 class="ui-accordion-header">
+                            <span data-bind="text: $data.title() + ' - ' + $root.lblFieldEnable + ': ' + $data.enable()"></span>
+                        </h3>
+                        <div>
+                            <input type="checkbox" id="enableField" data-bind="checked: $data.enable">
+                            <label for="enableField" class="form-checkbox" data-bind="text: $root.lblFieldEnable"></label>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldTitle" data-bind="text: $root.lblTitle"></label>
+                            <input id="txt_tblFieldTitle"  class="gcaut-uri" data-bind="value: $data.title"></input>
+                            <div style="clear: both"></div>
+                            <label for="txt_tblFieldData" data-bind="text: $root.lblFieldData"></label>
+                            <input id="txt_tblFieldData"  class="gcaut-uri" data-bind="value: $data.data, enable: false"></input>
+                        </div>
+                    </li>
+                </script>
             </section>
         </div>
-		<div id="tab-foot" class="gcaut-tabs gcaut-tabs-level1">
-			<section id="footerMap">
-				<input type="checkbox" id="cb_arrow" data-bind="checked: isArrow">
+        <div id="tab-foot" class="gcaut-tabs gcaut-tabs-level1">
+            <section id="footerMap">
+                <input type="checkbox" id="cb_arrow" data-bind="checked: isArrow">
                 <button id="btnAbout" class="gcaut-footer-arrow gcaut-rotate90" tabindex="-1" data-bind="attr: { title: lblEnbArrow }"></button>
                 <label for="cb_arrow" data-bind="text: lblEnbArrow"></label>
-				<div class="row">
-					<label for="cb_arrowsr" class="gcaut-padding-left30" data-bind="text: lblArrowSR"></label>
-					<select id="cb_arrowsr" data-bind="options: arrowSR, optionsText: 'val', value: selectArrowSR, enable: false"></select>
-				</div>
+                <div class="row">
+                    <label for="cb_arrowsr" class="gcaut-padding-left30" data-bind="text: lblArrowSR"></label>
+                    <select id="cb_arrowsr" data-bind="options: arrowSR, optionsText: 'val', value: selectArrowSR, enable: false"></select>
+                </div>
                 <div style="clear: both"></div>
                 <input type="checkbox" id="scalebarNav" data-bind="checked: isScalebar">
-                <label for="scalebarNav" class="form-checkbox" data-bind="text: lblScalebar"></label>                           
+                <label for="scalebarNav" class="form-checkbox" data-bind="text: lblScalebar"></label>
                 <div class="row">
                     <label for="scalebarTypeNav" class="gcaut-padding-left30" data-bind="text: lblScalebarUnit"></label>
                     <select id="scalebarTypeNav" data-bind="options: scalebarType, optionsText: 'val', value: selectScalebar, enable: false"></select>
-                </div>                          
-				<div style="clear: both"></div>
-				<input type="checkbox" id="cb_mouse" data-bind="checked: isMouse">
-				<label for="cb_mouse" class="form-checkbox" data-bind="text: lblEnbMouse"></label>
-				<div class="row">
-					<label for="cb_mousesr" class="gcaut-padding-left30" data-bind="text: lblMouseSR"></label>
-					<select id="cb_mousesr" data-bind="options: mouseSR, optionsText: 'val', value: selectMouseSR, enable: isMouse,"></select>
-				</div>
-			</setion>
-		</div>
-	</div>
-	<section id="projectFooter" class="gcaut-foot" style="height: 40px;"></section>
+                </div>
+                <div style="clear: both"></div>
+                <input type="checkbox" id="cb_mouse" data-bind="checked: isMouse">
+                <label for="cb_mouse" class="form-checkbox" data-bind="text: lblEnbMouse"></label>
+                <div class="row">
+                    <label for="cb_mousesr" class="gcaut-padding-left30" data-bind="text: lblMouseSR"></label>
+                    <select id="cb_mousesr" data-bind="options: mouseSR, optionsText: 'val', value: selectMouseSR, enable: isMouse,"></select>
+                </div>
+            </setion>
+        </div>
+    </div>
+    <section id="projectFooter" class="gcaut-foot" style="height: 40px;"></section>
 </div>
 <dl id="gcwu-date-mod" role="contentinfo">
 <dt>Modification Date&#160;:</dt><dd><span><time>2013-10-30</time></span></dd>
@@ -1045,8 +1070,9 @@ wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licenc
 
 <!-- CustomScriptsStart -->
 <!-- bootstrapper script start (comment min and uncomment debug to run without to build)-->
-<script>dojoConfig = { async: true };</script> 
-<script src="http://js.arcgis.com/3.12/"></script>
+<script>dojoConfig = { async: true };</script>
+<!--<script src="http://js.arcgis.com/3.12/"></script>-->
+<script src="http://geoappext.nrcan.gc.ca/arcgis_js_api/library/3.11/3.11compact/init.js"></script>
 <!-- <script src="../gcaut/gcaut-config-min.js"></script> -->
 <script src="../src/js/gcaut-config-debug.js"></script>
 <link rel="stylesheet" href="../gcaut/gcaut-min.css">
