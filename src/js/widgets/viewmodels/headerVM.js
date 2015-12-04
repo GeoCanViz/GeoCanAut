@@ -114,7 +114,8 @@
 
                 _self.write = function() {
                     var value,
-                        about = _self.aboutValue().replace(/\n\r?/g, '<br />');
+                        about = _self.aboutValue().replace(/\n\r?/g, '<br />'),
+                        expand = (_self.selectTools().val === 'vraie' || _self.selectTools().val === 'true') ? true : false;
 
                     // get inset and link info from other vm
                     // TODO set inset when insetVM will be created. In mean time hardcode
@@ -128,7 +129,7 @@
                                 '},' +
                                 '"tools": {' +
                                     '"enable": ' + _self.isTools() +
-                                    ',"expand": ' + _self.selectTools().val +
+                                    ',"expand": ' + expand +
                                 '},' +
                                 '"link": ' + _self.isLink() +
                                 ',"inset": ' + _self.isInset() +
